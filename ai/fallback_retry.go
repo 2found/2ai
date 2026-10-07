@@ -55,7 +55,7 @@ func (r nativeRungAttempts) run(ctx context.Context, out *AssistantMessageEventS
 		last, err = relayNativeAttempt(attemptCtx, out, func(ctx context.Context) (*AssistantMessageEventStream, error) {
 			// Only nested composition in the same observation scope replaces
 			// this producer. Auxiliary preparation has its own span/call.
-			if parent, _ := ctx.Value(safePhysicalKey{}).(*safePhysicalObservation); parent != nil && parent.scope == physical.scope {
+			if parent, _ := ctx.Value(safePhysicalKey{}).(*safePhysicalObservation); parent != nil && parent.scope.SameScope(physical.scope) {
 				parent.delegated.Store(true)
 			}
 			safeAttempt = r.safeCall.StartAttempt(number, r.safeLabels)

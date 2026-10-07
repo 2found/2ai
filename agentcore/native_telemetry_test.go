@@ -167,9 +167,14 @@ func TestSafeProactiveCompactionRetainsMainAttempts(t *testing.T) {
 }
 
 func TestSafeTerminalNativeSpansReportFailure(t *testing.T) {
-	for _, tc := range []struct{ reason, status, kind string }{
-		{"aborted", "cancelled", "request_cancelled"},
-		{"error", "failed", "unknown"},
+	for _, tc := range []struct {
+		reason, status, kind string
+		withError            bool
+	}{
+		{"aborted", "cancelled", "request_cancelled", false},
+		{"aborted", "cancelled", "request_cancelled", true},
+		{"error", "failed", "unknown", false},
+		{"error", "failed", "unknown", true},
 	} {
 		t.Run(tc.reason, func(t *testing.T) {
 			safe, err := telemetry.NewSafeObserver(telemetry.SafeObserverOptions{})
@@ -180,12 +185,17 @@ func TestSafeTerminalNativeSpansReportFailure(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			a, err := agentcore.New(agentcore.Config{Model: "fixture", NativeProvider: &ai.FallbackProvider{Candidates: []ai.FallbackCandidate{{Model: json.RawMessage(`{"id":"fixture"}`), Stream: ai.ScriptedStream(ai.Message{Role: "assistant", StopReason: tc.reason})}}}})
+			message := ai.Message{Role: "assistant", StopReason: tc.reason}
+			privateError := "private terminal error"
+			if tc.withError {
+				message.ErrorMessage = &privateError
+			}
+			a, err := agentcore.New(agentcore.Config{Model: "fixture", NativeProvider: &ai.FallbackProvider{Candidates: []ai.FallbackCandidate{{Model: json.RawMessage(`{"id":"fixture"}`), Stream: ai.ScriptedStream(message)}}}})
 			if err != nil {
 				t.Fatal(err)
 			}
 			result, err := a.RunNative(ctx, agentcore.NativeRun{Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: "run"}}})
-			if err != nil || result.StopReason != tc.reason {
+			if (err != nil) != tc.withError || tc.withError && err.Error() != privateError || result.StopReason != tc.reason {
 				t.Fatalf("terminal result changed: %+v %v", result, err)
 			}
 			spans := 0

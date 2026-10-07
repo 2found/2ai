@@ -14,6 +14,7 @@ type safeSpanOutcome struct{ status, failure string }
 
 // SetSafeOutcome binds only bounded structural status metadata. It never reads
 // a private status/error or changes the legacy recorder's status precedence.
+// Cancellation may accompany a returned error; that error is still preserved.
 func (s *Span) SetSafeOutcome(status, failure string) {
 	if s != nil && s.safeState != nil {
 		s.safeState.outcome.Store(&safeSpanOutcome{safeStatus(status), SafeFailureKind(failure)})
@@ -67,7 +68,7 @@ func (c Context) startSafeSpan(options SpanOptions, callback func(*Span) error) 
 		if err == context.DeadlineExceeded {
 			r.Status, r.FailureKind = "cancelled", "request_timeout"
 		}
-		if outcome := state.outcome.Load(); returned && err == nil && outcome != nil {
+		if outcome := state.outcome.Load(); returned && outcome != nil && (err == nil || outcome.status == "cancelled") {
 			r.Status, r.FailureKind = outcome.status, outcome.failure
 		}
 		scope.observer.admit(r)

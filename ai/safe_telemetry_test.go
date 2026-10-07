@@ -505,7 +505,7 @@ func TestSafeNestedFallbackStillCountsOnlyDelegatedProducer(t *testing.T) {
 		return attemptFixture(AssistantMessageEvent{Type: "done", Message: message})(ctx)
 	}}}}
 	_, err := (FallbackProvider{}).Run(ctx, NewAssistantMessageEventStream(), FallbackRequest{Candidates: 1, Open: func(ctx context.Context, _, _ int) (*AssistantMessageEventStream, error) {
-		return inner.Stream(ctx, nil, NormalizeContext(Context{}), nil)
+		return inner.Stream(telemetry.WithSafeCategory(ctx, telemetry.CategoryMain), nil, NormalizeContext(Context{}), nil)
 	}})
 	if err != nil {
 		t.Fatal(err)
@@ -513,6 +513,34 @@ func TestSafeNestedFallbackStillCountsOnlyDelegatedProducer(t *testing.T) {
 	r := safeAttempts(o)
 	if len(r) != 1 || r[0].Accounting.Tokens.Input != 3 {
 		t.Fatalf("nested wrapper double counted producer: %+v", r)
+	}
+}
+
+func TestSafeDirectPooledPreparationHasIndependentScope(t *testing.T) {
+	o, ctx := safeAIContext(t)
+	_, err := (FallbackProvider{}).Run(ctx, NewAssistantMessageEventStream(), FallbackRequest{Candidates: 1, Open: func(ctx context.Context, _, _ int) (*AssistantMessageEventStream, error) {
+		err := telemetry.SafeContext(telemetry.Context{}, ctx).StartSpan(telemetry.SpanOptions{Name: "agentray.ai.compaction"}, func(span *telemetry.Span) error {
+			auxCtx := telemetry.WithContext(ctx, span.Context())
+			source := &fakeTokenSource{tokens: []OAuthToken{{AccessToken: "fixture-token"}}}
+			s, err := nativeOAuthPoolStream(auxCtx, json.RawMessage(`{"id":"m"}`), NormalizeContext(Context{}), OpenAICompletionsStreamOptions{}, source, "fixture", func(ctx context.Context, _ json.RawMessage, _ TranscriptContext, _ OpenAICompletionsStreamOptions, _ OAuthToken) (*AssistantMessageEventStream, error) {
+				return attemptFixture(AssistantMessageEvent{Type: "done", Message: &Message{Role: "assistant", StopReason: "stop", Usage: explicitUsage(7, 0, 0, 0, 0, false)}})(ctx)
+			})
+			if err != nil {
+				return err
+			}
+			return s.WaitForEnd(auxCtx)
+		})
+		if err != nil {
+			return nil, err
+		}
+		return attemptFixture(AssistantMessageEvent{Type: "done", Message: &Message{Role: "assistant", StopReason: "stop", Usage: explicitUsage(3, 0, 0, 0, 0, false)}})(ctx)
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	r := safeAttempts(o)
+	if len(r) != 2 || r[0].Category != telemetry.CategoryCompaction || r[1].Category != telemetry.CategoryMain || *r[0].CallID == *r[1].CallID || r[0].Accounting.Tokens.Input+r[1].Accounting.Tokens.Input != 10 {
+		t.Fatalf("direct auxiliary pool lost scope/usage: %+v", r)
 	}
 }
 

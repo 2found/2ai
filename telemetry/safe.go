@@ -274,6 +274,16 @@ func CaptureSafeOrigin(ctx context.Context) SafeOrigin {
 	s := safeFrom(ctx)
 	return SafeOrigin{scope: s, known: s != nil}
 }
+
+// SameScope compares immutable observation metadata, including its observer,
+// execution, span and category. Equivalent context copies share a scope.
+func (o SafeOrigin) SameScope(other SafeOrigin) bool {
+	if o.scope == nil || other.scope == nil {
+		return o.scope == other.scope
+	}
+	return o.known == other.known && *o.scope == *other.scope
+}
+
 func (o SafeOrigin) Merge(other SafeOrigin) SafeOrigin {
 	if o.scope == nil {
 		o.scope = other.scope

@@ -69,7 +69,7 @@ func (a *Agent) RunNative(ctx context.Context, input NativeRun) (RunResult, erro
 	return telemetry.StartSpan(input.Telemetry, telemetry.SpanOptions{Name: "agentray.agent.run"}, func(span *telemetry.Span) (RunResult, error) {
 		input.Telemetry = span.Context()
 		result, err := a.runNative(telemetry.WithContext(ctx, span.Context()), input)
-		if err == nil {
+		if err == nil || result.StopReason == "aborted" {
 			if result.StopReason == "aborted" {
 				kind := "request_cancelled"
 				if ctx.Err() == context.DeadlineExceeded {

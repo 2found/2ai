@@ -16,14 +16,15 @@ type safePhysicalObservation struct {
 }
 
 func safePhysicalPoolContext(ctx context.Context) context.Context {
-	if parent, _ := ctx.Value(safePhysicalKey{}).(*safePhysicalObservation); parent != nil {
+	scope := telemetry.CaptureSafeOrigin(ctx)
+	if parent, _ := ctx.Value(safePhysicalKey{}).(*safePhysicalObservation); parent != nil && parent.scope.SameScope(scope) {
 		return ctx
 	}
-	return context.WithValue(ctx, safePhysicalKey{}, &safePhysicalObservation{call: telemetry.NewSafeCall(ctx)})
+	return context.WithValue(ctx, safePhysicalKey{}, &safePhysicalObservation{call: telemetry.NewSafeCall(ctx), scope: scope})
 }
 
 func startSafePhysical(ctx context.Context, ordinal int) *telemetry.SafeAttempt {
-	if parent, _ := ctx.Value(safePhysicalKey{}).(*safePhysicalObservation); parent != nil {
+	if parent, _ := ctx.Value(safePhysicalKey{}).(*safePhysicalObservation); parent != nil && parent.scope.SameScope(telemetry.CaptureSafeOrigin(ctx)) {
 		parent.delegated.Store(true)
 		return parent.call.StartAttempt(ordinal, parent.labels)
 	}
