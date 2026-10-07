@@ -130,6 +130,9 @@ func TestNativeAPIFactoriesHTTP(t *testing.T) {
 					if result.StopReason != "stop" || result.Content.Blocks.Len() != 1 || result.Content.Blocks.Get(0).Text != "answer" || requests.Load() != 1 {
 						t.Fatalf("wrong native result: %s", mustFactoryJSON(t, result))
 					}
+					if result.Usage == nil || !result.Usage.Observation.UsageObserved || !result.Usage.Observation.PricingObserved || result.Usage.Observation.UsageSource != "wire" || result.Usage.Observation.PricingSource != "model" {
+						t.Fatalf("native %s provenance missing: %+v", api, result.Usage)
+					}
 					if len(callbacks) < 3 || callbacks[0] != "payload" || callbacks[1] != "response" {
 						t.Fatalf("callback order: %v", callbacks)
 					}

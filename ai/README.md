@@ -42,6 +42,16 @@ attempt, and terminal publication. Those callbacks contain host policy; AI owns
 the retry/fallback loop. Wrap setup failures in `PreparationError` so a failing
 credential/context callback cannot be mistaken for a provider outage.
 
+Safe accounting uses the optional [typed pull observer](../telemetry/SAFE.md).
+Bind host-approved public labels through `FallbackCandidate.SafeLabels` or
+`FallbackRequest.SafeLabels`; raw model JSON and response names are never
+implicitly approved. Native wire usage and explicit model-rate presence supply
+provenance without changing cost calculations. Custom/scripted producers set
+`Usage.Observation` explicitly; it is excluded from transcript/checkpoint JSON.
+Empty cost metadata and missing usage remain unknown. `FallbackRequest.Observe`
+remains an authoritative callback whose errors abort the request, separate from
+the passive safe observer.
+
 Files are grouped by provider and concern within the Go package. Shared
 transcript, event, HTTP and OAuth helpers have concrete data/callback contracts.
 Existing legacy adapters and catalog helpers still serve public SDK, discovery

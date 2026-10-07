@@ -128,6 +128,9 @@ func (c *MessageContent) UnmarshalJSON(data []byte) error {
 }
 
 type Usage struct {
+	// Observation is producer evidence for safe settlement only. It is never
+	// serialized into Pi transcripts/checkpoints and is not inferred on decode.
+	Observation  UsageObservation `json:"-"`
 	encoding     *transcriptEncoding
 	Input        float64   `json:"input"`
 	Output       float64   `json:"output"`

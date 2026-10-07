@@ -725,6 +725,8 @@ func (a *devinAccumulator) chunk(delta devinChatDelta) {
 			a.output.ResponseModel = &upstream
 		}
 		if delta.usage != nil {
+			a.output.Usage.Observation.UsageObserved = true
+			a.output.Usage.Observation.UsageSource = "wire"
 			a.output.Usage.Input = float64(delta.usage.inputTokens)
 			a.output.Usage.Output = float64(delta.usage.outputTokens)
 			a.output.Usage.CacheRead = float64(delta.usage.cacheReadTokens)

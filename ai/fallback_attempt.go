@@ -9,10 +9,12 @@ import (
 // metadata. The caller decides retry/escalation and publishes a final terminal;
 // a failed attempt must not settle the logical request's stream.
 type AttemptOutcome struct {
-	AdmissionError error
-	Terminal       AssistantMessageEvent
-	pending        []AssistantMessageEvent
-	Committed      bool
+	AdmissionError   error
+	Terminal         AssistantMessageEvent
+	pending          []AssistantMessageEvent
+	Committed        bool
+	failureKind      string
+	producerAdmitted bool
 }
 
 func (r AttemptOutcome) publish(out *AssistantMessageEventStream) error {
@@ -52,8 +54,29 @@ func relayNativeAttempt(ctx context.Context, out *AssistantMessageEventStream, o
 		return result, nil
 	}
 	if source == nil {
+		result.failureKind = "provider_protocol"
 		return result, errors.New("native attempt returned no stream")
 	}
+	result.producerAdmitted = true
+	// Early host/protocol exits still cancel and join the real producer. Keep
+	// the original error/replay decision while retaining any aborted usage.
+	defer func() {
+		if err == nil {
+			return
+		}
+		cancel()
+		readCtx := context.WithoutCancel(ctx)
+		_ = source.WaitForEnd(readCtx)
+		for {
+			event, ok, readErr := source.Next(readCtx)
+			if readErr != nil || !ok {
+				break
+			}
+			if event.Type == "done" || event.Type == "error" {
+				result.Terminal = event
+			}
+		}
+	}()
 	admit := func() error {
 		if result.Committed {
 			return nil
@@ -62,6 +85,7 @@ func relayNativeAttempt(ctx context.Context, out *AssistantMessageEventStream, o
 			return err
 		}
 		if err := commit(ctx); err != nil {
+			result.failureKind = "host_callback"
 			return err
 		}
 		result.Committed = true
@@ -84,6 +108,7 @@ func relayNativeAttempt(ctx context.Context, out *AssistantMessageEventStream, o
 			if err = ctx.Err(); err != nil {
 				return result, err
 			}
+			result.failureKind = "provider_protocol"
 			return result, errors.New("native attempt ended without a terminal event")
 		}
 		if event.Type == "done" || event.Type == "error" {

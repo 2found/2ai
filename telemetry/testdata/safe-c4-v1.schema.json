@@ -1,0 +1,576 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://2ai.invalid/safe-c4-v1.schema.json",
+  "title": "2ai safe settled producer record v1",
+  "description": "Synthetic C4 producer contract; additive accounting belongs only to attempt_settled. No product scope or private content. Record cap 4096 UTF-8 bytes, not expressed by JSON Schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "2ai.safe.v1"
+    },
+    "accounting_schema": {
+      "const": "2ai.disjoint-tokens.v1"
+    },
+    "kind": {
+      "enum": [
+        "span_settled",
+        "attempt_settled",
+        "reconciliation"
+      ]
+    },
+    "producer_event_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_.-]+$"
+    },
+    "execution_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_.-]+$"
+    },
+    "origin_execution_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "span_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "parent_span_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "parent_execution_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "call_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "attempt_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "provider_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "model_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "tool_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "attempt_ordinal": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "category": {
+      "enum": [
+        "main",
+        "compaction",
+        "advisor",
+        "memory",
+        "child"
+      ]
+    },
+    "span_kind": {
+      "enum": [
+        "unknown",
+        "agent",
+        "model",
+        "tool"
+      ]
+    },
+    "labels_state": {
+      "enum": [
+        "approved",
+        "unavailable"
+      ]
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "settled_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "duration_ns": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "status": {
+      "enum": [
+        "unknown",
+        "completed",
+        "stopped",
+        "cancelled",
+        "failed"
+      ]
+    },
+    "failure_kind": {
+      "enum": [
+        "none",
+        "host_callback",
+        "host_preparation",
+        "request_cancelled",
+        "request_timeout",
+        "provider_transport",
+        "provider_auth",
+        "provider_rate_limit",
+        "provider_unavailable",
+        "provider_rejected",
+        "provider_protocol",
+        "provider_decode",
+        "tool_denied",
+        "unknown"
+      ]
+    },
+    "accounting": {
+      "$ref": "#/$defs/accounting"
+    },
+    "reconciliation": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/aggregate"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "producer_admitted": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schema_version",
+    "accounting_schema",
+    "kind",
+    "producer_event_id",
+    "execution_id",
+    "origin_execution_id",
+    "span_id",
+    "parent_span_id",
+    "parent_execution_id",
+    "call_id",
+    "attempt_id",
+    "provider_id",
+    "model_id",
+    "tool_id",
+    "attempt_ordinal",
+    "category",
+    "span_kind",
+    "labels_state",
+    "started_at",
+    "settled_at",
+    "duration_ns",
+    "status",
+    "failure_kind",
+    "accounting",
+    "reconciliation",
+    "producer_admitted"
+  ],
+  "$defs": {
+    "tokens": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "input": {
+          "type": "number",
+          "minimum": 0
+        },
+        "output": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cache_read": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cache_write": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "input",
+        "output",
+        "cache_read",
+        "cache_write"
+      ]
+    },
+    "accounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "usage_observed": {
+          "type": "boolean"
+        },
+        "pricing_observed": {
+          "type": "boolean"
+        },
+        "usage_source": {
+          "enum": [
+            "unknown",
+            "invalid",
+            "wire",
+            "explicit"
+          ]
+        },
+        "pricing_source": {
+          "enum": [
+            "unknown",
+            "invalid",
+            "model",
+            "explicit"
+          ]
+        },
+        "price_state": {
+          "enum": [
+            "unknown",
+            "unpriced",
+            "priced"
+          ]
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "attempt_coverage": {
+          "enum": [
+            "observed",
+            "unavailable"
+          ]
+        },
+        "tokens": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/tokens"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "known_cost_usd": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "usage_observed",
+        "pricing_observed",
+        "usage_source",
+        "pricing_source",
+        "price_state",
+        "complete",
+        "attempt_coverage",
+        "tokens",
+        "known_cost_usd"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "usage_observed": {
+                "const": false
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "tokens": {
+                "type": "null"
+              },
+              "known_cost_usd": {
+                "type": "null"
+              },
+              "price_state": {
+                "const": "unknown"
+              },
+              "complete": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "price_state": {
+                "const": "priced"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "usage_observed": {
+                "const": true
+              },
+              "pricing_observed": {
+                "const": true
+              },
+              "tokens": {
+                "$ref": "#/$defs/tokens"
+              },
+              "known_cost_usd": {
+                "type": "number",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "pricing_observed": {
+                "const": false
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "known_cost_usd": {
+                "type": "null"
+              },
+              "complete": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "aggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reported_tokens": {
+          "$ref": "#/$defs/tokens"
+        },
+        "reported_cost_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "additive": {
+          "const": false
+        }
+      },
+      "required": [
+        "reported_tokens",
+        "reported_cost_usd",
+        "additive"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "attempt_settled"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "call_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.-]+$"
+          },
+          "attempt_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.-]+$"
+          },
+          "attempt_ordinal": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "span_kind": {
+            "const": "model"
+          },
+          "reconciliation": {
+            "type": "null"
+          },
+          "accounting": {
+            "properties": {
+              "attempt_coverage": {
+                "const": "observed"
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "call_id": {
+            "type": "null"
+          },
+          "attempt_id": {
+            "type": "null"
+          },
+          "attempt_ordinal": {
+            "const": 0
+          },
+          "accounting": {
+            "properties": {
+              "attempt_coverage": {
+                "const": "unavailable"
+              }
+            }
+          },
+          "producer_admitted": {
+            "const": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "span_settled"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "span_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.-]+$"
+          },
+          "reconciliation": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "attempt_settled"
+          },
+          "producer_admitted": {
+            "const": false
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "accounting": {
+            "properties": {
+              "usage_observed": {
+                "const": false
+              },
+              "pricing_observed": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

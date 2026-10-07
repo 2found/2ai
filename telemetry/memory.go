@@ -1,6 +1,16 @@
 package telemetry
 
-import "sync"
+import (
+	"sync"
+	"time"
+)
+
+// SpanTiming is independent of the Pi-compatible RecordedSpan JSON contract.
+type SpanTiming struct {
+	SpanID    int           `json:"span_id"`
+	StartedAt time.Time     `json:"started_at"`
+	Duration  time.Duration `json:"duration_ns"`
+}
 
 type RecordedEvent struct {
 	Name       string     `json:"name"`
@@ -21,6 +31,8 @@ type RecordedSpan struct {
 type mutableSpan struct {
 	RecordedSpan
 	explicitStatus bool
+	startedAt      time.Time
+	duration       time.Duration
 }
 
 type memoryState struct {
@@ -55,7 +67,7 @@ func (c Context) admit(options SpanOptions) *Span {
 	recorded := &mutableSpan{RecordedSpan: RecordedSpan{
 		ID: len(c.state.spans) + 1, Name: options.Name, Attributes: attributes,
 		Events: []RecordedEvent{}, Status: SpanStatus{Status: "ok"},
-	}}
+	}, startedAt: time.Now()}
 	if c.parent != nil {
 		parentID := c.parent.ID
 		recorded.ParentID = &parentID
@@ -105,6 +117,9 @@ func (s *Span) SetAttributes(attributes Attributes) {
 }
 
 func (s *Span) SetStatus(status SpanStatus) {
+	if s != nil && s.safeState != nil && status.Status != "ok" {
+		s.safeState.failed.Store(true)
+	}
 	if s != nil && s.callbacks.SetStatus != nil {
 		s.callbacks.SetStatus(status)
 		return
@@ -179,6 +194,7 @@ func (s *Span) settle(failed bool, failure any) {
 		s.context.parent.Status = status
 	}
 	s.context.parent.Settled = true
+	s.context.parent.duration = time.Since(s.context.parent.startedAt)
 	sequence := s.context.state.nextEndSequence
 	s.context.state.nextEndSequence++
 	s.context.parent.EndSequence = &sequence
@@ -217,6 +233,23 @@ func copyInt(value *int) *int {
 	}
 	copy := *value
 	return &copy
+}
+
+// GetSpanTimings returns settled timings in admission order, without changing
+// snapshot fields, parent admission, or late-child behavior.
+func (m *InMemory) GetSpanTimings() []SpanTiming {
+	if m == nil || m.state == nil {
+		return []SpanTiming{}
+	}
+	m.state.mu.Lock()
+	defer m.state.mu.Unlock()
+	timings := make([]SpanTiming, 0, len(m.state.spans))
+	for _, span := range m.state.spans {
+		if span.Settled {
+			timings = append(timings, SpanTiming{SpanID: span.ID, StartedAt: span.startedAt, Duration: span.duration})
+		}
+	}
+	return timings
 }
 
 func copyStatus(status SpanStatus) SpanStatus {

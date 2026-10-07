@@ -13,6 +13,7 @@ import (
 
 	"github.com/2found/2ai/agentcore"
 	"github.com/2found/2ai/ai"
+	"github.com/2found/2ai/telemetry"
 )
 
 // Plugin installs the memory store. A nil Store leaves the agent memoryless,
@@ -71,6 +72,7 @@ func (p Plugin) BeginRun(_ context.Context, info agentcore.RunInfo) (agentcore.E
 
 // curation is one run's memory-curation capability.
 type curation struct {
+	safeOrigin           telemetry.SafeOrigin
 	worker               *ConsolidationWorker
 	consolidation        ConsolidationStore
 	consolidator         Consolidator

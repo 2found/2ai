@@ -398,6 +398,9 @@ func TestDevinPooledStreamTextThinkingAndToolCall(t *testing.T) {
 	if result.Usage.Input != 10 || result.Usage.Output != 20 || result.Usage.CacheRead != 3 {
 		t.Fatalf("usage=%+v", result.Usage)
 	}
+	if !result.Usage.Observation.UsageObserved || result.Usage.Observation.UsageSource != "wire" {
+		t.Fatalf("Devin usage provenance missing: %+v", result.Usage)
+	}
 
 	// The captured frame is gzip-compressed Connect framing; decode and assert
 	// the turn identity and resolved model uid.

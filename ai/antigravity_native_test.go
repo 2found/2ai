@@ -93,6 +93,9 @@ func TestAntigravityNativePool(t *testing.T) {
 				if result.Usage.Input != 5 || result.Usage.Output != 3 || result.Usage.CacheRead != 3 || result.Usage.TotalTokens != 11 {
 					t.Fatalf("usage: %+v", result.Usage)
 				}
+				if !result.Usage.Observation.UsageObserved || result.Usage.Observation.UsageSource != "wire" {
+					t.Fatalf("Antigravity usage provenance missing: %+v", result.Usage)
+				}
 				if capture.Failure() != nil {
 					t.Fatal("stale failed attempt")
 				}
