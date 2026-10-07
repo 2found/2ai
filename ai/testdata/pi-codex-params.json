@@ -1,0 +1,4383 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "model": {
+    "id": "gpt-5.5",
+    "name": "Test",
+    "api": "openai-codex-responses",
+    "provider": "openai-codex",
+    "baseUrl": "https://chatgpt.com/backend-api",
+    "reasoning": true,
+    "input": [
+      "text",
+      "image"
+    ],
+    "maxTokens": 20000,
+    "contextWindow": 100000,
+    "cost": {
+      "input": 0,
+      "output": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    }
+  },
+  "context": {
+    "systemPrompt": "system",
+    "messages": [
+      {
+        "role": "user",
+        "content": "hello",
+        "timestamp": 100
+      }
+    ],
+    "tools": [
+      {
+        "name": "tool",
+        "description": "Tool",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code"
+          ]
+        }
+      }
+    ]
+  },
+  "cases": [
+    {
+      "input": {
+        "name": "default"
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "no instructions or tools",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "hello",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "You are a helpful assistant.",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "empty instructions",
+        "context": {
+          "systemPrompt": "",
+          "messages": []
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "You are a helpful assistant.",
+          "input": [],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "section instructions",
+        "context": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "base",
+              "sections": {
+                "a": "first",
+                "b": null,
+                "c": "second"
+              },
+              "timestamp": 1
+            },
+            {
+              "role": "user",
+              "content": "hello",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "base\n\nfirst\n\nsecond",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "empty cache key",
+        "cacheSessionId": ""
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "prompt_cache_key": "",
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "cache passed through unclamped",
+        "cacheSessionId": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "options": {
+          "sessionId": "different",
+          "cacheRetention": "none"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "prompt_cache_key": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "sampling options not spread",
+        "model": {
+          "samplingParams": {
+            "model": "other",
+            "stream": false
+          }
+        },
+        "options": {
+          "maxTokens": 50,
+          "samplingParams": {
+            "instructions": "other"
+          },
+          "parallelToolCalls": false
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "verbosity low",
+        "options": {
+          "textVerbosity": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "verbosity medium",
+        "options": {
+          "textVerbosity": "medium"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "medium"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "verbosity high",
+        "options": {
+          "textVerbosity": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "high"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "verbosity ",
+        "options": {
+          "textVerbosity": ""
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "verbosity null",
+        "options": {
+          "textVerbosity": null
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool choice auto",
+        "options": {
+          "toolChoice": "auto"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool choice none",
+        "options": {
+          "toolChoice": "none"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "none",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool choice required",
+        "options": {
+          "toolChoice": "required"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "required",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool choice null",
+        "options": {
+          "toolChoice": null
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool choice ",
+        "options": {
+          "toolChoice": ""
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "temperature 0",
+        "options": {
+          "temperature": 0
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "temperature": 0,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "temperature 0.5",
+        "options": {
+          "temperature": 0.5
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "temperature": 0.5,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "temperature null",
+        "options": {
+          "temperature": null
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "temperature": null,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "service default",
+        "options": {
+          "serviceTier": "default"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "service_tier": "default",
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "service flex",
+        "options": {
+          "serviceTier": "flex"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "service_tier": "flex",
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "service priority",
+        "options": {
+          "serviceTier": "priority"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "service_tier": "priority",
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "service null",
+        "options": {
+          "serviceTier": null
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "service_tier": null,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning true effort undefined map 0",
+        "model": {
+          "reasoning": true,
+          "thinkingLevelMap": {}
+        },
+        "options": {}
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning true effort undefined map 1",
+        "model": {
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "off": null,
+            "high": null
+          }
+        },
+        "options": {}
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning true effort undefined map 2",
+        "model": {
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "off": "disabled",
+            "high": "mapped"
+          }
+        },
+        "options": {}
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "disabled"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning true effort none map 0",
+        "model": {
+          "reasoning": true,
+          "thinkingLevelMap": {}
+        },
+        "options": {
+          "reasoningEffort": "none"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning true effort none map 1",
+        "model": {
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "off": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoningEffort": "none"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning true effort none map 2",
+        "model": {
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "off": "disabled",
+            "high": "mapped"
+          }
+        },
+        "options": {
+          "reasoningEffort": "none"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "disabled",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning true effort low map 0",
+        "model": {
+          "reasoning": true,
+          "thinkingLevelMap": {}
+        },
+        "options": {
+          "reasoningEffort": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning true effort low map 1",
+        "model": {
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "off": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoningEffort": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning true effort low map 2",
+        "model": {
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "off": "disabled",
+            "high": "mapped"
+          }
+        },
+        "options": {
+          "reasoningEffort": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning true effort high map 0",
+        "model": {
+          "reasoning": true,
+          "thinkingLevelMap": {}
+        },
+        "options": {
+          "reasoningEffort": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "high",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning true effort high map 1",
+        "model": {
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "off": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoningEffort": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "high",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning true effort high map 2",
+        "model": {
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "off": "disabled",
+            "high": "mapped"
+          }
+        },
+        "options": {
+          "reasoningEffort": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "mapped",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning true effort null map 0",
+        "model": {
+          "reasoning": true,
+          "thinkingLevelMap": {}
+        },
+        "options": {
+          "reasoningEffort": null
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning true effort null map 1",
+        "model": {
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "off": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoningEffort": null
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning true effort null map 2",
+        "model": {
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "off": "disabled",
+            "high": "mapped"
+          }
+        },
+        "options": {
+          "reasoningEffort": null
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning false effort undefined map 0",
+        "model": {
+          "reasoning": false,
+          "thinkingLevelMap": {}
+        },
+        "options": {}
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning false effort undefined map 1",
+        "model": {
+          "reasoning": false,
+          "thinkingLevelMap": {
+            "off": null,
+            "high": null
+          }
+        },
+        "options": {}
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning false effort undefined map 2",
+        "model": {
+          "reasoning": false,
+          "thinkingLevelMap": {
+            "off": "disabled",
+            "high": "mapped"
+          }
+        },
+        "options": {}
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning false effort none map 0",
+        "model": {
+          "reasoning": false,
+          "thinkingLevelMap": {}
+        },
+        "options": {
+          "reasoningEffort": "none"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning false effort none map 1",
+        "model": {
+          "reasoning": false,
+          "thinkingLevelMap": {
+            "off": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoningEffort": "none"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning false effort none map 2",
+        "model": {
+          "reasoning": false,
+          "thinkingLevelMap": {
+            "off": "disabled",
+            "high": "mapped"
+          }
+        },
+        "options": {
+          "reasoningEffort": "none"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "disabled",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning false effort low map 0",
+        "model": {
+          "reasoning": false,
+          "thinkingLevelMap": {}
+        },
+        "options": {
+          "reasoningEffort": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning false effort low map 1",
+        "model": {
+          "reasoning": false,
+          "thinkingLevelMap": {
+            "off": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoningEffort": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning false effort low map 2",
+        "model": {
+          "reasoning": false,
+          "thinkingLevelMap": {
+            "off": "disabled",
+            "high": "mapped"
+          }
+        },
+        "options": {
+          "reasoningEffort": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning false effort high map 0",
+        "model": {
+          "reasoning": false,
+          "thinkingLevelMap": {}
+        },
+        "options": {
+          "reasoningEffort": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "high",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning false effort high map 1",
+        "model": {
+          "reasoning": false,
+          "thinkingLevelMap": {
+            "off": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoningEffort": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "high",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning false effort high map 2",
+        "model": {
+          "reasoning": false,
+          "thinkingLevelMap": {
+            "off": "disabled",
+            "high": "mapped"
+          }
+        },
+        "options": {
+          "reasoningEffort": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "mapped",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning false effort null map 0",
+        "model": {
+          "reasoning": false,
+          "thinkingLevelMap": {}
+        },
+        "options": {
+          "reasoningEffort": null
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning false effort null map 1",
+        "model": {
+          "reasoning": false,
+          "thinkingLevelMap": {
+            "off": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoningEffort": null
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning false effort null map 2",
+        "model": {
+          "reasoning": false,
+          "thinkingLevelMap": {
+            "off": "disabled",
+            "high": "mapped"
+          }
+        },
+        "options": {
+          "reasoningEffort": null
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "summary auto",
+        "options": {
+          "reasoningEffort": "high",
+          "reasoningSummary": "auto"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "high",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "summary off",
+        "options": {
+          "reasoningEffort": "high",
+          "reasoningSummary": "off"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "high",
+            "summary": "off"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "summary on",
+        "options": {
+          "reasoningEffort": "high",
+          "reasoningSummary": "on"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "high",
+            "summary": "on"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "summary ",
+        "options": {
+          "reasoningEffort": "high",
+          "reasoningSummary": ""
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "high",
+            "summary": ""
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "summary null",
+        "options": {
+          "reasoningEffort": "high",
+          "reasoningSummary": null
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "hello"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "high",
+            "summary": "auto"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "strict undefined",
+        "compat": {},
+        "context": {
+          "tools": [
+            {
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "constrainedSampling": {
+                "type": "json_schema",
+                "strict": "require"
+              }
+            }
+          ],
+          "messages": []
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "You are a helpful assistant.",
+          "input": [],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "strict true",
+        "compat": {
+          "supportsStrictMode": true
+        },
+        "context": {
+          "tools": [
+            {
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "constrainedSampling": {
+                "type": "json_schema",
+                "strict": "require"
+              }
+            }
+          ],
+          "messages": []
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "You are a helpful assistant.",
+          "input": [],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "strict false",
+        "compat": {
+          "supportsStrictMode": false
+        },
+        "context": {
+          "tools": [
+            {
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "constrainedSampling": {
+                "type": "json_schema",
+                "strict": "require"
+              }
+            }
+          ],
+          "messages": []
+        }
+      },
+      "expected": {
+        "params": null,
+        "error": "Tool \"tool\" requires JSON-schema constrained sampling, but strict tools are unsupported."
+      }
+    },
+    {
+      "input": {
+        "name": "strict null",
+        "compat": {
+          "supportsStrictMode": null
+        },
+        "context": {
+          "tools": [
+            {
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "constrainedSampling": {
+                "type": "json_schema",
+                "strict": "require"
+              }
+            }
+          ],
+          "messages": []
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "You are a helpful assistant.",
+          "input": [],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar true",
+        "compat": {
+          "supportsOpenAIGrammarTools": true
+        },
+        "context": {
+          "tools": [
+            {
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "constrainedSampling": {
+                "type": "grammar",
+                "variants": {
+                  "openai_regex": ".*"
+                }
+              }
+            }
+          ],
+          "messages": [
+            {
+              "role": "user",
+              "content": "run",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "You are a helpful assistant.",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "run"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "custom",
+              "name": "tool",
+              "description": "Tool",
+              "format": {
+                "type": "grammar",
+                "syntax": "regex",
+                "definition": ".*"
+              }
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar false",
+        "compat": {
+          "supportsOpenAIGrammarTools": false
+        },
+        "context": {
+          "tools": [
+            {
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "constrainedSampling": {
+                "type": "grammar",
+                "variants": {
+                  "openai_regex": ".*"
+                }
+              }
+            }
+          ],
+          "messages": [
+            {
+              "role": "user",
+              "content": "run",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "You are a helpful assistant.",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "run"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "mid conversation tools 0",
+        "compat": {},
+        "context": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "system",
+              "timestamp": 1
+            },
+            {
+              "role": "user",
+              "content": "run",
+              "timestamp": 100
+            },
+            {
+              "role": "system",
+              "content": "new rule",
+              "timestamp": 2,
+              "toolsAdded": [
+                {
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "run"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "next"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "tools": [
+            {
+              "type": "function",
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              },
+              "strict": null
+            }
+          ],
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "mid conversation tools 1",
+        "compat": {
+          "supportsMidConvoSystemMessages": true,
+          "supportsAdditionalTools": true
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "system",
+              "timestamp": 1
+            },
+            {
+              "role": "user",
+              "content": "run",
+              "timestamp": 100
+            },
+            {
+              "role": "system",
+              "content": "new rule",
+              "timestamp": 2,
+              "toolsAdded": [
+                {
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "run"
+                }
+              ]
+            },
+            {
+              "type": "additional_tools",
+              "role": "developer",
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ]
+            },
+            {
+              "role": "developer",
+              "content": "new rule"
+            },
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "next"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "mid conversation tools 2",
+        "compat": {
+          "supportsMidConvoSystemMessages": true,
+          "supportsToolSearch": true
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "system",
+              "timestamp": 1
+            },
+            {
+              "role": "user",
+              "content": "run",
+              "timestamp": 100
+            },
+            {
+              "role": "system",
+              "content": "new rule",
+              "timestamp": 2,
+              "toolsAdded": [
+                {
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "gpt-5.5",
+          "store": false,
+          "stream": true,
+          "instructions": "system",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "run"
+                }
+              ]
+            },
+            {
+              "type": "tool_search_call",
+              "call_id": "pi_tool_load_lmvylawxm9nf",
+              "execution": "client",
+              "status": "completed",
+              "arguments": {
+                "query": "tool",
+                "limit": 1
+              }
+            },
+            {
+              "type": "tool_search_output",
+              "call_id": "pi_tool_load_lmvylawxm9nf",
+              "execution": "client",
+              "status": "completed",
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "defer_loading": true,
+                  "strict": null
+                }
+              ]
+            },
+            {
+              "role": "developer",
+              "content": "new rule"
+            },
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "next"
+                }
+              ]
+            }
+          ],
+          "text": {
+            "verbosity": "low"
+          },
+          "include": [
+            "reasoning.encrypted_content"
+          ],
+          "tool_choice": "auto",
+          "parallel_tool_calls": true,
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "error": null
+      }
+    }
+  ]
+}

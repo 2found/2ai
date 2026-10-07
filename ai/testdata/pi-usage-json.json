@@ -1,0 +1,1895 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "raw": "{}",
+        "mutation": "none"
+      },
+      "expected": {
+        "before": {},
+        "beforeNumbers": {},
+        "after": {},
+        "afterNumbers": {}
+      }
+    },
+    {
+      "input": {
+        "raw": "{}",
+        "mutation": "NaN"
+      },
+      "expected": {
+        "before": {},
+        "beforeNumbers": {},
+        "after": {
+          "input": null,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "total": null
+          }
+        },
+        "afterNumbers": {
+          "input": "NaN",
+          "cacheWrite1h": "NaN",
+          "reasoning": "NaN",
+          "cost.total": "NaN"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{}",
+        "mutation": "Infinity"
+      },
+      "expected": {
+        "before": {},
+        "beforeNumbers": {},
+        "after": {
+          "input": null,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "total": null
+          }
+        },
+        "afterNumbers": {
+          "input": "Infinity",
+          "cacheWrite1h": "Infinity",
+          "reasoning": "Infinity",
+          "cost.total": "Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{}",
+        "mutation": "-Infinity"
+      },
+      "expected": {
+        "before": {},
+        "beforeNumbers": {},
+        "after": {
+          "input": null,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "total": null
+          }
+        },
+        "afterNumbers": {
+          "input": "-Infinity",
+          "cacheWrite1h": "-Infinity",
+          "reasoning": "-Infinity",
+          "cost.total": "-Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{}",
+        "mutation": "-0"
+      },
+      "expected": {
+        "before": {},
+        "beforeNumbers": {},
+        "after": {
+          "input": 0,
+          "reasoning": 0,
+          "cacheWrite1h": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "afterNumbers": {
+          "input": "-0",
+          "cacheWrite1h": "-0",
+          "reasoning": "-0",
+          "cost.total": "-0"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{}",
+        "mutation": "42"
+      },
+      "expected": {
+        "before": {},
+        "beforeNumbers": {},
+        "after": {
+          "input": 42,
+          "reasoning": 42,
+          "cacheWrite1h": 42,
+          "cost": {
+            "total": 42
+          }
+        },
+        "afterNumbers": {
+          "input": "finite",
+          "cacheWrite1h": "finite",
+          "reasoning": "finite",
+          "cost.total": "finite"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":null,\"output\":null,\"reasoning\":null,\"cacheWrite1h\":null,\"cost\":{\"input\":null}}",
+        "mutation": "none"
+      },
+      "expected": {
+        "before": {
+          "input": null,
+          "output": null,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "input": null
+          }
+        },
+        "beforeNumbers": {},
+        "after": {
+          "input": null,
+          "output": null,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "input": null
+          }
+        },
+        "afterNumbers": {}
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":null,\"output\":null,\"reasoning\":null,\"cacheWrite1h\":null,\"cost\":{\"input\":null}}",
+        "mutation": "NaN"
+      },
+      "expected": {
+        "before": {
+          "input": null,
+          "output": null,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "input": null
+          }
+        },
+        "beforeNumbers": {},
+        "after": {
+          "input": null,
+          "output": null,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "input": null,
+            "total": null
+          }
+        },
+        "afterNumbers": {
+          "input": "NaN",
+          "cacheWrite1h": "NaN",
+          "reasoning": "NaN",
+          "cost.total": "NaN"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":null,\"output\":null,\"reasoning\":null,\"cacheWrite1h\":null,\"cost\":{\"input\":null}}",
+        "mutation": "Infinity"
+      },
+      "expected": {
+        "before": {
+          "input": null,
+          "output": null,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "input": null
+          }
+        },
+        "beforeNumbers": {},
+        "after": {
+          "input": null,
+          "output": null,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "input": null,
+            "total": null
+          }
+        },
+        "afterNumbers": {
+          "input": "Infinity",
+          "cacheWrite1h": "Infinity",
+          "reasoning": "Infinity",
+          "cost.total": "Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":null,\"output\":null,\"reasoning\":null,\"cacheWrite1h\":null,\"cost\":{\"input\":null}}",
+        "mutation": "-Infinity"
+      },
+      "expected": {
+        "before": {
+          "input": null,
+          "output": null,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "input": null
+          }
+        },
+        "beforeNumbers": {},
+        "after": {
+          "input": null,
+          "output": null,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "input": null,
+            "total": null
+          }
+        },
+        "afterNumbers": {
+          "input": "-Infinity",
+          "cacheWrite1h": "-Infinity",
+          "reasoning": "-Infinity",
+          "cost.total": "-Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":null,\"output\":null,\"reasoning\":null,\"cacheWrite1h\":null,\"cost\":{\"input\":null}}",
+        "mutation": "-0"
+      },
+      "expected": {
+        "before": {
+          "input": null,
+          "output": null,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "input": null
+          }
+        },
+        "beforeNumbers": {},
+        "after": {
+          "input": 0,
+          "output": null,
+          "reasoning": 0,
+          "cacheWrite1h": 0,
+          "cost": {
+            "input": null,
+            "total": 0
+          }
+        },
+        "afterNumbers": {
+          "input": "-0",
+          "cacheWrite1h": "-0",
+          "reasoning": "-0",
+          "cost.total": "-0"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":null,\"output\":null,\"reasoning\":null,\"cacheWrite1h\":null,\"cost\":{\"input\":null}}",
+        "mutation": "42"
+      },
+      "expected": {
+        "before": {
+          "input": null,
+          "output": null,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "input": null
+          }
+        },
+        "beforeNumbers": {},
+        "after": {
+          "input": 42,
+          "output": null,
+          "reasoning": 42,
+          "cacheWrite1h": 42,
+          "cost": {
+            "input": null,
+            "total": 42
+          }
+        },
+        "afterNumbers": {
+          "input": "finite",
+          "cacheWrite1h": "finite",
+          "reasoning": "finite",
+          "cost.total": "finite"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"cost\":null}",
+        "mutation": "none"
+      },
+      "expected": {
+        "before": {
+          "cost": null
+        },
+        "beforeNumbers": {},
+        "after": {
+          "cost": null
+        },
+        "afterNumbers": {}
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"cost\":null}",
+        "mutation": "NaN"
+      },
+      "expected": {
+        "before": {
+          "cost": null
+        },
+        "beforeNumbers": {},
+        "after": {
+          "cost": {
+            "total": null
+          },
+          "input": null,
+          "reasoning": null,
+          "cacheWrite1h": null
+        },
+        "afterNumbers": {
+          "input": "NaN",
+          "cacheWrite1h": "NaN",
+          "reasoning": "NaN",
+          "cost.total": "NaN"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"cost\":null}",
+        "mutation": "Infinity"
+      },
+      "expected": {
+        "before": {
+          "cost": null
+        },
+        "beforeNumbers": {},
+        "after": {
+          "cost": {
+            "total": null
+          },
+          "input": null,
+          "reasoning": null,
+          "cacheWrite1h": null
+        },
+        "afterNumbers": {
+          "input": "Infinity",
+          "cacheWrite1h": "Infinity",
+          "reasoning": "Infinity",
+          "cost.total": "Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"cost\":null}",
+        "mutation": "-Infinity"
+      },
+      "expected": {
+        "before": {
+          "cost": null
+        },
+        "beforeNumbers": {},
+        "after": {
+          "cost": {
+            "total": null
+          },
+          "input": null,
+          "reasoning": null,
+          "cacheWrite1h": null
+        },
+        "afterNumbers": {
+          "input": "-Infinity",
+          "cacheWrite1h": "-Infinity",
+          "reasoning": "-Infinity",
+          "cost.total": "-Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"cost\":null}",
+        "mutation": "-0"
+      },
+      "expected": {
+        "before": {
+          "cost": null
+        },
+        "beforeNumbers": {},
+        "after": {
+          "cost": {
+            "total": 0
+          },
+          "input": 0,
+          "reasoning": 0,
+          "cacheWrite1h": 0
+        },
+        "afterNumbers": {
+          "input": "-0",
+          "cacheWrite1h": "-0",
+          "reasoning": "-0",
+          "cost.total": "-0"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"cost\":null}",
+        "mutation": "42"
+      },
+      "expected": {
+        "before": {
+          "cost": null
+        },
+        "beforeNumbers": {},
+        "after": {
+          "cost": {
+            "total": 42
+          },
+          "input": 42,
+          "reasoning": 42,
+          "cacheWrite1h": 42
+        },
+        "afterNumbers": {
+          "input": "finite",
+          "cacheWrite1h": "finite",
+          "reasoning": "finite",
+          "cost.total": "finite"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":1e400,\"output\":-1e400,\"cacheRead\":1e400,\"cacheWrite\":-1e400,\"cacheWrite1h\":1e400,\"reasoning\":-1e400,\"totalTokens\":1e400,\"cost\":{\"input\":1e400,\"output\":-1e400,\"cacheRead\":1e400,\"cacheWrite\":-1e400,\"total\":1e400}}",
+        "mutation": "none"
+      },
+      "expected": {
+        "before": {
+          "input": null,
+          "output": null,
+          "cacheRead": null,
+          "cacheWrite": null,
+          "cacheWrite1h": null,
+          "reasoning": null,
+          "totalTokens": null,
+          "cost": {
+            "input": null,
+            "output": null,
+            "cacheRead": null,
+            "cacheWrite": null,
+            "total": null
+          }
+        },
+        "beforeNumbers": {
+          "input": "Infinity",
+          "output": "-Infinity",
+          "cacheRead": "Infinity",
+          "cacheWrite": "-Infinity",
+          "cacheWrite1h": "Infinity",
+          "reasoning": "-Infinity",
+          "totalTokens": "Infinity",
+          "cost.input": "Infinity",
+          "cost.output": "-Infinity",
+          "cost.cacheRead": "Infinity",
+          "cost.cacheWrite": "-Infinity",
+          "cost.total": "Infinity"
+        },
+        "after": {
+          "input": null,
+          "output": null,
+          "cacheRead": null,
+          "cacheWrite": null,
+          "cacheWrite1h": null,
+          "reasoning": null,
+          "totalTokens": null,
+          "cost": {
+            "input": null,
+            "output": null,
+            "cacheRead": null,
+            "cacheWrite": null,
+            "total": null
+          }
+        },
+        "afterNumbers": {
+          "input": "Infinity",
+          "output": "-Infinity",
+          "cacheRead": "Infinity",
+          "cacheWrite": "-Infinity",
+          "cacheWrite1h": "Infinity",
+          "reasoning": "-Infinity",
+          "totalTokens": "Infinity",
+          "cost.input": "Infinity",
+          "cost.output": "-Infinity",
+          "cost.cacheRead": "Infinity",
+          "cost.cacheWrite": "-Infinity",
+          "cost.total": "Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":1e400,\"output\":-1e400,\"cacheRead\":1e400,\"cacheWrite\":-1e400,\"cacheWrite1h\":1e400,\"reasoning\":-1e400,\"totalTokens\":1e400,\"cost\":{\"input\":1e400,\"output\":-1e400,\"cacheRead\":1e400,\"cacheWrite\":-1e400,\"total\":1e400}}",
+        "mutation": "NaN"
+      },
+      "expected": {
+        "before": {
+          "input": null,
+          "output": null,
+          "cacheRead": null,
+          "cacheWrite": null,
+          "cacheWrite1h": null,
+          "reasoning": null,
+          "totalTokens": null,
+          "cost": {
+            "input": null,
+            "output": null,
+            "cacheRead": null,
+            "cacheWrite": null,
+            "total": null
+          }
+        },
+        "beforeNumbers": {
+          "input": "Infinity",
+          "output": "-Infinity",
+          "cacheRead": "Infinity",
+          "cacheWrite": "-Infinity",
+          "cacheWrite1h": "Infinity",
+          "reasoning": "-Infinity",
+          "totalTokens": "Infinity",
+          "cost.input": "Infinity",
+          "cost.output": "-Infinity",
+          "cost.cacheRead": "Infinity",
+          "cost.cacheWrite": "-Infinity",
+          "cost.total": "Infinity"
+        },
+        "after": {
+          "input": null,
+          "output": null,
+          "cacheRead": null,
+          "cacheWrite": null,
+          "cacheWrite1h": null,
+          "reasoning": null,
+          "totalTokens": null,
+          "cost": {
+            "input": null,
+            "output": null,
+            "cacheRead": null,
+            "cacheWrite": null,
+            "total": null
+          }
+        },
+        "afterNumbers": {
+          "input": "NaN",
+          "output": "-Infinity",
+          "cacheRead": "Infinity",
+          "cacheWrite": "-Infinity",
+          "cacheWrite1h": "NaN",
+          "reasoning": "NaN",
+          "totalTokens": "Infinity",
+          "cost.input": "Infinity",
+          "cost.output": "-Infinity",
+          "cost.cacheRead": "Infinity",
+          "cost.cacheWrite": "-Infinity",
+          "cost.total": "NaN"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":1e400,\"output\":-1e400,\"cacheRead\":1e400,\"cacheWrite\":-1e400,\"cacheWrite1h\":1e400,\"reasoning\":-1e400,\"totalTokens\":1e400,\"cost\":{\"input\":1e400,\"output\":-1e400,\"cacheRead\":1e400,\"cacheWrite\":-1e400,\"total\":1e400}}",
+        "mutation": "Infinity"
+      },
+      "expected": {
+        "before": {
+          "input": null,
+          "output": null,
+          "cacheRead": null,
+          "cacheWrite": null,
+          "cacheWrite1h": null,
+          "reasoning": null,
+          "totalTokens": null,
+          "cost": {
+            "input": null,
+            "output": null,
+            "cacheRead": null,
+            "cacheWrite": null,
+            "total": null
+          }
+        },
+        "beforeNumbers": {
+          "input": "Infinity",
+          "output": "-Infinity",
+          "cacheRead": "Infinity",
+          "cacheWrite": "-Infinity",
+          "cacheWrite1h": "Infinity",
+          "reasoning": "-Infinity",
+          "totalTokens": "Infinity",
+          "cost.input": "Infinity",
+          "cost.output": "-Infinity",
+          "cost.cacheRead": "Infinity",
+          "cost.cacheWrite": "-Infinity",
+          "cost.total": "Infinity"
+        },
+        "after": {
+          "input": null,
+          "output": null,
+          "cacheRead": null,
+          "cacheWrite": null,
+          "cacheWrite1h": null,
+          "reasoning": null,
+          "totalTokens": null,
+          "cost": {
+            "input": null,
+            "output": null,
+            "cacheRead": null,
+            "cacheWrite": null,
+            "total": null
+          }
+        },
+        "afterNumbers": {
+          "input": "Infinity",
+          "output": "-Infinity",
+          "cacheRead": "Infinity",
+          "cacheWrite": "-Infinity",
+          "cacheWrite1h": "Infinity",
+          "reasoning": "Infinity",
+          "totalTokens": "Infinity",
+          "cost.input": "Infinity",
+          "cost.output": "-Infinity",
+          "cost.cacheRead": "Infinity",
+          "cost.cacheWrite": "-Infinity",
+          "cost.total": "Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":1e400,\"output\":-1e400,\"cacheRead\":1e400,\"cacheWrite\":-1e400,\"cacheWrite1h\":1e400,\"reasoning\":-1e400,\"totalTokens\":1e400,\"cost\":{\"input\":1e400,\"output\":-1e400,\"cacheRead\":1e400,\"cacheWrite\":-1e400,\"total\":1e400}}",
+        "mutation": "-Infinity"
+      },
+      "expected": {
+        "before": {
+          "input": null,
+          "output": null,
+          "cacheRead": null,
+          "cacheWrite": null,
+          "cacheWrite1h": null,
+          "reasoning": null,
+          "totalTokens": null,
+          "cost": {
+            "input": null,
+            "output": null,
+            "cacheRead": null,
+            "cacheWrite": null,
+            "total": null
+          }
+        },
+        "beforeNumbers": {
+          "input": "Infinity",
+          "output": "-Infinity",
+          "cacheRead": "Infinity",
+          "cacheWrite": "-Infinity",
+          "cacheWrite1h": "Infinity",
+          "reasoning": "-Infinity",
+          "totalTokens": "Infinity",
+          "cost.input": "Infinity",
+          "cost.output": "-Infinity",
+          "cost.cacheRead": "Infinity",
+          "cost.cacheWrite": "-Infinity",
+          "cost.total": "Infinity"
+        },
+        "after": {
+          "input": null,
+          "output": null,
+          "cacheRead": null,
+          "cacheWrite": null,
+          "cacheWrite1h": null,
+          "reasoning": null,
+          "totalTokens": null,
+          "cost": {
+            "input": null,
+            "output": null,
+            "cacheRead": null,
+            "cacheWrite": null,
+            "total": null
+          }
+        },
+        "afterNumbers": {
+          "input": "-Infinity",
+          "output": "-Infinity",
+          "cacheRead": "Infinity",
+          "cacheWrite": "-Infinity",
+          "cacheWrite1h": "-Infinity",
+          "reasoning": "-Infinity",
+          "totalTokens": "Infinity",
+          "cost.input": "Infinity",
+          "cost.output": "-Infinity",
+          "cost.cacheRead": "Infinity",
+          "cost.cacheWrite": "-Infinity",
+          "cost.total": "-Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":1e400,\"output\":-1e400,\"cacheRead\":1e400,\"cacheWrite\":-1e400,\"cacheWrite1h\":1e400,\"reasoning\":-1e400,\"totalTokens\":1e400,\"cost\":{\"input\":1e400,\"output\":-1e400,\"cacheRead\":1e400,\"cacheWrite\":-1e400,\"total\":1e400}}",
+        "mutation": "-0"
+      },
+      "expected": {
+        "before": {
+          "input": null,
+          "output": null,
+          "cacheRead": null,
+          "cacheWrite": null,
+          "cacheWrite1h": null,
+          "reasoning": null,
+          "totalTokens": null,
+          "cost": {
+            "input": null,
+            "output": null,
+            "cacheRead": null,
+            "cacheWrite": null,
+            "total": null
+          }
+        },
+        "beforeNumbers": {
+          "input": "Infinity",
+          "output": "-Infinity",
+          "cacheRead": "Infinity",
+          "cacheWrite": "-Infinity",
+          "cacheWrite1h": "Infinity",
+          "reasoning": "-Infinity",
+          "totalTokens": "Infinity",
+          "cost.input": "Infinity",
+          "cost.output": "-Infinity",
+          "cost.cacheRead": "Infinity",
+          "cost.cacheWrite": "-Infinity",
+          "cost.total": "Infinity"
+        },
+        "after": {
+          "input": 0,
+          "output": null,
+          "cacheRead": null,
+          "cacheWrite": null,
+          "cacheWrite1h": 0,
+          "reasoning": 0,
+          "totalTokens": null,
+          "cost": {
+            "input": null,
+            "output": null,
+            "cacheRead": null,
+            "cacheWrite": null,
+            "total": 0
+          }
+        },
+        "afterNumbers": {
+          "input": "-0",
+          "output": "-Infinity",
+          "cacheRead": "Infinity",
+          "cacheWrite": "-Infinity",
+          "cacheWrite1h": "-0",
+          "reasoning": "-0",
+          "totalTokens": "Infinity",
+          "cost.input": "Infinity",
+          "cost.output": "-Infinity",
+          "cost.cacheRead": "Infinity",
+          "cost.cacheWrite": "-Infinity",
+          "cost.total": "-0"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":1e400,\"output\":-1e400,\"cacheRead\":1e400,\"cacheWrite\":-1e400,\"cacheWrite1h\":1e400,\"reasoning\":-1e400,\"totalTokens\":1e400,\"cost\":{\"input\":1e400,\"output\":-1e400,\"cacheRead\":1e400,\"cacheWrite\":-1e400,\"total\":1e400}}",
+        "mutation": "42"
+      },
+      "expected": {
+        "before": {
+          "input": null,
+          "output": null,
+          "cacheRead": null,
+          "cacheWrite": null,
+          "cacheWrite1h": null,
+          "reasoning": null,
+          "totalTokens": null,
+          "cost": {
+            "input": null,
+            "output": null,
+            "cacheRead": null,
+            "cacheWrite": null,
+            "total": null
+          }
+        },
+        "beforeNumbers": {
+          "input": "Infinity",
+          "output": "-Infinity",
+          "cacheRead": "Infinity",
+          "cacheWrite": "-Infinity",
+          "cacheWrite1h": "Infinity",
+          "reasoning": "-Infinity",
+          "totalTokens": "Infinity",
+          "cost.input": "Infinity",
+          "cost.output": "-Infinity",
+          "cost.cacheRead": "Infinity",
+          "cost.cacheWrite": "-Infinity",
+          "cost.total": "Infinity"
+        },
+        "after": {
+          "input": 42,
+          "output": null,
+          "cacheRead": null,
+          "cacheWrite": null,
+          "cacheWrite1h": 42,
+          "reasoning": 42,
+          "totalTokens": null,
+          "cost": {
+            "input": null,
+            "output": null,
+            "cacheRead": null,
+            "cacheWrite": null,
+            "total": 42
+          }
+        },
+        "afterNumbers": {
+          "input": "finite",
+          "output": "-Infinity",
+          "cacheRead": "Infinity",
+          "cacheWrite": "-Infinity",
+          "cacheWrite1h": "finite",
+          "reasoning": "finite",
+          "totalTokens": "Infinity",
+          "cost.input": "Infinity",
+          "cost.output": "-Infinity",
+          "cost.cacheRead": "Infinity",
+          "cost.cacheWrite": "-Infinity",
+          "cost.total": "finite"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":-0,\"output\":-0,\"reasoning\":-0,\"cacheWrite1h\":-0,\"cost\":{\"total\":-0}}",
+        "mutation": "none"
+      },
+      "expected": {
+        "before": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheWrite1h": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "beforeNumbers": {
+          "input": "-0",
+          "output": "-0",
+          "cacheWrite1h": "-0",
+          "reasoning": "-0",
+          "cost.total": "-0"
+        },
+        "after": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheWrite1h": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "afterNumbers": {
+          "input": "-0",
+          "output": "-0",
+          "cacheWrite1h": "-0",
+          "reasoning": "-0",
+          "cost.total": "-0"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":-0,\"output\":-0,\"reasoning\":-0,\"cacheWrite1h\":-0,\"cost\":{\"total\":-0}}",
+        "mutation": "NaN"
+      },
+      "expected": {
+        "before": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheWrite1h": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "beforeNumbers": {
+          "input": "-0",
+          "output": "-0",
+          "cacheWrite1h": "-0",
+          "reasoning": "-0",
+          "cost.total": "-0"
+        },
+        "after": {
+          "input": null,
+          "output": 0,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "total": null
+          }
+        },
+        "afterNumbers": {
+          "input": "NaN",
+          "output": "-0",
+          "cacheWrite1h": "NaN",
+          "reasoning": "NaN",
+          "cost.total": "NaN"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":-0,\"output\":-0,\"reasoning\":-0,\"cacheWrite1h\":-0,\"cost\":{\"total\":-0}}",
+        "mutation": "Infinity"
+      },
+      "expected": {
+        "before": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheWrite1h": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "beforeNumbers": {
+          "input": "-0",
+          "output": "-0",
+          "cacheWrite1h": "-0",
+          "reasoning": "-0",
+          "cost.total": "-0"
+        },
+        "after": {
+          "input": null,
+          "output": 0,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "total": null
+          }
+        },
+        "afterNumbers": {
+          "input": "Infinity",
+          "output": "-0",
+          "cacheWrite1h": "Infinity",
+          "reasoning": "Infinity",
+          "cost.total": "Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":-0,\"output\":-0,\"reasoning\":-0,\"cacheWrite1h\":-0,\"cost\":{\"total\":-0}}",
+        "mutation": "-Infinity"
+      },
+      "expected": {
+        "before": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheWrite1h": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "beforeNumbers": {
+          "input": "-0",
+          "output": "-0",
+          "cacheWrite1h": "-0",
+          "reasoning": "-0",
+          "cost.total": "-0"
+        },
+        "after": {
+          "input": null,
+          "output": 0,
+          "reasoning": null,
+          "cacheWrite1h": null,
+          "cost": {
+            "total": null
+          }
+        },
+        "afterNumbers": {
+          "input": "-Infinity",
+          "output": "-0",
+          "cacheWrite1h": "-Infinity",
+          "reasoning": "-Infinity",
+          "cost.total": "-Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":-0,\"output\":-0,\"reasoning\":-0,\"cacheWrite1h\":-0,\"cost\":{\"total\":-0}}",
+        "mutation": "-0"
+      },
+      "expected": {
+        "before": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheWrite1h": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "beforeNumbers": {
+          "input": "-0",
+          "output": "-0",
+          "cacheWrite1h": "-0",
+          "reasoning": "-0",
+          "cost.total": "-0"
+        },
+        "after": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheWrite1h": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "afterNumbers": {
+          "input": "-0",
+          "output": "-0",
+          "cacheWrite1h": "-0",
+          "reasoning": "-0",
+          "cost.total": "-0"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":-0,\"output\":-0,\"reasoning\":-0,\"cacheWrite1h\":-0,\"cost\":{\"total\":-0}}",
+        "mutation": "42"
+      },
+      "expected": {
+        "before": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheWrite1h": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "beforeNumbers": {
+          "input": "-0",
+          "output": "-0",
+          "cacheWrite1h": "-0",
+          "reasoning": "-0",
+          "cost.total": "-0"
+        },
+        "after": {
+          "input": 42,
+          "output": 0,
+          "reasoning": 42,
+          "cacheWrite1h": 42,
+          "cost": {
+            "total": 42
+          }
+        },
+        "afterNumbers": {
+          "input": "finite",
+          "output": "-0",
+          "cacheWrite1h": "finite",
+          "reasoning": "finite",
+          "cost.total": "finite"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":1e-9999,\"output\":-1e-9999,\"cost\":{\"total\":-1e-9999}}",
+        "mutation": "none"
+      },
+      "expected": {
+        "before": {
+          "input": 0,
+          "output": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "output": "-0",
+          "cost.total": "-0"
+        },
+        "after": {
+          "input": 0,
+          "output": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "afterNumbers": {
+          "input": "finite",
+          "output": "-0",
+          "cost.total": "-0"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":1e-9999,\"output\":-1e-9999,\"cost\":{\"total\":-1e-9999}}",
+        "mutation": "NaN"
+      },
+      "expected": {
+        "before": {
+          "input": 0,
+          "output": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "output": "-0",
+          "cost.total": "-0"
+        },
+        "after": {
+          "input": null,
+          "output": 0,
+          "cost": {
+            "total": null
+          },
+          "reasoning": null,
+          "cacheWrite1h": null
+        },
+        "afterNumbers": {
+          "input": "NaN",
+          "output": "-0",
+          "cacheWrite1h": "NaN",
+          "reasoning": "NaN",
+          "cost.total": "NaN"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":1e-9999,\"output\":-1e-9999,\"cost\":{\"total\":-1e-9999}}",
+        "mutation": "Infinity"
+      },
+      "expected": {
+        "before": {
+          "input": 0,
+          "output": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "output": "-0",
+          "cost.total": "-0"
+        },
+        "after": {
+          "input": null,
+          "output": 0,
+          "cost": {
+            "total": null
+          },
+          "reasoning": null,
+          "cacheWrite1h": null
+        },
+        "afterNumbers": {
+          "input": "Infinity",
+          "output": "-0",
+          "cacheWrite1h": "Infinity",
+          "reasoning": "Infinity",
+          "cost.total": "Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":1e-9999,\"output\":-1e-9999,\"cost\":{\"total\":-1e-9999}}",
+        "mutation": "-Infinity"
+      },
+      "expected": {
+        "before": {
+          "input": 0,
+          "output": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "output": "-0",
+          "cost.total": "-0"
+        },
+        "after": {
+          "input": null,
+          "output": 0,
+          "cost": {
+            "total": null
+          },
+          "reasoning": null,
+          "cacheWrite1h": null
+        },
+        "afterNumbers": {
+          "input": "-Infinity",
+          "output": "-0",
+          "cacheWrite1h": "-Infinity",
+          "reasoning": "-Infinity",
+          "cost.total": "-Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":1e-9999,\"output\":-1e-9999,\"cost\":{\"total\":-1e-9999}}",
+        "mutation": "-0"
+      },
+      "expected": {
+        "before": {
+          "input": 0,
+          "output": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "output": "-0",
+          "cost.total": "-0"
+        },
+        "after": {
+          "input": 0,
+          "output": 0,
+          "cost": {
+            "total": 0
+          },
+          "reasoning": 0,
+          "cacheWrite1h": 0
+        },
+        "afterNumbers": {
+          "input": "-0",
+          "output": "-0",
+          "cacheWrite1h": "-0",
+          "reasoning": "-0",
+          "cost.total": "-0"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":1e-9999,\"output\":-1e-9999,\"cost\":{\"total\":-1e-9999}}",
+        "mutation": "42"
+      },
+      "expected": {
+        "before": {
+          "input": 0,
+          "output": 0,
+          "cost": {
+            "total": 0
+          }
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "output": "-0",
+          "cost.total": "-0"
+        },
+        "after": {
+          "input": 42,
+          "output": 0,
+          "cost": {
+            "total": 42
+          },
+          "reasoning": 42,
+          "cacheWrite1h": 42
+        },
+        "afterNumbers": {
+          "input": "finite",
+          "output": "-0",
+          "cacheWrite1h": "finite",
+          "reasoning": "finite",
+          "cost.total": "finite"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":9007199254740993,\"cost\":{\"total\":18446744073709551615},\"vendor\":[9007199254740993,1e400,-0]}",
+        "mutation": "none"
+      },
+      "expected": {
+        "before": {
+          "input": 9007199254740992,
+          "cost": {
+            "total": 18446744073709552000
+          },
+          "vendor": [
+            9007199254740992,
+            null,
+            0
+          ]
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "cost.total": "finite"
+        },
+        "after": {
+          "input": 9007199254740992,
+          "cost": {
+            "total": 18446744073709552000
+          },
+          "vendor": [
+            9007199254740992,
+            null,
+            0
+          ]
+        },
+        "afterNumbers": {
+          "input": "finite",
+          "cost.total": "finite"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":9007199254740993,\"cost\":{\"total\":18446744073709551615},\"vendor\":[9007199254740993,1e400,-0]}",
+        "mutation": "NaN"
+      },
+      "expected": {
+        "before": {
+          "input": 9007199254740992,
+          "cost": {
+            "total": 18446744073709552000
+          },
+          "vendor": [
+            9007199254740992,
+            null,
+            0
+          ]
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "cost.total": "finite"
+        },
+        "after": {
+          "input": null,
+          "cost": {
+            "total": null
+          },
+          "vendor": [
+            9007199254740992,
+            null,
+            0
+          ],
+          "reasoning": null,
+          "cacheWrite1h": null
+        },
+        "afterNumbers": {
+          "input": "NaN",
+          "cacheWrite1h": "NaN",
+          "reasoning": "NaN",
+          "cost.total": "NaN"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":9007199254740993,\"cost\":{\"total\":18446744073709551615},\"vendor\":[9007199254740993,1e400,-0]}",
+        "mutation": "Infinity"
+      },
+      "expected": {
+        "before": {
+          "input": 9007199254740992,
+          "cost": {
+            "total": 18446744073709552000
+          },
+          "vendor": [
+            9007199254740992,
+            null,
+            0
+          ]
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "cost.total": "finite"
+        },
+        "after": {
+          "input": null,
+          "cost": {
+            "total": null
+          },
+          "vendor": [
+            9007199254740992,
+            null,
+            0
+          ],
+          "reasoning": null,
+          "cacheWrite1h": null
+        },
+        "afterNumbers": {
+          "input": "Infinity",
+          "cacheWrite1h": "Infinity",
+          "reasoning": "Infinity",
+          "cost.total": "Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":9007199254740993,\"cost\":{\"total\":18446744073709551615},\"vendor\":[9007199254740993,1e400,-0]}",
+        "mutation": "-Infinity"
+      },
+      "expected": {
+        "before": {
+          "input": 9007199254740992,
+          "cost": {
+            "total": 18446744073709552000
+          },
+          "vendor": [
+            9007199254740992,
+            null,
+            0
+          ]
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "cost.total": "finite"
+        },
+        "after": {
+          "input": null,
+          "cost": {
+            "total": null
+          },
+          "vendor": [
+            9007199254740992,
+            null,
+            0
+          ],
+          "reasoning": null,
+          "cacheWrite1h": null
+        },
+        "afterNumbers": {
+          "input": "-Infinity",
+          "cacheWrite1h": "-Infinity",
+          "reasoning": "-Infinity",
+          "cost.total": "-Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":9007199254740993,\"cost\":{\"total\":18446744073709551615},\"vendor\":[9007199254740993,1e400,-0]}",
+        "mutation": "-0"
+      },
+      "expected": {
+        "before": {
+          "input": 9007199254740992,
+          "cost": {
+            "total": 18446744073709552000
+          },
+          "vendor": [
+            9007199254740992,
+            null,
+            0
+          ]
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "cost.total": "finite"
+        },
+        "after": {
+          "input": 0,
+          "cost": {
+            "total": 0
+          },
+          "vendor": [
+            9007199254740992,
+            null,
+            0
+          ],
+          "reasoning": 0,
+          "cacheWrite1h": 0
+        },
+        "afterNumbers": {
+          "input": "-0",
+          "cacheWrite1h": "-0",
+          "reasoning": "-0",
+          "cost.total": "-0"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":9007199254740993,\"cost\":{\"total\":18446744073709551615},\"vendor\":[9007199254740993,1e400,-0]}",
+        "mutation": "42"
+      },
+      "expected": {
+        "before": {
+          "input": 9007199254740992,
+          "cost": {
+            "total": 18446744073709552000
+          },
+          "vendor": [
+            9007199254740992,
+            null,
+            0
+          ]
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "cost.total": "finite"
+        },
+        "after": {
+          "input": 42,
+          "cost": {
+            "total": 42
+          },
+          "vendor": [
+            9007199254740992,
+            null,
+            0
+          ],
+          "reasoning": 42,
+          "cacheWrite1h": 42
+        },
+        "afterNumbers": {
+          "input": "finite",
+          "cacheWrite1h": "finite",
+          "reasoning": "finite",
+          "cost.total": "finite"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":3,\"cost\":{\"input\":0.1,\"currency\":\"USD\",\"overflow\":1e400},\"providerMeter\":{\"requests\":9007199254740993,\"values\":[-0,-1e400]}}",
+        "mutation": "none"
+      },
+      "expected": {
+        "before": {
+          "input": 3,
+          "cost": {
+            "input": 0.1,
+            "currency": "USD",
+            "overflow": null
+          },
+          "providerMeter": {
+            "requests": 9007199254740992,
+            "values": [
+              0,
+              null
+            ]
+          }
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "cost.input": "finite"
+        },
+        "after": {
+          "input": 3,
+          "cost": {
+            "input": 0.1,
+            "currency": "USD",
+            "overflow": null
+          },
+          "providerMeter": {
+            "requests": 9007199254740992,
+            "values": [
+              0,
+              null
+            ]
+          }
+        },
+        "afterNumbers": {
+          "input": "finite",
+          "cost.input": "finite"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":3,\"cost\":{\"input\":0.1,\"currency\":\"USD\",\"overflow\":1e400},\"providerMeter\":{\"requests\":9007199254740993,\"values\":[-0,-1e400]}}",
+        "mutation": "NaN"
+      },
+      "expected": {
+        "before": {
+          "input": 3,
+          "cost": {
+            "input": 0.1,
+            "currency": "USD",
+            "overflow": null
+          },
+          "providerMeter": {
+            "requests": 9007199254740992,
+            "values": [
+              0,
+              null
+            ]
+          }
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "cost.input": "finite"
+        },
+        "after": {
+          "input": null,
+          "cost": {
+            "input": 0.1,
+            "currency": "USD",
+            "overflow": null,
+            "total": null
+          },
+          "providerMeter": {
+            "requests": 9007199254740992,
+            "values": [
+              0,
+              null
+            ]
+          },
+          "reasoning": null,
+          "cacheWrite1h": null
+        },
+        "afterNumbers": {
+          "input": "NaN",
+          "cacheWrite1h": "NaN",
+          "reasoning": "NaN",
+          "cost.input": "finite",
+          "cost.total": "NaN"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":3,\"cost\":{\"input\":0.1,\"currency\":\"USD\",\"overflow\":1e400},\"providerMeter\":{\"requests\":9007199254740993,\"values\":[-0,-1e400]}}",
+        "mutation": "Infinity"
+      },
+      "expected": {
+        "before": {
+          "input": 3,
+          "cost": {
+            "input": 0.1,
+            "currency": "USD",
+            "overflow": null
+          },
+          "providerMeter": {
+            "requests": 9007199254740992,
+            "values": [
+              0,
+              null
+            ]
+          }
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "cost.input": "finite"
+        },
+        "after": {
+          "input": null,
+          "cost": {
+            "input": 0.1,
+            "currency": "USD",
+            "overflow": null,
+            "total": null
+          },
+          "providerMeter": {
+            "requests": 9007199254740992,
+            "values": [
+              0,
+              null
+            ]
+          },
+          "reasoning": null,
+          "cacheWrite1h": null
+        },
+        "afterNumbers": {
+          "input": "Infinity",
+          "cacheWrite1h": "Infinity",
+          "reasoning": "Infinity",
+          "cost.input": "finite",
+          "cost.total": "Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":3,\"cost\":{\"input\":0.1,\"currency\":\"USD\",\"overflow\":1e400},\"providerMeter\":{\"requests\":9007199254740993,\"values\":[-0,-1e400]}}",
+        "mutation": "-Infinity"
+      },
+      "expected": {
+        "before": {
+          "input": 3,
+          "cost": {
+            "input": 0.1,
+            "currency": "USD",
+            "overflow": null
+          },
+          "providerMeter": {
+            "requests": 9007199254740992,
+            "values": [
+              0,
+              null
+            ]
+          }
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "cost.input": "finite"
+        },
+        "after": {
+          "input": null,
+          "cost": {
+            "input": 0.1,
+            "currency": "USD",
+            "overflow": null,
+            "total": null
+          },
+          "providerMeter": {
+            "requests": 9007199254740992,
+            "values": [
+              0,
+              null
+            ]
+          },
+          "reasoning": null,
+          "cacheWrite1h": null
+        },
+        "afterNumbers": {
+          "input": "-Infinity",
+          "cacheWrite1h": "-Infinity",
+          "reasoning": "-Infinity",
+          "cost.input": "finite",
+          "cost.total": "-Infinity"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":3,\"cost\":{\"input\":0.1,\"currency\":\"USD\",\"overflow\":1e400},\"providerMeter\":{\"requests\":9007199254740993,\"values\":[-0,-1e400]}}",
+        "mutation": "-0"
+      },
+      "expected": {
+        "before": {
+          "input": 3,
+          "cost": {
+            "input": 0.1,
+            "currency": "USD",
+            "overflow": null
+          },
+          "providerMeter": {
+            "requests": 9007199254740992,
+            "values": [
+              0,
+              null
+            ]
+          }
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "cost.input": "finite"
+        },
+        "after": {
+          "input": 0,
+          "cost": {
+            "input": 0.1,
+            "currency": "USD",
+            "overflow": null,
+            "total": 0
+          },
+          "providerMeter": {
+            "requests": 9007199254740992,
+            "values": [
+              0,
+              null
+            ]
+          },
+          "reasoning": 0,
+          "cacheWrite1h": 0
+        },
+        "afterNumbers": {
+          "input": "-0",
+          "cacheWrite1h": "-0",
+          "reasoning": "-0",
+          "cost.input": "finite",
+          "cost.total": "-0"
+        }
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"input\":3,\"cost\":{\"input\":0.1,\"currency\":\"USD\",\"overflow\":1e400},\"providerMeter\":{\"requests\":9007199254740993,\"values\":[-0,-1e400]}}",
+        "mutation": "42"
+      },
+      "expected": {
+        "before": {
+          "input": 3,
+          "cost": {
+            "input": 0.1,
+            "currency": "USD",
+            "overflow": null
+          },
+          "providerMeter": {
+            "requests": 9007199254740992,
+            "values": [
+              0,
+              null
+            ]
+          }
+        },
+        "beforeNumbers": {
+          "input": "finite",
+          "cost.input": "finite"
+        },
+        "after": {
+          "input": 42,
+          "cost": {
+            "input": 0.1,
+            "currency": "USD",
+            "overflow": null,
+            "total": 42
+          },
+          "providerMeter": {
+            "requests": 9007199254740992,
+            "values": [
+              0,
+              null
+            ]
+          },
+          "reasoning": 42,
+          "cacheWrite1h": 42
+        },
+        "afterNumbers": {
+          "input": "finite",
+          "cacheWrite1h": "finite",
+          "reasoning": "finite",
+          "cost.input": "finite",
+          "cost.total": "finite"
+        }
+      }
+    }
+  ]
+}

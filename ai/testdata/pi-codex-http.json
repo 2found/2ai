@@ -1,0 +1,2376 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "model": {
+    "id": "gpt-5.5",
+    "name": "Test",
+    "api": "openai-codex-responses",
+    "provider": "openai-codex",
+    "baseUrl": "https://codex.example/backend",
+    "reasoning": true,
+    "input": [
+      "text",
+      "image"
+    ],
+    "maxTokens": 20000,
+    "contextWindow": 100000,
+    "cost": {
+      "input": 0,
+      "output": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    }
+  },
+  "context": {
+    "systemPrompt": "system",
+    "messages": [
+      {
+        "role": "user",
+        "content": "hello",
+        "timestamp": 100
+      }
+    ],
+    "tools": [
+      {
+        "name": "tool",
+        "description": "Tool",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code"
+          ]
+        }
+      }
+    ]
+  },
+  "token": "header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+  "cases": [
+    {
+      "input": {
+        "name": "default"
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response",
+          "event"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 3,
+            "output": 2,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "responseId": "response",
+          "rawStopReason": "completed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "session",
+        "options": {
+          "sessionId": "session"
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "session-id": "session",
+              "user-agent": "<platform>",
+              "x-client-request-id": "session"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "prompt_cache_key": "session",
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response",
+          "event"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 3,
+            "output": 2,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "responseId": "response",
+          "rawStopReason": "completed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "cache none",
+        "options": {
+          "sessionId": "session",
+          "cacheRetention": "none"
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response",
+          "event"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 3,
+            "output": 2,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "responseId": "response",
+          "rawStopReason": "completed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "empty session",
+        "options": {
+          "sessionId": ""
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "prompt_cache_key": "",
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response",
+          "event"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 3,
+            "output": 2,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "responseId": "response",
+          "rawStopReason": "completed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "cache clipped",
+        "options": {
+          "sessionId": "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "session-id": "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
+              "user-agent": "<platform>",
+              "x-client-request-id": "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "prompt_cache_key": "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response",
+          "event"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 3,
+            "output": 2,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "responseId": "response",
+          "rawStopReason": "completed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "header overrides",
+        "headers": {
+          "x-model": "initial"
+        },
+        "options": {
+          "headers": {
+            "x-model": null,
+            "x-request": "new",
+            "authorization": "wrong"
+          }
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>",
+              "x-request": "new"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response",
+          "event"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 3,
+            "output": 2,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "responseId": "response",
+          "rawStopReason": "completed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "payload replacement",
+        "payload": {
+          "model": "replaced",
+          "stream": true,
+          "input": [],
+          "marker": "replacement"
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "replaced",
+              "stream": true,
+              "input": [],
+              "marker": "replacement"
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response",
+          "event"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 3,
+            "output": 2,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "responseId": "response",
+          "rawStopReason": "completed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "payload failure",
+        "payloadFailure": true
+      },
+      "expected": {
+        "requests": [],
+        "callbacks": [
+          "payload"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "payload failure"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "response failure",
+        "responseFailure": true
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "response failure"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "event failure",
+        "eventFailure": true,
+        "options": {
+          "maxRetries": 2
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response",
+          "event"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "event failure"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "no response body",
+        "responses": [
+          {
+            "status": 204
+          }
+        ]
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "No response body"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "non-JSON billing catch retry",
+        "options": {
+          "maxRetries": 1
+        },
+        "responses": [
+          {
+            "status": 429,
+            "body": "billing"
+          },
+          {}
+        ]
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          },
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response",
+          "response",
+          "event"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 3,
+            "output": 2,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "responseId": "response",
+          "rawStopReason": "completed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "event mutation",
+        "eventMutation": true
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response",
+          "event"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 3,
+            "output": 2,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "responseId": "mutated",
+          "rawStopReason": "completed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "missing key",
+        "options": {
+          "apiKey": ""
+        }
+      },
+      "expected": {
+        "requests": [],
+        "callbacks": [],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "No API key for provider: openai-codex"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "invalid token",
+        "options": {
+          "apiKey": "invalid"
+        }
+      },
+      "expected": {
+        "requests": [],
+        "callbacks": [],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "Failed to extract accountId from token"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "negative timeout",
+        "options": {
+          "timeoutMs": -1
+        }
+      },
+      "expected": {
+        "requests": [],
+        "callbacks": [
+          "payload"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "Invalid timeoutMs: -1"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "null timeout",
+        "options": {
+          "timeoutMs": null
+        }
+      },
+      "expected": {
+        "requests": [],
+        "callbacks": [
+          "payload"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "Invalid timeoutMs: null"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "fractional timeout",
+        "options": {
+          "timeoutMs": 10.5
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response",
+          "event"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 3,
+            "output": 2,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "responseId": "response",
+          "rawStopReason": "completed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "transient retry",
+        "options": {
+          "maxRetries": 1
+        },
+        "responses": [
+          {
+            "status": 503,
+            "body": "overloaded",
+            "headers": {
+              "retry-after-ms": "0"
+            }
+          },
+          {}
+        ]
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          },
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response",
+          "response",
+          "event"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 3,
+            "output": 2,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "responseId": "response",
+          "rawStopReason": "completed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "retry delay ceiling",
+        "options": {
+          "maxRetries": 1,
+          "maxRetryDelayMs": 1000
+        },
+        "responses": [
+          {
+            "status": 503,
+            "body": "overloaded",
+            "headers": {
+              "retry-after-ms": "2001"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "Server requested 3s retry delay (max: 1s)"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "quota no retry",
+        "options": {
+          "maxRetries": 2
+        },
+        "responses": [
+          {
+            "status": 429,
+            "body": "{\"error\":{\"code\":\"usage_limit_reached\",\"plan_type\":\"PLUS\",\"resets_at\":60}}"
+          }
+        ]
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          },
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response",
+          "response",
+          "event"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 3,
+            "output": 2,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "responseId": "response",
+          "rawStopReason": "completed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "unauthorized retries through catch",
+        "options": {
+          "maxRetries": 1
+        },
+        "responses": [
+          {
+            "status": 401,
+            "body": "{\"error\":{\"message\":\"unauthorized\"}}"
+          },
+          {}
+        ]
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          },
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response",
+          "response",
+          "event"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 3,
+            "output": 2,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "responseId": "response",
+          "rawStopReason": "completed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "max retries negative",
+        "options": {
+          "maxRetries": -1
+        }
+      },
+      "expected": {
+        "requests": [],
+        "callbacks": [
+          "payload"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "Failed after retries"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "server body error",
+        "responses": [
+          {
+            "status": 400,
+            "body": "invalid request"
+          }
+        ]
+      },
+      "expected": {
+        "requests": [
+          {
+            "url": "https://codex.example/backend/codex/responses",
+            "headers": {
+              "accept": "text/event-stream",
+              "authorization": "Bearer header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+              "chatgpt-account-id": "account",
+              "content-encoding": "zstd",
+              "content-type": "application/json",
+              "openai-beta": "responses=experimental",
+              "originator": "pi",
+              "user-agent": "<platform>"
+            },
+            "body": {
+              "model": "gpt-5.5",
+              "store": false,
+              "stream": true,
+              "instructions": "system",
+              "input": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "input_text",
+                      "text": "hello"
+                    }
+                  ]
+                }
+              ],
+              "text": {
+                "verbosity": "low"
+              },
+              "include": [
+                "reasoning.encrypted_content"
+              ],
+              "tool_choice": "auto",
+              "parallel_tool_calls": true,
+              "tools": [
+                {
+                  "type": "function",
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "strict": null
+                }
+              ],
+              "reasoning": {
+                "effort": "none"
+              }
+            }
+          }
+        ],
+        "callbacks": [
+          "payload",
+          "response"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "openai-codex-responses",
+          "provider": "openai-codex",
+          "model": "gpt-5.5",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "invalid request"
+        }
+      }
+    }
+  ]
+}

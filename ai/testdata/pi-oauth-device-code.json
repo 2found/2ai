@@ -1,0 +1,4445 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "interval": {
+          "special": "undefined"
+        },
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 5000
+        },
+        {
+          "poll": 6000
+        }
+      ],
+      "now": 6000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": {
+          "special": "undefined"
+        },
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 10000
+        },
+        {
+          "poll": 11000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 12000
+        }
+      ],
+      "now": 12000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": {
+          "special": "undefined"
+        },
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 5000
+        },
+        {
+          "poll": 6000
+        },
+        {
+          "sleep": 5000
+        },
+        {
+          "poll": 11000
+        }
+      ],
+      "now": 11000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": {
+          "special": "undefined"
+        },
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 5000
+        },
+        {
+          "poll": 6000
+        },
+        {
+          "sleep": 10000
+        },
+        {
+          "poll": 16000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 17000
+        }
+      ],
+      "now": 17000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": null,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 5000
+        },
+        {
+          "poll": 6000
+        }
+      ],
+      "now": 6000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": null,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 10000
+        },
+        {
+          "poll": 11000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 12000
+        }
+      ],
+      "now": 12000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": null,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 5000
+        },
+        {
+          "poll": 6000
+        },
+        {
+          "sleep": 5000
+        },
+        {
+          "poll": 11000
+        }
+      ],
+      "now": 11000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": null,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 5000
+        },
+        {
+          "poll": 6000
+        },
+        {
+          "sleep": 10000
+        },
+        {
+          "poll": 16000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 17000
+        }
+      ],
+      "now": 17000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 0,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        }
+      ],
+      "now": 2000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 0,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 6000
+        },
+        {
+          "poll": 7000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 8000
+        }
+      ],
+      "now": 8000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 0,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 3000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 0,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        },
+        {
+          "sleep": 6000
+        },
+        {
+          "poll": 8000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 9000
+        }
+      ],
+      "now": 9000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": -2,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        }
+      ],
+      "now": 2000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": -2,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 6000
+        },
+        {
+          "poll": 7000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 8000
+        }
+      ],
+      "now": 8000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": -2,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 3000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": -2,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        },
+        {
+          "sleep": 6000
+        },
+        {
+          "poll": 8000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 9000
+        }
+      ],
+      "now": 9000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 0.0001,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        }
+      ],
+      "now": 2000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 0.0001,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 6000
+        },
+        {
+          "poll": 7000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 8000
+        }
+      ],
+      "now": 8000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 0.0001,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 3000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 0.0001,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        },
+        {
+          "sleep": 6000
+        },
+        {
+          "poll": 8000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 9000
+        }
+      ],
+      "now": 9000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 1.9999,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 1999
+        },
+        {
+          "poll": 2999
+        }
+      ],
+      "now": 2999,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 1.9999,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 6999
+        },
+        {
+          "poll": 7999
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 8999
+        }
+      ],
+      "now": 8999,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 1.9999,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 1999
+        },
+        {
+          "poll": 2999
+        },
+        {
+          "sleep": 1999
+        },
+        {
+          "poll": 4998
+        }
+      ],
+      "now": 4998,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 1.9999,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 1999
+        },
+        {
+          "poll": 2999
+        },
+        {
+          "sleep": 6999
+        },
+        {
+          "poll": 9998
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 10998
+        }
+      ],
+      "now": 10998,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 7000
+        },
+        {
+          "poll": 8000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 9000
+        }
+      ],
+      "now": 9000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 5000
+        }
+      ],
+      "now": 5000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        },
+        {
+          "sleep": 7000
+        },
+        {
+          "poll": 10000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 11000
+        }
+      ],
+      "now": 11000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 5,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 5000
+        },
+        {
+          "poll": 6000
+        }
+      ],
+      "now": 6000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 5,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 10000
+        },
+        {
+          "poll": 11000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 12000
+        }
+      ],
+      "now": 12000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 5,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 5000
+        },
+        {
+          "poll": 6000
+        },
+        {
+          "sleep": 5000
+        },
+        {
+          "poll": 11000
+        }
+      ],
+      "now": 11000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 5,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 5000
+        },
+        {
+          "poll": 6000
+        },
+        {
+          "sleep": 10000
+        },
+        {
+          "poll": 16000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 17000
+        }
+      ],
+      "now": 17000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": "2.5",
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 2500
+        },
+        {
+          "poll": 3500
+        }
+      ],
+      "now": 3500,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": "2.5",
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 7500
+        },
+        {
+          "poll": 8500
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 9500
+        }
+      ],
+      "now": 9500,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": "2.5",
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 2500
+        },
+        {
+          "poll": 3500
+        },
+        {
+          "sleep": 2500
+        },
+        {
+          "poll": 6000
+        }
+      ],
+      "now": 6000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": "2.5",
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 2500
+        },
+        {
+          "poll": 3500
+        },
+        {
+          "sleep": 7500
+        },
+        {
+          "poll": 11000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 12000
+        }
+      ],
+      "now": 12000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": true,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        }
+      ],
+      "now": 2000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": true,
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 6000
+        },
+        {
+          "poll": 7000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 8000
+        }
+      ],
+      "now": 8000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": true,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 3000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": true,
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        },
+        {
+          "sleep": 6000
+        },
+        {
+          "poll": 8000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 9000
+        }
+      ],
+      "now": 9000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": [],
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        }
+      ],
+      "now": 2000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": [],
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 6000
+        },
+        {
+          "poll": 7000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 8000
+        }
+      ],
+      "now": 8000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": [],
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 3000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": [],
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        },
+        {
+          "sleep": 6000
+        },
+        {
+          "poll": 8000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 9000
+        }
+      ],
+      "now": 9000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": [
+          2
+        ],
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": [
+          2
+        ],
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 7000
+        },
+        {
+          "poll": 8000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 9000
+        }
+      ],
+      "now": 9000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": [
+          2
+        ],
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 5000
+        }
+      ],
+      "now": 5000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": [
+          2
+        ],
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        },
+        {
+          "sleep": 7000
+        },
+        {
+          "poll": 10000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 11000
+        }
+      ],
+      "now": 11000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": "invalid",
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": "NaN"
+        },
+        {
+          "poll": 1001
+        }
+      ],
+      "now": 1001,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": "invalid",
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": "NaN"
+        },
+        {
+          "poll": 1001
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2001
+        }
+      ],
+      "now": 2001,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": "invalid",
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": "NaN"
+        },
+        {
+          "poll": 1001
+        },
+        {
+          "sleep": "NaN"
+        },
+        {
+          "poll": 1002
+        }
+      ],
+      "now": 1002,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": "invalid",
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": "NaN"
+        },
+        {
+          "poll": 1001
+        },
+        {
+          "sleep": "NaN"
+        },
+        {
+          "poll": 1002
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2002
+        }
+      ],
+      "now": 2002,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": {
+          "special": "NaN"
+        },
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": "NaN"
+        },
+        {
+          "poll": 1001
+        }
+      ],
+      "now": 1001,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": {
+          "special": "NaN"
+        },
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": "NaN"
+        },
+        {
+          "poll": 1001
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2001
+        }
+      ],
+      "now": 2001,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": {
+          "special": "NaN"
+        },
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": "NaN"
+        },
+        {
+          "poll": 1001
+        },
+        {
+          "sleep": "NaN"
+        },
+        {
+          "poll": 1002
+        }
+      ],
+      "now": 1002,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": {
+          "special": "NaN"
+        },
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": "NaN"
+        },
+        {
+          "poll": 1001
+        },
+        {
+          "sleep": "NaN"
+        },
+        {
+          "poll": 1002
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2002
+        }
+      ],
+      "now": 2002,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": {
+          "special": "Infinity"
+        },
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 20000
+        }
+      ],
+      "now": 21000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": {
+          "special": "Infinity"
+        },
+        "expires": 20,
+        "wait": false,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 20000
+        }
+      ],
+      "now": 21000,
+      "output": {
+        "error": "Device flow timed out after one or more slow_down responses. This is often caused by clock drift in WSL or VM environments. Please sync or restart the VM clock and try again.",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": {
+          "special": "Infinity"
+        },
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 20000
+        }
+      ],
+      "now": 21000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": {
+          "special": "Infinity"
+        },
+        "expires": 20,
+        "wait": true,
+        "steps": [
+          {
+            "status": "slow_down"
+          },
+          {
+            "status": "slow_down",
+            "interval": 0.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 20000
+        }
+      ],
+      "now": 21000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": {
+          "special": "undefined"
+        },
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": {
+          "special": "undefined"
+        },
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 5000
+        }
+      ],
+      "now": 5000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": null,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": null,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 5000
+        }
+      ],
+      "now": 5000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 0,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [],
+      "now": 1000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 0,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [],
+      "now": 1000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": -1,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [],
+      "now": 1000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": -1,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [],
+      "now": 1000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 0.5,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 500
+        }
+      ],
+      "now": 1500,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 0.5,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 500
+        }
+      ],
+      "now": 1500,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 1000
+        }
+      ],
+      "now": 2000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 1000
+        }
+      ],
+      "now": 2000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 2,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 2000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 2,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 2000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 7,
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 7,
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 5000
+        }
+      ],
+      "now": 5000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": "0",
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": "0",
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 5000
+        }
+      ],
+      "now": 5000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": {
+          "special": "NaN"
+        },
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [],
+      "now": 1000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": {
+          "special": "NaN"
+        },
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [],
+      "now": 1000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": {
+          "special": "Infinity"
+        },
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": {
+          "special": "Infinity"
+        },
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 5000
+        }
+      ],
+      "now": 5000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": {
+          "special": "-Infinity"
+        },
+        "wait": false,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [],
+      "now": 1000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": {
+          "special": "-Infinity"
+        },
+        "wait": true,
+        "steps": [
+          {
+            "status": "pending"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [],
+      "now": 1000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "steps": [
+          {
+            "status": "slow_down",
+            "interval": {
+              "special": "undefined"
+            }
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 7000
+        },
+        {
+          "poll": 8000
+        }
+      ],
+      "now": 8000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "steps": [
+          {
+            "status": "slow_down",
+            "interval": null
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 7000
+        },
+        {
+          "poll": 8000
+        }
+      ],
+      "now": 8000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "steps": [
+          {
+            "status": "slow_down",
+            "interval": 0
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 7000
+        },
+        {
+          "poll": 8000
+        }
+      ],
+      "now": 8000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "steps": [
+          {
+            "status": "slow_down",
+            "interval": -1
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 7000
+        },
+        {
+          "poll": 8000
+        }
+      ],
+      "now": 8000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "steps": [
+          {
+            "status": "slow_down",
+            "interval": 0.0001
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 1000
+        },
+        {
+          "poll": 2000
+        }
+      ],
+      "now": 2000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "steps": [
+          {
+            "status": "slow_down",
+            "interval": 1.2
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 1200
+        },
+        {
+          "poll": 2200
+        }
+      ],
+      "now": 2200,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "steps": [
+          {
+            "status": "slow_down",
+            "interval": 30
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 10000
+        }
+      ],
+      "now": 11000,
+      "output": {
+        "error": "Device flow timed out after one or more slow_down responses. This is often caused by clock drift in WSL or VM environments. Please sync or restart the VM clock and try again.",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "steps": [
+          {
+            "status": "slow_down",
+            "interval": "1"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 7000
+        },
+        {
+          "poll": 8000
+        }
+      ],
+      "now": 8000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "steps": [
+          {
+            "status": "slow_down",
+            "interval": {
+              "special": "NaN"
+            }
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 7000
+        },
+        {
+          "poll": 8000
+        }
+      ],
+      "now": 8000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "steps": [
+          {
+            "status": "slow_down",
+            "interval": {
+              "special": "Infinity"
+            }
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 7000
+        },
+        {
+          "poll": 8000
+        }
+      ],
+      "now": 8000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "steps": [
+          {
+            "status": "slow_down",
+            "interval": {
+              "special": "-Infinity"
+            }
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 7000
+        },
+        {
+          "poll": 8000
+        }
+      ],
+      "now": 8000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "complete",
+            "action": "abort",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "complete",
+            "action": "expire",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "complete",
+            "action": "throw",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "poll failed",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "complete",
+            "action": "reject",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "poll failed",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "failed",
+            "action": "abort",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "denied",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "failed",
+            "action": "expire",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "error": "denied",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "failed",
+            "action": "throw",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "poll failed",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "failed",
+            "action": "reject",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "poll failed",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "pending",
+            "action": "abort",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "pending",
+            "action": "expire",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "pending",
+            "action": "throw",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "poll failed",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "pending",
+            "action": "reject",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "poll failed",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "slow_down",
+            "action": "abort",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "slow_down",
+            "action": "expire",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "error": "Device flow timed out after one or more slow_down responses. This is often caused by clock drift in WSL or VM environments. Please sync or restart the VM clock and try again.",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "slow_down",
+            "action": "throw",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "poll failed",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "slow_down",
+            "action": "reject",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "poll failed",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "unknown",
+            "action": "abort",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "unknown",
+            "action": "expire",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "unknown",
+            "action": "throw",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "poll failed",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "steps": [
+          {
+            "status": "unknown",
+            "action": "reject",
+            "message": "denied"
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "poll failed",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 0,
+        "wait": false,
+        "preabort": true,
+        "steps": [
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [],
+      "now": 1000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "wait": false,
+        "preabort": true,
+        "steps": [
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [],
+      "now": 1000,
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "wait": false,
+        "preabort": true,
+        "steps": [
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [],
+      "now": 1000,
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 0,
+        "wait": true,
+        "preabort": true,
+        "steps": [
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [],
+      "now": 1000,
+      "output": {
+        "error": "Device flow timed out",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 1,
+        "wait": true,
+        "preabort": true,
+        "steps": [
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [],
+      "now": 1000,
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "wait": true,
+        "preabort": true,
+        "steps": [
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [],
+      "now": 1000,
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "abortSleep": true,
+        "steps": [
+          {
+            "status": "pending"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 2000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "wait": true,
+        "abortSleep": true,
+        "steps": [
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "sleep": 2000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "steps": [
+          {
+            "status": "failed",
+            "message": ""
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "steps": [
+          {
+            "status": "pending",
+            "mutate": true
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "poll": 3000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "steps": [
+          {
+            "status": "pending",
+            "replacePoll": true
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        },
+        {
+          "sleep": 2000
+        },
+        {
+          "replacement": 3000
+        }
+      ],
+      "now": 3000,
+      "output": {
+        "value": {
+          "token": "value"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "interval": 2,
+        "expires": 10,
+        "steps": [
+          {
+            "status": "pending",
+            "replaceSignal": true
+          },
+          {
+            "status": "complete"
+          }
+        ]
+      },
+      "log": [
+        {
+          "poll": 1000
+        }
+      ],
+      "now": 1000,
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      }
+    }
+  ],
+  "sleeps": [
+    {
+      "mode": "preabort",
+      "output": {
+        "error": "custom cancelled"
+      }
+    },
+    {
+      "mode": "abort",
+      "output": {
+        "error": "custom cancelled"
+      }
+    },
+    {
+      "mode": "complete",
+      "output": {
+        "success": true
+      }
+    }
+  ],
+  "pkce": [
+    {
+      "kind": "zero",
+      "bytes": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "calls": 1,
+      "output": {
+        "verifier": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "challenge": "DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo"
+      }
+    },
+    {
+      "kind": "ones",
+      "bytes": [
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255
+      ],
+      "calls": 1,
+      "output": {
+        "verifier": "__________________________________________8",
+        "challenge": "Il9-dTKd1FqjVJddc5hzGTCTk686TGczvBNgGk8bh5Y"
+      }
+    },
+    {
+      "kind": "increment",
+      "bytes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "calls": 1,
+      "output": {
+        "verifier": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "challenge": "6oZqdX5MOLq_qBJ8vppAnT4fk6AP8UiP9zX8-Rev_9A"
+      }
+    },
+    {
+      "kind": "descending",
+      "bytes": [
+        255,
+        254,
+        253,
+        252,
+        251,
+        250,
+        249,
+        248,
+        247,
+        246,
+        245,
+        244,
+        243,
+        242,
+        241,
+        240,
+        239,
+        238,
+        237,
+        236,
+        235,
+        234,
+        233,
+        232,
+        231,
+        230,
+        229,
+        228,
+        227,
+        226,
+        225,
+        224
+      ],
+      "calls": 1,
+      "output": {
+        "verifier": "__79_Pv6-fj39vX08_Lx8O_u7ezr6uno5-bl5OPi4eA",
+        "challenge": "esIQFdYADOc9b2HEIP9NXw88yBbaJbEHJrdOiWHNklw"
+      }
+    },
+    {
+      "kind": "alternating",
+      "bytes": [
+        0,
+        255,
+        0,
+        255,
+        0,
+        255,
+        0,
+        255,
+        0,
+        255,
+        0,
+        255,
+        0,
+        255,
+        0,
+        255,
+        0,
+        255,
+        0,
+        255,
+        0,
+        255,
+        0,
+        255,
+        0,
+        255,
+        0,
+        255,
+        0,
+        255,
+        0,
+        255
+      ],
+      "calls": 1,
+      "output": {
+        "verifier": "AP8A_wD_AP8A_wD_AP8A_wD_AP8A_wD_AP8A_wD_AP8",
+        "challenge": "9pzj5JIzcCsI06m_r7g9iUhbE-fImT9xmG15ahU0-h4"
+      }
+    }
+  ]
+}

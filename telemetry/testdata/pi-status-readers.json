@@ -1,0 +1,1185 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "ok",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "ok",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "error",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Read",
+                "message": "outer"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "error",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Read",
+                "message": "outer"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "nil_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "nil_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "nested_ok",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "nested_ok",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "nested_error",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Read",
+                "message": "outer"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "nested_error",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Read",
+                "message": "outer"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "nested_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "nested_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "snapshot",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "memory",
+        "phase": "snapshot",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "ok",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "ok",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "error",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "error",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "nil_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "nil_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "nested_ok",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "nested_ok",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "nested_error",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "nested_error",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "nested_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "nested_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "snapshot",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "snapshot",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "ok",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "ok",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "error",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "error",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "nil_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "nil_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "nested_ok",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "nested_ok",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "nested_error",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "nested_error",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "nested_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "nested_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "snapshot",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "snapshot",
+        "fail": true
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    }
+  ]
+}

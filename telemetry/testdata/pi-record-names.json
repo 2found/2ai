@@ -1,0 +1,77 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "source": "packages/telemetry/src/memory.ts",
+  "sourceSHA256": "d5d72e1a97ee1190c3a8e05ebff10a62568e3762ab8ace5095f966d50e0ef7e7",
+  "cases": [
+    {
+      "name": "\"plain\"",
+      "options": "{\"name\":\"plain\",\"attributes\":{\"source\":\"json\"}}",
+      "active": "[{\"id\":1,\"parentId\":null,\"name\":\"plain\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"plain\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+      "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"plain\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"plain\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]",
+      "event": "{\"name\":\"plain\",\"attributes\":{\"source\":\"event\"}}"
+    },
+    {
+      "name": "\"\\ud800\"",
+      "options": "{\"name\":\"\\ud800\",\"attributes\":{\"source\":\"json\"}}",
+      "active": "[{\"id\":1,\"parentId\":null,\"name\":\"\\ud800\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"\\ud800\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+      "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"\\ud800\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"\\ud800\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]",
+      "event": "{\"name\":\"\\ud800\",\"attributes\":{\"source\":\"event\"}}"
+    },
+    {
+      "name": "\"\\udfff\"",
+      "options": "{\"name\":\"\\udfff\",\"attributes\":{\"source\":\"json\"}}",
+      "active": "[{\"id\":1,\"parentId\":null,\"name\":\"\\udfff\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"\\udfff\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+      "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"\\udfff\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"\\udfff\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]",
+      "event": "{\"name\":\"\\udfff\",\"attributes\":{\"source\":\"event\"}}"
+    },
+    {
+      "name": "\"🌏\"",
+      "options": "{\"name\":\"🌏\",\"attributes\":{\"source\":\"json\"}}",
+      "active": "[{\"id\":1,\"parentId\":null,\"name\":\"🌏\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"🌏\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+      "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"🌏\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"🌏\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]",
+      "event": "{\"name\":\"🌏\",\"attributes\":{\"source\":\"event\"}}"
+    },
+    {
+      "name": "\"\\udfff\\ud800\"",
+      "options": "{\"name\":\"\\udfff\\ud800\",\"attributes\":{\"source\":\"json\"}}",
+      "active": "[{\"id\":1,\"parentId\":null,\"name\":\"\\udfff\\ud800\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"\\udfff\\ud800\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+      "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"\\udfff\\ud800\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"\\udfff\\ud800\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]",
+      "event": "{\"name\":\"\\udfff\\ud800\",\"attributes\":{\"source\":\"event\"}}"
+    },
+    {
+      "name": "\"a\\ud800b\"",
+      "options": "{\"name\":\"a\\ud800b\",\"attributes\":{\"source\":\"json\"}}",
+      "active": "[{\"id\":1,\"parentId\":null,\"name\":\"a\\ud800b\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"a\\ud800b\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+      "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"a\\ud800b\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"a\\ud800b\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]",
+      "event": "{\"name\":\"a\\ud800b\",\"attributes\":{\"source\":\"event\"}}"
+    },
+    {
+      "name": "\"\\u0000\\u001f\"",
+      "options": "{\"name\":\"\\u0000\\u001f\",\"attributes\":{\"source\":\"json\"}}",
+      "active": "[{\"id\":1,\"parentId\":null,\"name\":\"\\u0000\\u001f\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"\\u0000\\u001f\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+      "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"\\u0000\\u001f\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"\\u0000\\u001f\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]",
+      "event": "{\"name\":\"\\u0000\\u001f\",\"attributes\":{\"source\":\"event\"}}"
+    },
+    {
+      "name": "\"  \"",
+      "options": "{\"name\":\"  \",\"attributes\":{\"source\":\"json\"}}",
+      "active": "[{\"id\":1,\"parentId\":null,\"name\":\"  \",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"  \",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+      "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"  \",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"  \",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]",
+      "event": "{\"name\":\"  \",\"attributes\":{\"source\":\"event\"}}"
+    },
+    {
+      "name": "\"�\"",
+      "options": "{\"name\":\"�\",\"attributes\":{\"source\":\"json\"}}",
+      "active": "[{\"id\":1,\"parentId\":null,\"name\":\"�\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"�\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+      "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"�\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"�\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]",
+      "event": "{\"name\":\"�\",\"attributes\":{\"source\":\"event\"}}"
+    },
+    {
+      "name": "\"<name>&\"",
+      "options": "{\"name\":\"<name>&\",\"attributes\":{\"source\":\"json\"}}",
+      "active": "[{\"id\":1,\"parentId\":null,\"name\":\"<name>&\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"<name>&\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+      "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"<name>&\",\"attributes\":{\"source\":\"json\"},\"events\":[{\"name\":\"<name>&\",\"attributes\":{\"source\":\"event\"}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]",
+      "event": "{\"name\":\"<name>&\",\"attributes\":{\"source\":\"event\"}}"
+    }
+  ]
+}

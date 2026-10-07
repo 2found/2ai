@@ -1,0 +1,10 @@
+/bin/
+.env
+.env.*
+!.env.example
+*.local.json
+*.test
+coverage.out
+.DS_Store
+go.work
+go.work.sum

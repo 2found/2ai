@@ -1,0 +1,5106 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "partialJSONSHA256": "23f750aa1170c830b7ef180135852317886cc58ce7d2597e5eeee044539072c7",
+  "cases": [
+    {
+      "name": "surrogate keys/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate keys/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate keys/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate keys/3",
+      "input": "{\"\\",
+      "repaired": "{\"\\\\",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate keys/4",
+      "input": "{\"\\u",
+      "repaired": "{\"\\u",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate keys/5",
+      "input": "{\"\\ud",
+      "repaired": "{\"\\ud",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate keys/6",
+      "input": "{\"\\ud8",
+      "repaired": "{\"\\ud8",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate keys/7",
+      "input": "{\"\\ud80",
+      "repaired": "{\"\\ud80",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate keys/8",
+      "input": "{\"\\ud800",
+      "repaired": "{\"\\ud800",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate keys/9",
+      "input": "{\"\\ud800\"",
+      "repaired": "{\"\\ud800\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate keys/10",
+      "input": "{\"\\ud800\":",
+      "repaired": "{\"\\ud800\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate keys/11",
+      "input": "{\"\\ud800\":1",
+      "repaired": "{\"\\ud800\":1",
+      "streaming": "{\"\\ud800\":1}"
+    },
+    {
+      "name": "surrogate keys/12",
+      "input": "{\"\\ud800\":1,",
+      "repaired": "{\"\\ud800\":1,",
+      "streaming": "{\"\\ud800\":1}"
+    },
+    {
+      "name": "surrogate keys/13",
+      "input": "{\"\\ud800\":1,\"",
+      "repaired": "{\"\\ud800\":1,\"",
+      "streaming": "{\"\\ud800\":1}"
+    },
+    {
+      "name": "surrogate keys/14",
+      "input": "{\"\\ud800\":1,\"\\",
+      "repaired": "{\"\\ud800\":1,\"\\\\",
+      "streaming": "{\"\\ud800\":1}"
+    },
+    {
+      "name": "surrogate keys/15",
+      "input": "{\"\\ud800\":1,\"\\u",
+      "repaired": "{\"\\ud800\":1,\"\\u",
+      "streaming": "{\"\\ud800\":1}"
+    },
+    {
+      "name": "surrogate keys/16",
+      "input": "{\"\\ud800\":1,\"\\ud",
+      "repaired": "{\"\\ud800\":1,\"\\ud",
+      "streaming": "{\"\\ud800\":1}"
+    },
+    {
+      "name": "surrogate keys/17",
+      "input": "{\"\\ud800\":1,\"\\udc",
+      "repaired": "{\"\\ud800\":1,\"\\udc",
+      "streaming": "{\"\\ud800\":1}"
+    },
+    {
+      "name": "surrogate keys/18",
+      "input": "{\"\\ud800\":1,\"\\udc0",
+      "repaired": "{\"\\ud800\":1,\"\\udc0",
+      "streaming": "{\"\\ud800\":1}"
+    },
+    {
+      "name": "surrogate keys/19",
+      "input": "{\"\\ud800\":1,\"\\udc00",
+      "repaired": "{\"\\ud800\":1,\"\\udc00",
+      "streaming": "{\"\\ud800\":1}"
+    },
+    {
+      "name": "surrogate keys/20",
+      "input": "{\"\\ud800\":1,\"\\udc00\"",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\"",
+      "streaming": "{\"\\ud800\":1}"
+    },
+    {
+      "name": "surrogate keys/21",
+      "input": "{\"\\ud800\":1,\"\\udc00\":",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":",
+      "streaming": "{\"\\ud800\":1}"
+    },
+    {
+      "name": "surrogate keys/22",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2}"
+    },
+    {
+      "name": "surrogate keys/23",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2}"
+    },
+    {
+      "name": "surrogate keys/24",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2}"
+    },
+    {
+      "name": "surrogate keys/25",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\\\",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2}"
+    },
+    {
+      "name": "surrogate keys/26",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\u",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\u",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2}"
+    },
+    {
+      "name": "surrogate keys/27",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\uf",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\uf",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2}"
+    },
+    {
+      "name": "surrogate keys/28",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\uff",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\uff",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2}"
+    },
+    {
+      "name": "surrogate keys/29",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufff",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufff",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2}"
+    },
+    {
+      "name": "surrogate keys/30",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2}"
+    },
+    {
+      "name": "surrogate keys/31",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\"",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\"",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2}"
+    },
+    {
+      "name": "surrogate keys/32",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2}"
+    },
+    {
+      "name": "surrogate keys/33",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2,\"�\":3}"
+    },
+    {
+      "name": "surrogate keys/34",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2,\"�\":3}"
+    },
+    {
+      "name": "surrogate keys/35",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2,\"�\":3}"
+    },
+    {
+      "name": "surrogate keys/36",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\\\",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2,\"�\":3}"
+    },
+    {
+      "name": "surrogate keys/37",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\u",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\u",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2,\"�\":3}"
+    },
+    {
+      "name": "surrogate keys/38",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2,\"�\":3}"
+    },
+    {
+      "name": "surrogate keys/39",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud8",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud8",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2,\"�\":3}"
+    },
+    {
+      "name": "surrogate keys/40",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud80",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud80",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2,\"�\":3}"
+    },
+    {
+      "name": "surrogate keys/41",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud800",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud800",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2,\"�\":3}"
+    },
+    {
+      "name": "surrogate keys/42",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud800\"",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud800\"",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2,\"�\":3}"
+    },
+    {
+      "name": "surrogate keys/43",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud800\":",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud800\":",
+      "streaming": "{\"\\ud800\":1,\"\\udc00\":2,\"�\":3}"
+    },
+    {
+      "name": "surrogate keys/44",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud800\":4",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud800\":4",
+      "streaming": "{\"\\ud800\":4,\"\\udc00\":2,\"�\":3}"
+    },
+    {
+      "name": "surrogate keys/45",
+      "input": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud800\":4}",
+      "repaired": "{\"\\ud800\":1,\"\\udc00\":2,\"\\ufffd\":3,\"\\ud800\":4}",
+      "complete": "{\"\\ud800\":4,\"\\udc00\":2,\"�\":3}",
+      "streaming": "{\"\\ud800\":4,\"\\udc00\":2,\"�\":3}"
+    },
+    {
+      "name": "surrogate values/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate values/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate values/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate values/3",
+      "input": "{\"h",
+      "repaired": "{\"h",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate values/4",
+      "input": "{\"hi",
+      "repaired": "{\"hi",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate values/5",
+      "input": "{\"hig",
+      "repaired": "{\"hig",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate values/6",
+      "input": "{\"high",
+      "repaired": "{\"high",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate values/7",
+      "input": "{\"high\"",
+      "repaired": "{\"high\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate values/8",
+      "input": "{\"high\":",
+      "repaired": "{\"high\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "surrogate values/9",
+      "input": "{\"high\":\"",
+      "repaired": "{\"high\":\"",
+      "streaming": "{\"high\":\"\"}"
+    },
+    {
+      "name": "surrogate values/10",
+      "input": "{\"high\":\"\\",
+      "repaired": "{\"high\":\"\\\\",
+      "streaming": "{\"high\":\"\"}"
+    },
+    {
+      "name": "surrogate values/11",
+      "input": "{\"high\":\"\\u",
+      "repaired": "{\"high\":\"\\u",
+      "streaming": "{\"high\":\"\"}"
+    },
+    {
+      "name": "surrogate values/12",
+      "input": "{\"high\":\"\\uD",
+      "repaired": "{\"high\":\"\\uD",
+      "streaming": "{\"high\":\"\"}"
+    },
+    {
+      "name": "surrogate values/13",
+      "input": "{\"high\":\"\\uD8",
+      "repaired": "{\"high\":\"\\uD8",
+      "streaming": "{\"high\":\"\"}"
+    },
+    {
+      "name": "surrogate values/14",
+      "input": "{\"high\":\"\\uD80",
+      "repaired": "{\"high\":\"\\uD80",
+      "streaming": "{\"high\":\"\"}"
+    },
+    {
+      "name": "surrogate values/15",
+      "input": "{\"high\":\"\\uD800",
+      "repaired": "{\"high\":\"\\uD800",
+      "streaming": "{\"high\":\"\\ud800\"}"
+    },
+    {
+      "name": "surrogate values/16",
+      "input": "{\"high\":\"\\uD800\"",
+      "repaired": "{\"high\":\"\\uD800\"",
+      "streaming": "{\"high\":\"\\ud800\"}"
+    },
+    {
+      "name": "surrogate values/17",
+      "input": "{\"high\":\"\\uD800\",",
+      "repaired": "{\"high\":\"\\uD800\",",
+      "streaming": "{\"high\":\"\\ud800\"}"
+    },
+    {
+      "name": "surrogate values/18",
+      "input": "{\"high\":\"\\uD800\",\"",
+      "repaired": "{\"high\":\"\\uD800\",\"",
+      "streaming": "{\"high\":\"\\ud800\"}"
+    },
+    {
+      "name": "surrogate values/19",
+      "input": "{\"high\":\"\\uD800\",\"l",
+      "repaired": "{\"high\":\"\\uD800\",\"l",
+      "streaming": "{\"high\":\"\\ud800\"}"
+    },
+    {
+      "name": "surrogate values/20",
+      "input": "{\"high\":\"\\uD800\",\"lo",
+      "repaired": "{\"high\":\"\\uD800\",\"lo",
+      "streaming": "{\"high\":\"\\ud800\"}"
+    },
+    {
+      "name": "surrogate values/21",
+      "input": "{\"high\":\"\\uD800\",\"low",
+      "repaired": "{\"high\":\"\\uD800\",\"low",
+      "streaming": "{\"high\":\"\\ud800\"}"
+    },
+    {
+      "name": "surrogate values/22",
+      "input": "{\"high\":\"\\uD800\",\"low\"",
+      "repaired": "{\"high\":\"\\uD800\",\"low\"",
+      "streaming": "{\"high\":\"\\ud800\"}"
+    },
+    {
+      "name": "surrogate values/23",
+      "input": "{\"high\":\"\\uD800\",\"low\":",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":",
+      "streaming": "{\"high\":\"\\ud800\"}"
+    },
+    {
+      "name": "surrogate values/24",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\"}"
+    },
+    {
+      "name": "surrogate values/25",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\\\",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\"}"
+    },
+    {
+      "name": "surrogate values/26",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\u",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\u",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\"}"
+    },
+    {
+      "name": "surrogate values/27",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uD",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uD",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\"}"
+    },
+    {
+      "name": "surrogate values/28",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\"}"
+    },
+    {
+      "name": "surrogate values/29",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC0",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC0",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\"}"
+    },
+    {
+      "name": "surrogate values/30",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/31",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\"",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\"",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/32",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/33",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/34",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"p",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"p",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/35",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pa",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pa",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/36",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pai",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pai",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/37",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/38",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\"",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\"",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/39",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/40",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"\"}"
+    },
+    {
+      "name": "surrogate values/41",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\\\",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"\"}"
+    },
+    {
+      "name": "surrogate values/42",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\u",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\u",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"\"}"
+    },
+    {
+      "name": "surrogate values/43",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"\"}"
+    },
+    {
+      "name": "surrogate values/44",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud8",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud8",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"\"}"
+    },
+    {
+      "name": "surrogate values/45",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"\"}"
+    },
+    {
+      "name": "surrogate values/46",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"\\ud83d\"}"
+    },
+    {
+      "name": "surrogate values/47",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\\\",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"\\ud83d\"}"
+    },
+    {
+      "name": "surrogate values/48",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\u",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\u",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"\\ud83d\"}"
+    },
+    {
+      "name": "surrogate values/49",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ud",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ud",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"\\ud83d\"}"
+    },
+    {
+      "name": "surrogate values/50",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"\\ud83d\"}"
+    },
+    {
+      "name": "surrogate values/51",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude0",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude0",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"\\ud83d\"}"
+    },
+    {
+      "name": "surrogate values/52",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\"}"
+    },
+    {
+      "name": "surrogate values/53",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\"",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\"",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\"}"
+    },
+    {
+      "name": "surrogate values/54",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\"}"
+    },
+    {
+      "name": "surrogate values/55",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\"}"
+    },
+    {
+      "name": "surrogate values/56",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"r",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"r",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\"}"
+    },
+    {
+      "name": "surrogate values/57",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"re",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"re",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\"}"
+    },
+    {
+      "name": "surrogate values/58",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"rev",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"rev",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\"}"
+    },
+    {
+      "name": "surrogate values/59",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reve",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reve",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\"}"
+    },
+    {
+      "name": "surrogate values/60",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"rever",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"rever",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\"}"
+    },
+    {
+      "name": "surrogate values/61",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"revers",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"revers",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\"}"
+    },
+    {
+      "name": "surrogate values/62",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reverse",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reverse",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\"}"
+    },
+    {
+      "name": "surrogate values/63",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\"}"
+    },
+    {
+      "name": "surrogate values/64",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\"",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\"",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\"}"
+    },
+    {
+      "name": "surrogate values/65",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\"}"
+    },
+    {
+      "name": "surrogate values/66",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\"}"
+    },
+    {
+      "name": "surrogate values/67",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\\\",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\"}"
+    },
+    {
+      "name": "surrogate values/68",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\u",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\u",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\"}"
+    },
+    {
+      "name": "surrogate values/69",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\ud",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\ud",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\"}"
+    },
+    {
+      "name": "surrogate values/70",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\"}"
+    },
+    {
+      "name": "surrogate values/71",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc0",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc0",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\"}"
+    },
+    {
+      "name": "surrogate values/72",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/73",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\\\",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/74",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\u",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\u",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/75",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\ud",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\ud",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/76",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\ud8",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\ud8",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/77",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\ud80",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\ud80",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\\udc00\"}"
+    },
+    {
+      "name": "surrogate values/78",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\ud800",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\ud800",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\\udc00\\ud800\"}"
+    },
+    {
+      "name": "surrogate values/79",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\ud800\"",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\ud800\"",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\\udc00\\ud800\"}"
+    },
+    {
+      "name": "surrogate values/80",
+      "input": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\ud800\"}",
+      "repaired": "{\"high\":\"\\uD800\",\"low\":\"\\uDC00\",\"pair\":\"\\ud83d\\ude00\",\"reversed\":\"\\udc00\\ud800\"}",
+      "complete": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\\udc00\\ud800\"}",
+      "streaming": "{\"high\":\"\\ud800\",\"low\":\"\\udc00\",\"pair\":\"😀\",\"reversed\":\"\\udc00\\ud800\"}"
+    },
+    {
+      "name": "paired key identity/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "paired key identity/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "paired key identity/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "paired key identity/4",
+      "input": "{\"😀",
+      "repaired": "{\"😀",
+      "streaming": "{}"
+    },
+    {
+      "name": "paired key identity/5",
+      "input": "{\"😀\"",
+      "repaired": "{\"😀\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "paired key identity/6",
+      "input": "{\"😀\":",
+      "repaired": "{\"😀\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "paired key identity/7",
+      "input": "{\"😀\":1",
+      "repaired": "{\"😀\":1",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "paired key identity/8",
+      "input": "{\"😀\":1,",
+      "repaired": "{\"😀\":1,",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "paired key identity/9",
+      "input": "{\"😀\":1,\"",
+      "repaired": "{\"😀\":1,\"",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "paired key identity/10",
+      "input": "{\"😀\":1,\"m",
+      "repaired": "{\"😀\":1,\"m",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "paired key identity/11",
+      "input": "{\"😀\":1,\"mi",
+      "repaired": "{\"😀\":1,\"mi",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "paired key identity/12",
+      "input": "{\"😀\":1,\"mid",
+      "repaired": "{\"😀\":1,\"mid",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "paired key identity/13",
+      "input": "{\"😀\":1,\"midd",
+      "repaired": "{\"😀\":1,\"midd",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "paired key identity/14",
+      "input": "{\"😀\":1,\"middl",
+      "repaired": "{\"😀\":1,\"middl",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "paired key identity/15",
+      "input": "{\"😀\":1,\"middle",
+      "repaired": "{\"😀\":1,\"middle",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "paired key identity/16",
+      "input": "{\"😀\":1,\"middle\"",
+      "repaired": "{\"😀\":1,\"middle\"",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "paired key identity/17",
+      "input": "{\"😀\":1,\"middle\":",
+      "repaired": "{\"😀\":1,\"middle\":",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "paired key identity/18",
+      "input": "{\"😀\":1,\"middle\":2",
+      "repaired": "{\"😀\":1,\"middle\":2",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/19",
+      "input": "{\"😀\":1,\"middle\":2,",
+      "repaired": "{\"😀\":1,\"middle\":2,",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/20",
+      "input": "{\"😀\":1,\"middle\":2,\"",
+      "repaired": "{\"😀\":1,\"middle\":2,\"",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/21",
+      "input": "{\"😀\":1,\"middle\":2,\"\\",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\\\",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/22",
+      "input": "{\"😀\":1,\"middle\":2,\"\\u",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\u",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/23",
+      "input": "{\"😀\":1,\"middle\":2,\"\\ud",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\ud",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/24",
+      "input": "{\"😀\":1,\"middle\":2,\"\\ud8",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\ud8",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/25",
+      "input": "{\"😀\":1,\"middle\":2,\"\\ud83",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\ud83",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/26",
+      "input": "{\"😀\":1,\"middle\":2,\"\\ud83d",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\ud83d",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/27",
+      "input": "{\"😀\":1,\"middle\":2,\"\\ud83d\\",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\ud83d\\\\",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/28",
+      "input": "{\"😀\":1,\"middle\":2,\"\\ud83d\\u",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\ud83d\\u",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/29",
+      "input": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ud",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ud",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/30",
+      "input": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ude",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ude",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/31",
+      "input": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ude0",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ude0",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/32",
+      "input": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ude00",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ude00",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/33",
+      "input": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ude00\"",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ude00\"",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/34",
+      "input": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ude00\":",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ude00\":",
+      "streaming": "{\"😀\":1,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/35",
+      "input": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ude00\":3",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ude00\":3",
+      "streaming": "{\"😀\":3,\"middle\":2}"
+    },
+    {
+      "name": "paired key identity/36",
+      "input": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ude00\":3}",
+      "repaired": "{\"😀\":1,\"middle\":2,\"\\ud83d\\ude00\":3}",
+      "complete": "{\"😀\":3,\"middle\":2}",
+      "streaming": "{\"😀\":3,\"middle\":2}"
+    },
+    {
+      "name": "index order/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "index order/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "index order/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "index order/3",
+      "input": "{\"z",
+      "repaired": "{\"z",
+      "streaming": "{}"
+    },
+    {
+      "name": "index order/4",
+      "input": "{\"z\"",
+      "repaired": "{\"z\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "index order/5",
+      "input": "{\"z\":",
+      "repaired": "{\"z\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "index order/6",
+      "input": "{\"z\":0",
+      "repaired": "{\"z\":0",
+      "streaming": "{\"z\":0}"
+    },
+    {
+      "name": "index order/7",
+      "input": "{\"z\":0,",
+      "repaired": "{\"z\":0,",
+      "streaming": "{\"z\":0}"
+    },
+    {
+      "name": "index order/8",
+      "input": "{\"z\":0,\"",
+      "repaired": "{\"z\":0,\"",
+      "streaming": "{\"z\":0}"
+    },
+    {
+      "name": "index order/9",
+      "input": "{\"z\":0,\"1",
+      "repaired": "{\"z\":0,\"1",
+      "streaming": "{\"z\":0}"
+    },
+    {
+      "name": "index order/10",
+      "input": "{\"z\":0,\"10",
+      "repaired": "{\"z\":0,\"10",
+      "streaming": "{\"z\":0}"
+    },
+    {
+      "name": "index order/11",
+      "input": "{\"z\":0,\"10\"",
+      "repaired": "{\"z\":0,\"10\"",
+      "streaming": "{\"z\":0}"
+    },
+    {
+      "name": "index order/12",
+      "input": "{\"z\":0,\"10\":",
+      "repaired": "{\"z\":0,\"10\":",
+      "streaming": "{\"z\":0}"
+    },
+    {
+      "name": "index order/13",
+      "input": "{\"z\":0,\"10\":1",
+      "repaired": "{\"z\":0,\"10\":1",
+      "streaming": "{\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/14",
+      "input": "{\"z\":0,\"10\":1,",
+      "repaired": "{\"z\":0,\"10\":1,",
+      "streaming": "{\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/15",
+      "input": "{\"z\":0,\"10\":1,\"",
+      "repaired": "{\"z\":0,\"10\":1,\"",
+      "streaming": "{\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/16",
+      "input": "{\"z\":0,\"10\":1,\"2",
+      "repaired": "{\"z\":0,\"10\":1,\"2",
+      "streaming": "{\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/17",
+      "input": "{\"z\":0,\"10\":1,\"2\"",
+      "repaired": "{\"z\":0,\"10\":1,\"2\"",
+      "streaming": "{\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/18",
+      "input": "{\"z\":0,\"10\":1,\"2\":",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":",
+      "streaming": "{\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/19",
+      "input": "{\"z\":0,\"10\":1,\"2\":2",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2",
+      "streaming": "{\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/20",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,",
+      "streaming": "{\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/21",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"",
+      "streaming": "{\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/22",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\\\",
+      "streaming": "{\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/23",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u",
+      "streaming": "{\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/24",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0",
+      "streaming": "{\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/25",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u00",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u00",
+      "streaming": "{\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/26",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u003",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u003",
+      "streaming": "{\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/27",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031",
+      "streaming": "{\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/28",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\"",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\"",
+      "streaming": "{\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/29",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":",
+      "streaming": "{\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/30",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/31",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/32",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/33",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"0",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"0",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/34",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/35",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\"",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\"",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/36",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0}"
+    },
+    {
+      "name": "index order/37",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4}"
+    },
+    {
+      "name": "index order/38",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4}"
+    },
+    {
+      "name": "index order/39",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4}"
+    },
+    {
+      "name": "index order/40",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4}"
+    },
+    {
+      "name": "index order/41",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"42",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"42",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4}"
+    },
+    {
+      "name": "index order/42",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"429",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"429",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4}"
+    },
+    {
+      "name": "index order/43",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4}"
+    },
+    {
+      "name": "index order/44",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"42949",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"42949",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4}"
+    },
+    {
+      "name": "index order/45",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"429496",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"429496",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4}"
+    },
+    {
+      "name": "index order/46",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4}"
+    },
+    {
+      "name": "index order/47",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"42949672",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"42949672",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4}"
+    },
+    {
+      "name": "index order/48",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"429496729",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"429496729",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4}"
+    },
+    {
+      "name": "index order/49",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4}"
+    },
+    {
+      "name": "index order/50",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\"",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\"",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4}"
+    },
+    {
+      "name": "index order/51",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4}"
+    },
+    {
+      "name": "index order/52",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/53",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/54",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/55",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/56",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"42",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"42",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/57",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"429",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"429",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/58",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4294",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4294",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/59",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"42949",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"42949",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/60",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"429496",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"429496",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/61",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4294967",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4294967",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/62",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"42949672",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"42949672",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/63",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"429496729",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"429496729",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/64",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4294967294",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4294967294",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/65",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4294967294\"",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4294967294\"",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/66",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4294967294\":",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4294967294\":",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/67",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4294967294\":6",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4294967294\":6",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"4294967294\":6,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "index order/68",
+      "input": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4294967294\":6}",
+      "repaired": "{\"z\":0,\"10\":1,\"2\":2,\"\\u0031\":3,\"01\":4,\"4294967295\":5,\"4294967294\":6}",
+      "complete": "{\"1\":3,\"2\":2,\"10\":1,\"4294967294\":6,\"z\":0,\"01\":4,\"4294967295\":5}",
+      "streaming": "{\"1\":3,\"2\":2,\"10\":1,\"4294967294\":6,\"z\":0,\"01\":4,\"4294967295\":5}"
+    },
+    {
+      "name": "duplicate key identity/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "duplicate key identity/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "duplicate key identity/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "duplicate key identity/3",
+      "input": "{\"a",
+      "repaired": "{\"a",
+      "streaming": "{}"
+    },
+    {
+      "name": "duplicate key identity/4",
+      "input": "{\"a\"",
+      "repaired": "{\"a\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "duplicate key identity/5",
+      "input": "{\"a\":",
+      "repaired": "{\"a\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "duplicate key identity/6",
+      "input": "{\"a\":1",
+      "repaired": "{\"a\":1",
+      "streaming": "{\"a\":1}"
+    },
+    {
+      "name": "duplicate key identity/7",
+      "input": "{\"a\":1,",
+      "repaired": "{\"a\":1,",
+      "streaming": "{\"a\":1}"
+    },
+    {
+      "name": "duplicate key identity/8",
+      "input": "{\"a\":1,\"",
+      "repaired": "{\"a\":1,\"",
+      "streaming": "{\"a\":1}"
+    },
+    {
+      "name": "duplicate key identity/9",
+      "input": "{\"a\":1,\"b",
+      "repaired": "{\"a\":1,\"b",
+      "streaming": "{\"a\":1}"
+    },
+    {
+      "name": "duplicate key identity/10",
+      "input": "{\"a\":1,\"b\"",
+      "repaired": "{\"a\":1,\"b\"",
+      "streaming": "{\"a\":1}"
+    },
+    {
+      "name": "duplicate key identity/11",
+      "input": "{\"a\":1,\"b\":",
+      "repaired": "{\"a\":1,\"b\":",
+      "streaming": "{\"a\":1}"
+    },
+    {
+      "name": "duplicate key identity/12",
+      "input": "{\"a\":1,\"b\":2",
+      "repaired": "{\"a\":1,\"b\":2",
+      "streaming": "{\"a\":1,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/13",
+      "input": "{\"a\":1,\"b\":2,",
+      "repaired": "{\"a\":1,\"b\":2,",
+      "streaming": "{\"a\":1,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/14",
+      "input": "{\"a\":1,\"b\":2,\"",
+      "repaired": "{\"a\":1,\"b\":2,\"",
+      "streaming": "{\"a\":1,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/15",
+      "input": "{\"a\":1,\"b\":2,\"\\",
+      "repaired": "{\"a\":1,\"b\":2,\"\\\\",
+      "streaming": "{\"a\":1,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/16",
+      "input": "{\"a\":1,\"b\":2,\"\\u",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u",
+      "streaming": "{\"a\":1,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/17",
+      "input": "{\"a\":1,\"b\":2,\"\\u0",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0",
+      "streaming": "{\"a\":1,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/18",
+      "input": "{\"a\":1,\"b\":2,\"\\u00",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u00",
+      "streaming": "{\"a\":1,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/19",
+      "input": "{\"a\":1,\"b\":2,\"\\u006",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u006",
+      "streaming": "{\"a\":1,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/20",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061",
+      "streaming": "{\"a\":1,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/21",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\"",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\"",
+      "streaming": "{\"a\":1,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/22",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":",
+      "streaming": "{\"a\":1,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/23",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3",
+      "streaming": "{\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/24",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,",
+      "streaming": "{\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/25",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"",
+      "streaming": "{\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/26",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2",
+      "streaming": "{\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/27",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\"",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\"",
+      "streaming": "{\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/28",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":",
+      "streaming": "{\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/29",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4",
+      "streaming": "{\"2\":4,\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/30",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,",
+      "streaming": "{\"2\":4,\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/31",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"",
+      "streaming": "{\"2\":4,\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/32",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\\\",
+      "streaming": "{\"2\":4,\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/33",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u",
+      "streaming": "{\"2\":4,\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/34",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u0",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u0",
+      "streaming": "{\"2\":4,\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/35",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u00",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u00",
+      "streaming": "{\"2\":4,\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/36",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u003",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u003",
+      "streaming": "{\"2\":4,\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/37",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u0032",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u0032",
+      "streaming": "{\"2\":4,\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/38",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u0032\"",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u0032\"",
+      "streaming": "{\"2\":4,\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/39",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u0032\":",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u0032\":",
+      "streaming": "{\"2\":4,\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/40",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u0032\":5",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u0032\":5",
+      "streaming": "{\"2\":5,\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "duplicate key identity/41",
+      "input": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u0032\":5}",
+      "repaired": "{\"a\":1,\"b\":2,\"\\u0061\":3,\"2\":4,\"\\u0032\":5}",
+      "complete": "{\"2\":5,\"a\":3,\"b\":2}",
+      "streaming": "{\"2\":5,\"a\":3,\"b\":2}"
+    },
+    {
+      "name": "HTML separators/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "HTML separators/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "HTML separators/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "HTML separators/3",
+      "input": "{\"<",
+      "repaired": "{\"<",
+      "streaming": "{}"
+    },
+    {
+      "name": "HTML separators/4",
+      "input": "{\"<>",
+      "repaired": "{\"<>",
+      "streaming": "{}"
+    },
+    {
+      "name": "HTML separators/5",
+      "input": "{\"<>&",
+      "repaired": "{\"<>&",
+      "streaming": "{}"
+    },
+    {
+      "name": "HTML separators/6",
+      "input": "{\"<>& ",
+      "repaired": "{\"<>& ",
+      "streaming": "{}"
+    },
+    {
+      "name": "HTML separators/7",
+      "input": "{\"<>&  ",
+      "repaired": "{\"<>&  ",
+      "streaming": "{}"
+    },
+    {
+      "name": "HTML separators/8",
+      "input": "{\"<>&  \"",
+      "repaired": "{\"<>&  \"",
+      "streaming": "{}"
+    },
+    {
+      "name": "HTML separators/9",
+      "input": "{\"<>&  \":",
+      "repaired": "{\"<>&  \":",
+      "streaming": "{}"
+    },
+    {
+      "name": "HTML separators/10",
+      "input": "{\"<>&  \":\"",
+      "repaired": "{\"<>&  \":\"",
+      "streaming": "{\"<>&  \":\"\"}"
+    },
+    {
+      "name": "HTML separators/11",
+      "input": "{\"<>&  \":\"<",
+      "repaired": "{\"<>&  \":\"<",
+      "streaming": "{\"<>&  \":\"<\"}"
+    },
+    {
+      "name": "HTML separators/12",
+      "input": "{\"<>&  \":\"<>",
+      "repaired": "{\"<>&  \":\"<>",
+      "streaming": "{\"<>&  \":\"<>\"}"
+    },
+    {
+      "name": "HTML separators/13",
+      "input": "{\"<>&  \":\"<>&",
+      "repaired": "{\"<>&  \":\"<>&",
+      "streaming": "{\"<>&  \":\"<>&\"}"
+    },
+    {
+      "name": "HTML separators/14",
+      "input": "{\"<>&  \":\"<>& ",
+      "repaired": "{\"<>&  \":\"<>& ",
+      "streaming": "{\"<>&  \":\"<>&\"}"
+    },
+    {
+      "name": "HTML separators/15",
+      "input": "{\"<>&  \":\"<>&  ",
+      "repaired": "{\"<>&  \":\"<>&  ",
+      "streaming": "{\"<>&  \":\"<>&\"}"
+    },
+    {
+      "name": "HTML separators/16",
+      "input": "{\"<>&  \":\"<>&  \"",
+      "repaired": "{\"<>&  \":\"<>&  \"",
+      "streaming": "{\"<>&  \":\"<>&  \"}"
+    },
+    {
+      "name": "HTML separators/17",
+      "input": "{\"<>&  \":\"<>&  \",",
+      "repaired": "{\"<>&  \":\"<>&  \",",
+      "streaming": "{\"<>&  \":\"<>&  \"}"
+    },
+    {
+      "name": "HTML separators/18",
+      "input": "{\"<>&  \":\"<>&  \",\"",
+      "repaired": "{\"<>&  \":\"<>&  \",\"",
+      "streaming": "{\"<>&  \":\"<>&  \"}"
+    },
+    {
+      "name": "HTML separators/19",
+      "input": "{\"<>&  \":\"<>&  \",\"T",
+      "repaired": "{\"<>&  \":\"<>&  \",\"T",
+      "streaming": "{\"<>&  \":\"<>&  \"}"
+    },
+    {
+      "name": "HTML separators/20",
+      "input": "{\"<>&  \":\"<>&  \",\"Ti",
+      "repaired": "{\"<>&  \":\"<>&  \",\"Ti",
+      "streaming": "{\"<>&  \":\"<>&  \"}"
+    },
+    {
+      "name": "HTML separators/21",
+      "input": "{\"<>&  \":\"<>&  \",\"Tiế",
+      "repaired": "{\"<>&  \":\"<>&  \",\"Tiế",
+      "streaming": "{\"<>&  \":\"<>&  \"}"
+    },
+    {
+      "name": "HTML separators/22",
+      "input": "{\"<>&  \":\"<>&  \",\"Tiến",
+      "repaired": "{\"<>&  \":\"<>&  \",\"Tiến",
+      "streaming": "{\"<>&  \":\"<>&  \"}"
+    },
+    {
+      "name": "HTML separators/23",
+      "input": "{\"<>&  \":\"<>&  \",\"Tiếng",
+      "repaired": "{\"<>&  \":\"<>&  \",\"Tiếng",
+      "streaming": "{\"<>&  \":\"<>&  \"}"
+    },
+    {
+      "name": "HTML separators/24",
+      "input": "{\"<>&  \":\"<>&  \",\"Tiếng ",
+      "repaired": "{\"<>&  \":\"<>&  \",\"Tiếng ",
+      "streaming": "{\"<>&  \":\"<>&  \"}"
+    },
+    {
+      "name": "HTML separators/25",
+      "input": "{\"<>&  \":\"<>&  \",\"Tiếng V",
+      "repaired": "{\"<>&  \":\"<>&  \",\"Tiếng V",
+      "streaming": "{\"<>&  \":\"<>&  \"}"
+    },
+    {
+      "name": "HTML separators/26",
+      "input": "{\"<>&  \":\"<>&  \",\"Tiếng Vi",
+      "repaired": "{\"<>&  \":\"<>&  \",\"Tiếng Vi",
+      "streaming": "{\"<>&  \":\"<>&  \"}"
+    },
+    {
+      "name": "HTML separators/27",
+      "input": "{\"<>&  \":\"<>&  \",\"Tiếng Việ",
+      "repaired": "{\"<>&  \":\"<>&  \",\"Tiếng Việ",
+      "streaming": "{\"<>&  \":\"<>&  \"}"
+    },
+    {
+      "name": "HTML separators/28",
+      "input": "{\"<>&  \":\"<>&  \",\"Tiếng Việt",
+      "repaired": "{\"<>&  \":\"<>&  \",\"Tiếng Việt",
+      "streaming": "{\"<>&  \":\"<>&  \"}"
+    },
+    {
+      "name": "HTML separators/29",
+      "input": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\"",
+      "repaired": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\"",
+      "streaming": "{\"<>&  \":\"<>&  \"}"
+    },
+    {
+      "name": "HTML separators/30",
+      "input": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\":",
+      "repaired": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\":",
+      "streaming": "{\"<>&  \":\"<>&  \"}"
+    },
+    {
+      "name": "HTML separators/31",
+      "input": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\":\"",
+      "repaired": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\":\"",
+      "streaming": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\":\"\"}"
+    },
+    {
+      "name": "HTML separators/33",
+      "input": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\":\"😀",
+      "repaired": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\":\"😀",
+      "streaming": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\":\"😀\"}"
+    },
+    {
+      "name": "HTML separators/34",
+      "input": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\":\"😀\"",
+      "repaired": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\":\"😀\"",
+      "streaming": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\":\"😀\"}"
+    },
+    {
+      "name": "HTML separators/35",
+      "input": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\":\"😀\"}",
+      "repaired": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\":\"😀\"}",
+      "complete": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\":\"😀\"}",
+      "streaming": "{\"<>&  \":\"<>&  \",\"Tiếng Việt\":\"😀\"}"
+    },
+    {
+      "name": "escaped keys/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "escaped keys/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "escaped keys/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "escaped keys/3",
+      "input": "{\"\\",
+      "repaired": "{\"\\\\",
+      "streaming": "{}"
+    },
+    {
+      "name": "escaped keys/4",
+      "input": "{\"\\n",
+      "repaired": "{\"\\n",
+      "streaming": "{}"
+    },
+    {
+      "name": "escaped keys/5",
+      "input": "{\"\\n\"",
+      "repaired": "{\"\\n\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "escaped keys/6",
+      "input": "{\"\\n\":",
+      "repaired": "{\"\\n\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "escaped keys/7",
+      "input": "{\"\\n\":1",
+      "repaired": "{\"\\n\":1",
+      "streaming": "{\"\\n\":1}"
+    },
+    {
+      "name": "escaped keys/8",
+      "input": "{\"\\n\":1,",
+      "repaired": "{\"\\n\":1,",
+      "streaming": "{\"\\n\":1}"
+    },
+    {
+      "name": "escaped keys/9",
+      "input": "{\"\\n\":1,\"",
+      "repaired": "{\"\\n\":1,\"",
+      "streaming": "{\"\\n\":1}"
+    },
+    {
+      "name": "escaped keys/10",
+      "input": "{\"\\n\":1,\"\\",
+      "repaired": "{\"\\n\":1,\"\\\\",
+      "streaming": "{\"\\n\":1}"
+    },
+    {
+      "name": "escaped keys/11",
+      "input": "{\"\\n\":1,\"\\u",
+      "repaired": "{\"\\n\":1,\"\\u",
+      "streaming": "{\"\\n\":1}"
+    },
+    {
+      "name": "escaped keys/12",
+      "input": "{\"\\n\":1,\"\\u0",
+      "repaired": "{\"\\n\":1,\"\\u0",
+      "streaming": "{\"\\n\":1}"
+    },
+    {
+      "name": "escaped keys/13",
+      "input": "{\"\\n\":1,\"\\u00",
+      "repaired": "{\"\\n\":1,\"\\u00",
+      "streaming": "{\"\\n\":1}"
+    },
+    {
+      "name": "escaped keys/14",
+      "input": "{\"\\n\":1,\"\\u000",
+      "repaired": "{\"\\n\":1,\"\\u000",
+      "streaming": "{\"\\n\":1}"
+    },
+    {
+      "name": "escaped keys/15",
+      "input": "{\"\\n\":1,\"\\u000a",
+      "repaired": "{\"\\n\":1,\"\\u000a",
+      "streaming": "{\"\\n\":1}"
+    },
+    {
+      "name": "escaped keys/16",
+      "input": "{\"\\n\":1,\"\\u000a\"",
+      "repaired": "{\"\\n\":1,\"\\u000a\"",
+      "streaming": "{\"\\n\":1}"
+    },
+    {
+      "name": "escaped keys/17",
+      "input": "{\"\\n\":1,\"\\u000a\":",
+      "repaired": "{\"\\n\":1,\"\\u000a\":",
+      "streaming": "{\"\\n\":1}"
+    },
+    {
+      "name": "escaped keys/18",
+      "input": "{\"\\n\":1,\"\\u000a\":2",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2",
+      "streaming": "{\"\\n\":2}"
+    },
+    {
+      "name": "escaped keys/19",
+      "input": "{\"\\n\":1,\"\\u000a\":2,",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,",
+      "streaming": "{\"\\n\":2}"
+    },
+    {
+      "name": "escaped keys/20",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"",
+      "streaming": "{\"\\n\":2}"
+    },
+    {
+      "name": "escaped keys/21",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\\",
+      "streaming": "{\"\\n\":2}"
+    },
+    {
+      "name": "escaped keys/22",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"",
+      "streaming": "{\"\\n\":2}"
+    },
+    {
+      "name": "escaped keys/23",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\"",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\"",
+      "streaming": "{\"\\n\":2}"
+    },
+    {
+      "name": "escaped keys/24",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":",
+      "streaming": "{\"\\n\":2}"
+    },
+    {
+      "name": "escaped keys/25",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3",
+      "streaming": "{\"\\n\":2,\"\\\"\":3}"
+    },
+    {
+      "name": "escaped keys/26",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,",
+      "streaming": "{\"\\n\":2,\"\\\"\":3}"
+    },
+    {
+      "name": "escaped keys/27",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"",
+      "streaming": "{\"\\n\":2,\"\\\"\":3}"
+    },
+    {
+      "name": "escaped keys/28",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\",
+      "streaming": "{\"\\n\":2,\"\\\"\":3}"
+    },
+    {
+      "name": "escaped keys/29",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\",
+      "streaming": "{\"\\n\":2,\"\\\"\":3}"
+    },
+    {
+      "name": "escaped keys/30",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\"",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\"",
+      "streaming": "{\"\\n\":2,\"\\\"\":3}"
+    },
+    {
+      "name": "escaped keys/31",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":",
+      "streaming": "{\"\\n\":2,\"\\\"\":3}"
+    },
+    {
+      "name": "escaped keys/32",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4}"
+    },
+    {
+      "name": "escaped keys/33",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4}"
+    },
+    {
+      "name": "escaped keys/34",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4}"
+    },
+    {
+      "name": "escaped keys/35",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\\\",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4}"
+    },
+    {
+      "name": "escaped keys/36",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4}"
+    },
+    {
+      "name": "escaped keys/37",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\"",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\"",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4}"
+    },
+    {
+      "name": "escaped keys/38",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4}"
+    },
+    {
+      "name": "escaped keys/39",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4,\"/\":5}"
+    },
+    {
+      "name": "escaped keys/40",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4,\"/\":5}"
+    },
+    {
+      "name": "escaped keys/41",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4,\"/\":5}"
+    },
+    {
+      "name": "escaped keys/42",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4,\"/\":5}"
+    },
+    {
+      "name": "escaped keys/43",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\"",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\"",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4,\"/\":5}"
+    },
+    {
+      "name": "escaped keys/44",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4,\"/\":5}"
+    },
+    {
+      "name": "escaped keys/45",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":6",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":6",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4,\"/\":6}"
+    },
+    {
+      "name": "escaped keys/46",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":6,",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":6,",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4,\"/\":6}"
+    },
+    {
+      "name": "escaped keys/47",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":6,\"",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":6,\"",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4,\"/\":6}"
+    },
+    {
+      "name": "escaped keys/48",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":6,\"\"",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":6,\"\"",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4,\"/\":6}"
+    },
+    {
+      "name": "escaped keys/49",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":6,\"\":",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":6,\"\":",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4,\"/\":6}"
+    },
+    {
+      "name": "escaped keys/50",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":6,\"\":7",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":6,\"\":7",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4,\"/\":6,\"\":7}"
+    },
+    {
+      "name": "escaped keys/51",
+      "input": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":6,\"\":7}",
+      "repaired": "{\"\\n\":1,\"\\u000a\":2,\"\\\"\":3,\"\\\\\":4,\"\\/\":5,\"/\":6,\"\":7}",
+      "complete": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4,\"/\":6,\"\":7}",
+      "streaming": "{\"\\n\":2,\"\\\"\":3,\"\\\\\":4,\"/\":6,\"\":7}"
+    },
+    {
+      "name": "prototype keys/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/3",
+      "input": "{\"_",
+      "repaired": "{\"_",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/4",
+      "input": "{\"__",
+      "repaired": "{\"__",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/5",
+      "input": "{\"__p",
+      "repaired": "{\"__p",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/6",
+      "input": "{\"__pr",
+      "repaired": "{\"__pr",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/7",
+      "input": "{\"__pro",
+      "repaired": "{\"__pro",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/8",
+      "input": "{\"__prot",
+      "repaired": "{\"__prot",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/9",
+      "input": "{\"__proto",
+      "repaired": "{\"__proto",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/10",
+      "input": "{\"__proto_",
+      "repaired": "{\"__proto_",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/11",
+      "input": "{\"__proto__",
+      "repaired": "{\"__proto__",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/12",
+      "input": "{\"__proto__\"",
+      "repaired": "{\"__proto__\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/13",
+      "input": "{\"__proto__\":",
+      "repaired": "{\"__proto__\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/14",
+      "input": "{\"__proto__\":{",
+      "repaired": "{\"__proto__\":{",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/15",
+      "input": "{\"__proto__\":{\"",
+      "repaired": "{\"__proto__\":{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/16",
+      "input": "{\"__proto__\":{\"a",
+      "repaired": "{\"__proto__\":{\"a",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/17",
+      "input": "{\"__proto__\":{\"a\"",
+      "repaired": "{\"__proto__\":{\"a\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/18",
+      "input": "{\"__proto__\":{\"a\":",
+      "repaired": "{\"__proto__\":{\"a\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/19",
+      "input": "{\"__proto__\":{\"a\":1",
+      "repaired": "{\"__proto__\":{\"a\":1",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/20",
+      "input": "{\"__proto__\":{\"a\":1}",
+      "repaired": "{\"__proto__\":{\"a\":1}",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/21",
+      "input": "{\"__proto__\":{\"a\":1},",
+      "repaired": "{\"__proto__\":{\"a\":1},",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/22",
+      "input": "{\"__proto__\":{\"a\":1},\"",
+      "repaired": "{\"__proto__\":{\"a\":1},\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/23",
+      "input": "{\"__proto__\":{\"a\":1},\"c",
+      "repaired": "{\"__proto__\":{\"a\":1},\"c",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/24",
+      "input": "{\"__proto__\":{\"a\":1},\"co",
+      "repaired": "{\"__proto__\":{\"a\":1},\"co",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/25",
+      "input": "{\"__proto__\":{\"a\":1},\"con",
+      "repaired": "{\"__proto__\":{\"a\":1},\"con",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/26",
+      "input": "{\"__proto__\":{\"a\":1},\"cons",
+      "repaired": "{\"__proto__\":{\"a\":1},\"cons",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/27",
+      "input": "{\"__proto__\":{\"a\":1},\"const",
+      "repaired": "{\"__proto__\":{\"a\":1},\"const",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/28",
+      "input": "{\"__proto__\":{\"a\":1},\"constr",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constr",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/29",
+      "input": "{\"__proto__\":{\"a\":1},\"constru",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constru",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/30",
+      "input": "{\"__proto__\":{\"a\":1},\"construc",
+      "repaired": "{\"__proto__\":{\"a\":1},\"construc",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/31",
+      "input": "{\"__proto__\":{\"a\":1},\"construct",
+      "repaired": "{\"__proto__\":{\"a\":1},\"construct",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/32",
+      "input": "{\"__proto__\":{\"a\":1},\"constructo",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructo",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/33",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/34",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\"",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/35",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "prototype keys/36",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2",
+      "streaming": "{\"constructor\":2}"
+    },
+    {
+      "name": "prototype keys/37",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,",
+      "streaming": "{\"constructor\":2}"
+    },
+    {
+      "name": "prototype keys/38",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"",
+      "streaming": "{\"constructor\":2}"
+    },
+    {
+      "name": "prototype keys/39",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"p",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"p",
+      "streaming": "{\"constructor\":2}"
+    },
+    {
+      "name": "prototype keys/40",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"pr",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"pr",
+      "streaming": "{\"constructor\":2}"
+    },
+    {
+      "name": "prototype keys/41",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"pro",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"pro",
+      "streaming": "{\"constructor\":2}"
+    },
+    {
+      "name": "prototype keys/42",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prot",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prot",
+      "streaming": "{\"constructor\":2}"
+    },
+    {
+      "name": "prototype keys/43",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"proto",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"proto",
+      "streaming": "{\"constructor\":2}"
+    },
+    {
+      "name": "prototype keys/44",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"protot",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"protot",
+      "streaming": "{\"constructor\":2}"
+    },
+    {
+      "name": "prototype keys/45",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototy",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototy",
+      "streaming": "{\"constructor\":2}"
+    },
+    {
+      "name": "prototype keys/46",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototyp",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototyp",
+      "streaming": "{\"constructor\":2}"
+    },
+    {
+      "name": "prototype keys/47",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype",
+      "streaming": "{\"constructor\":2}"
+    },
+    {
+      "name": "prototype keys/48",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\"",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\"",
+      "streaming": "{\"constructor\":2}"
+    },
+    {
+      "name": "prototype keys/49",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":",
+      "streaming": "{\"constructor\":2}"
+    },
+    {
+      "name": "prototype keys/50",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3",
+      "streaming": "{\"constructor\":2,\"prototype\":3}"
+    },
+    {
+      "name": "prototype keys/51",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,",
+      "streaming": "{\"constructor\":2,\"prototype\":3}"
+    },
+    {
+      "name": "prototype keys/52",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"",
+      "streaming": "{\"constructor\":2,\"prototype\":3}"
+    },
+    {
+      "name": "prototype keys/53",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"t",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"t",
+      "streaming": "{\"constructor\":2,\"prototype\":3}"
+    },
+    {
+      "name": "prototype keys/54",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"to",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"to",
+      "streaming": "{\"constructor\":2,\"prototype\":3}"
+    },
+    {
+      "name": "prototype keys/55",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toS",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toS",
+      "streaming": "{\"constructor\":2,\"prototype\":3}"
+    },
+    {
+      "name": "prototype keys/56",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toSt",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toSt",
+      "streaming": "{\"constructor\":2,\"prototype\":3}"
+    },
+    {
+      "name": "prototype keys/57",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toStr",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toStr",
+      "streaming": "{\"constructor\":2,\"prototype\":3}"
+    },
+    {
+      "name": "prototype keys/58",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toStri",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toStri",
+      "streaming": "{\"constructor\":2,\"prototype\":3}"
+    },
+    {
+      "name": "prototype keys/59",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toStrin",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toStrin",
+      "streaming": "{\"constructor\":2,\"prototype\":3}"
+    },
+    {
+      "name": "prototype keys/60",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString",
+      "streaming": "{\"constructor\":2,\"prototype\":3}"
+    },
+    {
+      "name": "prototype keys/61",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\"",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\"",
+      "streaming": "{\"constructor\":2,\"prototype\":3}"
+    },
+    {
+      "name": "prototype keys/62",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":",
+      "streaming": "{\"constructor\":2,\"prototype\":3}"
+    },
+    {
+      "name": "prototype keys/63",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/64",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/65",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/66",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\\\",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/67",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/68",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u0",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u0",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/69",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u00",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u00",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/70",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/71",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/72",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/73",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_p",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_p",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/74",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_pr",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_pr",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/75",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_pro",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_pro",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/76",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_prot",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_prot",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/77",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_proto",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_proto",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/78",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_proto_",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_proto_",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/79",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_proto__",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_proto__",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/80",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_proto__\"",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_proto__\"",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/81",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_proto__\":",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_proto__\":",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/82",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_proto__\":5",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_proto__\":5",
+      "streaming": "{\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "prototype keys/83",
+      "input": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_proto__\":5}",
+      "repaired": "{\"__proto__\":{\"a\":1},\"constructor\":2,\"prototype\":3,\"toString\":4,\"\\u005f_proto__\":5}",
+      "complete": "{\"__proto__\":5,\"constructor\":2,\"prototype\":3,\"toString\":4}",
+      "streaming": "{\"__proto__\":5,\"constructor\":2,\"prototype\":3,\"toString\":4}"
+    },
+    {
+      "name": "nested objects/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "nested objects/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "nested objects/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "nested objects/3",
+      "input": "{\"o",
+      "repaired": "{\"o",
+      "streaming": "{}"
+    },
+    {
+      "name": "nested objects/4",
+      "input": "{\"ou",
+      "repaired": "{\"ou",
+      "streaming": "{}"
+    },
+    {
+      "name": "nested objects/5",
+      "input": "{\"out",
+      "repaired": "{\"out",
+      "streaming": "{}"
+    },
+    {
+      "name": "nested objects/6",
+      "input": "{\"oute",
+      "repaired": "{\"oute",
+      "streaming": "{}"
+    },
+    {
+      "name": "nested objects/7",
+      "input": "{\"outer",
+      "repaired": "{\"outer",
+      "streaming": "{}"
+    },
+    {
+      "name": "nested objects/8",
+      "input": "{\"outer\"",
+      "repaired": "{\"outer\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "nested objects/9",
+      "input": "{\"outer\":",
+      "repaired": "{\"outer\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "nested objects/10",
+      "input": "{\"outer\":{",
+      "repaired": "{\"outer\":{",
+      "streaming": "{\"outer\":{}}"
+    },
+    {
+      "name": "nested objects/11",
+      "input": "{\"outer\":{\"",
+      "repaired": "{\"outer\":{\"",
+      "streaming": "{\"outer\":{}}"
+    },
+    {
+      "name": "nested objects/12",
+      "input": "{\"outer\":{\"\\",
+      "repaired": "{\"outer\":{\"\\\\",
+      "streaming": "{\"outer\":{}}"
+    },
+    {
+      "name": "nested objects/13",
+      "input": "{\"outer\":{\"\\u",
+      "repaired": "{\"outer\":{\"\\u",
+      "streaming": "{\"outer\":{}}"
+    },
+    {
+      "name": "nested objects/14",
+      "input": "{\"outer\":{\"\\ud",
+      "repaired": "{\"outer\":{\"\\ud",
+      "streaming": "{\"outer\":{}}"
+    },
+    {
+      "name": "nested objects/15",
+      "input": "{\"outer\":{\"\\ud8",
+      "repaired": "{\"outer\":{\"\\ud8",
+      "streaming": "{\"outer\":{}}"
+    },
+    {
+      "name": "nested objects/16",
+      "input": "{\"outer\":{\"\\ud80",
+      "repaired": "{\"outer\":{\"\\ud80",
+      "streaming": "{\"outer\":{}}"
+    },
+    {
+      "name": "nested objects/17",
+      "input": "{\"outer\":{\"\\ud800",
+      "repaired": "{\"outer\":{\"\\ud800",
+      "streaming": "{\"outer\":{}}"
+    },
+    {
+      "name": "nested objects/18",
+      "input": "{\"outer\":{\"\\ud800\"",
+      "repaired": "{\"outer\":{\"\\ud800\"",
+      "streaming": "{\"outer\":{}}"
+    },
+    {
+      "name": "nested objects/19",
+      "input": "{\"outer\":{\"\\ud800\":",
+      "repaired": "{\"outer\":{\"\\ud800\":",
+      "streaming": "{\"outer\":{}}"
+    },
+    {
+      "name": "nested objects/20",
+      "input": "{\"outer\":{\"\\ud800\":1",
+      "repaired": "{\"outer\":{\"\\ud800\":1",
+      "streaming": "{\"outer\":{\"\\ud800\":1}}"
+    },
+    {
+      "name": "nested objects/21",
+      "input": "{\"outer\":{\"\\ud800\":1,",
+      "repaired": "{\"outer\":{\"\\ud800\":1,",
+      "streaming": "{\"outer\":{\"\\ud800\":1}}"
+    },
+    {
+      "name": "nested objects/22",
+      "input": "{\"outer\":{\"\\ud800\":1,\"",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"",
+      "streaming": "{\"outer\":{\"\\ud800\":1}}"
+    },
+    {
+      "name": "nested objects/23",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\\\",
+      "streaming": "{\"outer\":{\"\\ud800\":1}}"
+    },
+    {
+      "name": "nested objects/24",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\u",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\u",
+      "streaming": "{\"outer\":{\"\\ud800\":1}}"
+    },
+    {
+      "name": "nested objects/25",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\ud",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\ud",
+      "streaming": "{\"outer\":{\"\\ud800\":1}}"
+    },
+    {
+      "name": "nested objects/26",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc",
+      "streaming": "{\"outer\":{\"\\ud800\":1}}"
+    },
+    {
+      "name": "nested objects/27",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc0",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc0",
+      "streaming": "{\"outer\":{\"\\ud800\":1}}"
+    },
+    {
+      "name": "nested objects/28",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00",
+      "streaming": "{\"outer\":{\"\\ud800\":1}}"
+    },
+    {
+      "name": "nested objects/29",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\"",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\"",
+      "streaming": "{\"outer\":{\"\\ud800\":1}}"
+    },
+    {
+      "name": "nested objects/30",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":",
+      "streaming": "{\"outer\":{\"\\ud800\":1}}"
+    },
+    {
+      "name": "nested objects/31",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2",
+      "streaming": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/32",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,",
+      "streaming": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/33",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"",
+      "streaming": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/34",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2",
+      "streaming": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/35",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\"",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\"",
+      "streaming": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/36",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":",
+      "streaming": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/37",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3",
+      "streaming": "{\"outer\":{\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/38",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,",
+      "streaming": "{\"outer\":{\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/39",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"",
+      "streaming": "{\"outer\":{\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/40",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1",
+      "streaming": "{\"outer\":{\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/41",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\"",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\"",
+      "streaming": "{\"outer\":{\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/42",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":",
+      "streaming": "{\"outer\":{\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/43",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/44",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4}",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4}",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/45",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/46",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/47",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"i",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"i",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/48",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"it",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"it",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/49",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"ite",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"ite",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/50",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"item",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"item",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/51",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/52",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\"",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\"",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/53",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2}}"
+    },
+    {
+      "name": "nested objects/54",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[]}"
+    },
+    {
+      "name": "nested objects/55",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{}]}"
+    },
+    {
+      "name": "nested objects/56",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{}]}"
+    },
+    {
+      "name": "nested objects/57",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\\\",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{}]}"
+    },
+    {
+      "name": "nested objects/58",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\u",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\u",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{}]}"
+    },
+    {
+      "name": "nested objects/59",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{}]}"
+    },
+    {
+      "name": "nested objects/60",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud8",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud8",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{}]}"
+    },
+    {
+      "name": "nested objects/61",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud80",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud80",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{}]}"
+    },
+    {
+      "name": "nested objects/62",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{}]}"
+    },
+    {
+      "name": "nested objects/63",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\"",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\"",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{}]}"
+    },
+    {
+      "name": "nested objects/64",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{}]}"
+    },
+    {
+      "name": "nested objects/65",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{\"\\ud800\":\"\"}]}"
+    },
+    {
+      "name": "nested objects/66",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\\\",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{\"\\ud800\":\"\"}]}"
+    },
+    {
+      "name": "nested objects/67",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\u",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\u",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{\"\\ud800\":\"\"}]}"
+    },
+    {
+      "name": "nested objects/68",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\ud",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\ud",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{\"\\ud800\":\"\"}]}"
+    },
+    {
+      "name": "nested objects/69",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\udc",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\udc",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{\"\\ud800\":\"\"}]}"
+    },
+    {
+      "name": "nested objects/70",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\udc0",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\udc0",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{\"\\ud800\":\"\"}]}"
+    },
+    {
+      "name": "nested objects/71",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\udc00",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\udc00",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{\"\\ud800\":\"\\udc00\"}]}"
+    },
+    {
+      "name": "nested objects/72",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\udc00\"",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\udc00\"",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{\"\\ud800\":\"\\udc00\"}]}"
+    },
+    {
+      "name": "nested objects/73",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\udc00\"}",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\udc00\"}",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{\"\\ud800\":\"\\udc00\"}]}"
+    },
+    {
+      "name": "nested objects/74",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\udc00\"}]",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\udc00\"}]",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{\"\\ud800\":\"\\udc00\"}]}"
+    },
+    {
+      "name": "nested objects/75",
+      "input": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\udc00\"}]}",
+      "repaired": "{\"outer\":{\"\\ud800\":1,\"\\udc00\":2,\"2\":3,\"1\":4},\"items\":[{\"\\ud800\":\"\\udc00\"}]}",
+      "complete": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{\"\\ud800\":\"\\udc00\"}]}",
+      "streaming": "{\"outer\":{\"1\":4,\"2\":3,\"\\ud800\":1,\"\\udc00\":2},\"items\":[{\"\\ud800\":\"\\udc00\"}]}"
+    },
+    {
+      "name": "numbers/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "numbers/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "numbers/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "numbers/3",
+      "input": "{\"v",
+      "repaired": "{\"v",
+      "streaming": "{}"
+    },
+    {
+      "name": "numbers/4",
+      "input": "{\"va",
+      "repaired": "{\"va",
+      "streaming": "{}"
+    },
+    {
+      "name": "numbers/5",
+      "input": "{\"val",
+      "repaired": "{\"val",
+      "streaming": "{}"
+    },
+    {
+      "name": "numbers/6",
+      "input": "{\"valu",
+      "repaired": "{\"valu",
+      "streaming": "{}"
+    },
+    {
+      "name": "numbers/7",
+      "input": "{\"value",
+      "repaired": "{\"value",
+      "streaming": "{}"
+    },
+    {
+      "name": "numbers/8",
+      "input": "{\"values",
+      "repaired": "{\"values",
+      "streaming": "{}"
+    },
+    {
+      "name": "numbers/9",
+      "input": "{\"values\"",
+      "repaired": "{\"values\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "numbers/10",
+      "input": "{\"values\":",
+      "repaired": "{\"values\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "numbers/11",
+      "input": "{\"values\":[",
+      "repaired": "{\"values\":[",
+      "streaming": "{\"values\":[]}"
+    },
+    {
+      "name": "numbers/12",
+      "input": "{\"values\":[9",
+      "repaired": "{\"values\":[9",
+      "streaming": "{\"values\":[9]}"
+    },
+    {
+      "name": "numbers/13",
+      "input": "{\"values\":[90",
+      "repaired": "{\"values\":[90",
+      "streaming": "{\"values\":[90]}"
+    },
+    {
+      "name": "numbers/14",
+      "input": "{\"values\":[900",
+      "repaired": "{\"values\":[900",
+      "streaming": "{\"values\":[900]}"
+    },
+    {
+      "name": "numbers/15",
+      "input": "{\"values\":[9007",
+      "repaired": "{\"values\":[9007",
+      "streaming": "{\"values\":[9007]}"
+    },
+    {
+      "name": "numbers/16",
+      "input": "{\"values\":[90071",
+      "repaired": "{\"values\":[90071",
+      "streaming": "{\"values\":[90071]}"
+    },
+    {
+      "name": "numbers/17",
+      "input": "{\"values\":[900719",
+      "repaired": "{\"values\":[900719",
+      "streaming": "{\"values\":[900719]}"
+    },
+    {
+      "name": "numbers/18",
+      "input": "{\"values\":[9007199",
+      "repaired": "{\"values\":[9007199",
+      "streaming": "{\"values\":[9007199]}"
+    },
+    {
+      "name": "numbers/19",
+      "input": "{\"values\":[90071992",
+      "repaired": "{\"values\":[90071992",
+      "streaming": "{\"values\":[90071992]}"
+    },
+    {
+      "name": "numbers/20",
+      "input": "{\"values\":[900719925",
+      "repaired": "{\"values\":[900719925",
+      "streaming": "{\"values\":[900719925]}"
+    },
+    {
+      "name": "numbers/21",
+      "input": "{\"values\":[9007199254",
+      "repaired": "{\"values\":[9007199254",
+      "streaming": "{\"values\":[9007199254]}"
+    },
+    {
+      "name": "numbers/22",
+      "input": "{\"values\":[90071992547",
+      "repaired": "{\"values\":[90071992547",
+      "streaming": "{\"values\":[90071992547]}"
+    },
+    {
+      "name": "numbers/23",
+      "input": "{\"values\":[900719925474",
+      "repaired": "{\"values\":[900719925474",
+      "streaming": "{\"values\":[900719925474]}"
+    },
+    {
+      "name": "numbers/24",
+      "input": "{\"values\":[9007199254740",
+      "repaired": "{\"values\":[9007199254740",
+      "streaming": "{\"values\":[9007199254740]}"
+    },
+    {
+      "name": "numbers/25",
+      "input": "{\"values\":[90071992547409",
+      "repaired": "{\"values\":[90071992547409",
+      "streaming": "{\"values\":[90071992547409]}"
+    },
+    {
+      "name": "numbers/26",
+      "input": "{\"values\":[900719925474099",
+      "repaired": "{\"values\":[900719925474099",
+      "streaming": "{\"values\":[900719925474099]}"
+    },
+    {
+      "name": "numbers/27",
+      "input": "{\"values\":[9007199254740993",
+      "repaired": "{\"values\":[9007199254740993",
+      "streaming": "{\"values\":[9007199254740992]}"
+    },
+    {
+      "name": "numbers/28",
+      "input": "{\"values\":[9007199254740993,",
+      "repaired": "{\"values\":[9007199254740993,",
+      "streaming": "{\"values\":[9007199254740992]}"
+    },
+    {
+      "name": "numbers/29",
+      "input": "{\"values\":[9007199254740993,1",
+      "repaired": "{\"values\":[9007199254740993,1",
+      "streaming": "{\"values\":[9007199254740992,1]}"
+    },
+    {
+      "name": "numbers/30",
+      "input": "{\"values\":[9007199254740993,1e",
+      "repaired": "{\"values\":[9007199254740993,1e",
+      "streaming": "{\"values\":[9007199254740992,1]}"
+    },
+    {
+      "name": "numbers/31",
+      "input": "{\"values\":[9007199254740993,1e3",
+      "repaired": "{\"values\":[9007199254740993,1e3",
+      "streaming": "{\"values\":[9007199254740992,1000]}"
+    },
+    {
+      "name": "numbers/32",
+      "input": "{\"values\":[9007199254740993,1e30",
+      "repaired": "{\"values\":[9007199254740993,1e30",
+      "streaming": "{\"values\":[9007199254740992,1e+30]}"
+    },
+    {
+      "name": "numbers/33",
+      "input": "{\"values\":[9007199254740993,1e309",
+      "repaired": "{\"values\":[9007199254740993,1e309",
+      "streaming": "{\"values\":[9007199254740992,null]}"
+    },
+    {
+      "name": "numbers/34",
+      "input": "{\"values\":[9007199254740993,1e309,",
+      "repaired": "{\"values\":[9007199254740993,1e309,",
+      "streaming": "{\"values\":[9007199254740992,null]}"
+    },
+    {
+      "name": "numbers/35",
+      "input": "{\"values\":[9007199254740993,1e309,-",
+      "repaired": "{\"values\":[9007199254740993,1e309,-",
+      "streaming": "{\"values\":[9007199254740992,null]}"
+    },
+    {
+      "name": "numbers/36",
+      "input": "{\"values\":[9007199254740993,1e309,-1",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1",
+      "streaming": "{\"values\":[9007199254740992,null,-1]}"
+    },
+    {
+      "name": "numbers/37",
+      "input": "{\"values\":[9007199254740993,1e309,-1e",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e",
+      "streaming": "{\"values\":[9007199254740992,null,-1]}"
+    },
+    {
+      "name": "numbers/38",
+      "input": "{\"values\":[9007199254740993,1e309,-1e3",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e3",
+      "streaming": "{\"values\":[9007199254740992,null,-1000]}"
+    },
+    {
+      "name": "numbers/39",
+      "input": "{\"values\":[9007199254740993,1e309,-1e30",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e30",
+      "streaming": "{\"values\":[9007199254740992,null,-1e+30]}"
+    },
+    {
+      "name": "numbers/40",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309",
+      "streaming": "{\"values\":[9007199254740992,null,null]}"
+    },
+    {
+      "name": "numbers/41",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,",
+      "streaming": "{\"values\":[9007199254740992,null,null]}"
+    },
+    {
+      "name": "numbers/42",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-",
+      "streaming": "{\"values\":[9007199254740992,null,null]}"
+    },
+    {
+      "name": "numbers/43",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0",
+      "streaming": "{\"values\":[9007199254740992,null,null,0]}"
+    },
+    {
+      "name": "numbers/44",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,",
+      "streaming": "{\"values\":[9007199254740992,null,null,0]}"
+    },
+    {
+      "name": "numbers/45",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,1]}"
+    },
+    {
+      "name": "numbers/46",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,1]}"
+    },
+    {
+      "name": "numbers/47",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,1]}"
+    },
+    {
+      "name": "numbers/48",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-4",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-4",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0.0001]}"
+    },
+    {
+      "name": "numbers/49",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-40",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-40",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,1e-40]}"
+    },
+    {
+      "name": "numbers/50",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0]}"
+    },
+    {
+      "name": "numbers/51",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0]}"
+    },
+    {
+      "name": "numbers/52",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1]}"
+    },
+    {
+      "name": "numbers/53",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1]}"
+    },
+    {
+      "name": "numbers/54",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1]}"
+    },
+    {
+      "name": "numbers/55",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1e-7]}"
+    },
+    {
+      "name": "numbers/56",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1e-7]}"
+    },
+    {
+      "name": "numbers/57",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1e-7,1]}"
+    },
+    {
+      "name": "numbers/58",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1e-7,1]}"
+    },
+    {
+      "name": "numbers/59",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e2",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e2",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1e-7,100]}"
+    },
+    {
+      "name": "numbers/60",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1e-7,1e+21]}"
+    },
+    {
+      "name": "numbers/61",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1e-7,1e+21]}"
+    },
+    {
+      "name": "numbers/62",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1e-7,1e+21,5]}"
+    },
+    {
+      "name": "numbers/63",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5e",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5e",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1e-7,1e+21,5]}"
+    },
+    {
+      "name": "numbers/64",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5e-",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5e-",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1e-7,1e+21,5]}"
+    },
+    {
+      "name": "numbers/65",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5e-3",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5e-3",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1e-7,1e+21,0.005]}"
+    },
+    {
+      "name": "numbers/66",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5e-32",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5e-32",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1e-7,1e+21,5e-32]}"
+    },
+    {
+      "name": "numbers/67",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5e-324",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5e-324",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1e-7,1e+21,5e-324]}"
+    },
+    {
+      "name": "numbers/68",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5e-324]",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5e-324]",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1e-7,1e+21,5e-324]}"
+    },
+    {
+      "name": "numbers/69",
+      "input": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5e-324]}",
+      "repaired": "{\"values\":[9007199254740993,1e309,-1e309,-0,1e-400,1e-7,1e21,5e-324]}",
+      "complete": "{\"values\":[9007199254740992,null,null,0,0,1e-7,1e+21,5e-324]}",
+      "streaming": "{\"values\":[9007199254740992,null,null,0,0,1e-7,1e+21,5e-324]}"
+    },
+    {
+      "name": "partial constants/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "partial constants/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "partial constants/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "partial constants/3",
+      "input": "{\"v",
+      "repaired": "{\"v",
+      "streaming": "{}"
+    },
+    {
+      "name": "partial constants/4",
+      "input": "{\"va",
+      "repaired": "{\"va",
+      "streaming": "{}"
+    },
+    {
+      "name": "partial constants/5",
+      "input": "{\"val",
+      "repaired": "{\"val",
+      "streaming": "{}"
+    },
+    {
+      "name": "partial constants/6",
+      "input": "{\"valu",
+      "repaired": "{\"valu",
+      "streaming": "{}"
+    },
+    {
+      "name": "partial constants/7",
+      "input": "{\"value",
+      "repaired": "{\"value",
+      "streaming": "{}"
+    },
+    {
+      "name": "partial constants/8",
+      "input": "{\"values",
+      "repaired": "{\"values",
+      "streaming": "{}"
+    },
+    {
+      "name": "partial constants/9",
+      "input": "{\"values\"",
+      "repaired": "{\"values\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "partial constants/10",
+      "input": "{\"values\":",
+      "repaired": "{\"values\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "partial constants/11",
+      "input": "{\"values\":[",
+      "repaired": "{\"values\":[",
+      "streaming": "{\"values\":[]}"
+    },
+    {
+      "name": "partial constants/12",
+      "input": "{\"values\":[n",
+      "repaired": "{\"values\":[n",
+      "streaming": "{\"values\":[null]}"
+    },
+    {
+      "name": "partial constants/13",
+      "input": "{\"values\":[nu",
+      "repaired": "{\"values\":[nu",
+      "streaming": "{\"values\":[null]}"
+    },
+    {
+      "name": "partial constants/14",
+      "input": "{\"values\":[nul",
+      "repaired": "{\"values\":[nul",
+      "streaming": "{\"values\":[null]}"
+    },
+    {
+      "name": "partial constants/15",
+      "input": "{\"values\":[null",
+      "repaired": "{\"values\":[null",
+      "streaming": "{\"values\":[null]}"
+    },
+    {
+      "name": "partial constants/16",
+      "input": "{\"values\":[null,",
+      "repaired": "{\"values\":[null,",
+      "streaming": "{\"values\":[null]}"
+    },
+    {
+      "name": "partial constants/17",
+      "input": "{\"values\":[null,t",
+      "repaired": "{\"values\":[null,t",
+      "streaming": "{\"values\":[null,true]}"
+    },
+    {
+      "name": "partial constants/18",
+      "input": "{\"values\":[null,tr",
+      "repaired": "{\"values\":[null,tr",
+      "streaming": "{\"values\":[null,true]}"
+    },
+    {
+      "name": "partial constants/19",
+      "input": "{\"values\":[null,tru",
+      "repaired": "{\"values\":[null,tru",
+      "streaming": "{\"values\":[null,true]}"
+    },
+    {
+      "name": "partial constants/20",
+      "input": "{\"values\":[null,true",
+      "repaired": "{\"values\":[null,true",
+      "streaming": "{\"values\":[null,true]}"
+    },
+    {
+      "name": "partial constants/21",
+      "input": "{\"values\":[null,true,",
+      "repaired": "{\"values\":[null,true,",
+      "streaming": "{\"values\":[null,true]}"
+    },
+    {
+      "name": "partial constants/22",
+      "input": "{\"values\":[null,true,f",
+      "repaired": "{\"values\":[null,true,f",
+      "streaming": "{\"values\":[null,true,false]}"
+    },
+    {
+      "name": "partial constants/23",
+      "input": "{\"values\":[null,true,fa",
+      "repaired": "{\"values\":[null,true,fa",
+      "streaming": "{\"values\":[null,true,false]}"
+    },
+    {
+      "name": "partial constants/24",
+      "input": "{\"values\":[null,true,fal",
+      "repaired": "{\"values\":[null,true,fal",
+      "streaming": "{\"values\":[null,true,false]}"
+    },
+    {
+      "name": "partial constants/25",
+      "input": "{\"values\":[null,true,fals",
+      "repaired": "{\"values\":[null,true,fals",
+      "streaming": "{\"values\":[null,true,false]}"
+    },
+    {
+      "name": "partial constants/26",
+      "input": "{\"values\":[null,true,false",
+      "repaired": "{\"values\":[null,true,false",
+      "streaming": "{\"values\":[null,true,false]}"
+    },
+    {
+      "name": "partial constants/27",
+      "input": "{\"values\":[null,true,false,",
+      "repaired": "{\"values\":[null,true,false,",
+      "streaming": "{\"values\":[null,true,false]}"
+    },
+    {
+      "name": "partial constants/28",
+      "input": "{\"values\":[null,true,false,I",
+      "repaired": "{\"values\":[null,true,false,I",
+      "streaming": "{\"values\":[null,true,false,null]}"
+    },
+    {
+      "name": "partial constants/29",
+      "input": "{\"values\":[null,true,false,In",
+      "repaired": "{\"values\":[null,true,false,In",
+      "streaming": "{\"values\":[null,true,false,null]}"
+    },
+    {
+      "name": "partial constants/30",
+      "input": "{\"values\":[null,true,false,Inf",
+      "repaired": "{\"values\":[null,true,false,Inf",
+      "streaming": "{\"values\":[null,true,false,null]}"
+    },
+    {
+      "name": "partial constants/31",
+      "input": "{\"values\":[null,true,false,Infi",
+      "repaired": "{\"values\":[null,true,false,Infi",
+      "streaming": "{\"values\":[null,true,false,null]}"
+    },
+    {
+      "name": "partial constants/32",
+      "input": "{\"values\":[null,true,false,Infin",
+      "repaired": "{\"values\":[null,true,false,Infin",
+      "streaming": "{\"values\":[null,true,false,null]}"
+    },
+    {
+      "name": "partial constants/33",
+      "input": "{\"values\":[null,true,false,Infini",
+      "repaired": "{\"values\":[null,true,false,Infini",
+      "streaming": "{\"values\":[null,true,false,null]}"
+    },
+    {
+      "name": "partial constants/34",
+      "input": "{\"values\":[null,true,false,Infinit",
+      "repaired": "{\"values\":[null,true,false,Infinit",
+      "streaming": "{\"values\":[null,true,false,null]}"
+    },
+    {
+      "name": "partial constants/35",
+      "input": "{\"values\":[null,true,false,Infinity",
+      "repaired": "{\"values\":[null,true,false,Infinity",
+      "streaming": "{\"values\":[null,true,false,null]}"
+    },
+    {
+      "name": "partial constants/36",
+      "input": "{\"values\":[null,true,false,Infinity,",
+      "repaired": "{\"values\":[null,true,false,Infinity,",
+      "streaming": "{\"values\":[null,true,false,null]}"
+    },
+    {
+      "name": "partial constants/37",
+      "input": "{\"values\":[null,true,false,Infinity,-",
+      "repaired": "{\"values\":[null,true,false,Infinity,-",
+      "streaming": "{\"values\":[null,true,false,null]}"
+    },
+    {
+      "name": "partial constants/38",
+      "input": "{\"values\":[null,true,false,Infinity,-I",
+      "repaired": "{\"values\":[null,true,false,Infinity,-I",
+      "streaming": "{\"values\":[null,true,false,null,null]}"
+    },
+    {
+      "name": "partial constants/39",
+      "input": "{\"values\":[null,true,false,Infinity,-In",
+      "repaired": "{\"values\":[null,true,false,Infinity,-In",
+      "streaming": "{\"values\":[null,true,false,null,null]}"
+    },
+    {
+      "name": "partial constants/40",
+      "input": "{\"values\":[null,true,false,Infinity,-Inf",
+      "repaired": "{\"values\":[null,true,false,Infinity,-Inf",
+      "streaming": "{\"values\":[null,true,false,null,null]}"
+    },
+    {
+      "name": "partial constants/41",
+      "input": "{\"values\":[null,true,false,Infinity,-Infi",
+      "repaired": "{\"values\":[null,true,false,Infinity,-Infi",
+      "streaming": "{\"values\":[null,true,false,null,null]}"
+    },
+    {
+      "name": "partial constants/42",
+      "input": "{\"values\":[null,true,false,Infinity,-Infin",
+      "repaired": "{\"values\":[null,true,false,Infinity,-Infin",
+      "streaming": "{\"values\":[null,true,false,null,null]}"
+    },
+    {
+      "name": "partial constants/43",
+      "input": "{\"values\":[null,true,false,Infinity,-Infini",
+      "repaired": "{\"values\":[null,true,false,Infinity,-Infini",
+      "streaming": "{\"values\":[null,true,false,null,null]}"
+    },
+    {
+      "name": "partial constants/44",
+      "input": "{\"values\":[null,true,false,Infinity,-Infinit",
+      "repaired": "{\"values\":[null,true,false,Infinity,-Infinit",
+      "streaming": "{\"values\":[null,true,false,null,null]}"
+    },
+    {
+      "name": "partial constants/45",
+      "input": "{\"values\":[null,true,false,Infinity,-Infinity",
+      "repaired": "{\"values\":[null,true,false,Infinity,-Infinity",
+      "streaming": "{\"values\":[null,true,false,null,null]}"
+    },
+    {
+      "name": "partial constants/46",
+      "input": "{\"values\":[null,true,false,Infinity,-Infinity,",
+      "repaired": "{\"values\":[null,true,false,Infinity,-Infinity,",
+      "streaming": "{\"values\":[null,true,false,null,null]}"
+    },
+    {
+      "name": "partial constants/47",
+      "input": "{\"values\":[null,true,false,Infinity,-Infinity,N",
+      "repaired": "{\"values\":[null,true,false,Infinity,-Infinity,N",
+      "streaming": "{\"values\":[null,true,false,null,null,null]}"
+    },
+    {
+      "name": "partial constants/48",
+      "input": "{\"values\":[null,true,false,Infinity,-Infinity,Na",
+      "repaired": "{\"values\":[null,true,false,Infinity,-Infinity,Na",
+      "streaming": "{\"values\":[null,true,false,null,null,null]}"
+    },
+    {
+      "name": "partial constants/49",
+      "input": "{\"values\":[null,true,false,Infinity,-Infinity,NaN",
+      "repaired": "{\"values\":[null,true,false,Infinity,-Infinity,NaN",
+      "streaming": "{\"values\":[null,true,false,null,null,null]}"
+    },
+    {
+      "name": "partial constants/50",
+      "input": "{\"values\":[null,true,false,Infinity,-Infinity,NaN]",
+      "repaired": "{\"values\":[null,true,false,Infinity,-Infinity,NaN]",
+      "streaming": "{\"values\":[null,true,false,null,null,null]}"
+    },
+    {
+      "name": "partial constants/51",
+      "input": "{\"values\":[null,true,false,Infinity,-Infinity,NaN]}",
+      "repaired": "{\"values\":[null,true,false,Infinity,-Infinity,NaN]}",
+      "streaming": "{\"values\":[null,true,false,null,null,null]}"
+    },
+    {
+      "name": "repair controls/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/3",
+      "input": "{\"l",
+      "repaired": "{\"l",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/4",
+      "input": "{\"li",
+      "repaired": "{\"li",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/5",
+      "input": "{\"lin",
+      "repaired": "{\"lin",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/6",
+      "input": "{\"line",
+      "repaired": "{\"line",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/7",
+      "input": "{\"line\n",
+      "repaired": "{\"line\\n",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/8",
+      "input": "{\"line\nk",
+      "repaired": "{\"line\\nk",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/9",
+      "input": "{\"line\nke",
+      "repaired": "{\"line\\nke",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/10",
+      "input": "{\"line\nkey",
+      "repaired": "{\"line\\nkey",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/11",
+      "input": "{\"line\nkey\"",
+      "repaired": "{\"line\\nkey\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/12",
+      "input": "{\"line\nkey\":",
+      "repaired": "{\"line\\nkey\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/13",
+      "input": "{\"line\nkey\":\"",
+      "repaired": "{\"line\\nkey\":\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/14",
+      "input": "{\"line\nkey\":\"l",
+      "repaired": "{\"line\\nkey\":\"l",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/15",
+      "input": "{\"line\nkey\":\"li",
+      "repaired": "{\"line\\nkey\":\"li",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/16",
+      "input": "{\"line\nkey\":\"lin",
+      "repaired": "{\"line\\nkey\":\"lin",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/17",
+      "input": "{\"line\nkey\":\"line",
+      "repaired": "{\"line\\nkey\":\"line",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/18",
+      "input": "{\"line\nkey\":\"line\n",
+      "repaired": "{\"line\\nkey\":\"line\\n",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/19",
+      "input": "{\"line\nkey\":\"line\nv",
+      "repaired": "{\"line\\nkey\":\"line\\nv",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/20",
+      "input": "{\"line\nkey\":\"line\nva",
+      "repaired": "{\"line\\nkey\":\"line\\nva",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/21",
+      "input": "{\"line\nkey\":\"line\nval",
+      "repaired": "{\"line\\nkey\":\"line\\nval",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/22",
+      "input": "{\"line\nkey\":\"line\nvalu",
+      "repaired": "{\"line\\nkey\":\"line\\nvalu",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/23",
+      "input": "{\"line\nkey\":\"line\nvalue",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/24",
+      "input": "{\"line\nkey\":\"line\nvalue\"",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/25",
+      "input": "{\"line\nkey\":\"line\nvalue\",",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/26",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/27",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"t",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"t",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/28",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"ta",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"ta",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/29",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/30",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\t",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\t",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/31",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tk",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tk",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/32",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tke",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tke",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/33",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tkey",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/34",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tkey\"",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/35",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tkey\":",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/36",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tkey\":\"",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\":\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/37",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tkey\":\"t",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\":\"t",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/38",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tkey\":\"ta",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\":\"ta",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/39",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tkey\":\"tab",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\":\"tab",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/40",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tkey\":\"tab\t",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\":\"tab\\t",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/41",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tkey\":\"tab\tv",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\":\"tab\\tv",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/42",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tkey\":\"tab\tva",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\":\"tab\\tva",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/43",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tkey\":\"tab\tval",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\":\"tab\\tval",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/44",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tkey\":\"tab\tvalu",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\":\"tab\\tvalu",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/45",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tkey\":\"tab\tvalue",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\":\"tab\\tvalue",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/46",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tkey\":\"tab\tvalue\"",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\":\"tab\\tvalue\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair controls/47",
+      "input": "{\"line\nkey\":\"line\nvalue\",\"tab\tkey\":\"tab\tvalue\"}",
+      "repaired": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\":\"tab\\tvalue\"}",
+      "complete": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\":\"tab\\tvalue\"}",
+      "streaming": "{\"line\\nkey\":\"line\\nvalue\",\"tab\\tkey\":\"tab\\tvalue\"}"
+    },
+    {
+      "name": "repair escapes/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/3",
+      "input": "{\"b",
+      "repaired": "{\"b",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/4",
+      "input": "{\"ba",
+      "repaired": "{\"ba",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/5",
+      "input": "{\"bad",
+      "repaired": "{\"bad",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/6",
+      "input": "{\"bad\\",
+      "repaired": "{\"bad\\\\",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/7",
+      "input": "{\"bad\\q",
+      "repaired": "{\"bad\\\\q",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/8",
+      "input": "{\"bad\\q\"",
+      "repaired": "{\"bad\\\\q\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/9",
+      "input": "{\"bad\\q\":",
+      "repaired": "{\"bad\\\\q\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/10",
+      "input": "{\"bad\\q\":\"",
+      "repaired": "{\"bad\\\\q\":\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/11",
+      "input": "{\"bad\\q\":\"v",
+      "repaired": "{\"bad\\\\q\":\"v",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/12",
+      "input": "{\"bad\\q\":\"va",
+      "repaired": "{\"bad\\\\q\":\"va",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/13",
+      "input": "{\"bad\\q\":\"val",
+      "repaired": "{\"bad\\\\q\":\"val",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/14",
+      "input": "{\"bad\\q\":\"valu",
+      "repaired": "{\"bad\\\\q\":\"valu",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/15",
+      "input": "{\"bad\\q\":\"value",
+      "repaired": "{\"bad\\\\q\":\"value",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/16",
+      "input": "{\"bad\\q\":\"value\\",
+      "repaired": "{\"bad\\\\q\":\"value\\\\",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/17",
+      "input": "{\"bad\\q\":\"value\\q",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/18",
+      "input": "{\"bad\\q\":\"value\\q\"",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/19",
+      "input": "{\"bad\\q\":\"value\\q\",",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/20",
+      "input": "{\"bad\\q\":\"value\\q\",\"",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/21",
+      "input": "{\"bad\\q\":\"value\\q\",\"w",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"w",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/22",
+      "input": "{\"bad\\q\":\"value\\q\",\"wi",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"wi",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/23",
+      "input": "{\"bad\\q\":\"value\\q\",\"win",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"win",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/24",
+      "input": "{\"bad\\q\":\"value\\q\",\"wind",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"wind",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/25",
+      "input": "{\"bad\\q\":\"value\\q\",\"windo",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windo",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/26",
+      "input": "{\"bad\\q\":\"value\\q\",\"window",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"window",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/27",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/28",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\"",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/29",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/30",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/31",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/32",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/33",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/34",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\p",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\p",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/35",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\pa",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\pa",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/36",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\pat",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\pat",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/37",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/38",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\\\",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/39",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\f",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\f",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/40",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\fi",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\fi",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/41",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\fil",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\fil",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/42",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/43",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\"",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/44",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/45",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/46",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"l",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"l",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/47",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"la",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"la",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/48",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"las",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"las",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/49",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"last",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"last",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/50",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"last\"",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"last\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/51",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"last\":",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"last\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/52",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"last\":\"",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"last\":\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/53",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"last\":\"t",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"last\":\"t",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/54",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"last\":\"ta",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"last\":\"ta",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/55",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"last\":\"tai",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"last\":\"tai",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/56",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"last\":\"tail",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"last\":\"tail",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/57",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"last\":\"tail\\",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"last\":\"tail\\\\",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/58",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"last\":\"tail\\\\",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"last\":\"tail\\\\",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/59",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"last\":\"tail\\\\\"",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"last\":\"tail\\\\\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "repair escapes/60",
+      "input": "{\"bad\\q\":\"value\\q\",\"windows\":\"C:\\path\\file\",\"last\":\"tail\\\\\"}",
+      "repaired": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"last\":\"tail\\\\\"}",
+      "complete": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"last\":\"tail\\\\\"}",
+      "streaming": "{\"bad\\\\q\":\"value\\\\q\",\"windows\":\"C:\\\\path\\file\",\"last\":\"tail\\\\\"}"
+    },
+    {
+      "name": "lenient punctuation/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/3",
+      "input": "{\"a",
+      "repaired": "{\"a",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/4",
+      "input": "{\"a\"",
+      "repaired": "{\"a\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/5",
+      "input": "{\"a\"=",
+      "repaired": "{\"a\"=",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/6",
+      "input": "{\"a\"=1",
+      "repaired": "{\"a\"=1",
+      "streaming": "{\"a\":1}"
+    },
+    {
+      "name": "lenient punctuation/7",
+      "input": "{\"a\"=1 ",
+      "repaired": "{\"a\"=1 ",
+      "streaming": "{\"a\":1}"
+    },
+    {
+      "name": "lenient punctuation/8",
+      "input": "{\"a\"=1 \"",
+      "repaired": "{\"a\"=1 \"",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/9",
+      "input": "{\"a\"=1 \"b",
+      "repaired": "{\"a\"=1 \"b",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/10",
+      "input": "{\"a\"=1 \"b\"",
+      "repaired": "{\"a\"=1 \"b\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/11",
+      "input": "{\"a\"=1 \"b\":",
+      "repaired": "{\"a\"=1 \"b\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/12",
+      "input": "{\"a\"=1 \"b\":2",
+      "repaired": "{\"a\"=1 \"b\":2",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/13",
+      "input": "{\"a\"=1 \"b\":2,",
+      "repaired": "{\"a\"=1 \"b\":2,",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/14",
+      "input": "{\"a\"=1 \"b\":2,\"",
+      "repaired": "{\"a\"=1 \"b\":2,\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/15",
+      "input": "{\"a\"=1 \"b\":2,\"c",
+      "repaired": "{\"a\"=1 \"b\":2,\"c",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/16",
+      "input": "{\"a\"=1 \"b\":2,\"c\"",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/17",
+      "input": "{\"a\"=1 \"b\":2,\"c\":",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/18",
+      "input": "{\"a\"=1 \"b\":2,\"c\":t",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":t",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/19",
+      "input": "{\"a\"=1 \"b\":2,\"c\":tr",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":tr",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/20",
+      "input": "{\"a\"=1 \"b\":2,\"c\":tru",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":tru",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/21",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/22",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true ",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true ",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/23",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true f",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true f",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/24",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true fa",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true fa",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/25",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true fal",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true fal",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/26",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true fals",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true fals",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/27",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/28",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/29",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,\"",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/30",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,\"d",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,\"d",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/31",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\"",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/32",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/33",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/34",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3}",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3}",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/35",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} ",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} ",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/36",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} t",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} t",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/37",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} tr",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} tr",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/38",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} tra",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} tra",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/39",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} trai",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} trai",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/40",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} trail",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} trail",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/41",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} traili",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} traili",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/42",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} trailin",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} trailin",
+      "streaming": "{}"
+    },
+    {
+      "name": "lenient punctuation/43",
+      "input": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} trailing",
+      "repaired": "{\"a\"=1 \"b\":2,\"c\":true false,\"d\":3} trailing",
+      "streaming": "{}"
+    },
+    {
+      "name": "malformed exponent/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "malformed exponent/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "malformed exponent/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "malformed exponent/4",
+      "input": "{\"😀",
+      "repaired": "{\"😀",
+      "streaming": "{}"
+    },
+    {
+      "name": "malformed exponent/5",
+      "input": "{\"😀\"",
+      "repaired": "{\"😀\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "malformed exponent/6",
+      "input": "{\"😀\":",
+      "repaired": "{\"😀\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "malformed exponent/7",
+      "input": "{\"😀\":1",
+      "repaired": "{\"😀\":1",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "malformed exponent/8",
+      "input": "{\"😀\":1,",
+      "repaired": "{\"😀\":1,",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "malformed exponent/9",
+      "input": "{\"😀\":1,\"",
+      "repaired": "{\"😀\":1,\"",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "malformed exponent/10",
+      "input": "{\"😀\":1,\"v",
+      "repaired": "{\"😀\":1,\"v",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "malformed exponent/11",
+      "input": "{\"😀\":1,\"va",
+      "repaired": "{\"😀\":1,\"va",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "malformed exponent/12",
+      "input": "{\"😀\":1,\"val",
+      "repaired": "{\"😀\":1,\"val",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "malformed exponent/13",
+      "input": "{\"😀\":1,\"valu",
+      "repaired": "{\"😀\":1,\"valu",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "malformed exponent/14",
+      "input": "{\"😀\":1,\"value",
+      "repaired": "{\"😀\":1,\"value",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "malformed exponent/15",
+      "input": "{\"😀\":1,\"value\"",
+      "repaired": "{\"😀\":1,\"value\"",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "malformed exponent/16",
+      "input": "{\"😀\":1,\"value\":",
+      "repaired": "{\"😀\":1,\"value\":",
+      "streaming": "{\"😀\":1}"
+    },
+    {
+      "name": "malformed exponent/17",
+      "input": "{\"😀\":1,\"value\":1",
+      "repaired": "{\"😀\":1,\"value\":1",
+      "streaming": "{\"😀\":1,\"value\":1}"
+    },
+    {
+      "name": "malformed exponent/18",
+      "input": "{\"😀\":1,\"value\":12",
+      "repaired": "{\"😀\":1,\"value\":12",
+      "streaming": "{\"😀\":1,\"value\":12}"
+    },
+    {
+      "name": "malformed exponent/19",
+      "input": "{\"😀\":1,\"value\":12e",
+      "repaired": "{\"😀\":1,\"value\":12e",
+      "streaming": "{\"😀\":1,\"value\":12}"
+    },
+    {
+      "name": "malformed exponent/20",
+      "input": "{\"😀\":1,\"value\":12e+",
+      "repaired": "{\"😀\":1,\"value\":12e+",
+      "streaming": "{\"😀\":1,\"value\":12}"
+    },
+    {
+      "name": "malformed exponent/21",
+      "input": "{\"😀\":1,\"value\":12e+}",
+      "repaired": "{\"😀\":1,\"value\":12e+}",
+      "streaming": "{\"😀\":1,\"value\":12}"
+    },
+    {
+      "name": "incomplete unicode/0",
+      "input": "",
+      "repaired": "",
+      "streaming": "{}"
+    },
+    {
+      "name": "incomplete unicode/1",
+      "input": "{",
+      "repaired": "{",
+      "streaming": "{}"
+    },
+    {
+      "name": "incomplete unicode/2",
+      "input": "{\"",
+      "repaired": "{\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "incomplete unicode/4",
+      "input": "{\"😀",
+      "repaired": "{\"😀",
+      "streaming": "{}"
+    },
+    {
+      "name": "incomplete unicode/5",
+      "input": "{\"😀\"",
+      "repaired": "{\"😀\"",
+      "streaming": "{}"
+    },
+    {
+      "name": "incomplete unicode/6",
+      "input": "{\"😀\":",
+      "repaired": "{\"😀\":",
+      "streaming": "{}"
+    },
+    {
+      "name": "incomplete unicode/7",
+      "input": "{\"😀\":\"",
+      "repaired": "{\"😀\":\"",
+      "streaming": "{\"😀\":\"\"}"
+    },
+    {
+      "name": "incomplete unicode/8",
+      "input": "{\"😀\":\"f",
+      "repaired": "{\"😀\":\"f",
+      "streaming": "{\"😀\":\"f\"}"
+    },
+    {
+      "name": "incomplete unicode/9",
+      "input": "{\"😀\":\"fi",
+      "repaired": "{\"😀\":\"fi",
+      "streaming": "{\"😀\":\"fi\"}"
+    },
+    {
+      "name": "incomplete unicode/10",
+      "input": "{\"😀\":\"fir",
+      "repaired": "{\"😀\":\"fir",
+      "streaming": "{\"😀\":\"fir\"}"
+    },
+    {
+      "name": "incomplete unicode/11",
+      "input": "{\"😀\":\"firs",
+      "repaired": "{\"😀\":\"firs",
+      "streaming": "{\"😀\":\"firs\"}"
+    },
+    {
+      "name": "incomplete unicode/12",
+      "input": "{\"😀\":\"first",
+      "repaired": "{\"😀\":\"first",
+      "streaming": "{\"😀\":\"first\"}"
+    },
+    {
+      "name": "incomplete unicode/13",
+      "input": "{\"😀\":\"first\"",
+      "repaired": "{\"😀\":\"first\"",
+      "streaming": "{\"😀\":\"first\"}"
+    },
+    {
+      "name": "incomplete unicode/14",
+      "input": "{\"😀\":\"first\",",
+      "repaired": "{\"😀\":\"first\",",
+      "streaming": "{\"😀\":\"first\"}"
+    },
+    {
+      "name": "incomplete unicode/15",
+      "input": "{\"😀\":\"first\",\"",
+      "repaired": "{\"😀\":\"first\",\"",
+      "streaming": "{\"😀\":\"first\"}"
+    },
+    {
+      "name": "incomplete unicode/16",
+      "input": "{\"😀\":\"first\",\"v",
+      "repaired": "{\"😀\":\"first\",\"v",
+      "streaming": "{\"😀\":\"first\"}"
+    },
+    {
+      "name": "incomplete unicode/17",
+      "input": "{\"😀\":\"first\",\"va",
+      "repaired": "{\"😀\":\"first\",\"va",
+      "streaming": "{\"😀\":\"first\"}"
+    },
+    {
+      "name": "incomplete unicode/18",
+      "input": "{\"😀\":\"first\",\"val",
+      "repaired": "{\"😀\":\"first\",\"val",
+      "streaming": "{\"😀\":\"first\"}"
+    },
+    {
+      "name": "incomplete unicode/19",
+      "input": "{\"😀\":\"first\",\"valu",
+      "repaired": "{\"😀\":\"first\",\"valu",
+      "streaming": "{\"😀\":\"first\"}"
+    },
+    {
+      "name": "incomplete unicode/20",
+      "input": "{\"😀\":\"first\",\"value",
+      "repaired": "{\"😀\":\"first\",\"value",
+      "streaming": "{\"😀\":\"first\"}"
+    },
+    {
+      "name": "incomplete unicode/21",
+      "input": "{\"😀\":\"first\",\"value\"",
+      "repaired": "{\"😀\":\"first\",\"value\"",
+      "streaming": "{\"😀\":\"first\"}"
+    },
+    {
+      "name": "incomplete unicode/22",
+      "input": "{\"😀\":\"first\",\"value\":",
+      "repaired": "{\"😀\":\"first\",\"value\":",
+      "streaming": "{\"😀\":\"first\"}"
+    },
+    {
+      "name": "incomplete unicode/23",
+      "input": "{\"😀\":\"first\",\"value\":\"",
+      "repaired": "{\"😀\":\"first\",\"value\":\"",
+      "streaming": "{\"😀\":\"first\",\"value\":\"\"}"
+    },
+    {
+      "name": "incomplete unicode/24",
+      "input": "{\"😀\":\"first\",\"value\":\"t",
+      "repaired": "{\"😀\":\"first\",\"value\":\"t",
+      "streaming": "{\"😀\":\"first\",\"value\":\"t\"}"
+    },
+    {
+      "name": "incomplete unicode/25",
+      "input": "{\"😀\":\"first\",\"value\":\"ta",
+      "repaired": "{\"😀\":\"first\",\"value\":\"ta",
+      "streaming": "{\"😀\":\"first\",\"value\":\"ta\"}"
+    },
+    {
+      "name": "incomplete unicode/26",
+      "input": "{\"😀\":\"first\",\"value\":\"tai",
+      "repaired": "{\"😀\":\"first\",\"value\":\"tai",
+      "streaming": "{\"😀\":\"first\",\"value\":\"tai\"}"
+    },
+    {
+      "name": "incomplete unicode/27",
+      "input": "{\"😀\":\"first\",\"value\":\"tail",
+      "repaired": "{\"😀\":\"first\",\"value\":\"tail",
+      "streaming": "{\"😀\":\"first\",\"value\":\"tail\"}"
+    },
+    {
+      "name": "incomplete unicode/28",
+      "input": "{\"😀\":\"first\",\"value\":\"tail\\",
+      "repaired": "{\"😀\":\"first\",\"value\":\"tail\\\\",
+      "streaming": "{\"😀\":\"first\",\"value\":\"tail\"}"
+    },
+    {
+      "name": "incomplete unicode/29",
+      "input": "{\"😀\":\"first\",\"value\":\"tail\\u",
+      "repaired": "{\"😀\":\"first\",\"value\":\"tail\\u",
+      "streaming": "{\"😀\":\"first\",\"value\":\"tail\"}"
+    },
+    {
+      "name": "incomplete unicode/30",
+      "input": "{\"😀\":\"first\",\"value\":\"tail\\uD",
+      "repaired": "{\"😀\":\"first\",\"value\":\"tail\\uD",
+      "streaming": "{\"😀\":\"first\",\"value\":\"tail\"}"
+    },
+    {
+      "name": "incomplete unicode/31",
+      "input": "{\"😀\":\"first\",\"value\":\"tail\\uD8",
+      "repaired": "{\"😀\":\"first\",\"value\":\"tail\\uD8",
+      "streaming": "{\"😀\":\"first\",\"value\":\"tail\"}"
+    }
+  ]
+}

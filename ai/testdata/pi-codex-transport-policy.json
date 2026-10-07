@@ -1,0 +1,673 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "name": "success",
+        "scenarios": [
+          "success"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 1,
+          "sse": 0,
+          "starts": 1,
+          "stopReason": "stop",
+          "stats": {
+            "requests": 1,
+            "connectionsCreated": 1,
+            "connectionsReused": 0,
+            "cachedContextRequests": 1,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 1,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 0,
+            "sseFallbacks": 0
+          },
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "network",
+        "scenarios": [
+          "network"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 1,
+          "sse": 1,
+          "starts": 1,
+          "stopReason": "stop",
+          "stats": {
+            "requests": 1,
+            "connectionsCreated": 1,
+            "connectionsReused": 0,
+            "cachedContextRequests": 1,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 1,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 1,
+            "sseFallbacks": 1,
+            "lastWebSocketError": "network failed",
+            "websocketFallbackActive": true
+          },
+          "diagnostics": [
+            {
+              "type": "provider_transport_failure",
+              "eventsEmitted": false,
+              "phase": "before_message_stream_start",
+              "fallbackTransport": "sse"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "after-network",
+        "scenarios": [
+          "after-network"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 1,
+          "sse": 0,
+          "starts": 1,
+          "stopReason": "error",
+          "error": "network failed",
+          "stats": {
+            "requests": 1,
+            "connectionsCreated": 1,
+            "connectionsReused": 0,
+            "cachedContextRequests": 1,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 1,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 1,
+            "sseFallbacks": 0,
+            "lastWebSocketError": "network failed",
+            "websocketFallbackActive": true
+          },
+          "diagnostics": [
+            {
+              "type": "provider_transport_failure",
+              "eventsEmitted": true,
+              "phase": "after_message_stream_start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "limit then success",
+        "scenarios": [
+          "limit",
+          "success"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 2,
+          "sse": 0,
+          "starts": 1,
+          "stopReason": "stop",
+          "stats": {
+            "requests": 2,
+            "connectionsCreated": 2,
+            "connectionsReused": 0,
+            "cachedContextRequests": 2,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 2,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 0,
+            "sseFallbacks": 0
+          },
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "limit then limit",
+        "scenarios": [
+          "limit",
+          "limit"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 2,
+          "sse": 1,
+          "starts": 1,
+          "stopReason": "stop",
+          "stats": {
+            "requests": 2,
+            "connectionsCreated": 2,
+            "connectionsReused": 0,
+            "cachedContextRequests": 2,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 2,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 1,
+            "sseFallbacks": 1,
+            "lastWebSocketError": "Codex error: websocket_connection_limit_reached",
+            "websocketFallbackActive": true
+          },
+          "diagnostics": [
+            {
+              "type": "provider_transport_failure",
+              "eventsEmitted": false,
+              "phase": "before_message_stream_start",
+              "fallbackTransport": "sse"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "missing then success",
+        "scenarios": [
+          "missing",
+          "success"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 2,
+          "sse": 0,
+          "starts": 1,
+          "stopReason": "stop",
+          "stats": {
+            "requests": 2,
+            "connectionsCreated": 2,
+            "connectionsReused": 0,
+            "cachedContextRequests": 2,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 2,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 0,
+            "sseFallbacks": 0
+          },
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "missing then missing",
+        "scenarios": [
+          "missing",
+          "missing"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 2,
+          "sse": 0,
+          "starts": 0,
+          "stopReason": "error",
+          "error": "Codex error: previous_response_not_found",
+          "stats": {
+            "requests": 2,
+            "connectionsCreated": 2,
+            "connectionsReused": 0,
+            "cachedContextRequests": 2,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 2,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 0,
+            "sseFallbacks": 0
+          },
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "limit then missing then success",
+        "scenarios": [
+          "limit",
+          "missing",
+          "success"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 3,
+          "sse": 0,
+          "starts": 1,
+          "stopReason": "stop",
+          "stats": {
+            "requests": 3,
+            "connectionsCreated": 3,
+            "connectionsReused": 0,
+            "cachedContextRequests": 3,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 3,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 0,
+            "sseFallbacks": 0
+          },
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "missing then limit then network",
+        "scenarios": [
+          "missing",
+          "limit",
+          "network"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 3,
+          "sse": 1,
+          "starts": 1,
+          "stopReason": "stop",
+          "stats": {
+            "requests": 3,
+            "connectionsCreated": 3,
+            "connectionsReused": 0,
+            "cachedContextRequests": 3,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 3,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 1,
+            "sseFallbacks": 1,
+            "lastWebSocketError": "network failed",
+            "websocketFallbackActive": true
+          },
+          "diagnostics": [
+            {
+              "type": "provider_transport_failure",
+              "eventsEmitted": false,
+              "phase": "before_message_stream_start",
+              "fallbackTransport": "sse"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "after-missing then success",
+        "scenarios": [
+          "after-missing",
+          "success"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 2,
+          "sse": 0,
+          "starts": 1,
+          "stopReason": "stop",
+          "stats": {
+            "requests": 2,
+            "connectionsCreated": 2,
+            "connectionsReused": 0,
+            "cachedContextRequests": 2,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 2,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 0,
+            "sseFallbacks": 0
+          },
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "after-limit",
+        "scenarios": [
+          "after-limit"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 1,
+          "sse": 0,
+          "starts": 1,
+          "stopReason": "error",
+          "error": "Codex error: websocket_connection_limit_reached",
+          "stats": {
+            "requests": 1,
+            "connectionsCreated": 1,
+            "connectionsReused": 0,
+            "cachedContextRequests": 1,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 1,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 0,
+            "sseFallbacks": 0
+          },
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "api",
+        "scenarios": [
+          "api"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 1,
+          "sse": 0,
+          "starts": 0,
+          "stopReason": "error",
+          "error": "Codex error: invalid_request_error",
+          "stats": {
+            "requests": 1,
+            "connectionsCreated": 1,
+            "connectionsReused": 0,
+            "cachedContextRequests": 1,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 1,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 0,
+            "sseFallbacks": 0
+          },
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "callback",
+        "scenarios": [
+          "callback"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 1,
+          "sse": 0,
+          "starts": 0,
+          "stopReason": "error",
+          "error": "callback failed",
+          "stats": {
+            "requests": 1,
+            "connectionsCreated": 1,
+            "connectionsReused": 0,
+            "cachedContextRequests": 1,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 1,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 0,
+            "sseFallbacks": 0
+          },
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "abort",
+        "scenarios": [
+          "abort"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 1,
+          "sse": 0,
+          "starts": 0,
+          "stopReason": "aborted",
+          "error": "Request was aborted",
+          "stats": {
+            "requests": 1,
+            "connectionsCreated": 1,
+            "connectionsReused": 0,
+            "cachedContextRequests": 1,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 1,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 0,
+            "sseFallbacks": 0
+          },
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "explicit SSE",
+        "transport": "sse",
+        "scenarios": [
+          "network"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 0,
+          "sse": 1,
+          "starts": 1,
+          "stopReason": "stop",
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "explicit WS still falls back",
+        "transport": "websocket",
+        "scenarios": [
+          "network"
+        ]
+      },
+      "expected": [
+        {
+          "attempts": 1,
+          "sse": 1,
+          "starts": 1,
+          "stopReason": "stop",
+          "stats": {
+            "requests": 1,
+            "connectionsCreated": 1,
+            "connectionsReused": 0,
+            "cachedContextRequests": 0,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 1,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 1,
+            "sseFallbacks": 1,
+            "lastWebSocketError": "network failed",
+            "websocketFallbackActive": true
+          },
+          "diagnostics": [
+            {
+              "type": "provider_transport_failure",
+              "eventsEmitted": false,
+              "phase": "before_message_stream_start",
+              "fallbackTransport": "sse"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "session fallback retained",
+        "scenarios": [
+          "network",
+          "success"
+        ],
+        "calls": 2
+      },
+      "expected": [
+        {
+          "attempts": 1,
+          "sse": 1,
+          "starts": 1,
+          "stopReason": "stop",
+          "stats": {
+            "requests": 1,
+            "connectionsCreated": 1,
+            "connectionsReused": 0,
+            "cachedContextRequests": 1,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 1,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 1,
+            "sseFallbacks": 1,
+            "lastWebSocketError": "network failed",
+            "websocketFallbackActive": true
+          },
+          "diagnostics": [
+            {
+              "type": "provider_transport_failure",
+              "eventsEmitted": false,
+              "phase": "before_message_stream_start",
+              "fallbackTransport": "sse"
+            }
+          ]
+        },
+        {
+          "attempts": 0,
+          "sse": 2,
+          "starts": 1,
+          "stopReason": "stop",
+          "stats": {
+            "requests": 1,
+            "connectionsCreated": 1,
+            "connectionsReused": 0,
+            "cachedContextRequests": 1,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 1,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 1,
+            "sseFallbacks": 2,
+            "lastWebSocketError": "network failed",
+            "websocketFallbackActive": true
+          },
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "no session no sticky fallback",
+        "session": "",
+        "scenarios": [
+          "network",
+          "success"
+        ],
+        "calls": 2
+      },
+      "expected": [
+        {
+          "attempts": 1,
+          "sse": 1,
+          "starts": 1,
+          "stopReason": "stop",
+          "diagnostics": [
+            {
+              "type": "provider_transport_failure",
+              "eventsEmitted": false,
+              "phase": "before_message_stream_start",
+              "fallbackTransport": "sse"
+            }
+          ]
+        },
+        {
+          "attempts": 1,
+          "sse": 1,
+          "starts": 1,
+          "stopReason": "stop",
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "reset clears fallback",
+        "scenarios": [
+          "network",
+          "success"
+        ],
+        "calls": 2,
+        "reset": true
+      },
+      "expected": [
+        {
+          "attempts": 1,
+          "sse": 1,
+          "starts": 1,
+          "stopReason": "stop",
+          "stats": {
+            "requests": 1,
+            "connectionsCreated": 1,
+            "connectionsReused": 0,
+            "cachedContextRequests": 1,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 1,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 1,
+            "sseFallbacks": 1,
+            "lastWebSocketError": "network failed",
+            "websocketFallbackActive": true
+          },
+          "diagnostics": [
+            {
+              "type": "provider_transport_failure",
+              "eventsEmitted": false,
+              "phase": "before_message_stream_start",
+              "fallbackTransport": "sse"
+            }
+          ]
+        },
+        {
+          "attempts": 1,
+          "sse": 1,
+          "starts": 1,
+          "stopReason": "stop",
+          "stats": {
+            "requests": 1,
+            "connectionsCreated": 1,
+            "connectionsReused": 0,
+            "cachedContextRequests": 1,
+            "storeTrueRequests": 0,
+            "fullContextRequests": 1,
+            "deltaRequests": 0,
+            "lastInputItems": 0,
+            "websocketFailures": 0,
+            "sseFallbacks": 0
+          },
+          "diagnostics": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3804 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "constructors": [
+    {
+      "kind": "empty",
+      "name": null,
+      "output": {
+        "error": "Provider p: at least one of \"api\", \"images\", or \"classifiers\" is required."
+      }
+    },
+    {
+      "kind": "empty",
+      "name": "",
+      "output": {
+        "error": "Provider p: at least one of \"api\", \"images\", or \"classifiers\" is required."
+      }
+    },
+    {
+      "kind": "empty",
+      "name": "Named",
+      "output": {
+        "error": "Provider p: at least one of \"api\", \"images\", or \"classifiers\" is required."
+      }
+    },
+    {
+      "kind": "undefined",
+      "name": null,
+      "output": {
+        "error": "Provider p: at least one of \"api\", \"images\", or \"classifiers\" is required."
+      }
+    },
+    {
+      "kind": "undefined",
+      "name": "",
+      "output": {
+        "error": "Provider p: at least one of \"api\", \"images\", or \"classifiers\" is required."
+      }
+    },
+    {
+      "kind": "undefined",
+      "name": "Named",
+      "output": {
+        "error": "Provider p: at least one of \"api\", \"images\", or \"classifiers\" is required."
+      }
+    },
+    {
+      "kind": "single",
+      "name": null,
+      "output": {
+        "id": "p",
+        "name": "p",
+        "baseUrl": "metadata",
+        "headers": {
+          "x": "meta"
+        },
+        "authSame": true,
+        "chat": [],
+        "all": [],
+        "fetch": false,
+        "cancel": false,
+        "images": false,
+        "classify": false,
+        "refresh": false
+      }
+    },
+    {
+      "kind": "single",
+      "name": "",
+      "output": {
+        "id": "p",
+        "name": "",
+        "baseUrl": "metadata",
+        "headers": {
+          "x": "meta"
+        },
+        "authSame": true,
+        "chat": [],
+        "all": [],
+        "fetch": false,
+        "cancel": false,
+        "images": false,
+        "classify": false,
+        "refresh": false
+      }
+    },
+    {
+      "kind": "single",
+      "name": "Named",
+      "output": {
+        "id": "p",
+        "name": "Named",
+        "baseUrl": "metadata",
+        "headers": {
+          "x": "meta"
+        },
+        "authSame": true,
+        "chat": [],
+        "all": [],
+        "fetch": false,
+        "cancel": false,
+        "images": false,
+        "classify": false,
+        "refresh": false
+      }
+    },
+    {
+      "kind": "map",
+      "name": null,
+      "output": {
+        "id": "p",
+        "name": "p",
+        "baseUrl": "metadata",
+        "headers": {
+          "x": "meta"
+        },
+        "authSame": true,
+        "chat": [],
+        "all": [],
+        "fetch": true,
+        "cancel": true,
+        "images": false,
+        "classify": false,
+        "refresh": false
+      }
+    },
+    {
+      "kind": "map",
+      "name": "",
+      "output": {
+        "id": "p",
+        "name": "",
+        "baseUrl": "metadata",
+        "headers": {
+          "x": "meta"
+        },
+        "authSame": true,
+        "chat": [],
+        "all": [],
+        "fetch": true,
+        "cancel": true,
+        "images": false,
+        "classify": false,
+        "refresh": false
+      }
+    },
+    {
+      "kind": "map",
+      "name": "Named",
+      "output": {
+        "id": "p",
+        "name": "Named",
+        "baseUrl": "metadata",
+        "headers": {
+          "x": "meta"
+        },
+        "authSame": true,
+        "chat": [],
+        "all": [],
+        "fetch": true,
+        "cancel": true,
+        "images": false,
+        "classify": false,
+        "refresh": false
+      }
+    },
+    {
+      "kind": "images",
+      "name": null,
+      "output": {
+        "id": "p",
+        "name": "p",
+        "baseUrl": "metadata",
+        "headers": {
+          "x": "meta"
+        },
+        "authSame": true,
+        "chat": [],
+        "all": [],
+        "fetch": false,
+        "cancel": false,
+        "images": true,
+        "classify": false,
+        "refresh": false
+      }
+    },
+    {
+      "kind": "images",
+      "name": "",
+      "output": {
+        "id": "p",
+        "name": "",
+        "baseUrl": "metadata",
+        "headers": {
+          "x": "meta"
+        },
+        "authSame": true,
+        "chat": [],
+        "all": [],
+        "fetch": false,
+        "cancel": false,
+        "images": true,
+        "classify": false,
+        "refresh": false
+      }
+    },
+    {
+      "kind": "images",
+      "name": "Named",
+      "output": {
+        "id": "p",
+        "name": "Named",
+        "baseUrl": "metadata",
+        "headers": {
+          "x": "meta"
+        },
+        "authSame": true,
+        "chat": [],
+        "all": [],
+        "fetch": false,
+        "cancel": false,
+        "images": true,
+        "classify": false,
+        "refresh": false
+      }
+    },
+    {
+      "kind": "classifiers",
+      "name": null,
+      "output": {
+        "id": "p",
+        "name": "p",
+        "baseUrl": "metadata",
+        "headers": {
+          "x": "meta"
+        },
+        "authSame": true,
+        "chat": [],
+        "all": [],
+        "fetch": false,
+        "cancel": false,
+        "images": false,
+        "classify": true,
+        "refresh": false
+      }
+    },
+    {
+      "kind": "classifiers",
+      "name": "",
+      "output": {
+        "id": "p",
+        "name": "",
+        "baseUrl": "metadata",
+        "headers": {
+          "x": "meta"
+        },
+        "authSame": true,
+        "chat": [],
+        "all": [],
+        "fetch": false,
+        "cancel": false,
+        "images": false,
+        "classify": true,
+        "refresh": false
+      }
+    },
+    {
+      "kind": "classifiers",
+      "name": "Named",
+      "output": {
+        "id": "p",
+        "name": "Named",
+        "baseUrl": "metadata",
+        "headers": {
+          "x": "meta"
+        },
+        "authSame": true,
+        "chat": [],
+        "all": [],
+        "fetch": false,
+        "cancel": false,
+        "images": false,
+        "classify": true,
+        "refresh": false
+      }
+    },
+    {
+      "kind": "mixed",
+      "name": null,
+      "output": {
+        "id": "p",
+        "name": "p",
+        "baseUrl": "metadata",
+        "headers": {
+          "x": "meta"
+        },
+        "authSame": true,
+        "chat": [],
+        "all": [],
+        "fetch": true,
+        "cancel": true,
+        "images": true,
+        "classify": true,
+        "refresh": false
+      }
+    },
+    {
+      "kind": "mixed",
+      "name": "",
+      "output": {
+        "id": "p",
+        "name": "",
+        "baseUrl": "metadata",
+        "headers": {
+          "x": "meta"
+        },
+        "authSame": true,
+        "chat": [],
+        "all": [],
+        "fetch": true,
+        "cancel": true,
+        "images": true,
+        "classify": true,
+        "refresh": false
+      }
+    },
+    {
+      "kind": "mixed",
+      "name": "Named",
+      "output": {
+        "id": "p",
+        "name": "Named",
+        "baseUrl": "metadata",
+        "headers": {
+          "x": "meta"
+        },
+        "authSame": true,
+        "chat": [],
+        "all": [],
+        "fetch": true,
+        "cancel": true,
+        "images": true,
+        "classify": true,
+        "refresh": false
+      }
+    }
+  ],
+  "cases": [
+    {
+      "method": "stream",
+      "mode": "ok",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "stream",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "stream",
+      "mode": "missing",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": "absent",
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p has no API implementation for \"absent\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "absent",
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p has no API implementation for \"absent\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "stream",
+      "mode": "replacement",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "replaced",
+          "kind": "stream",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "stream",
+      "mode": "replace-input-map",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "stream",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "stream",
+      "mode": "live-id",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": "absent",
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider changed has no API implementation for \"absent\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "absent",
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider changed has no API implementation for \"absent\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "stream",
+      "mode": "throw",
+      "output": {
+        "error": "implementation failed",
+        "code": null
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "stream",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "stream",
+      "mode": "aborted-missing",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": "absent",
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p has no API implementation for \"absent\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "absent",
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p has no API implementation for \"absent\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "stream",
+      "mode": "nonstring",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": 17,
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p has no API implementation for \"17\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": 17,
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p has no API implementation for \"17\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "stream",
+      "mode": "single",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "stream",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "stream",
+      "mode": "remove-capability",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "stream",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "stream",
+      "mode": "delete-entry",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": "a",
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p has no API implementation for \"a\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "a",
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p has no API implementation for \"a\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "stream",
+      "mode": "array-key",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "stream",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "stream",
+      "mode": "object-key",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": {},
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p has no API implementation for \"[object Object]\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": {},
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p has no API implementation for \"[object Object]\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "stream",
+      "mode": "null-key",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": null,
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p has no API implementation for \"null\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": null,
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p has no API implementation for \"null\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "stream",
+      "mode": "undefined-key",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p has no API implementation for \"undefined\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p has no API implementation for \"undefined\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "streamSimple",
+      "mode": "ok",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "streamSimple",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "streamSimple",
+      "mode": "missing",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": "absent",
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p has no API implementation for \"absent\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "absent",
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p has no API implementation for \"absent\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "streamSimple",
+      "mode": "replacement",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "replaced",
+          "kind": "streamSimple",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "streamSimple",
+      "mode": "replace-input-map",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "streamSimple",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "streamSimple",
+      "mode": "live-id",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": "absent",
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider changed has no API implementation for \"absent\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "absent",
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider changed has no API implementation for \"absent\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "streamSimple",
+      "mode": "throw",
+      "output": {
+        "error": "implementation failed",
+        "code": null
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "streamSimple",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "streamSimple",
+      "mode": "aborted-missing",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": "absent",
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p has no API implementation for \"absent\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "absent",
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p has no API implementation for \"absent\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "streamSimple",
+      "mode": "nonstring",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": 17,
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p has no API implementation for \"17\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": 17,
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p has no API implementation for \"17\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "streamSimple",
+      "mode": "single",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "streamSimple",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "streamSimple",
+      "mode": "remove-capability",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "streamSimple",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "streamSimple",
+      "mode": "delete-entry",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": "a",
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p has no API implementation for \"a\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "a",
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p has no API implementation for \"a\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "streamSimple",
+      "mode": "array-key",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "streamSimple",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "streamSimple",
+      "mode": "object-key",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": {},
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p has no API implementation for \"[object Object]\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": {},
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p has no API implementation for \"[object Object]\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "streamSimple",
+      "mode": "null-key",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": null,
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p has no API implementation for \"null\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": null,
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p has no API implementation for \"null\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "streamSimple",
+      "mode": "undefined-key",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p has no API implementation for \"undefined\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p has no API implementation for \"undefined\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "fetchDeferred",
+      "mode": "ok",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "fetchDeferred",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "fetchDeferred",
+      "mode": "missing",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": "absent",
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p does not support deferred responses for \"absent\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "absent",
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p does not support deferred responses for \"absent\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "fetchDeferred",
+      "mode": "replacement",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "replaced",
+          "kind": "fetchDeferred",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "fetchDeferred",
+      "mode": "replace-input-map",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "fetchDeferred",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "fetchDeferred",
+      "mode": "live-id",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": "absent",
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider changed does not support deferred responses for \"absent\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "absent",
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider changed does not support deferred responses for \"absent\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "fetchDeferred",
+      "mode": "throw",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": "a",
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "implementation failed",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "a",
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "implementation failed",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "fetchDeferred",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "fetchDeferred",
+      "mode": "aborted-missing",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": "absent",
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p does not support deferred responses for \"absent\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "absent",
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p does not support deferred responses for \"absent\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "fetchDeferred",
+      "mode": "nonstring",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": 17,
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p does not support deferred responses for \"17\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": 17,
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p does not support deferred responses for \"17\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "fetchDeferred",
+      "mode": "single",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "fetchDeferred",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "fetchDeferred",
+      "mode": "remove-capability",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": "a",
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p does not support deferred responses for \"a\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "a",
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p does not support deferred responses for \"a\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "fetchDeferred",
+      "mode": "delete-entry",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": "a",
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p does not support deferred responses for \"a\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "a",
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p does not support deferred responses for \"a\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "fetchDeferred",
+      "mode": "array-key",
+      "output": {
+        "events": [
+          {
+            "type": "done",
+            "reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": [],
+              "api": "test",
+              "provider": "p",
+              "model": "done",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "test",
+          "provider": "p",
+          "model": "done",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1000
+        }
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "fetchDeferred",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "fetchDeferred",
+      "mode": "object-key",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": {},
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p does not support deferred responses for \"[object Object]\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": {},
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p does not support deferred responses for \"[object Object]\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "fetchDeferred",
+      "mode": "null-key",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "api": null,
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p does not support deferred responses for \"null\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": null,
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p does not support deferred responses for \"null\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "fetchDeferred",
+      "mode": "undefined-key",
+      "output": {
+        "events": [
+          {
+            "type": "error",
+            "reason": "error",
+            "error": {
+              "role": "assistant",
+              "content": [],
+              "provider": "p",
+              "model": "m",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "errorMessage": "Provider p does not support deferred responses for \"undefined\"",
+              "timestamp": 1000
+            }
+          }
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "provider": "p",
+          "model": "m",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "errorMessage": "Provider p does not support deferred responses for \"undefined\"",
+          "timestamp": 1000
+        }
+      },
+      "log": []
+    },
+    {
+      "method": "cancelDeferred",
+      "mode": "ok",
+      "output": null,
+      "log": [
+        {
+          "label": "original",
+          "kind": "cancelDeferred",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "cancelDeferred",
+      "mode": "missing",
+      "output": {
+        "error": "Provider p cannot cancel deferred responses for \"absent\"",
+        "code": "provider"
+      },
+      "log": []
+    },
+    {
+      "method": "cancelDeferred",
+      "mode": "replacement",
+      "output": null,
+      "log": [
+        {
+          "label": "replaced",
+          "kind": "cancelDeferred",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "cancelDeferred",
+      "mode": "replace-input-map",
+      "output": null,
+      "log": [
+        {
+          "label": "original",
+          "kind": "cancelDeferred",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "cancelDeferred",
+      "mode": "live-id",
+      "output": {
+        "error": "Provider changed cannot cancel deferred responses for \"absent\"",
+        "code": "provider"
+      },
+      "log": []
+    },
+    {
+      "method": "cancelDeferred",
+      "mode": "throw",
+      "output": {
+        "error": "implementation failed",
+        "code": null
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "cancelDeferred",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "cancelDeferred",
+      "mode": "aborted-missing",
+      "output": {
+        "error": "Provider p cannot cancel deferred responses for \"absent\"",
+        "code": "provider"
+      },
+      "log": []
+    },
+    {
+      "method": "cancelDeferred",
+      "mode": "nonstring",
+      "output": {
+        "error": "Provider p cannot cancel deferred responses for \"17\"",
+        "code": "provider"
+      },
+      "log": []
+    },
+    {
+      "method": "cancelDeferred",
+      "mode": "single",
+      "output": null,
+      "log": [
+        {
+          "label": "original",
+          "kind": "cancelDeferred",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "cancelDeferred",
+      "mode": "remove-capability",
+      "output": {
+        "error": "Provider p cannot cancel deferred responses for \"a\"",
+        "code": "provider"
+      },
+      "log": []
+    },
+    {
+      "method": "cancelDeferred",
+      "mode": "delete-entry",
+      "output": {
+        "error": "Provider p cannot cancel deferred responses for \"a\"",
+        "code": "provider"
+      },
+      "log": []
+    },
+    {
+      "method": "cancelDeferred",
+      "mode": "array-key",
+      "output": null,
+      "log": [
+        {
+          "label": "original",
+          "kind": "cancelDeferred",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "cancelDeferred",
+      "mode": "object-key",
+      "output": {
+        "error": "Provider p cannot cancel deferred responses for \"[object Object]\"",
+        "code": "provider"
+      },
+      "log": []
+    },
+    {
+      "method": "cancelDeferred",
+      "mode": "null-key",
+      "output": {
+        "error": "Provider p cannot cancel deferred responses for \"null\"",
+        "code": "provider"
+      },
+      "log": []
+    },
+    {
+      "method": "cancelDeferred",
+      "mode": "undefined-key",
+      "output": {
+        "error": "Provider p cannot cancel deferred responses for \"undefined\"",
+        "code": "provider"
+      },
+      "log": []
+    },
+    {
+      "method": "generateImages",
+      "mode": "ok",
+      "output": {
+        "label": "original"
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "generateImages",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "generateImages",
+      "mode": "missing",
+      "output": {
+        "api": "absent",
+        "provider": "p",
+        "model": "m",
+        "output": [],
+        "stopReason": "error",
+        "errorMessage": "Provider p has no image generation implementation for \"absent\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "generateImages",
+      "mode": "replacement",
+      "output": {
+        "label": "replaced"
+      },
+      "log": [
+        {
+          "label": "replaced",
+          "kind": "generateImages",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "generateImages",
+      "mode": "replace-input-map",
+      "output": {
+        "label": "original"
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "generateImages",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "generateImages",
+      "mode": "live-id",
+      "output": {
+        "api": "absent",
+        "provider": "p",
+        "model": "m",
+        "output": [],
+        "stopReason": "error",
+        "errorMessage": "Provider changed has no image generation implementation for \"absent\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "generateImages",
+      "mode": "throw",
+      "output": {
+        "error": "implementation failed",
+        "code": null
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "generateImages",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "generateImages",
+      "mode": "aborted-missing",
+      "output": {
+        "api": "absent",
+        "provider": "p",
+        "model": "m",
+        "output": [],
+        "stopReason": "error",
+        "errorMessage": "Provider p has no image generation implementation for \"absent\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "generateImages",
+      "mode": "nonstring",
+      "output": {
+        "api": 17,
+        "provider": "p",
+        "model": "m",
+        "output": [],
+        "stopReason": "error",
+        "errorMessage": "Provider p has no image generation implementation for \"17\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "generateImages",
+      "mode": "single",
+      "output": {
+        "api": "absent",
+        "provider": "p",
+        "model": "m",
+        "output": [],
+        "stopReason": "error",
+        "errorMessage": "Provider p has no image generation implementation for \"absent\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "generateImages",
+      "mode": "remove-capability",
+      "output": {
+        "label": "original"
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "generateImages",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "generateImages",
+      "mode": "delete-entry",
+      "output": {
+        "api": "a",
+        "provider": "p",
+        "model": "m",
+        "output": [],
+        "stopReason": "error",
+        "errorMessage": "Provider p has no image generation implementation for \"a\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "generateImages",
+      "mode": "array-key",
+      "output": {
+        "label": "original"
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "generateImages",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "generateImages",
+      "mode": "object-key",
+      "output": {
+        "api": {},
+        "provider": "p",
+        "model": "m",
+        "output": [],
+        "stopReason": "error",
+        "errorMessage": "Provider p has no image generation implementation for \"[object Object]\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "generateImages",
+      "mode": "null-key",
+      "output": {
+        "api": null,
+        "provider": "p",
+        "model": "m",
+        "output": [],
+        "stopReason": "error",
+        "errorMessage": "Provider p has no image generation implementation for \"null\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "generateImages",
+      "mode": "undefined-key",
+      "output": {
+        "provider": "p",
+        "model": "m",
+        "output": [],
+        "stopReason": "error",
+        "errorMessage": "Provider p has no image generation implementation for \"undefined\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "classify",
+      "mode": "ok",
+      "output": {
+        "label": "original"
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "classify",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "classify",
+      "mode": "missing",
+      "output": {
+        "api": "absent",
+        "provider": "p",
+        "model": "m",
+        "answers": {},
+        "stopReason": "error",
+        "errorMessage": "Provider p has no classifier implementation for \"absent\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "classify",
+      "mode": "replacement",
+      "output": {
+        "label": "replaced"
+      },
+      "log": [
+        {
+          "label": "replaced",
+          "kind": "classify",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "classify",
+      "mode": "replace-input-map",
+      "output": {
+        "label": "original"
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "classify",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "classify",
+      "mode": "live-id",
+      "output": {
+        "api": "absent",
+        "provider": "p",
+        "model": "m",
+        "answers": {},
+        "stopReason": "error",
+        "errorMessage": "Provider changed has no classifier implementation for \"absent\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "classify",
+      "mode": "throw",
+      "output": {
+        "error": "implementation failed",
+        "code": null
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "classify",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "classify",
+      "mode": "aborted-missing",
+      "output": {
+        "api": "absent",
+        "provider": "p",
+        "model": "m",
+        "answers": {},
+        "stopReason": "error",
+        "errorMessage": "Provider p has no classifier implementation for \"absent\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "classify",
+      "mode": "nonstring",
+      "output": {
+        "api": 17,
+        "provider": "p",
+        "model": "m",
+        "answers": {},
+        "stopReason": "error",
+        "errorMessage": "Provider p has no classifier implementation for \"17\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "classify",
+      "mode": "single",
+      "output": {
+        "api": "absent",
+        "provider": "p",
+        "model": "m",
+        "answers": {},
+        "stopReason": "error",
+        "errorMessage": "Provider p has no classifier implementation for \"absent\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "classify",
+      "mode": "remove-capability",
+      "output": {
+        "label": "original"
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "classify",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "classify",
+      "mode": "delete-entry",
+      "output": {
+        "api": "a",
+        "provider": "p",
+        "model": "m",
+        "answers": {},
+        "stopReason": "error",
+        "errorMessage": "Provider p has no classifier implementation for \"a\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "classify",
+      "mode": "array-key",
+      "output": {
+        "label": "original"
+      },
+      "log": [
+        {
+          "label": "original",
+          "kind": "classify",
+          "modelSame": true,
+          "contextSame": true,
+          "optionsSame": true
+        }
+      ]
+    },
+    {
+      "method": "classify",
+      "mode": "object-key",
+      "output": {
+        "api": {},
+        "provider": "p",
+        "model": "m",
+        "answers": {},
+        "stopReason": "error",
+        "errorMessage": "Provider p has no classifier implementation for \"[object Object]\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "classify",
+      "mode": "null-key",
+      "output": {
+        "api": null,
+        "provider": "p",
+        "model": "m",
+        "answers": {},
+        "stopReason": "error",
+        "errorMessage": "Provider p has no classifier implementation for \"null\"",
+        "timestamp": 1000
+      },
+      "log": []
+    },
+    {
+      "method": "classify",
+      "mode": "undefined-key",
+      "output": {
+        "provider": "p",
+        "model": "m",
+        "answers": {},
+        "stopReason": "error",
+        "errorMessage": "Provider p has no classifier implementation for \"undefined\"",
+        "timestamp": 1000
+      },
+      "log": []
+    }
+  ],
+  "references": {
+    "initial": {
+      "id": "p",
+      "name": "p",
+      "authSame": true,
+      "authName": "live",
+      "chat": [
+        {
+          "id": "base",
+          "provider": "p",
+          "api": "a"
+        }
+      ],
+      "all": [
+        {
+          "id": "base",
+          "provider": "p",
+          "api": "a"
+        },
+        {
+          "id": "image",
+          "type": "image",
+          "provider": "p",
+          "api": "a"
+        }
+      ],
+      "fetch": false,
+      "cancel": false,
+      "images": false,
+      "classify": false
+    },
+    "restored": [
+      {
+        "id": "base",
+        "provider": "p",
+        "api": "a"
+      },
+      {
+        "id": "image",
+        "type": "image",
+        "provider": "p",
+        "api": "a"
+      },
+      {
+        "id": "restored",
+        "provider": "changed",
+        "api": "a"
+      }
+    ],
+    "fetched": [
+      {
+        "id": "base",
+        "provider": "p",
+        "api": "a"
+      },
+      {
+        "id": "image",
+        "type": "image",
+        "provider": "p",
+        "api": "a"
+      },
+      {
+        "id": "fresh",
+        "provider": "changed",
+        "api": "a"
+      }
+    ],
+    "fetches": 1,
+    "publications": [
+      null,
+      {
+        "models": [
+          {
+            "id": "fresh",
+            "provider": "changed",
+            "api": "a"
+          }
+        ],
+        "checkedAt": 1000
+      }
+    ]
+  }
+}

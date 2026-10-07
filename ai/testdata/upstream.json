@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/earendil-works/pi",
+  "commit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "purpose": "Provenance of expected JSON fixtures for the native Go port. No upstream implementation is needed at build or test time.",
+  "partial_json": {
+    "version": "0.1.7",
+    "license": "../LICENSE.partial-json"
+  }
+}

@@ -1,0 +1,2997 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "mode": "loop",
+        "stage": "updates",
+        "kind": "NaN"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "cacheWrite1h": "NaN",
+                "reasoning": "NaN",
+                "totalTokens": "NaN",
+                "cost": {
+                  "input": "NaN",
+                  "output": "NaN",
+                  "cacheRead": "NaN",
+                  "cacheWrite": "NaN",
+                  "total": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "cacheWrite1h": "NaN",
+                "reasoning": "NaN",
+                "totalTokens": "NaN",
+                "cost": {
+                  "input": "NaN",
+                  "output": "NaN",
+                  "cacheRead": "NaN",
+                  "cacheWrite": "NaN",
+                  "total": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "cacheWrite1h": "NaN",
+                "reasoning": "NaN",
+                "totalTokens": "NaN",
+                "cost": {
+                  "input": "NaN",
+                  "output": "NaN",
+                  "cacheRead": "NaN",
+                  "cacheWrite": "NaN",
+                  "total": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "cacheWrite1h": "NaN",
+                "reasoning": "NaN",
+                "totalTokens": "NaN",
+                "cost": {
+                  "input": "NaN",
+                  "output": "NaN",
+                  "cacheRead": "NaN",
+                  "cacheWrite": "NaN",
+                  "total": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+            "usage": {
+              "input": "NaN",
+              "output": "NaN",
+              "cacheRead": "NaN",
+              "cacheWrite": "NaN",
+              "cacheWrite1h": "NaN",
+              "reasoning": "NaN",
+              "totalTokens": "NaN",
+              "cost": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "total": "NaN"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "loop",
+        "stage": "updates",
+        "kind": "Infinity"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "cacheWrite1h": "Infinity",
+                "reasoning": "Infinity",
+                "totalTokens": "Infinity",
+                "cost": {
+                  "input": "Infinity",
+                  "output": "Infinity",
+                  "cacheRead": "Infinity",
+                  "cacheWrite": "Infinity",
+                  "total": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "cacheWrite1h": "Infinity",
+                "reasoning": "Infinity",
+                "totalTokens": "Infinity",
+                "cost": {
+                  "input": "Infinity",
+                  "output": "Infinity",
+                  "cacheRead": "Infinity",
+                  "cacheWrite": "Infinity",
+                  "total": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "cacheWrite1h": "Infinity",
+                "reasoning": "Infinity",
+                "totalTokens": "Infinity",
+                "cost": {
+                  "input": "Infinity",
+                  "output": "Infinity",
+                  "cacheRead": "Infinity",
+                  "cacheWrite": "Infinity",
+                  "total": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "cacheWrite1h": "Infinity",
+                "reasoning": "Infinity",
+                "totalTokens": "Infinity",
+                "cost": {
+                  "input": "Infinity",
+                  "output": "Infinity",
+                  "cacheRead": "Infinity",
+                  "cacheWrite": "Infinity",
+                  "total": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+            "usage": {
+              "input": "Infinity",
+              "output": "Infinity",
+              "cacheRead": "Infinity",
+              "cacheWrite": "Infinity",
+              "cacheWrite1h": "Infinity",
+              "reasoning": "Infinity",
+              "totalTokens": "Infinity",
+              "cost": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "total": "Infinity"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "loop",
+        "stage": "updates",
+        "kind": "-Infinity"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "cacheWrite1h": "-Infinity",
+                "reasoning": "-Infinity",
+                "totalTokens": "-Infinity",
+                "cost": {
+                  "input": "-Infinity",
+                  "output": "-Infinity",
+                  "cacheRead": "-Infinity",
+                  "cacheWrite": "-Infinity",
+                  "total": "-Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "cacheWrite1h": "-Infinity",
+                "reasoning": "-Infinity",
+                "totalTokens": "-Infinity",
+                "cost": {
+                  "input": "-Infinity",
+                  "output": "-Infinity",
+                  "cacheRead": "-Infinity",
+                  "cacheWrite": "-Infinity",
+                  "total": "-Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "cacheWrite1h": "-Infinity",
+                "reasoning": "-Infinity",
+                "totalTokens": "-Infinity",
+                "cost": {
+                  "input": "-Infinity",
+                  "output": "-Infinity",
+                  "cacheRead": "-Infinity",
+                  "cacheWrite": "-Infinity",
+                  "total": "-Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "cacheWrite1h": "-Infinity",
+                "reasoning": "-Infinity",
+                "totalTokens": "-Infinity",
+                "cost": {
+                  "input": "-Infinity",
+                  "output": "-Infinity",
+                  "cacheRead": "-Infinity",
+                  "cacheWrite": "-Infinity",
+                  "total": "-Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+            "usage": {
+              "input": "-Infinity",
+              "output": "-Infinity",
+              "cacheRead": "-Infinity",
+              "cacheWrite": "-Infinity",
+              "cacheWrite1h": "-Infinity",
+              "reasoning": "-Infinity",
+              "totalTokens": "-Infinity",
+              "cost": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "total": "-Infinity"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "loop",
+        "stage": "updates",
+        "kind": "-0"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "cacheWrite1h": "-0",
+                "reasoning": "-0",
+                "totalTokens": "-0",
+                "cost": {
+                  "input": "-0",
+                  "output": "-0",
+                  "cacheRead": "-0",
+                  "cacheWrite": "-0",
+                  "total": "-0"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "cacheWrite1h": "-0",
+                "reasoning": "-0",
+                "totalTokens": "-0",
+                "cost": {
+                  "input": "-0",
+                  "output": "-0",
+                  "cacheRead": "-0",
+                  "cacheWrite": "-0",
+                  "total": "-0"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "cacheWrite1h": "-0",
+                "reasoning": "-0",
+                "totalTokens": "-0",
+                "cost": {
+                  "input": "-0",
+                  "output": "-0",
+                  "cacheRead": "-0",
+                  "cacheWrite": "-0",
+                  "total": "-0"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "cacheWrite1h": "-0",
+                "reasoning": "-0",
+                "totalTokens": "-0",
+                "cost": {
+                  "input": "-0",
+                  "output": "-0",
+                  "cacheRead": "-0",
+                  "cacheWrite": "-0",
+                  "total": "-0"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+            "usage": {
+              "input": "-0",
+              "output": "-0",
+              "cacheRead": "-0",
+              "cacheWrite": "-0",
+              "cacheWrite1h": "-0",
+              "reasoning": "-0",
+              "totalTokens": "-0",
+              "cost": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "total": "-0"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "loop",
+        "stage": "terminal",
+        "kind": "NaN"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "cacheWrite1h": "NaN",
+                "reasoning": "NaN",
+                "totalTokens": "NaN",
+                "cost": {
+                  "input": "NaN",
+                  "output": "NaN",
+                  "cacheRead": "NaN",
+                  "cacheWrite": "NaN",
+                  "total": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "cacheWrite1h": "NaN",
+                "reasoning": "NaN",
+                "totalTokens": "NaN",
+                "cost": {
+                  "input": "NaN",
+                  "output": "NaN",
+                  "cacheRead": "NaN",
+                  "cacheWrite": "NaN",
+                  "total": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "cacheWrite1h": "NaN",
+                "reasoning": "NaN",
+                "totalTokens": "NaN",
+                "cost": {
+                  "input": "NaN",
+                  "output": "NaN",
+                  "cacheRead": "NaN",
+                  "cacheWrite": "NaN",
+                  "total": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+            "usage": {
+              "input": "NaN",
+              "output": "NaN",
+              "cacheRead": "NaN",
+              "cacheWrite": "NaN",
+              "cacheWrite1h": "NaN",
+              "reasoning": "NaN",
+              "totalTokens": "NaN",
+              "cost": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "total": "NaN"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "loop",
+        "stage": "terminal",
+        "kind": "Infinity"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "cacheWrite1h": "Infinity",
+                "reasoning": "Infinity",
+                "totalTokens": "Infinity",
+                "cost": {
+                  "input": "Infinity",
+                  "output": "Infinity",
+                  "cacheRead": "Infinity",
+                  "cacheWrite": "Infinity",
+                  "total": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "cacheWrite1h": "Infinity",
+                "reasoning": "Infinity",
+                "totalTokens": "Infinity",
+                "cost": {
+                  "input": "Infinity",
+                  "output": "Infinity",
+                  "cacheRead": "Infinity",
+                  "cacheWrite": "Infinity",
+                  "total": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "cacheWrite1h": "Infinity",
+                "reasoning": "Infinity",
+                "totalTokens": "Infinity",
+                "cost": {
+                  "input": "Infinity",
+                  "output": "Infinity",
+                  "cacheRead": "Infinity",
+                  "cacheWrite": "Infinity",
+                  "total": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+            "usage": {
+              "input": "Infinity",
+              "output": "Infinity",
+              "cacheRead": "Infinity",
+              "cacheWrite": "Infinity",
+              "cacheWrite1h": "Infinity",
+              "reasoning": "Infinity",
+              "totalTokens": "Infinity",
+              "cost": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "total": "Infinity"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "loop",
+        "stage": "terminal",
+        "kind": "-Infinity"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "cacheWrite1h": "-Infinity",
+                "reasoning": "-Infinity",
+                "totalTokens": "-Infinity",
+                "cost": {
+                  "input": "-Infinity",
+                  "output": "-Infinity",
+                  "cacheRead": "-Infinity",
+                  "cacheWrite": "-Infinity",
+                  "total": "-Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "cacheWrite1h": "-Infinity",
+                "reasoning": "-Infinity",
+                "totalTokens": "-Infinity",
+                "cost": {
+                  "input": "-Infinity",
+                  "output": "-Infinity",
+                  "cacheRead": "-Infinity",
+                  "cacheWrite": "-Infinity",
+                  "total": "-Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "cacheWrite1h": "-Infinity",
+                "reasoning": "-Infinity",
+                "totalTokens": "-Infinity",
+                "cost": {
+                  "input": "-Infinity",
+                  "output": "-Infinity",
+                  "cacheRead": "-Infinity",
+                  "cacheWrite": "-Infinity",
+                  "total": "-Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+            "usage": {
+              "input": "-Infinity",
+              "output": "-Infinity",
+              "cacheRead": "-Infinity",
+              "cacheWrite": "-Infinity",
+              "cacheWrite1h": "-Infinity",
+              "reasoning": "-Infinity",
+              "totalTokens": "-Infinity",
+              "cost": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "total": "-Infinity"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "loop",
+        "stage": "terminal",
+        "kind": "-0"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "cacheWrite1h": "-0",
+                "reasoning": "-0",
+                "totalTokens": "-0",
+                "cost": {
+                  "input": "-0",
+                  "output": "-0",
+                  "cacheRead": "-0",
+                  "cacheWrite": "-0",
+                  "total": "-0"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "cacheWrite1h": "-0",
+                "reasoning": "-0",
+                "totalTokens": "-0",
+                "cost": {
+                  "input": "-0",
+                  "output": "-0",
+                  "cacheRead": "-0",
+                  "cacheWrite": "-0",
+                  "total": "-0"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "cacheWrite1h": "-0",
+                "reasoning": "-0",
+                "totalTokens": "-0",
+                "cost": {
+                  "input": "-0",
+                  "output": "-0",
+                  "cacheRead": "-0",
+                  "cacheWrite": "-0",
+                  "total": "-0"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+            "usage": {
+              "input": "-0",
+              "output": "-0",
+              "cacheRead": "-0",
+              "cacheWrite": "-0",
+              "cacheWrite1h": "-0",
+              "reasoning": "-0",
+              "totalTokens": "-0",
+              "cost": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "total": "-0"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "loop",
+        "stage": "ignored",
+        "kind": "NaN"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+            "usage": {
+              "input": "0",
+              "output": "0",
+              "cacheRead": "0",
+              "cacheWrite": "0",
+              "cacheWrite1h": "0",
+              "reasoning": "0",
+              "totalTokens": "0",
+              "cost": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "total": "0"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "loop",
+        "stage": "ignored",
+        "kind": "Infinity"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+            "usage": {
+              "input": "0",
+              "output": "0",
+              "cacheRead": "0",
+              "cacheWrite": "0",
+              "cacheWrite1h": "0",
+              "reasoning": "0",
+              "totalTokens": "0",
+              "cost": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "total": "0"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "loop",
+        "stage": "ignored",
+        "kind": "-Infinity"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+            "usage": {
+              "input": "0",
+              "output": "0",
+              "cacheRead": "0",
+              "cacheWrite": "0",
+              "cacheWrite1h": "0",
+              "reasoning": "0",
+              "totalTokens": "0",
+              "cost": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "total": "0"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "loop",
+        "stage": "ignored",
+        "kind": "-0"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+            "usage": {
+              "input": "0",
+              "output": "0",
+              "cacheRead": "0",
+              "cacheWrite": "0",
+              "cacheWrite1h": "0",
+              "reasoning": "0",
+              "totalTokens": "0",
+              "cost": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "total": "0"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "stage": "updates",
+        "kind": "NaN"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "cacheWrite1h": "NaN",
+                "reasoning": "NaN",
+                "totalTokens": "NaN",
+                "cost": {
+                  "input": "NaN",
+                  "output": "NaN",
+                  "cacheRead": "NaN",
+                  "cacheWrite": "NaN",
+                  "total": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "cacheWrite1h": "NaN",
+                "reasoning": "NaN",
+                "totalTokens": "NaN",
+                "cost": {
+                  "input": "NaN",
+                  "output": "NaN",
+                  "cacheRead": "NaN",
+                  "cacheWrite": "NaN",
+                  "total": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "cacheWrite1h": "NaN",
+                "reasoning": "NaN",
+                "totalTokens": "NaN",
+                "cost": {
+                  "input": "NaN",
+                  "output": "NaN",
+                  "cacheRead": "NaN",
+                  "cacheWrite": "NaN",
+                  "total": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "cacheWrite1h": "NaN",
+                "reasoning": "NaN",
+                "totalTokens": "NaN",
+                "cost": {
+                  "input": "NaN",
+                  "output": "NaN",
+                  "cacheRead": "NaN",
+                  "cacheWrite": "NaN",
+                  "total": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+            "usage": {
+              "input": "NaN",
+              "output": "NaN",
+              "cacheRead": "NaN",
+              "cacheWrite": "NaN",
+              "cacheWrite1h": "NaN",
+              "reasoning": "NaN",
+              "totalTokens": "NaN",
+              "cost": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "total": "NaN"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "stage": "updates",
+        "kind": "Infinity"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "cacheWrite1h": "Infinity",
+                "reasoning": "Infinity",
+                "totalTokens": "Infinity",
+                "cost": {
+                  "input": "Infinity",
+                  "output": "Infinity",
+                  "cacheRead": "Infinity",
+                  "cacheWrite": "Infinity",
+                  "total": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "cacheWrite1h": "Infinity",
+                "reasoning": "Infinity",
+                "totalTokens": "Infinity",
+                "cost": {
+                  "input": "Infinity",
+                  "output": "Infinity",
+                  "cacheRead": "Infinity",
+                  "cacheWrite": "Infinity",
+                  "total": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "cacheWrite1h": "Infinity",
+                "reasoning": "Infinity",
+                "totalTokens": "Infinity",
+                "cost": {
+                  "input": "Infinity",
+                  "output": "Infinity",
+                  "cacheRead": "Infinity",
+                  "cacheWrite": "Infinity",
+                  "total": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "cacheWrite1h": "Infinity",
+                "reasoning": "Infinity",
+                "totalTokens": "Infinity",
+                "cost": {
+                  "input": "Infinity",
+                  "output": "Infinity",
+                  "cacheRead": "Infinity",
+                  "cacheWrite": "Infinity",
+                  "total": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+            "usage": {
+              "input": "Infinity",
+              "output": "Infinity",
+              "cacheRead": "Infinity",
+              "cacheWrite": "Infinity",
+              "cacheWrite1h": "Infinity",
+              "reasoning": "Infinity",
+              "totalTokens": "Infinity",
+              "cost": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "total": "Infinity"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "stage": "updates",
+        "kind": "-Infinity"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "cacheWrite1h": "-Infinity",
+                "reasoning": "-Infinity",
+                "totalTokens": "-Infinity",
+                "cost": {
+                  "input": "-Infinity",
+                  "output": "-Infinity",
+                  "cacheRead": "-Infinity",
+                  "cacheWrite": "-Infinity",
+                  "total": "-Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "cacheWrite1h": "-Infinity",
+                "reasoning": "-Infinity",
+                "totalTokens": "-Infinity",
+                "cost": {
+                  "input": "-Infinity",
+                  "output": "-Infinity",
+                  "cacheRead": "-Infinity",
+                  "cacheWrite": "-Infinity",
+                  "total": "-Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "cacheWrite1h": "-Infinity",
+                "reasoning": "-Infinity",
+                "totalTokens": "-Infinity",
+                "cost": {
+                  "input": "-Infinity",
+                  "output": "-Infinity",
+                  "cacheRead": "-Infinity",
+                  "cacheWrite": "-Infinity",
+                  "total": "-Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "cacheWrite1h": "-Infinity",
+                "reasoning": "-Infinity",
+                "totalTokens": "-Infinity",
+                "cost": {
+                  "input": "-Infinity",
+                  "output": "-Infinity",
+                  "cacheRead": "-Infinity",
+                  "cacheWrite": "-Infinity",
+                  "total": "-Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+            "usage": {
+              "input": "-Infinity",
+              "output": "-Infinity",
+              "cacheRead": "-Infinity",
+              "cacheWrite": "-Infinity",
+              "cacheWrite1h": "-Infinity",
+              "reasoning": "-Infinity",
+              "totalTokens": "-Infinity",
+              "cost": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "total": "-Infinity"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "stage": "updates",
+        "kind": "-0"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "cacheWrite1h": "-0",
+                "reasoning": "-0",
+                "totalTokens": "-0",
+                "cost": {
+                  "input": "-0",
+                  "output": "-0",
+                  "cacheRead": "-0",
+                  "cacheWrite": "-0",
+                  "total": "-0"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "cacheWrite1h": "-0",
+                "reasoning": "-0",
+                "totalTokens": "-0",
+                "cost": {
+                  "input": "-0",
+                  "output": "-0",
+                  "cacheRead": "-0",
+                  "cacheWrite": "-0",
+                  "total": "-0"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "cacheWrite1h": "-0",
+                "reasoning": "-0",
+                "totalTokens": "-0",
+                "cost": {
+                  "input": "-0",
+                  "output": "-0",
+                  "cacheRead": "-0",
+                  "cacheWrite": "-0",
+                  "total": "-0"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "cacheWrite1h": "-0",
+                "reasoning": "-0",
+                "totalTokens": "-0",
+                "cost": {
+                  "input": "-0",
+                  "output": "-0",
+                  "cacheRead": "-0",
+                  "cacheWrite": "-0",
+                  "total": "-0"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+            "usage": {
+              "input": "-0",
+              "output": "-0",
+              "cacheRead": "-0",
+              "cacheWrite": "-0",
+              "cacheWrite1h": "-0",
+              "reasoning": "-0",
+              "totalTokens": "-0",
+              "cost": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "total": "-0"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "stage": "terminal",
+        "kind": "NaN"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "cacheWrite1h": "NaN",
+                "reasoning": "NaN",
+                "totalTokens": "NaN",
+                "cost": {
+                  "input": "NaN",
+                  "output": "NaN",
+                  "cacheRead": "NaN",
+                  "cacheWrite": "NaN",
+                  "total": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "cacheWrite1h": "NaN",
+                "reasoning": "NaN",
+                "totalTokens": "NaN",
+                "cost": {
+                  "input": "NaN",
+                  "output": "NaN",
+                  "cacheRead": "NaN",
+                  "cacheWrite": "NaN",
+                  "total": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "cacheWrite1h": "NaN",
+                "reasoning": "NaN",
+                "totalTokens": "NaN",
+                "cost": {
+                  "input": "NaN",
+                  "output": "NaN",
+                  "cacheRead": "NaN",
+                  "cacheWrite": "NaN",
+                  "total": "NaN"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+            "usage": {
+              "input": "NaN",
+              "output": "NaN",
+              "cacheRead": "NaN",
+              "cacheWrite": "NaN",
+              "cacheWrite1h": "NaN",
+              "reasoning": "NaN",
+              "totalTokens": "NaN",
+              "cost": {
+                "input": "NaN",
+                "output": "NaN",
+                "cacheRead": "NaN",
+                "cacheWrite": "NaN",
+                "total": "NaN"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "stage": "terminal",
+        "kind": "Infinity"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "cacheWrite1h": "Infinity",
+                "reasoning": "Infinity",
+                "totalTokens": "Infinity",
+                "cost": {
+                  "input": "Infinity",
+                  "output": "Infinity",
+                  "cacheRead": "Infinity",
+                  "cacheWrite": "Infinity",
+                  "total": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "cacheWrite1h": "Infinity",
+                "reasoning": "Infinity",
+                "totalTokens": "Infinity",
+                "cost": {
+                  "input": "Infinity",
+                  "output": "Infinity",
+                  "cacheRead": "Infinity",
+                  "cacheWrite": "Infinity",
+                  "total": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "cacheWrite1h": "Infinity",
+                "reasoning": "Infinity",
+                "totalTokens": "Infinity",
+                "cost": {
+                  "input": "Infinity",
+                  "output": "Infinity",
+                  "cacheRead": "Infinity",
+                  "cacheWrite": "Infinity",
+                  "total": "Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+            "usage": {
+              "input": "Infinity",
+              "output": "Infinity",
+              "cacheRead": "Infinity",
+              "cacheWrite": "Infinity",
+              "cacheWrite1h": "Infinity",
+              "reasoning": "Infinity",
+              "totalTokens": "Infinity",
+              "cost": {
+                "input": "Infinity",
+                "output": "Infinity",
+                "cacheRead": "Infinity",
+                "cacheWrite": "Infinity",
+                "total": "Infinity"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "stage": "terminal",
+        "kind": "-Infinity"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "cacheWrite1h": "-Infinity",
+                "reasoning": "-Infinity",
+                "totalTokens": "-Infinity",
+                "cost": {
+                  "input": "-Infinity",
+                  "output": "-Infinity",
+                  "cacheRead": "-Infinity",
+                  "cacheWrite": "-Infinity",
+                  "total": "-Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "cacheWrite1h": "-Infinity",
+                "reasoning": "-Infinity",
+                "totalTokens": "-Infinity",
+                "cost": {
+                  "input": "-Infinity",
+                  "output": "-Infinity",
+                  "cacheRead": "-Infinity",
+                  "cacheWrite": "-Infinity",
+                  "total": "-Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+              "usage": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "cacheWrite1h": "-Infinity",
+                "reasoning": "-Infinity",
+                "totalTokens": "-Infinity",
+                "cost": {
+                  "input": "-Infinity",
+                  "output": "-Infinity",
+                  "cacheRead": "-Infinity",
+                  "cacheWrite": "-Infinity",
+                  "total": "-Infinity"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"cacheWrite1h\":null,\"reasoning\":null,\"totalTokens\":null,\"cost\":{\"input\":null,\"output\":null,\"cacheRead\":null,\"cacheWrite\":null,\"total\":null}}",
+            "usage": {
+              "input": "-Infinity",
+              "output": "-Infinity",
+              "cacheRead": "-Infinity",
+              "cacheWrite": "-Infinity",
+              "cacheWrite1h": "-Infinity",
+              "reasoning": "-Infinity",
+              "totalTokens": "-Infinity",
+              "cost": {
+                "input": "-Infinity",
+                "output": "-Infinity",
+                "cacheRead": "-Infinity",
+                "cacheWrite": "-Infinity",
+                "total": "-Infinity"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "stage": "terminal",
+        "kind": "-0"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "cacheWrite1h": "-0",
+                "reasoning": "-0",
+                "totalTokens": "-0",
+                "cost": {
+                  "input": "-0",
+                  "output": "-0",
+                  "cacheRead": "-0",
+                  "cacheWrite": "-0",
+                  "total": "-0"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "cacheWrite1h": "-0",
+                "reasoning": "-0",
+                "totalTokens": "-0",
+                "cost": {
+                  "input": "-0",
+                  "output": "-0",
+                  "cacheRead": "-0",
+                  "cacheWrite": "-0",
+                  "total": "-0"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "cacheWrite1h": "-0",
+                "reasoning": "-0",
+                "totalTokens": "-0",
+                "cost": {
+                  "input": "-0",
+                  "output": "-0",
+                  "cacheRead": "-0",
+                  "cacheWrite": "-0",
+                  "total": "-0"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+            "usage": {
+              "input": "-0",
+              "output": "-0",
+              "cacheRead": "-0",
+              "cacheWrite": "-0",
+              "cacheWrite1h": "-0",
+              "reasoning": "-0",
+              "totalTokens": "-0",
+              "cost": {
+                "input": "-0",
+                "output": "-0",
+                "cacheRead": "-0",
+                "cacheWrite": "-0",
+                "total": "-0"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "stage": "ignored",
+        "kind": "NaN"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+            "usage": {
+              "input": "0",
+              "output": "0",
+              "cacheRead": "0",
+              "cacheWrite": "0",
+              "cacheWrite1h": "0",
+              "reasoning": "0",
+              "totalTokens": "0",
+              "cost": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "total": "0"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "stage": "ignored",
+        "kind": "Infinity"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+            "usage": {
+              "input": "0",
+              "output": "0",
+              "cacheRead": "0",
+              "cacheWrite": "0",
+              "cacheWrite1h": "0",
+              "reasoning": "0",
+              "totalTokens": "0",
+              "cost": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "total": "0"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "stage": "ignored",
+        "kind": "-Infinity"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+            "usage": {
+              "input": "0",
+              "output": "0",
+              "cacheRead": "0",
+              "cacheWrite": "0",
+              "cacheWrite1h": "0",
+              "reasoning": "0",
+              "totalTokens": "0",
+              "cost": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "total": "0"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "stage": "ignored",
+        "kind": "-0"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start"
+          },
+          {
+            "type": "message_end"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "stopReason": "stop",
+              "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+              "usage": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "cacheWrite1h": "0",
+                "reasoning": "0",
+                "totalTokens": "0",
+                "cost": {
+                  "input": "0",
+                  "output": "0",
+                  "cacheRead": "0",
+                  "cacheWrite": "0",
+                  "total": "0"
+                }
+              }
+            }
+          },
+          {
+            "type": "agent_end"
+          }
+        ],
+        "completed": [
+          {
+            "stopReason": "stop",
+            "wire": "{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"cacheWrite1h\":0,\"reasoning\":0,\"totalTokens\":0,\"cost\":{\"input\":0,\"output\":0,\"cacheRead\":0,\"cacheWrite\":0,\"total\":0}}",
+            "usage": {
+              "input": "0",
+              "output": "0",
+              "cacheRead": "0",
+              "cacheWrite": "0",
+              "cacheWrite1h": "0",
+              "reasoning": "0",
+              "totalTokens": "0",
+              "cost": {
+                "input": "0",
+                "output": "0",
+                "cacheRead": "0",
+                "cacheWrite": "0",
+                "total": "0"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

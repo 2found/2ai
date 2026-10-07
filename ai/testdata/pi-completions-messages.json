@@ -1,0 +1,5065 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "model": {
+    "id": "test",
+    "name": "Test",
+    "api": "openai-completions",
+    "provider": "openai",
+    "baseUrl": "https://api.openai.com/v1",
+    "reasoning": true,
+    "input": [
+      "text",
+      "image"
+    ],
+    "cost": {
+      "input": 0,
+      "output": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    },
+    "maxTokens": 1000,
+    "contextWindow": 10000
+  },
+  "cases": [
+    {
+      "input": {
+        "name": "instructions and user",
+        "context": {
+          "systemPrompt": "system",
+          "messages": [
+            {
+              "role": "user",
+              "content": "hello",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "developer",
+            "content": "system"
+          },
+          {
+            "role": "user",
+            "content": "hello"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "nonreasoning system",
+        "model": {
+          "reasoning": false
+        },
+        "context": {
+          "systemPrompt": "system",
+          "messages": [
+            {
+              "role": "user",
+              "content": "",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "system",
+            "content": "system"
+          },
+          {
+            "role": "user",
+            "content": ""
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "user images and empty text",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": ""
+                },
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                },
+                {
+                  "type": "text",
+                  "text": "hello"
+                }
+              ],
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": [],
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "image_url",
+                "image_url": {
+                  "url": "data:image/png;base64,YQ=="
+                }
+              },
+              {
+                "type": "text",
+                "text": "hello"
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "nonvision images",
+        "model": {
+          "input": [
+            "text"
+          ]
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                },
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                },
+                {
+                  "type": "text",
+                  "text": "hello"
+                },
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                }
+              ],
+              "timestamp": 100
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "(image omitted: model does not support images)"
+              },
+              {
+                "type": "text",
+                "text": "hello"
+              },
+              {
+                "type": "text",
+                "text": "(image omitted: model does not support images)"
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "(tool image omitted: model does not support images)",
+            "tool_call_id": "call"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "assistant text parts",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": " "
+                },
+                {
+                  "type": "text",
+                  "text": "one"
+                },
+                {
+                  "type": "text",
+                  "text": "two"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "assistant",
+              "content": [],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "onetwo"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "raw thinking",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "reasoning_content"
+                },
+                {
+                  "type": "thinking",
+                  "thinking": "more"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "answer",
+            "reasoning_content": "reason\nmore"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "thinking as text",
+        "compat": {
+          "requiresThinkingAsText": true
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "reasoning"
+                },
+                {
+                  "type": "thinking",
+                  "thinking": "more"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": true,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "reason\n\nmore"
+              },
+              {
+                "type": "text",
+                "text": "answer"
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "thinking only skipped",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "reasoning"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "opencode reasoning field",
+        "model": {
+          "provider": "opencode-go"
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "reasoning"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "opencode-go",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "answer",
+            "reasoning_content": "reason"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "deepseek empty reasoning",
+        "model": {
+          "provider": "deepseek"
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "deepseek",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": true,
+          "thinkingFormat": "deepseek",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "answer",
+            "reasoning_content": ""
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "valid structured reasoning",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "[{\"type\":\"reasoning.text\",\"text\":\"raw\",\"signature\":null,\"id\":null,\"index\":0,\"format\":\"test\",\"opaque\":{\"exact\":\"kept\"}},{\"type\":\"reasoning.encrypted\",\"data\":\"secret\",\"id\":\"e\"}]"
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "call",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              }
+            ],
+            "reasoning_details": [
+              {
+                "type": "reasoning.text",
+                "text": "raw",
+                "signature": null,
+                "id": null,
+                "index": 0,
+                "format": "test",
+                "opaque": {
+                  "exact": "kept"
+                }
+              },
+              {
+                "type": "reasoning.encrypted",
+                "data": "secret",
+                "id": "e"
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "result",
+            "tool_call_id": "call"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "structured reasoning JSON number semantics",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "[{\"type\":\"reasoning.text\",\"text\":\"raw\",\"opaque\":9007199254740993}]"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "answer",
+            "reasoning_details": [
+              {
+                "type": "reasoning.text",
+                "text": "raw",
+                "opaque": 9007199254740992
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "structured reasoning infinite parsed number",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "[{\"type\":\"reasoning.text\",\"text\":\"raw\",\"index\":1e400}]"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "answer",
+            "reasoning_details": [
+              {
+                "type": "reasoning.text",
+                "text": "raw",
+                "index": null
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "legacy signature JSON number semantics",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  },
+                  "thoughtSignature": "{\"type\":\"reasoning.encrypted\",\"id\":\"e\",\"data\":\"secret\",\"opaque\":9007199254740993}"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "call",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              }
+            ],
+            "reasoning_details": [
+              {
+                "type": "reasoning.encrypted",
+                "id": "e",
+                "data": "secret",
+                "opaque": 9007199254740992
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "result",
+            "tool_call_id": "call"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "invalid structured reasoning",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "[{\"type\":\"reasoning.text\",\"text\":\"raw\",\"index\":null}]"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "answer"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "invalid reasoning signature 0",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "[]"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "answer"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "invalid reasoning signature 1",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "{\"type\":\"reasoning.text\",\"text\":\"object\"}"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "answer"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "invalid reasoning signature 2",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "[{\"type\":\"unknown\",\"text\":\"raw\"}]"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "answer"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "invalid reasoning signature 3",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "[{\"type\":\"reasoning.summary\",\"summary\":3}]"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "answer"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "invalid reasoning signature 4",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "[{\"type\":\"reasoning.text\",\"text\":\"raw\",\"signature\":{}}]"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "answer"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "invalid reasoning signature 5",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "[{\"type\":\"reasoning.text\",\"text\":\"raw\",\"index\":\"0\"}]"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "answer"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "invalid reasoning signature 6",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "[{\"type\":\"reasoning.text\",\"text\":\"raw\",\"id\":3}]"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "answer"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "invalid reasoning signature 7",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "[{\"type\":\"reasoning.text\",\"text\":\"raw\",\"format\":null}]"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "answer"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning text field",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "reasoning_text"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "answer",
+            "reasoning_text": "reason"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "cross model thinking becomes text",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason",
+                  "thinkingSignature": "reasoning_content"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "other"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "reasonanswer"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "legacy encrypted invalid signature",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  },
+                  "thoughtSignature": "{\"type\":\"reasoning.encrypted\",\"id\":\"\",\"data\":\"secret\"}"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "call",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "result",
+            "tool_call_id": "call"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "legacy encrypted reasoning",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  },
+                  "thoughtSignature": "{\"type\":\"reasoning.encrypted\",\"id\":\"e\",\"data\":\"secret\",\"extra\":7}"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "call",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              }
+            ],
+            "reasoning_details": [
+              {
+                "type": "reasoning.encrypted",
+                "id": "e",
+                "data": "secret",
+                "extra": 7
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "result",
+            "tool_call_id": "call"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "structured details win legacy",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "",
+                  "thinkingSignature": "[{\"type\":\"reasoning.summary\",\"summary\":\"saved\"}]"
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  },
+                  "thoughtSignature": "{\"type\":\"reasoning.encrypted\",\"id\":\"e\",\"data\":\"secret\"}"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "call",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              }
+            ],
+            "reasoning_details": [
+              {
+                "type": "reasoning.summary",
+                "summary": "saved"
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "result",
+            "tool_call_id": "call"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "same model preserves long id",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "result",
+            "tool_call_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "cross model id truncation",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "other"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "result",
+            "tool_call_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "cross model pipe id uniqueness",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "same|one+/=",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  }
+                },
+                {
+                  "type": "toolCall",
+                  "id": "same|two+/=",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  }
+                },
+                {
+                  "type": "toolCall",
+                  "id": "same|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "same|one+/=",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "same|two+/=",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "same|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "same_one___",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              },
+              {
+                "id": "same_two___",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              },
+              {
+                "id": "same_1ub1axdo",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "result",
+            "tool_call_id": "same_one___"
+          },
+          {
+            "role": "tool",
+            "content": "result",
+            "tool_call_id": "same_two___"
+          },
+          {
+            "role": "tool",
+            "content": "result",
+            "tool_call_id": "same_1ub1axdo"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "cross model unicode hash",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "😀call|😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "__call_111pnueh",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "No result provided",
+            "tool_call_id": "__call_111pnueh"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool argument stringify",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "tool",
+                  "arguments": {
+                    "2": "two",
+                    "10": "ten",
+                    "z": "<>& ",
+                    "a": [
+                      0,
+                      1e-7,
+                      1e+21,
+                      0.000001
+                    ]
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "call",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"2\":\"two\",\"10\":\"ten\",\"z\":\"<>& \",\"a\":[0,1e-7,1e+21,0.000001]}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "result",
+            "tool_call_id": "call"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "orphan repair and rejected assistant",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "failed"
+                }
+              ],
+              "stopReason": "error",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "stopped"
+                }
+              ],
+              "stopReason": "aborted",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "call",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "No result provided",
+            "tool_call_id": "call"
+          },
+          {
+            "role": "user",
+            "content": "next"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool images grouped",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "one",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  }
+                },
+                {
+                  "type": "toolCall",
+                  "id": "two",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "one",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "two",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "one"
+                },
+                {
+                  "type": "text",
+                  "text": "two"
+                },
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "one",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              },
+              {
+                "id": "two",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "(see attached image)",
+            "tool_call_id": "one"
+          },
+          {
+            "role": "tool",
+            "content": "one\ntwo",
+            "tool_call_id": "two"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "Attached image(s) from tool result:"
+              },
+              {
+                "type": "image_url",
+                "image_url": {
+                  "url": "data:image/png;base64,YQ=="
+                }
+              },
+              {
+                "type": "image_url",
+                "image_url": {
+                  "url": "data:image/png;base64,YQ=="
+                }
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": "next"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool images bridge and name",
+        "compat": {
+          "requiresAssistantAfterToolResult": true,
+          "requiresToolResultName": true
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "one",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  }
+                },
+                {
+                  "type": "toolCall",
+                  "id": "two",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "one",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "two",
+              "toolName": "tool",
+              "content": [],
+              "isError": false,
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": true,
+          "requiresAssistantAfterToolResult": true,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+              {
+                "id": "one",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              },
+              {
+                "id": "two",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "(see attached image)",
+            "tool_call_id": "one",
+            "name": "tool"
+          },
+          {
+            "role": "tool",
+            "content": "(no tool output)",
+            "tool_call_id": "two",
+            "name": "tool"
+          },
+          {
+            "role": "assistant",
+            "content": "I have processed the tool results."
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "Attached image(s) from tool result:"
+              },
+              {
+                "type": "image_url",
+                "image_url": {
+                  "url": "data:image/png;base64,YQ=="
+                }
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": "next"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool text bridge",
+        "compat": {
+          "requiresAssistantAfterToolResult": true
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  \\u2028",
+                    "a": 1
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": true,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+              {
+                "id": "call",
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "arguments": "{\"z\":\"<>&  \\\\u2028\",\"a\":1}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "result",
+            "tool_call_id": "call"
+          },
+          {
+            "role": "assistant",
+            "content": "I have processed the tool results."
+          },
+          {
+            "role": "user",
+            "content": "next"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "mid conversation instructions collapsed",
+        "context": {
+          "messages": [
+            {
+              "role": "system",
+              "timestamp": 100,
+              "content": "first"
+            },
+            {
+              "role": "user",
+              "content": "hi",
+              "timestamp": 100
+            },
+            {
+              "role": "system",
+              "timestamp": 100,
+              "content": "second",
+              "sections": {
+                "scope": "new"
+              }
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "developer",
+            "content": "first\n\nsecond\n\nnew"
+          },
+          {
+            "role": "user",
+            "content": "hi"
+          },
+          {
+            "role": "user",
+            "content": "next"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "mid conversation tools anchored",
+        "compat": {
+          "supportsMidConvoSystemMessages": true,
+          "supportsMidConvoToolAdditions": true
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "system",
+              "timestamp": 100,
+              "content": "first"
+            },
+            {
+              "role": "user",
+              "content": "hi",
+              "timestamp": 100
+            },
+            {
+              "role": "system",
+              "timestamp": 100,
+              "content": "second",
+              "toolsAdded": [
+                {
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "z": {
+                        "type": "string"
+                      },
+                      "a": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              ],
+              "sections": {
+                "scope": null
+              }
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": true,
+          "supportsMidConvoToolAdditions": true,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "developer",
+            "content": "first"
+          },
+          {
+            "role": "user",
+            "content": "hi"
+          },
+          {
+            "role": "system",
+            "tools": [
+              {
+                "type": "function",
+                "function": {
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "z": {
+                        "type": "string"
+                      },
+                      "a": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "role": "developer",
+            "content": "second\n\nRemoved system prompt section \"scope\"."
+          },
+          {
+            "role": "user",
+            "content": "next"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar tools and calls",
+        "compat": {
+          "supportsOpenAIGrammarTools": true
+        },
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code"
+              ]
+            },
+            "constrainedSampling": {
+              "type": "grammar",
+              "variants": {
+                "openai_regex": ".*"
+              }
+            }
+          }
+        ],
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "tool",
+                  "arguments": {
+                    "code": "x < y\n"
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": true,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "call",
+                "type": "custom",
+                "custom": {
+                  "name": "tool",
+                  "input": "x < y\n"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": "result",
+            "tool_call_id": "call"
+          }
+        ],
+        "tools": [
+          {
+            "type": "custom",
+            "custom": {
+              "name": "tool",
+              "description": "Tool",
+              "format": {
+                "type": "grammar",
+                "grammar": {
+                  "syntax": "regex",
+                  "definition": ".*"
+                }
+              }
+            }
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "invalid grammar argument",
+        "compat": {
+          "supportsOpenAIGrammarTools": true
+        },
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code"
+              ]
+            },
+            "constrainedSampling": {
+              "type": "grammar",
+              "variants": {
+                "openai_regex": ".*"
+              }
+            }
+          }
+        ],
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "tool",
+                  "arguments": {
+                    "code": 42
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": true,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": null,
+        "tools": null,
+        "error": "Grammar tool call \"tool\" requires argument \"code\" to be a string."
+      }
+    },
+    {
+      "input": {
+        "name": "strict tool",
+        "compat": {
+          "supportsStrictMode": true
+        },
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            },
+            "constrainedSampling": {
+              "type": "json_schema",
+              "strict": "require"
+            }
+          }
+        ],
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": true,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "z": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "a": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "z",
+                  "a"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "strict required unsupported",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            },
+            "constrainedSampling": {
+              "type": "json_schema",
+              "strict": "require"
+            }
+          }
+        ],
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": null,
+        "error": "Tool \"tool\" requires JSON-schema constrained sampling, but strict tools are unsupported."
+      }
+    },
+    {
+      "input": {
+        "name": "strict optional unsupported schema",
+        "compat": {
+          "supportsStrictMode": true
+        },
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "oneOf": []
+            },
+            "constrainedSampling": {
+              "type": "json_schema",
+              "strict": "prefer"
+            }
+          }
+        ],
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": true,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "tool",
+              "description": "Tool",
+              "parameters": {
+                "type": "object",
+                "oneOf": []
+              },
+              "strict": false
+            }
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat zai",
+        "model": {
+          "provider": "zai"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "zai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat zai-coding-cn",
+        "model": {
+          "provider": "zai-coding-cn"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "zai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat together",
+        "model": {
+          "provider": "together"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "together",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": false
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat moonshotai",
+        "model": {
+          "provider": "moonshotai"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat openrouter",
+        "model": {
+          "provider": "openrouter"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openrouter",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": true,
+          "sessionAffinityFormat": "openrouter",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat cloudflare-workers-ai",
+        "model": {
+          "provider": "cloudflare-workers-ai"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": false
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat cloudflare-ai-gateway",
+        "model": {
+          "provider": "cloudflare-ai-gateway"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": false
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat nvidia",
+        "model": {
+          "provider": "nvidia"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": false
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat ant-ling",
+        "model": {
+          "provider": "ant-ling"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "ant-ling",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": false
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat cerebras",
+        "model": {
+          "provider": "cerebras"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat deepseek",
+        "model": {
+          "provider": "deepseek"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": true,
+          "thinkingFormat": "deepseek",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat xai",
+        "model": {
+          "provider": "xai"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat opencode",
+        "model": {
+          "provider": "opencode"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat url https://api.z.ai",
+        "model": {
+          "provider": "custom",
+          "baseUrl": "https://api.z.ai"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "zai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat url https://api.together.xyz",
+        "model": {
+          "provider": "custom",
+          "baseUrl": "https://api.together.xyz"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "together",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": false
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat url https://api.moonshot.cn",
+        "model": {
+          "provider": "custom",
+          "baseUrl": "https://api.moonshot.cn"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat url https://openrouter.ai",
+        "model": {
+          "provider": "custom",
+          "baseUrl": "https://openrouter.ai"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openrouter",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": true,
+          "sessionAffinityFormat": "openrouter",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat url https://api.cloudflare.com",
+        "model": {
+          "provider": "custom",
+          "baseUrl": "https://api.cloudflare.com"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": false
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat url https://gateway.ai.cloudflare.com",
+        "model": {
+          "provider": "custom",
+          "baseUrl": "https://gateway.ai.cloudflare.com"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": false
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat url https://integrate.api.nvidia.com",
+        "model": {
+          "provider": "custom",
+          "baseUrl": "https://integrate.api.nvidia.com"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": false
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat url https://api.ant-ling.com",
+        "model": {
+          "provider": "custom",
+          "baseUrl": "https://api.ant-ling.com"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "ant-ling",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": false
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat url https://cerebras.ai",
+        "model": {
+          "provider": "custom",
+          "baseUrl": "https://cerebras.ai"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat url https://DEEPSEEK.COM",
+        "model": {
+          "provider": "custom",
+          "baseUrl": "https://DEEPSEEK.COM"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": true,
+          "thinkingFormat": "deepseek",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat url https://api.x.ai",
+        "model": {
+          "provider": "custom",
+          "baseUrl": "https://api.x.ai"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": false,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat url https://opencode.ai",
+        "model": {
+          "provider": "custom",
+          "baseUrl": "https://opencode.ai"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "compat url https://chutes.ai",
+        "model": {
+          "provider": "custom",
+          "baseUrl": "https://chutes.ai"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": false,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openai",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "router anthropic",
+        "model": {
+          "id": "anthropic/model",
+          "provider": "openrouter"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openrouter",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "cacheControlFormat": "anthropic",
+          "sendSessionAffinityHeaders": true,
+          "sessionAffinityFormat": "openrouter",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "router openai",
+        "model": {
+          "id": "openai/model",
+          "provider": "openrouter"
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": true,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": true,
+          "maxTokensField": "max_completion_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "openrouter",
+          "openRouterRouting": {},
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": true,
+          "sessionAffinityFormat": "openrouter",
+          "supportsLongCacheRetention": true
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "nullish and explicit overrides",
+        "compat": {
+          "supportsStore": false,
+          "supportsFinishReason": false,
+          "maxTokensField": "max_tokens",
+          "supportsReasoningEffort": null,
+          "thinkingFormat": "custom",
+          "openRouterRouting": {
+            "order": [
+              "one"
+            ]
+          },
+          "vllmPriority": null
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "compat": {
+          "supportsStore": false,
+          "supportsDeveloperRole": true,
+          "supportsReasoningEffort": true,
+          "supportsUsageInStreaming": true,
+          "supportsFinishReason": false,
+          "maxTokensField": "max_tokens",
+          "requiresToolResultName": false,
+          "requiresAssistantAfterToolResult": false,
+          "requiresThinkingAsText": false,
+          "requiresReasoningContentOnAssistantMessages": false,
+          "thinkingFormat": "custom",
+          "openRouterRouting": {
+            "order": [
+              "one"
+            ]
+          },
+          "vercelGatewayRouting": {},
+          "chatTemplateKwargs": {},
+          "chatTemplateArgs": {},
+          "zaiToolStream": false,
+          "supportsThinkingTokenBudget": false,
+          "supportsStrictMode": false,
+          "supportsOpenAIGrammarTools": false,
+          "supportsMidConvoSystemMessages": false,
+          "supportsMidConvoToolAdditions": false,
+          "sendSessionAffinityHeaders": false,
+          "sessionAffinityFormat": "openai",
+          "supportsLongCacheRetention": true,
+          "vllmPriority": null
+        },
+        "messages": [],
+        "tools": [],
+        "error": null
+      }
+    }
+  ]
+}

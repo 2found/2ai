@@ -1,0 +1,162 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "source": "packages/agent/src/proxy.ts",
+  "sourceSHA256": "9c23fc8a625e79c6f8d180a65146288eaa8c10995d7c6fd91b75f57ff934fd40",
+  "cases": [
+    {
+      "name": "text",
+      "bodyBase64": "eyJlcnJvciI6ImRlbmllZCJ9",
+      "expected": "Proxy error: denied"
+    },
+    {
+      "name": "overflow",
+      "bodyBase64": "eyJlcnJvciI6MWU0MDB9",
+      "expected": "Proxy error: Infinity"
+    },
+    {
+      "name": "negative-overflow",
+      "bodyBase64": "eyJlcnJvciI6LTFlNDAwfQ==",
+      "expected": "Proxy error: -Infinity"
+    },
+    {
+      "name": "irrelevant-overflow",
+      "bodyBase64": "eyJlcnJvciI6ImRlbmllZCIsInVudXNlZCI6MWU0MDB9",
+      "expected": "Proxy error: denied"
+    },
+    {
+      "name": "underflow",
+      "bodyBase64": "eyJlcnJvciI6MWUtNDAwfQ==",
+      "expected": "Proxy error: 502 Bad Gateway"
+    },
+    {
+      "name": "negative-zero",
+      "bodyBase64": "eyJlcnJvciI6LTB9",
+      "expected": "Proxy error: 502 Bad Gateway"
+    },
+    {
+      "name": "high-surrogate",
+      "bodyBase64": "eyJlcnJvciI6Ilx1ZDgwMCJ9",
+      "expected": "Proxy error: \ud800"
+    },
+    {
+      "name": "low-surrogate",
+      "bodyBase64": "eyJlcnJvciI6Ilx1ZGZmZiJ9",
+      "expected": "Proxy error: \udfff"
+    },
+    {
+      "name": "pair",
+      "bodyBase64": "eyJlcnJvciI6Ilx1ZDgzY1x1ZGYwZiJ9",
+      "expected": "Proxy error: 🌏"
+    },
+    {
+      "name": "bom",
+      "bodyBase64": "77u/eyJlcnJvciI6ImRlbmllZCJ9",
+      "expected": "Proxy error: denied"
+    },
+    {
+      "name": "trailing",
+      "bodyBase64": "eyJlcnJvciI6ImRlbmllZCJ9IGp1bms=",
+      "expected": "Proxy error: 502 Bad Gateway"
+    },
+    {
+      "name": "null",
+      "bodyBase64": "bnVsbA==",
+      "expected": "Proxy error: 502 Bad Gateway"
+    },
+    {
+      "name": "number",
+      "bodyBase64": "NDI=",
+      "expected": "Proxy error: 502 Bad Gateway"
+    },
+    {
+      "name": "array",
+      "bodyBase64": "WyJkZW5pZWQiXQ==",
+      "expected": "Proxy error: 502 Bad Gateway"
+    },
+    {
+      "name": "empty",
+      "bodyBase64": "",
+      "expected": "Proxy error: 502 Bad Gateway"
+    },
+    {
+      "name": "empty-string",
+      "bodyBase64": "eyJlcnJvciI6IiJ9",
+      "expected": "Proxy error: 502 Bad Gateway"
+    },
+    {
+      "name": "false",
+      "bodyBase64": "eyJlcnJvciI6ZmFsc2V9",
+      "expected": "Proxy error: 502 Bad Gateway"
+    },
+    {
+      "name": "true",
+      "bodyBase64": "eyJlcnJvciI6dHJ1ZX0=",
+      "expected": "Proxy error: true"
+    },
+    {
+      "name": "null-error",
+      "bodyBase64": "eyJlcnJvciI6bnVsbH0=",
+      "expected": "Proxy error: 502 Bad Gateway"
+    },
+    {
+      "name": "empty-array",
+      "bodyBase64": "eyJlcnJvciI6W119",
+      "expected": "Proxy error: "
+    },
+    {
+      "name": "array-error",
+      "bodyBase64": "eyJlcnJvciI6W251bGwsMWU0MDAsIngiLFsiXHVkODAwIix7fV1dfQ==",
+      "expected": "Proxy error: ,Infinity,x,\ud800,[object Object]"
+    },
+    {
+      "name": "object",
+      "bodyBase64": "eyJlcnJvciI6eyJtZXNzYWdlIjoiZGVuaWVkIn19",
+      "expected": "Proxy error: [object Object]"
+    },
+    {
+      "name": "shadow-tostring",
+      "bodyBase64": "eyJlcnJvciI6eyJ0b1N0cmluZyI6bnVsbH19",
+      "expected": "Proxy error: 502 Bad Gateway"
+    },
+    {
+      "name": "nested-shadow",
+      "bodyBase64": "eyJlcnJvciI6W3sidG9TdHJpbmciOiJibG9ja2VkIn1dfQ==",
+      "expected": "Proxy error: 502 Bad Gateway"
+    },
+    {
+      "name": "shadow-valueof",
+      "bodyBase64": "eyJlcnJvciI6eyJ2YWx1ZU9mIjpudWxsfX0=",
+      "expected": "Proxy error: [object Object]"
+    },
+    {
+      "name": "duplicate",
+      "bodyBase64": "eyJlcnJvciI6MWU0MDAsImVycm9yIjoibGFzdCJ9",
+      "expected": "Proxy error: last"
+    },
+    {
+      "name": "case-sensitive",
+      "bodyBase64": "eyJFcnJvciI6ImRlbmllZCJ9",
+      "expected": "Proxy error: 502 Bad Gateway"
+    },
+    {
+      "name": "invalid-utf8",
+      "bodyBase64": "eyJlcnJvciI6IsCvIn0=",
+      "expected": "Proxy error: ��"
+    },
+    {
+      "name": "nested-bom",
+      "bodyBase64": "eyJlcnJvciI6Iu+7v2RlbmllZCJ9",
+      "expected": "Proxy error: ﻿denied"
+    },
+    {
+      "name": "read-error",
+      "readFailure": "read-error",
+      "expected": "Proxy error: 502 Bad Gateway"
+    },
+    {
+      "name": "read-panic",
+      "readFailure": "read-panic",
+      "expected": "Proxy error: 502 Bad Gateway"
+    }
+  ]
+}

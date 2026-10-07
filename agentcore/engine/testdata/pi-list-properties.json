@@ -1,0 +1,1105 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "names": [
+    "-1",
+    "01",
+    "4294967295",
+    "a",
+    "2",
+    "1",
+    "__proto__",
+    "constructor",
+    "-0",
+    "1e0",
+    "0002"
+  ],
+  "cases": [
+    {
+      "phase": "plain",
+      "expected": {
+        "length": 3,
+        "keys": [
+          "0",
+          "1",
+          "2",
+          "-1",
+          "01",
+          "4294967295",
+          "a",
+          "__proto__",
+          "constructor",
+          "-0",
+          "1e0",
+          "0002"
+        ],
+        "indexKeys": [
+          0,
+          1,
+          2
+        ],
+        "wire": "[\"initial\",\"1\",\"2\"]",
+        "lookups": {
+          "0": {
+            "found": true,
+            "value": "initial"
+          },
+          "1": {
+            "found": true,
+            "value": "1"
+          },
+          "2": {
+            "found": true,
+            "value": "2"
+          },
+          "3": {
+            "found": false,
+            "value": null
+          },
+          "-1": {
+            "found": true,
+            "value": "-1"
+          },
+          "01": {
+            "found": true,
+            "value": "01"
+          },
+          "4294967295": {
+            "found": true,
+            "value": "4294967295"
+          },
+          "a": {
+            "found": true,
+            "value": "a"
+          },
+          "__proto__": {
+            "found": true,
+            "value": "__proto__"
+          },
+          "constructor": {
+            "found": true,
+            "value": "constructor"
+          },
+          "-0": {
+            "found": true,
+            "value": "-0"
+          },
+          "1e0": {
+            "found": true,
+            "value": "1e0"
+          },
+          "0002": {
+            "found": true,
+            "value": "0002"
+          },
+          "absent": {
+            "found": false,
+            "value": null
+          }
+        }
+      }
+    },
+    {
+      "phase": "overwrite",
+      "expected": {
+        "length": 3,
+        "keys": [
+          "0",
+          "1",
+          "2",
+          "-1",
+          "01",
+          "4294967295",
+          "a",
+          "__proto__",
+          "constructor",
+          "-0",
+          "1e0",
+          "0002"
+        ],
+        "indexKeys": [
+          0,
+          1,
+          2
+        ],
+        "wire": "[\"initial\",\"1\",\"2\"]",
+        "lookups": {
+          "0": {
+            "found": true,
+            "value": "initial"
+          },
+          "1": {
+            "found": true,
+            "value": "1"
+          },
+          "2": {
+            "found": true,
+            "value": "2"
+          },
+          "3": {
+            "found": false,
+            "value": null
+          },
+          "-1": {
+            "found": true,
+            "value": "-1"
+          },
+          "01": {
+            "found": true,
+            "value": "01"
+          },
+          "4294967295": {
+            "found": true,
+            "value": "4294967295"
+          },
+          "a": {
+            "found": true,
+            "value": "edited"
+          },
+          "__proto__": {
+            "found": true,
+            "value": "__proto__"
+          },
+          "constructor": {
+            "found": true,
+            "value": "constructor"
+          },
+          "-0": {
+            "found": true,
+            "value": "-0"
+          },
+          "1e0": {
+            "found": true,
+            "value": "1e0"
+          },
+          "0002": {
+            "found": true,
+            "value": "0002"
+          },
+          "absent": {
+            "found": false,
+            "value": null
+          }
+        }
+      }
+    },
+    {
+      "phase": "index_overwrite",
+      "expected": {
+        "length": 3,
+        "keys": [
+          "0",
+          "1",
+          "2",
+          "-1",
+          "01",
+          "4294967295",
+          "a",
+          "__proto__",
+          "constructor",
+          "-0",
+          "1e0",
+          "0002"
+        ],
+        "indexKeys": [
+          0,
+          1,
+          2
+        ],
+        "wire": "[\"initial\",\"edited\",\"2\"]",
+        "lookups": {
+          "0": {
+            "found": true,
+            "value": "initial"
+          },
+          "1": {
+            "found": true,
+            "value": "edited"
+          },
+          "2": {
+            "found": true,
+            "value": "2"
+          },
+          "3": {
+            "found": false,
+            "value": null
+          },
+          "-1": {
+            "found": true,
+            "value": "-1"
+          },
+          "01": {
+            "found": true,
+            "value": "01"
+          },
+          "4294967295": {
+            "found": true,
+            "value": "4294967295"
+          },
+          "a": {
+            "found": true,
+            "value": "a"
+          },
+          "__proto__": {
+            "found": true,
+            "value": "__proto__"
+          },
+          "constructor": {
+            "found": true,
+            "value": "constructor"
+          },
+          "-0": {
+            "found": true,
+            "value": "-0"
+          },
+          "1e0": {
+            "found": true,
+            "value": "1e0"
+          },
+          "0002": {
+            "found": true,
+            "value": "0002"
+          },
+          "absent": {
+            "found": false,
+            "value": null
+          }
+        }
+      }
+    },
+    {
+      "phase": "delete_reinsert",
+      "expected": {
+        "length": 3,
+        "keys": [
+          "0",
+          "1",
+          "2",
+          "01",
+          "4294967295",
+          "a",
+          "__proto__",
+          "constructor",
+          "-0",
+          "1e0",
+          "0002",
+          "-1"
+        ],
+        "indexKeys": [
+          0,
+          1,
+          2
+        ],
+        "wire": "[\"initial\",\"1\",\"2\"]",
+        "lookups": {
+          "0": {
+            "found": true,
+            "value": "initial"
+          },
+          "1": {
+            "found": true,
+            "value": "1"
+          },
+          "2": {
+            "found": true,
+            "value": "2"
+          },
+          "3": {
+            "found": false,
+            "value": null
+          },
+          "-1": {
+            "found": true,
+            "value": "edited"
+          },
+          "01": {
+            "found": true,
+            "value": "01"
+          },
+          "4294967295": {
+            "found": true,
+            "value": "4294967295"
+          },
+          "a": {
+            "found": true,
+            "value": "a"
+          },
+          "__proto__": {
+            "found": true,
+            "value": "__proto__"
+          },
+          "constructor": {
+            "found": true,
+            "value": "constructor"
+          },
+          "-0": {
+            "found": true,
+            "value": "-0"
+          },
+          "1e0": {
+            "found": true,
+            "value": "1e0"
+          },
+          "0002": {
+            "found": true,
+            "value": "0002"
+          },
+          "absent": {
+            "found": false,
+            "value": null
+          }
+        }
+      }
+    },
+    {
+      "phase": "delete_index",
+      "expected": {
+        "length": 3,
+        "keys": [
+          "0",
+          "2",
+          "-1",
+          "01",
+          "4294967295",
+          "a",
+          "__proto__",
+          "constructor",
+          "-0",
+          "1e0",
+          "0002"
+        ],
+        "indexKeys": [
+          0,
+          2
+        ],
+        "wire": "[\"initial\",null,\"2\"]",
+        "lookups": {
+          "0": {
+            "found": true,
+            "value": "initial"
+          },
+          "1": {
+            "found": false,
+            "value": null
+          },
+          "2": {
+            "found": true,
+            "value": "2"
+          },
+          "3": {
+            "found": false,
+            "value": null
+          },
+          "-1": {
+            "found": true,
+            "value": "-1"
+          },
+          "01": {
+            "found": true,
+            "value": "01"
+          },
+          "4294967295": {
+            "found": true,
+            "value": "4294967295"
+          },
+          "a": {
+            "found": true,
+            "value": "a"
+          },
+          "__proto__": {
+            "found": true,
+            "value": "__proto__"
+          },
+          "constructor": {
+            "found": true,
+            "value": "constructor"
+          },
+          "-0": {
+            "found": true,
+            "value": "-0"
+          },
+          "1e0": {
+            "found": true,
+            "value": "1e0"
+          },
+          "0002": {
+            "found": true,
+            "value": "0002"
+          },
+          "absent": {
+            "found": false,
+            "value": null
+          }
+        }
+      }
+    },
+    {
+      "phase": "shrink",
+      "expected": {
+        "length": 1,
+        "keys": [
+          "0",
+          "-1",
+          "01",
+          "4294967295",
+          "a",
+          "__proto__",
+          "constructor",
+          "-0",
+          "1e0",
+          "0002"
+        ],
+        "indexKeys": [
+          0
+        ],
+        "wire": "[\"initial\"]",
+        "lookups": {
+          "0": {
+            "found": true,
+            "value": "initial"
+          },
+          "1": {
+            "found": false,
+            "value": null
+          },
+          "2": {
+            "found": false,
+            "value": null
+          },
+          "3": {
+            "found": false,
+            "value": null
+          },
+          "-1": {
+            "found": true,
+            "value": "-1"
+          },
+          "01": {
+            "found": true,
+            "value": "01"
+          },
+          "4294967295": {
+            "found": true,
+            "value": "4294967295"
+          },
+          "a": {
+            "found": true,
+            "value": "a"
+          },
+          "__proto__": {
+            "found": true,
+            "value": "__proto__"
+          },
+          "constructor": {
+            "found": true,
+            "value": "constructor"
+          },
+          "-0": {
+            "found": true,
+            "value": "-0"
+          },
+          "1e0": {
+            "found": true,
+            "value": "1e0"
+          },
+          "0002": {
+            "found": true,
+            "value": "0002"
+          },
+          "absent": {
+            "found": false,
+            "value": null
+          }
+        }
+      }
+    },
+    {
+      "phase": "grow",
+      "expected": {
+        "length": 5,
+        "keys": [
+          "0",
+          "1",
+          "2",
+          "-1",
+          "01",
+          "4294967295",
+          "a",
+          "__proto__",
+          "constructor",
+          "-0",
+          "1e0",
+          "0002"
+        ],
+        "indexKeys": [
+          0,
+          1,
+          2
+        ],
+        "wire": "[\"initial\",\"1\",\"2\",null,null]",
+        "lookups": {
+          "0": {
+            "found": true,
+            "value": "initial"
+          },
+          "1": {
+            "found": true,
+            "value": "1"
+          },
+          "2": {
+            "found": true,
+            "value": "2"
+          },
+          "3": {
+            "found": false,
+            "value": null
+          },
+          "-1": {
+            "found": true,
+            "value": "-1"
+          },
+          "01": {
+            "found": true,
+            "value": "01"
+          },
+          "4294967295": {
+            "found": true,
+            "value": "4294967295"
+          },
+          "a": {
+            "found": true,
+            "value": "a"
+          },
+          "__proto__": {
+            "found": true,
+            "value": "__proto__"
+          },
+          "constructor": {
+            "found": true,
+            "value": "constructor"
+          },
+          "-0": {
+            "found": true,
+            "value": "-0"
+          },
+          "1e0": {
+            "found": true,
+            "value": "1e0"
+          },
+          "0002": {
+            "found": true,
+            "value": "0002"
+          },
+          "absent": {
+            "found": false,
+            "value": null
+          }
+        }
+      }
+    },
+    {
+      "phase": "clone",
+      "expected": {
+        "error": "Species construction did not get a valid constructor"
+      }
+    },
+    {
+      "phase": "clone_default",
+      "expected": {
+        "length": 3,
+        "keys": [
+          "0",
+          "1",
+          "2"
+        ],
+        "indexKeys": [
+          0,
+          1,
+          2
+        ],
+        "wire": "[\"initial\",\"1\",\"2\"]",
+        "lookups": {
+          "0": {
+            "found": true,
+            "value": "initial"
+          },
+          "1": {
+            "found": true,
+            "value": "1"
+          },
+          "2": {
+            "found": true,
+            "value": "2"
+          },
+          "3": {
+            "found": false,
+            "value": null
+          },
+          "-1": {
+            "found": false,
+            "value": null
+          },
+          "01": {
+            "found": false,
+            "value": null
+          },
+          "4294967295": {
+            "found": false,
+            "value": null
+          },
+          "a": {
+            "found": false,
+            "value": null
+          },
+          "__proto__": {
+            "found": false,
+            "value": null
+          },
+          "constructor": {
+            "found": false,
+            "value": null
+          },
+          "-0": {
+            "found": false,
+            "value": null
+          },
+          "1e0": {
+            "found": false,
+            "value": null
+          },
+          "0002": {
+            "found": false,
+            "value": null
+          },
+          "absent": {
+            "found": false,
+            "value": null
+          }
+        }
+      }
+    },
+    {
+      "phase": "clone_object",
+      "expected": {
+        "length": 3,
+        "keys": [
+          "0",
+          "1",
+          "2"
+        ],
+        "indexKeys": [
+          0,
+          1,
+          2
+        ],
+        "wire": "[\"initial\",\"1\",\"2\"]",
+        "lookups": {
+          "0": {
+            "found": true,
+            "value": "initial"
+          },
+          "1": {
+            "found": true,
+            "value": "1"
+          },
+          "2": {
+            "found": true,
+            "value": "2"
+          },
+          "3": {
+            "found": false,
+            "value": null
+          },
+          "-1": {
+            "found": false,
+            "value": null
+          },
+          "01": {
+            "found": false,
+            "value": null
+          },
+          "4294967295": {
+            "found": false,
+            "value": null
+          },
+          "a": {
+            "found": false,
+            "value": null
+          },
+          "__proto__": {
+            "found": false,
+            "value": null
+          },
+          "constructor": {
+            "found": false,
+            "value": null
+          },
+          "-0": {
+            "found": false,
+            "value": null
+          },
+          "1e0": {
+            "found": false,
+            "value": null
+          },
+          "0002": {
+            "found": false,
+            "value": null
+          },
+          "absent": {
+            "found": false,
+            "value": null
+          }
+        }
+      }
+    },
+    {
+      "phase": "clone_undefined",
+      "expected": {
+        "length": 3,
+        "keys": [
+          "0",
+          "1",
+          "2"
+        ],
+        "indexKeys": [
+          0,
+          1,
+          2
+        ],
+        "wire": "[\"initial\",\"1\",\"2\"]",
+        "lookups": {
+          "0": {
+            "found": true,
+            "value": "initial"
+          },
+          "1": {
+            "found": true,
+            "value": "1"
+          },
+          "2": {
+            "found": true,
+            "value": "2"
+          },
+          "3": {
+            "found": false,
+            "value": null
+          },
+          "-1": {
+            "found": false,
+            "value": null
+          },
+          "01": {
+            "found": false,
+            "value": null
+          },
+          "4294967295": {
+            "found": false,
+            "value": null
+          },
+          "a": {
+            "found": false,
+            "value": null
+          },
+          "__proto__": {
+            "found": false,
+            "value": null
+          },
+          "constructor": {
+            "found": false,
+            "value": null
+          },
+          "-0": {
+            "found": false,
+            "value": null
+          },
+          "1e0": {
+            "found": false,
+            "value": null
+          },
+          "0002": {
+            "found": false,
+            "value": null
+          },
+          "absent": {
+            "found": false,
+            "value": null
+          }
+        }
+      }
+    },
+    {
+      "phase": "decode_grow",
+      "expected": {
+        "length": 5,
+        "keys": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "indexKeys": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "wire": "[\"initial\",\"1\",\"2\",null,null]",
+        "lookups": {
+          "0": {
+            "found": true,
+            "value": "initial"
+          },
+          "1": {
+            "found": true,
+            "value": "1"
+          },
+          "2": {
+            "found": true,
+            "value": "2"
+          },
+          "3": {
+            "found": true,
+            "value": null
+          },
+          "-1": {
+            "found": false,
+            "value": null
+          },
+          "01": {
+            "found": false,
+            "value": null
+          },
+          "4294967295": {
+            "found": false,
+            "value": null
+          },
+          "a": {
+            "found": false,
+            "value": null
+          },
+          "__proto__": {
+            "found": false,
+            "value": null
+          },
+          "constructor": {
+            "found": false,
+            "value": null
+          },
+          "-0": {
+            "found": false,
+            "value": null
+          },
+          "1e0": {
+            "found": false,
+            "value": null
+          },
+          "0002": {
+            "found": false,
+            "value": null
+          },
+          "absent": {
+            "found": false,
+            "value": null
+          }
+        }
+      }
+    },
+    {
+      "phase": "decode_delete",
+      "expected": {
+        "length": 3,
+        "keys": [
+          "0",
+          "1",
+          "2"
+        ],
+        "indexKeys": [
+          0,
+          1,
+          2
+        ],
+        "wire": "[\"initial\",null,\"2\"]",
+        "lookups": {
+          "0": {
+            "found": true,
+            "value": "initial"
+          },
+          "1": {
+            "found": true,
+            "value": null
+          },
+          "2": {
+            "found": true,
+            "value": "2"
+          },
+          "3": {
+            "found": false,
+            "value": null
+          },
+          "-1": {
+            "found": false,
+            "value": null
+          },
+          "01": {
+            "found": false,
+            "value": null
+          },
+          "4294967295": {
+            "found": false,
+            "value": null
+          },
+          "a": {
+            "found": false,
+            "value": null
+          },
+          "__proto__": {
+            "found": false,
+            "value": null
+          },
+          "constructor": {
+            "found": false,
+            "value": null
+          },
+          "-0": {
+            "found": false,
+            "value": null
+          },
+          "1e0": {
+            "found": false,
+            "value": null
+          },
+          "0002": {
+            "found": false,
+            "value": null
+          },
+          "absent": {
+            "found": false,
+            "value": null
+          }
+        }
+      }
+    }
+  ],
+  "agents": [
+    {
+      "subject": "messages",
+      "expected": {
+        "failed": {
+          "events": [
+            "message_start",
+            "message_end",
+            "turn_end",
+            "agent_end"
+          ],
+          "requests": 0,
+          "streaming": false,
+          "error": "Species construction did not get a valid constructor",
+          "messages": [
+            {
+              "role": "assistant",
+              "timestamp": 1000,
+              "error": "Species construction did not get a valid constructor"
+            }
+          ]
+        },
+        "recovered": {
+          "events": [
+            "message_start",
+            "message_end",
+            "turn_end",
+            "agent_end",
+            "agent_start",
+            "turn_start",
+            "message_start",
+            "message_end",
+            "message_start",
+            "message_end",
+            "turn_end",
+            "agent_end"
+          ],
+          "requests": 1,
+          "streaming": false,
+          "error": null,
+          "messages": [
+            {
+              "role": "assistant",
+              "timestamp": 1000,
+              "error": "Species construction did not get a valid constructor"
+            },
+            {
+              "role": "user",
+              "timestamp": 1,
+              "error": null
+            },
+            {
+              "role": "assistant",
+              "timestamp": 2,
+              "error": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "subject": "tools",
+      "expected": {
+        "failed": {
+          "events": [
+            "message_start",
+            "message_end",
+            "turn_end",
+            "agent_end"
+          ],
+          "requests": 0,
+          "streaming": false,
+          "error": "Species construction did not get a valid constructor",
+          "messages": [
+            {
+              "role": "assistant",
+              "timestamp": 1000,
+              "error": "Species construction did not get a valid constructor"
+            }
+          ]
+        },
+        "recovered": {
+          "events": [
+            "message_start",
+            "message_end",
+            "turn_end",
+            "agent_end",
+            "agent_start",
+            "turn_start",
+            "message_start",
+            "message_end",
+            "message_start",
+            "message_end",
+            "turn_end",
+            "agent_end"
+          ],
+          "requests": 1,
+          "streaming": false,
+          "error": null,
+          "messages": [
+            {
+              "role": "assistant",
+              "timestamp": 1000,
+              "error": "Species construction did not get a valid constructor"
+            },
+            {
+              "role": "user",
+              "timestamp": 1,
+              "error": null
+            },
+            {
+              "role": "assistant",
+              "timestamp": 2,
+              "error": null
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

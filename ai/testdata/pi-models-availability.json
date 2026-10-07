@@ -1,0 +1,6329 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "runtime": "Bun 1.3.14",
+  "source": {
+    "git_blob": "d8693c978c0f424808f70647f97f92fef6617e7d",
+    "sha256": "4739010c7e4f7596607b1dd495b9d5ab6cd921e29f55c5c331259a04b7253269",
+    "mode": "100644"
+  },
+  "cases": [
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "none",
+        "operation": "check"
+      },
+      "result": {
+        "absent": true
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "none",
+        "operation": "chat"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "none",
+        "operation": "all"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "none",
+        "operation": "image"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "check"
+      },
+      "result": {
+        "value": {
+          "source": "checked",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "image"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "resolve",
+        "operation": "check"
+      },
+      "result": {
+        "value": {
+          "source": "resolved",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "resolve",
+        "operation": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "absent": true
+          }
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "resolve",
+        "operation": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "absent": true
+          }
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "resolve",
+        "operation": "image"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "absent": true
+          }
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "oauth",
+        "operation": "check"
+      },
+      "result": {
+        "absent": true
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "oauth",
+        "operation": "chat"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "oauth",
+        "operation": "all"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "oauth",
+        "operation": "image"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "check"
+      },
+      "result": {
+        "value": {
+          "source": "checked",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "image"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "none",
+        "operation": "check"
+      },
+      "result": {
+        "absent": true
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "none",
+        "operation": "chat"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "none",
+        "operation": "all"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "none",
+        "operation": "image"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "check",
+        "operation": "check"
+      },
+      "result": {
+        "value": {
+          "source": "checked",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "check",
+        "operation": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "check",
+        "operation": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "check",
+        "operation": "image"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "resolve",
+        "operation": "check"
+      },
+      "result": {
+        "value": {
+          "source": "resolved",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "resolve",
+        "operation": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "absent": true
+          }
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "resolve",
+        "operation": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "absent": true
+          }
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "resolve",
+        "operation": "image"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "absent": true
+          }
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "oauth",
+        "operation": "check"
+      },
+      "result": {
+        "absent": true
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "oauth",
+        "operation": "chat"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "oauth",
+        "operation": "all"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "oauth",
+        "operation": "image"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "both",
+        "operation": "check"
+      },
+      "result": {
+        "value": {
+          "source": "checked",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "both",
+        "operation": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "both",
+        "operation": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": null
+        },
+        "handlers": "both",
+        "operation": "image"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "none",
+        "operation": "check"
+      },
+      "result": {
+        "absent": true
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "none",
+        "operation": "chat"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "none",
+        "operation": "all"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "none",
+        "operation": "image"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "check",
+        "operation": "check"
+      },
+      "result": {
+        "value": {
+          "source": "checked",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "check",
+        "operation": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "check",
+        "operation": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "check",
+        "operation": "image"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "resolve",
+        "operation": "check"
+      },
+      "result": {
+        "value": {
+          "source": "resolved",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "resolve",
+        "operation": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          }
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "resolve",
+        "operation": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          }
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "resolve",
+        "operation": "image"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          }
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "oauth",
+        "operation": "check"
+      },
+      "result": {
+        "absent": true
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "oauth",
+        "operation": "chat"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "oauth",
+        "operation": "all"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "oauth",
+        "operation": "image"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "check"
+      },
+      "result": {
+        "value": {
+          "source": "checked",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "image"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "none",
+        "operation": "check"
+      },
+      "result": {
+        "absent": true
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "none",
+        "operation": "chat"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "none",
+        "operation": "all"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "none",
+        "operation": "image"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "check",
+        "operation": "check"
+      },
+      "result": {
+        "absent": true
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "check",
+        "operation": "chat"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "check",
+        "operation": "all"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "check",
+        "operation": "image"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "resolve",
+        "operation": "check"
+      },
+      "result": {
+        "value": {
+          "source": "OAuth",
+          "type": "oauth"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "resolve",
+        "operation": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "resolve",
+        "operation": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "resolve",
+        "operation": "image"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "oauth",
+        "operation": "check"
+      },
+      "result": {
+        "value": {
+          "source": "OAuth",
+          "type": "oauth"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "oauth",
+        "operation": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "oauth",
+        "operation": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "oauth",
+        "operation": "image"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "check"
+      },
+      "result": {
+        "value": {
+          "source": "OAuth",
+          "type": "oauth"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "image"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "none",
+        "operation": "check"
+      },
+      "result": {
+        "absent": true
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "none",
+        "operation": "chat"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "none",
+        "operation": "all"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "none",
+        "operation": "image"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "check",
+        "operation": "check"
+      },
+      "result": {
+        "value": {
+          "source": "checked",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "check",
+        "operation": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "check",
+        "operation": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "check",
+        "operation": "image"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "resolve",
+        "operation": "check"
+      },
+      "result": {
+        "absent": true
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "resolve",
+        "operation": "chat"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "resolve",
+        "operation": "all"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "resolve",
+        "operation": "image"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "oauth",
+        "operation": "check"
+      },
+      "result": {
+        "absent": true
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "oauth",
+        "operation": "chat"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "oauth",
+        "operation": "all"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "oauth",
+        "operation": "image"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "both",
+        "operation": "check"
+      },
+      "result": {
+        "value": {
+          "source": "checked",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "both",
+        "operation": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "both",
+        "operation": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "unknown"
+          }
+        },
+        "handlers": "both",
+        "operation": "image"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models",
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models",
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "image",
+        "policy": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models",
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "image",
+        "policy": "chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models",
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models",
+        {
+          "allFilter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models",
+        {
+          "allFilter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "image",
+        "policy": "all"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models",
+        {
+          "allFilter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "image",
+        "policy": "all"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models",
+        {
+          "allFilter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "both"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "both"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "both"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models",
+        {
+          "allFilter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "both"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models",
+        {
+          "allFilter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "image",
+        "policy": "both"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models",
+        {
+          "allFilter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "image",
+        "policy": "both"
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models",
+        {
+          "allFilter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "nil-chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "nil-chat"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "nil-chat"
+      },
+      "result": {
+        "error": {
+          "message": "null is not an object (evaluating 'provider.filterModels(provider.getModels(), credential).map')"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models",
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "nil-chat"
+      },
+      "result": {
+        "error": {
+          "message": "null is not an object (evaluating 'provider.filterModels(provider.getModels(), credential).map')"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models",
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "image",
+        "policy": "nil-chat"
+      },
+      "result": {
+        "error": {
+          "message": "null is not an object (evaluating 'provider.filterModels(provider.getModels(), credential).map')"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models",
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "image",
+        "policy": "nil-chat"
+      },
+      "result": {
+        "error": {
+          "message": "null is not an object (evaluating 'provider.filterModels(provider.getModels(), credential).map')"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models",
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "nil-all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "nil-all"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "nil-all"
+      },
+      "result": {
+        "value": [
+          null
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models",
+        {
+          "allFilter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "nil-all"
+      },
+      "result": {
+        "value": [
+          null
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models",
+        {
+          "allFilter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "image",
+        "policy": "nil-all"
+      },
+      "result": {
+        "error": {
+          "message": "null is not an object (evaluating 'model.type')"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models",
+        {
+          "allFilter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "image",
+        "policy": "nil-all"
+      },
+      "result": {
+        "error": {
+          "message": "null is not an object (evaluating 'model.type')"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models",
+        {
+          "allFilter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "sparse"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "sparse"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "sparse"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models",
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "sparse"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models",
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "stored"
+          }
+        },
+        "handlers": "both",
+        "operation": "image",
+        "policy": "sparse"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "aborted": false
+        },
+        "all-models",
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "api_key",
+              "key": "stored"
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "old",
+            "expires": 0
+          }
+        },
+        "handlers": "both",
+        "operation": "image",
+        "policy": "sparse"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        "all-models",
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "oauth",
+              "access": "old",
+              "expires": 0
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "check",
+        "policy": "both",
+        "failure": "read"
+      },
+      "result": {
+        "error": {
+          "message": "Credential store read failed for p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "both",
+        "failure": "read"
+      },
+      "result": {
+        "error": {
+          "message": "Credential store read failed for p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "both",
+        "failure": "read"
+      },
+      "result": {
+        "error": {
+          "message": "Credential store read failed for p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "check",
+        "policy": "both",
+        "failure": "check"
+      },
+      "result": {
+        "error": {
+          "message": "API key auth check failed for provider p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "both",
+        "failure": "check"
+      },
+      "result": {
+        "error": {
+          "message": "API key auth check failed for provider p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "both",
+        "failure": "check"
+      },
+      "result": {
+        "error": {
+          "message": "API key auth check failed for provider p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "resolve",
+        "operation": "check",
+        "policy": "both",
+        "failure": "resolve"
+      },
+      "result": {
+        "error": {
+          "message": "API key auth failed for provider p: resolve failed",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "resolve",
+        "operation": "chat",
+        "policy": "both",
+        "failure": "resolve"
+      },
+      "result": {
+        "error": {
+          "message": "API key auth failed for provider p: resolve failed",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "resolve",
+        "operation": "all",
+        "policy": "both",
+        "failure": "resolve"
+      },
+      "result": {
+        "error": {
+          "message": "API key auth failed for provider p: resolve failed",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "check",
+        "policy": "both",
+        "failure": "models"
+      },
+      "result": {
+        "value": {
+          "source": "checked",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "both",
+        "failure": "models"
+      },
+      "result": {
+        "error": {
+          "message": "models failed"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "both",
+        "failure": "models"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models",
+        {
+          "allFilter": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "check",
+        "policy": "both",
+        "failure": "all-models"
+      },
+      "result": {
+        "value": {
+          "source": "checked",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "both",
+        "failure": "all-models"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "models",
+        {
+          "filter": {
+            "absent": true
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "both",
+        "failure": "all-models"
+      },
+      "result": {
+        "error": {
+          "message": "all models failed"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "check",
+        "policy": "both",
+        "failure": "filter"
+      },
+      "result": {
+        "value": {
+          "source": "checked",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "both",
+        "failure": "filter"
+      },
+      "result": {
+        "error": {
+          "message": "filter failed"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "models",
+        {
+          "filter": {
+            "absent": true
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "both",
+        "failure": "filter"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models",
+        {
+          "allFilter": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "check",
+        "policy": "both",
+        "failure": "all-filter"
+      },
+      "result": {
+        "value": {
+          "source": "checked",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "chat",
+        "policy": "both",
+        "failure": "all-filter"
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "models",
+        {
+          "filter": {
+            "absent": true
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "both",
+        "operation": "all",
+        "policy": "both",
+        "failure": "all-filter"
+      },
+      "result": {
+        "error": {
+          "message": "all filter failed"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models",
+        {
+          "allFilter": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "resolve",
+        "operation": "check",
+        "policy": "both",
+        "failure": "second-read"
+      },
+      "result": {
+        "error": {
+          "message": "Credential store read failed for p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "resolve",
+        "operation": "chat",
+        "policy": "both",
+        "failure": "second-read"
+      },
+      "result": {
+        "error": {
+          "message": "Credential store read failed for p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "resolve",
+        "operation": "all",
+        "policy": "both",
+        "failure": "second-read"
+      },
+      "result": {
+        "error": {
+          "message": "Credential store read failed for p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "check",
+        "checkResult": {
+          "absent": true
+        }
+      },
+      "result": {
+        "absent": true
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "checkResult": {
+          "absent": true
+        }
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "check",
+        "checkResult": {
+          "value": null
+        }
+      },
+      "result": {
+        "value": null
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "checkResult": {
+          "value": null
+        }
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "check",
+        "checkResult": {
+          "value": false
+        }
+      },
+      "result": {
+        "value": false
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "checkResult": {
+          "value": false
+        }
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "check",
+        "checkResult": {
+          "value": 0
+        }
+      },
+      "result": {
+        "value": 0
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "checkResult": {
+          "value": 0
+        }
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "check",
+        "checkResult": {
+          "value": {
+            "source": "custom",
+            "type": "api_key"
+          }
+        }
+      },
+      "result": {
+        "value": {
+          "source": "custom",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "checkResult": {
+          "value": {
+            "source": "custom",
+            "type": "api_key"
+          }
+        }
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "check",
+        "target": {
+          "absent": true
+        },
+        "abort": false
+      },
+      "result": {
+        "value": {
+          "source": "checked",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "target": {
+          "absent": true
+        },
+        "abort": false
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "check",
+        "target": {
+          "absent": true
+        },
+        "abort": true
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": []
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "target": {
+          "absent": true
+        },
+        "abort": true
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": []
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "check",
+        "target": {
+          "value": ""
+        },
+        "abort": false
+      },
+      "result": {
+        "absent": true
+      },
+      "log": []
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "target": {
+          "value": ""
+        },
+        "abort": false
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "check",
+        "target": {
+          "value": ""
+        },
+        "abort": true
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": []
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "target": {
+          "value": ""
+        },
+        "abort": true
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": []
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "check",
+        "target": {
+          "value": "missing"
+        },
+        "abort": false
+      },
+      "result": {
+        "absent": true
+      },
+      "log": []
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "target": {
+          "value": "missing"
+        },
+        "abort": false
+      },
+      "result": {
+        "value": []
+      },
+      "log": []
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "check",
+        "target": {
+          "value": "missing"
+        },
+        "abort": true
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": []
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "target": {
+          "value": "missing"
+        },
+        "abort": true
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": []
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "check",
+        "target": {
+          "value": "p"
+        },
+        "abort": false
+      },
+      "result": {
+        "value": {
+          "source": "checked",
+          "type": "api_key"
+        }
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "target": {
+          "value": "p"
+        },
+        "abort": false
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "check",
+        "target": {
+          "value": "p"
+        },
+        "abort": true
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": []
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "target": {
+          "value": "p"
+        },
+        "abort": true
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": []
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "chat",
+        "allModels": null
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "allModels": null
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models",
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "chat",
+        "allModels": []
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "allModels": []
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "chat",
+        "allModels": [
+          {
+            "id": "only",
+            "provider": "p"
+          }
+        ]
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "c2",
+            "provider": "p",
+            "type": "chat"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "absent": true
+        },
+        "handlers": "check",
+        "operation": "all",
+        "allModels": [
+          {
+            "id": "only",
+            "provider": "p"
+          }
+        ]
+      },
+      "result": {
+        "value": [
+          {
+            "id": "only",
+            "provider": "p"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "check": {
+            "absent": true
+          },
+          "aborted": false
+        },
+        "all-models"
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "first"
+          }
+        },
+        "handlers": "resolve",
+        "operation": "all",
+        "policy": "chat",
+        "second": {
+          "type": "oauth",
+          "access": "second",
+          "expires": 1000000000000000
+        }
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "toAuth": {
+            "type": "oauth",
+            "access": "second",
+            "expires": 1000000000000000
+          }
+        },
+        "all-models",
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "api_key",
+              "key": "first"
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "first"
+          }
+        },
+        "handlers": "resolve",
+        "operation": "all",
+        "policy": "chat",
+        "second": {
+          "type": "unknown"
+        }
+      },
+      "result": {
+        "value": []
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        }
+      ]
+    },
+    {
+      "input": {
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "first"
+          }
+        },
+        "handlers": "resolve",
+        "operation": "all",
+        "policy": "chat",
+        "second": {
+          "type": "api_key",
+          "key": "second"
+        }
+      },
+      "result": {
+        "value": [
+          {
+            "id": "c1",
+            "provider": "p"
+          },
+          {
+            "id": "i",
+            "provider": "p",
+            "type": "image"
+          },
+          {
+            "id": "k",
+            "provider": "p",
+            "type": "classifier"
+          },
+          {
+            "id": "f",
+            "provider": "p",
+            "type": "future"
+          }
+        ]
+      },
+      "log": [
+        {
+          "read": "p"
+        },
+        {
+          "read": "p"
+        },
+        {
+          "resolve": {
+            "value": {
+              "type": "api_key",
+              "key": "second"
+            }
+          }
+        },
+        "all-models",
+        "models",
+        {
+          "filter": {
+            "value": {
+              "type": "api_key",
+              "key": "first"
+            }
+          },
+          "sameModels": true
+        }
+      ]
+    }
+  ],
+  "concurrent": {
+    "readsBefore": 0,
+    "result": [
+      {
+        "id": "p-model",
+        "provider": "p"
+      },
+      {
+        "id": "q-model",
+        "provider": "q"
+      }
+    ],
+    "sameModels": true,
+    "registry": [
+      "q"
+    ],
+    "readsAfter": 2
+  },
+  "cancelled": {
+    "result": {
+      "error": {
+        "message": "cancelled"
+      }
+    },
+    "readsBefore": 0,
+    "readsAfter": 1
+  },
+  "ids": {
+    "labels": [
+      "nan",
+      "missing",
+      "undefined",
+      "shared",
+      "null",
+      "zero",
+      "one",
+      "image"
+    ],
+    "sharedModel": true,
+    "newUnion": true
+  }
+}

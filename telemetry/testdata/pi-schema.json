@@ -1,0 +1,659 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "schemas": [
+    {
+      "version": 1,
+      "spans": {
+        "operation": {
+          "description": "Operation",
+          "parents": {
+            "kind": "root_or_external"
+          },
+          "startAttributes": {
+            "kind": {
+              "type": "string",
+              "description": "Kind",
+              "required": true,
+              "values": [
+                "read",
+                "write"
+              ],
+              "examples": [
+                "read"
+              ],
+              "sensitive": false,
+              "cardinality": "low"
+            },
+            "count": {
+              "type": "number",
+              "description": "Count",
+              "required": false,
+              "values": [
+                0,
+                1,
+                2.5
+              ],
+              "examples": [
+                2.5
+              ]
+            },
+            "enabled": {
+              "type": "boolean",
+              "description": "Enabled",
+              "required": false,
+              "values": [
+                false,
+                true
+              ],
+              "examples": [
+                false
+              ]
+            },
+            "labels": {
+              "type": "string[]",
+              "description": "Labels",
+              "required": false,
+              "elementValues": [
+                "a",
+                "b"
+              ],
+              "examples": [
+                [],
+                [
+                  "a",
+                  "b"
+                ]
+              ],
+              "sensitive": true,
+              "cardinality": "high"
+            },
+            "counts": {
+              "type": "number[]",
+              "description": "Counts",
+              "required": false,
+              "elementValues": [
+                0,
+                1.5
+              ],
+              "examples": [
+                [
+                  0,
+                  1.5
+                ]
+              ]
+            },
+            "flags": {
+              "type": "boolean[]",
+              "description": "Flags",
+              "required": false,
+              "elementValues": [
+                true,
+                false
+              ],
+              "examples": [
+                [
+                  true,
+                  false
+                ]
+              ]
+            }
+          },
+          "endAttributes": {
+            "done": {
+              "type": "boolean",
+              "description": "Done"
+            }
+          },
+          "events": {
+            "result": {
+              "description": "Result",
+              "attributes": {
+                "outcome": {
+                  "type": "string",
+                  "description": "Outcome",
+                  "required": true,
+                  "values": [
+                    "ok",
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "status": {
+            "default": "ok",
+            "errorWhen": "Operation fails"
+          }
+        }
+      }
+    },
+    {
+      "version": 3,
+      "spans": {
+        "request": {
+          "description": "Request",
+          "parents": {
+            "kind": "spans",
+            "spans": [
+              "operation"
+            ]
+          },
+          "startAttributes": {
+            "provider": {
+              "type": "string",
+              "description": "Provider",
+              "required": true
+            }
+          },
+          "endAttributes": {
+            "response": {
+              "type": "string",
+              "description": "Response"
+            }
+          },
+          "events": {},
+          "status": {
+            "default": "ok",
+            "errorWhen": "Request fails"
+          }
+        },
+        "empty": {
+          "description": "Empty",
+          "parents": {
+            "kind": "spans",
+            "spans": []
+          },
+          "startAttributes": {},
+          "endAttributes": {},
+          "status": {
+            "default": "ok",
+            "errorWhen": "Fails"
+          }
+        },
+        "any": {
+          "description": "Any",
+          "parents": {
+            "kind": "any"
+          },
+          "startAttributes": {},
+          "endAttributes": {},
+          "status": {
+            "default": "ok",
+            "errorWhen": "Fails"
+          }
+        }
+      }
+    }
+  ],
+  "cases": [
+    {
+      "input": {
+        "name": "cross-schema parentage",
+        "actions": [
+          {
+            "op": "span",
+            "name": "operation",
+            "attributes": {
+              "kind": "read"
+            },
+            "actions": [
+              {
+                "op": "span",
+                "name": "request",
+                "attributes": {
+                  "provider": "example"
+                },
+                "actions": [
+                  {
+                    "op": "attributes",
+                    "attributes": {
+                      "response": "cached"
+                    }
+                  },
+                  {
+                    "op": "event",
+                    "name": "result",
+                    "attributes": {
+                      "outcome": "ok"
+                    }
+                  }
+                ],
+                "result": 42
+              }
+            ],
+            "result": 42
+          }
+        ]
+      },
+      "expected": {
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "operation",
+            "attributes": {
+              "kind": "read"
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 2,
+            "parentId": 1,
+            "name": "request",
+            "attributes": {
+              "provider": "example",
+              "response": "cached"
+            },
+            "events": [
+              {
+                "name": "result",
+                "attributes": {
+                  "outcome": "ok"
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ],
+        "results": [
+          {
+            "name": "request",
+            "result": 42
+          },
+          {
+            "name": "operation",
+            "result": 42
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "runtime does not validate vocabulary",
+        "actions": [
+          {
+            "op": "span",
+            "name": "undeclared",
+            "attributes": {
+              "unknown": 1
+            },
+            "actions": [
+              {
+                "op": "event",
+                "name": "undeclared-event",
+                "attributes": {
+                  "extra": true
+                }
+              },
+              {
+                "op": "attributes",
+                "attributes": {
+                  "extra": "retained"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "undeclared",
+            "attributes": {
+              "unknown": 1,
+              "extra": "retained"
+            },
+            "events": [
+              {
+                "name": "undeclared-event",
+                "attributes": {
+                  "extra": true
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ],
+        "results": [
+          {
+            "name": "undeclared",
+            "result": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "saved child starter after settlement",
+        "actions": [
+          {
+            "op": "span",
+            "name": "operation",
+            "actions": []
+          },
+          {
+            "op": "span",
+            "name": "late",
+            "target": "operation",
+            "actions": [
+              {
+                "op": "span",
+                "name": "late-grandchild"
+              }
+            ],
+            "result": 7
+          }
+        ]
+      },
+      "expected": {
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "operation",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ],
+        "results": [
+          {
+            "name": "operation",
+            "result": null
+          },
+          {
+            "name": "late-grandchild",
+            "result": null
+          },
+          {
+            "name": "late",
+            "result": 7
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "no ambient parent",
+        "actions": [
+          {
+            "op": "span",
+            "name": "operation",
+            "actions": [
+              {
+                "op": "span",
+                "name": "request",
+                "actions": [
+                  {
+                    "op": "span",
+                    "name": "root",
+                    "target": "root"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "op": "span",
+            "name": "second-root"
+          }
+        ]
+      },
+      "expected": {
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "operation",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 3
+          },
+          {
+            "id": 2,
+            "parentId": 1,
+            "name": "request",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 3,
+            "parentId": null,
+            "name": "root",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 4,
+            "parentId": null,
+            "name": "second-root",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 4
+          }
+        ],
+        "results": [
+          {
+            "name": "root",
+            "result": null
+          },
+          {
+            "name": "request",
+            "result": null
+          },
+          {
+            "name": "operation",
+            "result": null
+          },
+          {
+            "name": "second-root",
+            "result": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "no-op typed starter",
+        "noop": true,
+        "actions": [
+          {
+            "op": "span",
+            "name": "operation",
+            "actions": [
+              {
+                "op": "span",
+                "name": "request",
+                "result": 9
+              }
+            ],
+            "result": 42
+          }
+        ]
+      },
+      "expected": {
+        "spans": [],
+        "results": [
+          {
+            "name": "request",
+            "result": 9
+          },
+          {
+            "name": "operation",
+            "result": 42
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "duplicate schemas have no runtime validation",
+        "duplicate": true,
+        "actions": [
+          {
+            "op": "span",
+            "name": "operation",
+            "attributes": {
+              "kind": "write"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "operation",
+            "attributes": {
+              "kind": "write"
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ],
+        "results": [
+          {
+            "name": "operation",
+            "result": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "schema input is not read",
+        "unreadable": true,
+        "actions": [
+          {
+            "op": "span",
+            "name": "operation",
+            "actions": [
+              {
+                "op": "span",
+                "name": "request"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "operation",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 2,
+            "parentId": 1,
+            "name": "request",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ],
+        "results": [
+          {
+            "name": "request",
+            "result": null
+          },
+          {
+            "name": "operation",
+            "result": null
+          }
+        ]
+      }
+    }
+  ],
+  "conformance": [
+    {
+      "group": "callback lifecycle",
+      "name": "admits once synchronously and preserves the result"
+    },
+    {
+      "group": "callback lifecycle",
+      "name": "preserves synchronous and asynchronous rejection values"
+    },
+    {
+      "group": "status",
+      "name": "uses last explicit status without automatic overwrite"
+    },
+    {
+      "group": "recording",
+      "name": "merges attributes and records ordered events"
+    },
+    {
+      "group": "recording",
+      "name": "ignores failed attribute calls atomically"
+    },
+    {
+      "group": "recording",
+      "name": "makes calls after settlement inert"
+    },
+    {
+      "group": "parentage",
+      "name": "records nested and concurrent child relationships"
+    },
+    {
+      "group": "passivity",
+      "name": "suppresses unreadable telemetry payload failures"
+    },
+    {
+      "group": "passivity",
+      "name": "ignores failed status calls atomically"
+    }
+  ]
+}

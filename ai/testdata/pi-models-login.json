@@ -1,0 +1,3056 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "runtime": "Bun 1.3.14",
+  "source": {
+    "git_blob": "d8693c978c0f424808f70647f97f92fef6617e7d",
+    "sha256": "4739010c7e4f7596607b1dd495b9d5ab6cd921e29f55c5c331259a04b7253269",
+    "mode": "100644"
+  },
+  "cases": [
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "none",
+        "provider": false,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Unknown provider: p",
+          "code": "provider"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "none",
+        "provider": false,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "none",
+        "provider": true,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Provider does not support api_key login",
+          "code": "auth"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "none",
+        "provider": true,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "api",
+        "provider": false,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Unknown provider: p",
+          "code": "provider"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "api",
+        "provider": false,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "api",
+        "provider": true,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "value": {
+          "type": "api_key",
+          "key": "new",
+          "access": "token"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "new",
+          "access": "token"
+        }
+      },
+      "sameStored": true
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "api",
+        "provider": true,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "oauth",
+        "provider": false,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Unknown provider: p",
+          "code": "provider"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "oauth",
+        "provider": false,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "oauth",
+        "provider": true,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Provider does not support api_key login",
+          "code": "auth"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "oauth",
+        "provider": true,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "both",
+        "provider": false,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Unknown provider: p",
+          "code": "provider"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "both",
+        "provider": false,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "both",
+        "provider": true,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "value": {
+          "type": "api_key",
+          "key": "new",
+          "access": "token"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "new",
+          "access": "token"
+        }
+      },
+      "sameStored": true
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "both",
+        "provider": true,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "ambient",
+        "provider": false,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Unknown provider: p",
+          "code": "provider"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "ambient",
+        "provider": false,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "ambient",
+        "provider": true,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Provider does not support api_key login",
+          "code": "auth"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "api_key",
+        "handlers": "ambient",
+        "provider": true,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "none",
+        "provider": false,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Unknown provider: p",
+          "code": "provider"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "none",
+        "provider": false,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "none",
+        "provider": true,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Provider does not support oauth login",
+          "code": "auth"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "none",
+        "provider": true,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "api",
+        "provider": false,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Unknown provider: p",
+          "code": "provider"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "api",
+        "provider": false,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "api",
+        "provider": true,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Provider does not support oauth login",
+          "code": "auth"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "api",
+        "provider": true,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "oauth",
+        "provider": false,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Unknown provider: p",
+          "code": "provider"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "oauth",
+        "provider": false,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "oauth",
+        "provider": true,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "value": {
+          "type": "oauth",
+          "key": "new",
+          "access": "token"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device",
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "oauth",
+          "key": "new",
+          "access": "token"
+        }
+      },
+      "sameStored": true
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "oauth",
+        "provider": true,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": false,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Unknown provider: p",
+          "code": "provider"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": false,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "value": {
+          "type": "oauth",
+          "key": "new",
+          "access": "token"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device",
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "oauth",
+          "key": "new",
+          "access": "token"
+        }
+      },
+      "sameStored": true
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "ambient",
+        "provider": false,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Unknown provider: p",
+          "code": "provider"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "ambient",
+        "provider": false,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "ambient",
+        "provider": true,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Provider does not support oauth login",
+          "code": "auth"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "ambient",
+        "provider": true,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "none",
+        "provider": false,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Unknown provider: p",
+          "code": "provider"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "none",
+        "provider": false,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "none",
+        "provider": true,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Provider does not support other login",
+          "code": "auth"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "none",
+        "provider": true,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "api",
+        "provider": false,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Unknown provider: p",
+          "code": "provider"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "api",
+        "provider": false,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "api",
+        "provider": true,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "value": {
+          "type": "other",
+          "key": "new",
+          "access": "token"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "other",
+          "key": "new",
+          "access": "token"
+        }
+      },
+      "sameStored": true
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "api",
+        "provider": true,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "oauth",
+        "provider": false,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Unknown provider: p",
+          "code": "provider"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "oauth",
+        "provider": false,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "oauth",
+        "provider": true,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Provider does not support other login",
+          "code": "auth"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "oauth",
+        "provider": true,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "both",
+        "provider": false,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Unknown provider: p",
+          "code": "provider"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "both",
+        "provider": false,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "both",
+        "provider": true,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "value": {
+          "type": "other",
+          "key": "new",
+          "access": "token"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "other",
+          "key": "new",
+          "access": "token"
+        }
+      },
+      "sameStored": true
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "both",
+        "provider": true,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "ambient",
+        "provider": false,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Unknown provider: p",
+          "code": "provider"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "ambient",
+        "provider": false,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "ambient",
+        "provider": true,
+        "abort": false,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "Provider does not support other login",
+          "code": "auth"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "other",
+        "handlers": "ambient",
+        "provider": true,
+        "abort": true,
+        "credential": {
+          "value": {
+            "type": "other",
+            "key": "new",
+            "access": "token"
+          }
+        }
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "absent": true
+        }
+      },
+      "result": {
+        "absent": true
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device",
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "absent": true
+        },
+        "failure": "login"
+      },
+      "result": {
+        "error": {
+          "message": "login failed"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device"
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "absent": true
+        },
+        "failure": "modify"
+      },
+      "result": {
+        "error": {
+          "message": "Credential store modify failed for p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device",
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "value": null
+        }
+      },
+      "result": {
+        "value": null
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device",
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": null
+      },
+      "sameStored": true
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "value": null
+        },
+        "failure": "login"
+      },
+      "result": {
+        "error": {
+          "message": "login failed"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device"
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "value": null
+        },
+        "failure": "modify"
+      },
+      "result": {
+        "error": {
+          "message": "Credential store modify failed for p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device",
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "value": false
+        }
+      },
+      "result": {
+        "value": false
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device",
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": false
+      },
+      "sameStored": true
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "value": false
+        },
+        "failure": "login"
+      },
+      "result": {
+        "error": {
+          "message": "login failed"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device"
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "value": false
+        },
+        "failure": "modify"
+      },
+      "result": {
+        "error": {
+          "message": "Credential store modify failed for p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device",
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "value": "raw"
+        }
+      },
+      "result": {
+        "value": "raw"
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device",
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": "raw"
+      },
+      "sameStored": true
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "value": "raw"
+        },
+        "failure": "login"
+      },
+      "result": {
+        "error": {
+          "message": "login failed"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device"
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "value": "raw"
+        },
+        "failure": "modify"
+      },
+      "result": {
+        "error": {
+          "message": "Credential store modify failed for p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device",
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new"
+          }
+        }
+      },
+      "result": {
+        "value": {
+          "type": "api_key",
+          "key": "new"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device",
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "new"
+        }
+      },
+      "sameStored": true
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new"
+          }
+        },
+        "failure": "login"
+      },
+      "result": {
+        "error": {
+          "message": "login failed"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device"
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "value": {
+            "type": "api_key",
+            "key": "new"
+          }
+        },
+        "failure": "modify"
+      },
+      "result": {
+        "error": {
+          "message": "Credential store modify failed for p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device",
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "new"
+          }
+        }
+      },
+      "result": {
+        "value": {
+          "type": "oauth",
+          "access": "new"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device",
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "oauth",
+          "access": "new"
+        }
+      },
+      "sameStored": true
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "new"
+          }
+        },
+        "failure": "login"
+      },
+      "result": {
+        "error": {
+          "message": "login failed"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device"
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "type": "oauth",
+        "handlers": "both",
+        "provider": true,
+        "credential": {
+          "value": {
+            "type": "oauth",
+            "access": "new"
+          }
+        },
+        "failure": "modify"
+      },
+      "result": {
+        "error": {
+          "message": "Credential store modify failed for p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "login": true,
+          "aborted": false,
+          "promptIdentity": true,
+          "notifyIdentity": true,
+          "optionsIdentity": true
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "login"
+          }
+        },
+        {
+          "prompt": {
+            "type": "text",
+            "message": "confirm"
+          }
+        },
+        "device",
+        {
+          "modify": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "operation": "logout",
+        "provider": false,
+        "abort": false
+      },
+      "result": {
+        "absent": true
+      },
+      "log": [
+        {
+          "delete": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "absent": true
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "operation": "logout",
+        "provider": false,
+        "abort": false,
+        "failure": "delete"
+      },
+      "result": {
+        "error": {
+          "message": "Credential store delete failed for p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "delete": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "operation": "logout",
+        "provider": false,
+        "abort": true
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "operation": "logout",
+        "provider": false,
+        "abort": true,
+        "failure": "delete"
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "operation": "logout",
+        "provider": true,
+        "abort": false
+      },
+      "result": {
+        "absent": true
+      },
+      "log": [
+        {
+          "delete": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "absent": true
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "operation": "logout",
+        "provider": true,
+        "abort": false,
+        "failure": "delete"
+      },
+      "result": {
+        "error": {
+          "message": "Credential store delete failed for p",
+          "code": "auth"
+        }
+      },
+      "log": [
+        {
+          "delete": "p",
+          "aborted": false
+        }
+      ],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "operation": "logout",
+        "provider": true,
+        "abort": true
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    },
+    {
+      "input": {
+        "operation": "logout",
+        "provider": true,
+        "abort": true,
+        "failure": "delete"
+      },
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "log": [],
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      },
+      "sameStored": false
+    }
+  ],
+  "races": [
+    {
+      "stage": "login",
+      "fail": false,
+      "settledBeforeRelease": true,
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      }
+    },
+    {
+      "stage": "login",
+      "fail": true,
+      "settledBeforeRelease": true,
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      }
+    },
+    {
+      "stage": "queued",
+      "fail": false,
+      "settledBeforeRelease": true,
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "new"
+        }
+      }
+    },
+    {
+      "stage": "queued",
+      "fail": true,
+      "settledBeforeRelease": true,
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      }
+    },
+    {
+      "stage": "active",
+      "fail": false,
+      "settledBeforeRelease": false,
+      "result": {
+        "value": {
+          "type": "api_key",
+          "key": "new"
+        }
+      },
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "new"
+        }
+      }
+    },
+    {
+      "stage": "active",
+      "fail": true,
+      "settledBeforeRelease": false,
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      }
+    },
+    {
+      "stage": "delete",
+      "fail": false,
+      "settledBeforeRelease": false,
+      "result": {
+        "absent": true
+      },
+      "stored": {
+        "absent": true
+      }
+    },
+    {
+      "stage": "delete",
+      "fail": true,
+      "settledBeforeRelease": false,
+      "result": {
+        "error": {
+          "message": "cancelled"
+        }
+      },
+      "stored": {
+        "value": {
+          "type": "api_key",
+          "key": "old"
+        }
+      }
+    }
+  ],
+  "queuedStore": {
+    "login": {
+      "error": {
+        "message": "cancelled"
+      }
+    },
+    "logout": {
+      "absent": true
+    },
+    "callbacks": 0,
+    "stored": {
+      "absent": true
+    }
+  }
+}

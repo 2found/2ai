@@ -1,0 +1,4495 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "partialJSONVersion": "0.1.7",
+  "partialJSONSHA256": "23f750aa1170c830b7ef180135852317886cc58ce7d2597e5eeee044539072c7",
+  "json": [
+    {
+      "input": "",
+      "repaired": "",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": " ",
+      "repaired": " ",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "﻿",
+      "repaired": "﻿",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "",
+      "repaired": "",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{}",
+      "repaired": "{}",
+      "complete": {},
+      "completeError": false,
+      "streaming": {}
+    },
+    {
+      "input": "[]",
+      "repaired": "[]",
+      "complete": [],
+      "completeError": false,
+      "streaming": []
+    },
+    {
+      "input": "null",
+      "repaired": "null",
+      "complete": null,
+      "completeError": false,
+      "streaming": null
+    },
+    {
+      "input": "n",
+      "repaired": "n",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "nu",
+      "repaired": "nu",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "nul",
+      "repaired": "nul",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "true",
+      "repaired": "true",
+      "complete": true,
+      "completeError": false,
+      "streaming": true
+    },
+    {
+      "input": "tr",
+      "repaired": "tr",
+      "complete": null,
+      "completeError": true,
+      "streaming": true
+    },
+    {
+      "input": "false",
+      "repaired": "false",
+      "complete": false,
+      "completeError": false,
+      "streaming": false
+    },
+    {
+      "input": "fa",
+      "repaired": "fa",
+      "complete": null,
+      "completeError": true,
+      "streaming": false
+    },
+    {
+      "input": "Infinity",
+      "repaired": "Infinity",
+      "complete": null,
+      "completeError": true,
+      "streaming": null
+    },
+    {
+      "input": "Inf",
+      "repaired": "Inf",
+      "complete": null,
+      "completeError": true,
+      "streaming": null
+    },
+    {
+      "input": "-Inf",
+      "repaired": "-Inf",
+      "complete": null,
+      "completeError": true,
+      "streaming": null
+    },
+    {
+      "input": "NaN",
+      "repaired": "NaN",
+      "complete": null,
+      "completeError": true,
+      "streaming": null
+    },
+    {
+      "input": "N",
+      "repaired": "N",
+      "complete": null,
+      "completeError": true,
+      "streaming": null
+    },
+    {
+      "input": "-",
+      "repaired": "-",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "1e",
+      "repaired": "1e",
+      "complete": null,
+      "completeError": true,
+      "streaming": 1
+    },
+    {
+      "input": "1e-",
+      "repaired": "1e-",
+      "complete": null,
+      "completeError": true,
+      "streaming": 1
+    },
+    {
+      "input": "1E",
+      "repaired": "1E",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "1E-",
+      "repaired": "1E-",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "12.",
+      "repaired": "12.",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "01",
+      "repaired": "01",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "1e999",
+      "repaired": "1e999",
+      "complete": null,
+      "completeError": false,
+      "streaming": null
+    },
+    {
+      "input": "-1e999",
+      "repaired": "-1e999",
+      "complete": null,
+      "completeError": false,
+      "streaming": null
+    },
+    {
+      "input": "null trailing",
+      "repaired": "null trailing",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "true trailing",
+      "repaired": "true trailing",
+      "complete": null,
+      "completeError": true,
+      "streaming": true
+    },
+    {
+      "input": "{} trailing",
+      "repaired": "{} trailing",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "\"hello\" trailing",
+      "repaired": "\"hello\" trailing",
+      "complete": null,
+      "completeError": true,
+      "streaming": "hello"
+    },
+    {
+      "input": "[1,2] trailing",
+      "repaired": "[1,2] trailing",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        1,
+        2
+      ]
+    },
+    {
+      "input": "{\"a\" 1}",
+      "repaired": "{\"a\" 1}",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"a\"::1}",
+      "repaired": "{\"a\"::1}",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"a\":1 \"b\":2}",
+      "repaired": "{\"a\":1 \"b\":2}",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "[1 2]",
+      "repaired": "[1 2]",
+      "complete": null,
+      "completeError": true,
+      "streaming": []
+    },
+    {
+      "input": "{\"a\":true \"b\":false}",
+      "repaired": "{\"a\":true \"b\":false}",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": true,
+        "b": false
+      }
+    },
+    {
+      "input": "{\"a\":1e}",
+      "repaired": "{\"a\":1e}",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": 1
+      }
+    },
+    {
+      "input": "{\"a\":1E}",
+      "repaired": "{\"a\":1E}",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"a\":NaN",
+      "repaired": "{\"a\":NaN",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": null
+      }
+    },
+    {
+      "input": "{\"a\":\"bad\\xescape\"}",
+      "repaired": "{\"a\":\"bad\\\\xescape\"}",
+      "complete": {
+        "a": "bad\\xescape"
+      },
+      "completeError": false,
+      "streaming": {
+        "a": "bad\\xescape"
+      }
+    },
+    {
+      "input": "{\"a\":\"line\nnext\tand\u0001\"}",
+      "repaired": "{\"a\":\"line\\nnext\\tand\\u0001\"}",
+      "complete": {
+        "a": "line\nnext\tand\u0001"
+      },
+      "completeError": false,
+      "streaming": {
+        "a": "line\nnext\tand\u0001"
+      }
+    },
+    {
+      "input": "{\"a\":\"trailing\\",
+      "repaired": "{\"a\":\"trailing\\\\",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": "trailing"
+      }
+    },
+    {
+      "input": "{\"a\":\"bad\\uZZZZ\"}",
+      "repaired": "{\"a\":\"bad\\uZZZZ\"}",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"__proto__\":{\"x\":1}",
+      "repaired": "{\"__proto__\":{\"x\":1}",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"__proto__\":{\"x\":1}}",
+      "repaired": "{\"__proto__\":{\"x\":1}}",
+      "complete": {
+        "__proto__": {
+          "x": 1
+        }
+      },
+      "completeError": false,
+      "streaming": {
+        "__proto__": {
+          "x": 1
+        }
+      }
+    },
+    {
+      "input": "{\"constructor\":1,",
+      "repaired": "{\"constructor\":1,",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "constructor": 1
+      }
+    },
+    {
+      "input": "{\"a\":1,\"a\":2,",
+      "repaired": "{\"a\":1,\"a\":2,",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": 2
+      }
+    },
+    {
+      "input": "{\"2\":2,\"10\":10,\"1\":1,\"b\":4,",
+      "repaired": "{\"2\":2,\"10\":10,\"1\":1,\"b\":4,",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "1": 1,
+        "2": 2,
+        "10": 10,
+        "b": 4
+      }
+    },
+    {
+      "input": "\"\\ud83d\"",
+      "repaired": "\"\\ud83d\"",
+      "complete": "\ud83d",
+      "completeError": false,
+      "streaming": "\ud83d"
+    },
+    {
+      "input": "\"\\ude42\"",
+      "repaired": "\"\\ude42\"",
+      "complete": "\ude42",
+      "completeError": false,
+      "streaming": "\ude42"
+    },
+    {
+      "input": "\"\\ud83d\\ude42\"",
+      "repaired": "\"\\ud83d\\ude42\"",
+      "complete": "🙂",
+      "completeError": false,
+      "streaming": "🙂"
+    },
+    {
+      "input": "{",
+      "repaired": "{",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"",
+      "repaired": "{\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"p",
+      "repaired": "{\"p",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"pa",
+      "repaired": "{\"pa",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"pat",
+      "repaired": "{\"pat",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"path",
+      "repaired": "{\"path",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"path\"",
+      "repaired": "{\"path\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"path\":",
+      "repaired": "{\"path\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"path\":\"",
+      "repaired": "{\"path\":\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": ""
+      }
+    },
+    {
+      "input": "{\"path\":\"R",
+      "repaired": "{\"path\":\"R",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "R"
+      }
+    },
+    {
+      "input": "{\"path\":\"RE",
+      "repaired": "{\"path\":\"RE",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "RE"
+      }
+    },
+    {
+      "input": "{\"path\":\"REA",
+      "repaired": "{\"path\":\"REA",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "REA"
+      }
+    },
+    {
+      "input": "{\"path\":\"READ",
+      "repaired": "{\"path\":\"READ",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "READ"
+      }
+    },
+    {
+      "input": "{\"path\":\"READM",
+      "repaired": "{\"path\":\"READM",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "READM"
+      }
+    },
+    {
+      "input": "{\"path\":\"README",
+      "repaired": "{\"path\":\"README",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README"
+      }
+    },
+    {
+      "input": "{\"path\":\"README.",
+      "repaired": "{\"path\":\"README.",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README."
+      }
+    },
+    {
+      "input": "{\"path\":\"README.m",
+      "repaired": "{\"path\":\"README.m",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.m"
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md",
+      "repaired": "{\"path\":\"README.md",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md"
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\"",
+      "repaired": "{\"path\":\"README.md\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md"
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",",
+      "repaired": "{\"path\":\"README.md\",",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md"
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"",
+      "repaired": "{\"path\":\"README.md\",\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md"
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"l",
+      "repaired": "{\"path\":\"README.md\",\"l",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md"
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"li",
+      "repaired": "{\"path\":\"README.md\",\"li",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md"
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"lin",
+      "repaired": "{\"path\":\"README.md\",\"lin",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md"
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"line",
+      "repaired": "{\"path\":\"README.md\",\"line",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md"
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"lines",
+      "repaired": "{\"path\":\"README.md\",\"lines",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md"
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"lines\"",
+      "repaired": "{\"path\":\"README.md\",\"lines\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md"
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"lines\":",
+      "repaired": "{\"path\":\"README.md\",\"lines\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md"
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"lines\":[",
+      "repaired": "{\"path\":\"README.md\",\"lines\":[",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md",
+        "lines": []
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"lines\":[1",
+      "repaired": "{\"path\":\"README.md\",\"lines\":[1",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md",
+        "lines": [
+          1
+        ]
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"lines\":[1,",
+      "repaired": "{\"path\":\"README.md\",\"lines\":[1,",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md",
+        "lines": [
+          1
+        ]
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"lines\":[1,2",
+      "repaired": "{\"path\":\"README.md\",\"lines\":[1,2",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md",
+        "lines": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"lines\":[1,2,",
+      "repaired": "{\"path\":\"README.md\",\"lines\":[1,2,",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md",
+        "lines": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"lines\":[1,2,3",
+      "repaired": "{\"path\":\"README.md\",\"lines\":[1,2,3",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md",
+        "lines": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"lines\":[1,2,3]",
+      "repaired": "{\"path\":\"README.md\",\"lines\":[1,2,3]",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "path": "README.md",
+        "lines": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "input": "{\"path\":\"README.md\",\"lines\":[1,2,3]}",
+      "repaired": "{\"path\":\"README.md\",\"lines\":[1,2,3]}",
+      "complete": {
+        "path": "README.md",
+        "lines": [
+          1,
+          2,
+          3
+        ]
+      },
+      "completeError": false,
+      "streaming": {
+        "path": "README.md",
+        "lines": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "input": "{\"n",
+      "repaired": "{\"n",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"ne",
+      "repaired": "{\"ne",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"nes",
+      "repaired": "{\"nes",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"nest",
+      "repaired": "{\"nest",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"neste",
+      "repaired": "{\"neste",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"nested",
+      "repaired": "{\"nested",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"nested\"",
+      "repaired": "{\"nested\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"nested\":",
+      "repaired": "{\"nested\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"nested\":{",
+      "repaired": "{\"nested\":{",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {}
+      }
+    },
+    {
+      "input": "{\"nested\":{\"",
+      "repaired": "{\"nested\":{\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {}
+      }
+    },
+    {
+      "input": "{\"nested\":{\"n",
+      "repaired": "{\"nested\":{\"n",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {}
+      }
+    },
+    {
+      "input": "{\"nested\":{\"na",
+      "repaired": "{\"nested\":{\"na",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {}
+      }
+    },
+    {
+      "input": "{\"nested\":{\"nam",
+      "repaired": "{\"nested\":{\"nam",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {}
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name",
+      "repaired": "{\"nested\":{\"name",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {}
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\"",
+      "repaired": "{\"nested\":{\"name\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {}
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":",
+      "repaired": "{\"nested\":{\"name\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {}
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"",
+      "repaired": "{\"nested\":{\"name\":\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": ""
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"p",
+      "repaired": "{\"nested\":{\"name\":\"p",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "p"
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi",
+      "repaired": "{\"nested\":{\"name\":\"pi",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi"
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\"",
+      "repaired": "{\"nested\":{\"name\":\"pi\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi"
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",",
+      "repaired": "{\"nested\":{\"name\":\"pi\",",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi"
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi"
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"r",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"r",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi"
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"re",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"re",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi"
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"rea",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"rea",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi"
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"read",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"read",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi"
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi"
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\"",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi"
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi"
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":t",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":t",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":tr",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":tr",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":tru",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":tru",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"e",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"e",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"em",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"em",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"emp",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"emp",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empt",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empt",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\"",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":n",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":n",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":nu",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":nu",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":nul",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":nul",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null}",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null}",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"i",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"i",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"it",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"it",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"ite",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"ite",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"item",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"item",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\"",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        }
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": []
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {}
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{}",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{}",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {}
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {}
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          []
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[]",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[]",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          []
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          []
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],f",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],f",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],fa",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],fa",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],fal",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],fal",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],fals",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],fals",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false,
+          -1
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false,
+          -1
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false,
+          -1,
+          0
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false,
+          -1
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.5",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.5",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false,
+          -1,
+          0.5
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.5,",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.5,",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false,
+          -1,
+          0.5
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.5,1",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.5,1",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false,
+          -1,
+          0.5,
+          1
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.5,1e",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.5,1e",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false,
+          -1,
+          0.5,
+          1
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.5,1e3",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.5,1e3",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false,
+          -1,
+          0.5,
+          1000
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.5,1e3]",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.5,1e3]",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false,
+          -1,
+          0.5,
+          1000
+        ]
+      }
+    },
+    {
+      "input": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.5,1e3]}",
+      "repaired": "{\"nested\":{\"name\":\"pi\",\"ready\":true,\"empty\":null},\"items\":[{},[],false,-1,0.5,1e3]}",
+      "complete": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false,
+          -1,
+          0.5,
+          1000
+        ]
+      },
+      "completeError": false,
+      "streaming": {
+        "nested": {
+          "name": "pi",
+          "ready": true,
+          "empty": null
+        },
+        "items": [
+          {},
+          [],
+          false,
+          -1,
+          0.5,
+          1000
+        ]
+      }
+    },
+    {
+      "input": "{\"c",
+      "repaired": "{\"c",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"co",
+      "repaired": "{\"co",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"com",
+      "repaired": "{\"com",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"comm",
+      "repaired": "{\"comm",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"comma",
+      "repaired": "{\"comma",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"comman",
+      "repaired": "{\"comman",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"command",
+      "repaired": "{\"command",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"command\"",
+      "repaired": "{\"command\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"command\":",
+      "repaired": "{\"command\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"command\":\"",
+      "repaired": "{\"command\":\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": ""
+      }
+    },
+    {
+      "input": "{\"command\":\"p",
+      "repaired": "{\"command\":\"p",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "p"
+      }
+    },
+    {
+      "input": "{\"command\":\"pr",
+      "repaired": "{\"command\":\"pr",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "pr"
+      }
+    },
+    {
+      "input": "{\"command\":\"pri",
+      "repaired": "{\"command\":\"pri",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "pri"
+      }
+    },
+    {
+      "input": "{\"command\":\"prin",
+      "repaired": "{\"command\":\"prin",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "prin"
+      }
+    },
+    {
+      "input": "{\"command\":\"print",
+      "repaired": "{\"command\":\"print",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "print"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf",
+      "repaired": "{\"command\":\"printf",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf ",
+      "repaired": "{\"command\":\"printf ",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\",
+      "repaired": "{\"command\":\"printf \\\\",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf "
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"",
+      "repaired": "{\"command\":\"printf \\\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"h",
+      "repaired": "{\"command\":\"printf \\\"h",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"h"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"he",
+      "repaired": "{\"command\":\"printf \\\"he",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"he"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hel",
+      "repaired": "{\"command\":\"printf \\\"hel",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hel"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hell",
+      "repaired": "{\"command\":\"printf \\\"hell",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hell"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello",
+      "repaired": "{\"command\":\"printf \\\"hello",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\",
+      "repaired": "{\"command\":\"printf \\\"hello\\\\",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\"",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"u",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"u",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"un",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"un",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"uni",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"uni",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unic",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unic",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unico",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unico",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicod",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicod",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\"",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": ""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\\\",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": ""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": ""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u0",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u0",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": ""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": ""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": ""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\\\",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\u",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\u",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud8",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud8",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α\ud83d"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\\\",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α\ud83d"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\u",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\u",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α\ud83d"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ud",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ud",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α\ud83d"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α\ud83d"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude4",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude4",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α\ud83d"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\"",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"s",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"s",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"sl",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"sl",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"sla",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"sla",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slas",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slas",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\"",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂",
+        "slash": ""
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂",
+        "slash": "C"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂",
+        "slash": "C:"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:\\",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:\\\\",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂",
+        "slash": "C:"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:\\\\",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:\\\\",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂",
+        "slash": "C:\\"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:\\\\t",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:\\\\t",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂",
+        "slash": "C:\\t"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:\\\\tm",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:\\\\tm",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂",
+        "slash": "C:\\tm"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:\\\\tmp",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:\\\\tmp",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂",
+        "slash": "C:\\tmp"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:\\\\tmp\"",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:\\\\tmp\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂",
+        "slash": "C:\\tmp"
+      }
+    },
+    {
+      "input": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:\\\\tmp\"}",
+      "repaired": "{\"command\":\"printf \\\"hello\\\"\",\"unicode\":\"\\u03b1\\ud83d\\ude42\",\"slash\":\"C:\\\\tmp\"}",
+      "complete": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂",
+        "slash": "C:\\tmp"
+      },
+      "completeError": false,
+      "streaming": {
+        "command": "printf \"hello\"",
+        "unicode": "α🙂",
+        "slash": "C:\\tmp"
+      }
+    },
+    {
+      "input": "{\"m",
+      "repaired": "{\"m",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"me",
+      "repaired": "{\"me",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"mes",
+      "repaired": "{\"mes",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"mess",
+      "repaired": "{\"mess",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"messa",
+      "repaired": "{\"messa",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"messag",
+      "repaired": "{\"messag",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"message",
+      "repaired": "{\"message",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"message\"",
+      "repaired": "{\"message\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"message\":",
+      "repaired": "{\"message\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"message\":\"",
+      "repaired": "{\"message\":\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": ""
+      }
+    },
+    {
+      "input": "{\"message\":\"X",
+      "repaired": "{\"message\":\"X",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "X"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xi",
+      "repaired": "{\"message\":\"Xi",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xi"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin",
+      "repaired": "{\"message\":\"Xin",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin ",
+      "repaired": "{\"message\":\"Xin ",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin c",
+      "repaired": "{\"message\":\"Xin c",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin c"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin ch",
+      "repaired": "{\"message\":\"Xin ch",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin ch"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chà",
+      "repaired": "{\"message\":\"Xin chà",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chà"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào",
+      "repaired": "{\"message\":\"Xin chào",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào ",
+      "repaired": "{\"message\":\"Xin chào ",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào \ud83d",
+      "repaired": "{\"message\":\"Xin chào \ud83d",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào \ud83d"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂",
+      "repaired": "{\"message\":\"Xin chào 🙂",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\"",
+      "repaired": "{\"message\":\"Xin chào 🙂\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",",
+      "repaired": "{\"message\":\"Xin chào 🙂\",",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"e",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"e",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"es",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"es",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"esc",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"esc",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"esca",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"esca",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escap",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escap",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escape",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escape",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\"",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": ""
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\\\",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\n",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\n",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\n"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\\\",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\t",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\t",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\t"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\"",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"l",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"l",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"li",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"li",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"lit",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"lit",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"lite",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"lite",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"liter",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"liter",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"litera",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"litera",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\"",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\":",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\":\"",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\":\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc",
+        "literal": ""
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\":\"<",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\":\"<",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc",
+        "literal": "<"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\":\"<>",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\":\"<>",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc",
+        "literal": "<>"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\":\"<>&",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\":\"<>&",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc",
+        "literal": "<>&"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\":\"<>&\"",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\":\"<>&\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc",
+        "literal": "<>&"
+      }
+    },
+    {
+      "input": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\":\"<>&\"}",
+      "repaired": "{\"message\":\"Xin chào 🙂\",\"escaped\":\"a\\nb\\tc\",\"literal\":\"<>&\"}",
+      "complete": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc",
+        "literal": "<>&"
+      },
+      "completeError": false,
+      "streaming": {
+        "message": "Xin chào 🙂",
+        "escaped": "a\nb\tc",
+        "literal": "<>&"
+      }
+    },
+    {
+      "input": "{\"a",
+      "repaired": "{\"a",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"a\"",
+      "repaired": "{\"a\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"a\":",
+      "repaired": "{\"a\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {}
+    },
+    {
+      "input": "{\"a\":f",
+      "repaired": "{\"a\":f",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false
+      }
+    },
+    {
+      "input": "{\"a\":fa",
+      "repaired": "{\"a\":fa",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false
+      }
+    },
+    {
+      "input": "{\"a\":fal",
+      "repaired": "{\"a\":fal",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false
+      }
+    },
+    {
+      "input": "{\"a\":fals",
+      "repaired": "{\"a\":fals",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false
+      }
+    },
+    {
+      "input": "{\"a\":false",
+      "repaired": "{\"a\":false",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false
+      }
+    },
+    {
+      "input": "{\"a\":false,",
+      "repaired": "{\"a\":false,",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false
+      }
+    },
+    {
+      "input": "{\"a\":false,\"",
+      "repaired": "{\"a\":false,\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b",
+      "repaired": "{\"a\":false,\"b",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\"",
+      "repaired": "{\"a\":false,\"b\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":",
+      "repaired": "{\"a\":false,\"b\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":n",
+      "repaired": "{\"a\":false,\"b\":n",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":nu",
+      "repaired": "{\"a\":false,\"b\":nu",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":nul",
+      "repaired": "{\"a\":false,\"b\":nul",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null",
+      "repaired": "{\"a\":false,\"b\":null",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,",
+      "repaired": "{\"a\":false,\"b\":null,",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"",
+      "repaired": "{\"a\":false,\"b\":null,\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c",
+      "repaired": "{\"a\":false,\"b\":null,\"c",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\"",
+      "repaired": "{\"a\":false,\"b\":null,\"c\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":t",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":t",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":tr",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":tr",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":tru",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":tru",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true,",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true,",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true,\"",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true,\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true,\"l",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true,\"l",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true,\"la",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true,\"la",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true,\"lar",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true,\"lar",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true,\"larg",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true,\"larg",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true,\"large",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true,\"large",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true,\"large\"",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true,\"large\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true,\"large\":",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true,\"large\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true,\"large\":1",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true,\"large\":1",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true,
+        "large": 1
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true,\"large\":1e",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true,\"large\":1e",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true,
+        "large": 1
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true,\"large\":1e9",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true,\"large\":1e9",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true,
+        "large": 1000000000
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true,\"large\":1e99",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true,\"large\":1e99",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true,
+        "large": 1e+99
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true,\"large\":1e999",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true,\"large\":1e999",
+      "complete": null,
+      "completeError": true,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true,
+        "large": null
+      }
+    },
+    {
+      "input": "{\"a\":false,\"b\":null,\"c\":true,\"large\":1e999}",
+      "repaired": "{\"a\":false,\"b\":null,\"c\":true,\"large\":1e999}",
+      "complete": {
+        "a": false,
+        "b": null,
+        "c": true,
+        "large": null
+      },
+      "completeError": false,
+      "streaming": {
+        "a": false,
+        "b": null,
+        "c": true,
+        "large": null
+      }
+    },
+    {
+      "input": "[",
+      "repaired": "[",
+      "complete": null,
+      "completeError": true,
+      "streaming": []
+    },
+    {
+      "input": "[\"",
+      "repaired": "[\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        ""
+      ]
+    },
+    {
+      "input": "[\"t",
+      "repaired": "[\"t",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "t"
+      ]
+    },
+    {
+      "input": "[\"te",
+      "repaired": "[\"te",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "te"
+      ]
+    },
+    {
+      "input": "[\"tex",
+      "repaired": "[\"tex",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "tex"
+      ]
+    },
+    {
+      "input": "[\"text",
+      "repaired": "[\"text",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text"
+      ]
+    },
+    {
+      "input": "[\"text\"",
+      "repaired": "[\"text\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text"
+      ]
+    },
+    {
+      "input": "[\"text\",",
+      "repaired": "[\"text\",",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text"
+      ]
+    },
+    {
+      "input": "[\"text\",1",
+      "repaired": "[\"text\",1",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        1
+      ]
+    },
+    {
+      "input": "[\"text\",12",
+      "repaired": "[\"text\",12",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        12
+      ]
+    },
+    {
+      "input": "[\"text\",123",
+      "repaired": "[\"text\",123",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123
+      ]
+    },
+    {
+      "input": "[\"text\",123.",
+      "repaired": "[\"text\",123.",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text"
+      ]
+    },
+    {
+      "input": "[\"text\",123.4",
+      "repaired": "[\"text\",123.4",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.4
+      ]
+    },
+    {
+      "input": "[\"text\",123.45",
+      "repaired": "[\"text\",123.45",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,",
+      "repaired": "[\"text\",123.45,",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-",
+      "repaired": "[\"text\",123.45,-",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7",
+      "repaired": "[\"text\",123.45,-7",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -7
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.",
+      "repaired": "[\"text\",123.45,-7.",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5",
+      "repaired": "[\"text\",123.45,-7.5",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -7.5
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e",
+      "repaired": "[\"text\",123.45,-7.5e",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -7.5
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-",
+      "repaired": "[\"text\",123.45,-7.5e-",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -7.5
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2",
+      "repaired": "[\"text\",123.45,-7.5e-2",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,",
+      "repaired": "[\"text\",123.45,-7.5e-2,",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,t",
+      "repaired": "[\"text\",123.45,-7.5e-2,t",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,tr",
+      "repaired": "[\"text\",123.45,-7.5e-2,tr",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,tru",
+      "repaired": "[\"text\",123.45,-7.5e-2,tru",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true",
+      "repaired": "[\"text\",123.45,-7.5e-2,true",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,n",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,n",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,nu",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,nu",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,nul",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,nul",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {}
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{\"",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {}
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{\"k",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{\"k",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {}
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{\"ke",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{\"ke",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {}
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{\"key",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{\"key",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {}
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{\"key\"",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{\"key\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {}
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {}
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {
+          "key": ""
+        }
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"v",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"v",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {
+          "key": "v"
+        }
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"va",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"va",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {
+          "key": "va"
+        }
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"val",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"val",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {
+          "key": "val"
+        }
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"valu",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"valu",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {
+          "key": "valu"
+        }
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"value",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"value",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {
+          "key": "value"
+        }
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"value\"",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"value\"",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {
+          "key": "value"
+        }
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"value\"}",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"value\"}",
+      "complete": null,
+      "completeError": true,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {
+          "key": "value"
+        }
+      ]
+    },
+    {
+      "input": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"value\"}]",
+      "repaired": "[\"text\",123.45,-7.5e-2,true,null,{\"key\":\"value\"}]",
+      "complete": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {
+          "key": "value"
+        }
+      ],
+      "completeError": false,
+      "streaming": [
+        "text",
+        123.45,
+        -0.075,
+        true,
+        null,
+        {
+          "key": "value"
+        }
+      ]
+    },
+    {
+      "input": "{\"control\":\"a\u0000b\"}",
+      "repaired": "{\"control\":\"a\\u0000b\"}",
+      "complete": {
+        "control": "a\u0000b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0000b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0001b\"}",
+      "repaired": "{\"control\":\"a\\u0001b\"}",
+      "complete": {
+        "control": "a\u0001b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0001b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0002b\"}",
+      "repaired": "{\"control\":\"a\\u0002b\"}",
+      "complete": {
+        "control": "a\u0002b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0002b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0003b\"}",
+      "repaired": "{\"control\":\"a\\u0003b\"}",
+      "complete": {
+        "control": "a\u0003b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0003b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0004b\"}",
+      "repaired": "{\"control\":\"a\\u0004b\"}",
+      "complete": {
+        "control": "a\u0004b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0004b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0005b\"}",
+      "repaired": "{\"control\":\"a\\u0005b\"}",
+      "complete": {
+        "control": "a\u0005b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0005b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0006b\"}",
+      "repaired": "{\"control\":\"a\\u0006b\"}",
+      "complete": {
+        "control": "a\u0006b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0006b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0007b\"}",
+      "repaired": "{\"control\":\"a\\u0007b\"}",
+      "complete": {
+        "control": "a\u0007b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0007b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\bb\"}",
+      "repaired": "{\"control\":\"a\\bb\"}",
+      "complete": {
+        "control": "a\bb"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\bb"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\tb\"}",
+      "repaired": "{\"control\":\"a\\tb\"}",
+      "complete": {
+        "control": "a\tb"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\tb"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\nb\"}",
+      "repaired": "{\"control\":\"a\\nb\"}",
+      "complete": {
+        "control": "a\nb"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\nb"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u000bb\"}",
+      "repaired": "{\"control\":\"a\\u000bb\"}",
+      "complete": {
+        "control": "a\u000bb"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u000bb"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\fb\"}",
+      "repaired": "{\"control\":\"a\\fb\"}",
+      "complete": {
+        "control": "a\fb"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\fb"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\rb\"}",
+      "repaired": "{\"control\":\"a\\rb\"}",
+      "complete": {
+        "control": "a\rb"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\rb"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u000eb\"}",
+      "repaired": "{\"control\":\"a\\u000eb\"}",
+      "complete": {
+        "control": "a\u000eb"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u000eb"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u000fb\"}",
+      "repaired": "{\"control\":\"a\\u000fb\"}",
+      "complete": {
+        "control": "a\u000fb"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u000fb"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0010b\"}",
+      "repaired": "{\"control\":\"a\\u0010b\"}",
+      "complete": {
+        "control": "a\u0010b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0010b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0011b\"}",
+      "repaired": "{\"control\":\"a\\u0011b\"}",
+      "complete": {
+        "control": "a\u0011b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0011b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0012b\"}",
+      "repaired": "{\"control\":\"a\\u0012b\"}",
+      "complete": {
+        "control": "a\u0012b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0012b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0013b\"}",
+      "repaired": "{\"control\":\"a\\u0013b\"}",
+      "complete": {
+        "control": "a\u0013b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0013b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0014b\"}",
+      "repaired": "{\"control\":\"a\\u0014b\"}",
+      "complete": {
+        "control": "a\u0014b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0014b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0015b\"}",
+      "repaired": "{\"control\":\"a\\u0015b\"}",
+      "complete": {
+        "control": "a\u0015b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0015b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0016b\"}",
+      "repaired": "{\"control\":\"a\\u0016b\"}",
+      "complete": {
+        "control": "a\u0016b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0016b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0017b\"}",
+      "repaired": "{\"control\":\"a\\u0017b\"}",
+      "complete": {
+        "control": "a\u0017b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0017b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0018b\"}",
+      "repaired": "{\"control\":\"a\\u0018b\"}",
+      "complete": {
+        "control": "a\u0018b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0018b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u0019b\"}",
+      "repaired": "{\"control\":\"a\\u0019b\"}",
+      "complete": {
+        "control": "a\u0019b"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u0019b"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u001ab\"}",
+      "repaired": "{\"control\":\"a\\u001ab\"}",
+      "complete": {
+        "control": "a\u001ab"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u001ab"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u001bb\"}",
+      "repaired": "{\"control\":\"a\\u001bb\"}",
+      "complete": {
+        "control": "a\u001bb"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u001bb"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u001cb\"}",
+      "repaired": "{\"control\":\"a\\u001cb\"}",
+      "complete": {
+        "control": "a\u001cb"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u001cb"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u001db\"}",
+      "repaired": "{\"control\":\"a\\u001db\"}",
+      "complete": {
+        "control": "a\u001db"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u001db"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u001eb\"}",
+      "repaired": "{\"control\":\"a\\u001eb\"}",
+      "complete": {
+        "control": "a\u001eb"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u001eb"
+      }
+    },
+    {
+      "input": "{\"control\":\"a\u001fb\"}",
+      "repaired": "{\"control\":\"a\\u001fb\"}",
+      "complete": {
+        "control": "a\u001fb"
+      },
+      "completeError": false,
+      "streaming": {
+        "control": "a\u001fb"
+      }
+    }
+  ]
+}

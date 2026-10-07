@@ -1,0 +1,4127 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": {
+          "replacement": true
+        },
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "value": "original"
+        },
+        "afterLocal": {
+          "value": "original"
+        },
+        "lateBefore": {
+          "replacement": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "before_null"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": null,
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "value": "original"
+        },
+        "afterLocal": {
+          "value": "original"
+        },
+        "lateBefore": null,
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "before_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "value": "original",
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "before_mutate_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "replacement": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "replacement": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "before_replace_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": {
+          "replacement": true,
+          "changed": true
+        },
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "value": "original"
+        },
+        "afterLocal": {
+          "value": "original"
+        },
+        "lateBefore": {
+          "replacement": true,
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "execute_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "value": "original",
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "execute_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "replacement": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": {
+          "value": "original"
+        },
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "replacement": true
+        },
+        "afterLocal": {
+          "value": "original"
+        },
+        "lateBefore": {
+          "value": "original"
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "after_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "value": "original",
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "after_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": {
+          "value": "original"
+        },
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "value": "original"
+        },
+        "afterLocal": {
+          "replacement": true
+        },
+        "lateBefore": {
+          "value": "original"
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "update_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "value": "original",
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "late_before_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "value": "original",
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "late_before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": {
+          "value": "original"
+        },
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "value": "original"
+        },
+        "afterLocal": {
+          "value": "original"
+        },
+        "lateBefore": {
+          "replacement": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original"
+        ],
+        "beforeLocal": [
+          "replacement"
+        ],
+        "executed": [
+          "original"
+        ],
+        "executeLocal": [
+          "original"
+        ],
+        "afterLocal": [
+          "original"
+        ],
+        "lateBefore": [
+          "replacement"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "before_null"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original"
+        ],
+        "beforeLocal": null,
+        "executed": [
+          "original"
+        ],
+        "executeLocal": [
+          "original"
+        ],
+        "afterLocal": [
+          "original"
+        ],
+        "lateBefore": null,
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "before_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original",
+              "changed"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original",
+              "changed"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original",
+              "changed"
+            ]
+          }
+        ],
+        "selected": [
+          "original",
+          "changed"
+        ],
+        "beforeLocal": [
+          "original",
+          "changed"
+        ],
+        "executed": [
+          "original",
+          "changed"
+        ],
+        "executeLocal": [
+          "original",
+          "changed"
+        ],
+        "afterLocal": [
+          "original",
+          "changed"
+        ],
+        "lateBefore": [
+          "original",
+          "changed"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "before_mutate_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original",
+              "changed"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original",
+              "changed"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original",
+              "changed"
+            ]
+          }
+        ],
+        "selected": [
+          "original",
+          "changed"
+        ],
+        "beforeLocal": [
+          "replacement"
+        ],
+        "executed": [
+          "original",
+          "changed"
+        ],
+        "executeLocal": [
+          "original",
+          "changed"
+        ],
+        "afterLocal": [
+          "original",
+          "changed"
+        ],
+        "lateBefore": [
+          "replacement"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "before_replace_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original"
+        ],
+        "beforeLocal": [
+          "replacement",
+          "changed"
+        ],
+        "executed": [
+          "original"
+        ],
+        "executeLocal": [
+          "original"
+        ],
+        "afterLocal": [
+          "original"
+        ],
+        "lateBefore": [
+          "replacement",
+          "changed"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "execute_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original",
+              "changed"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original",
+              "changed"
+            ]
+          }
+        ],
+        "selected": [
+          "original",
+          "changed"
+        ],
+        "beforeLocal": [
+          "original",
+          "changed"
+        ],
+        "executed": [
+          "original",
+          "changed"
+        ],
+        "executeLocal": [
+          "original",
+          "changed"
+        ],
+        "afterLocal": [
+          "original",
+          "changed"
+        ],
+        "lateBefore": [
+          "original",
+          "changed"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "execute_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "replacement"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original"
+        ],
+        "beforeLocal": [
+          "original"
+        ],
+        "executed": [
+          "original"
+        ],
+        "executeLocal": [
+          "replacement"
+        ],
+        "afterLocal": [
+          "original"
+        ],
+        "lateBefore": [
+          "original"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "after_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original",
+          "changed"
+        ],
+        "beforeLocal": [
+          "original",
+          "changed"
+        ],
+        "executed": [
+          "original",
+          "changed"
+        ],
+        "executeLocal": [
+          "original",
+          "changed"
+        ],
+        "afterLocal": [
+          "original",
+          "changed"
+        ],
+        "lateBefore": [
+          "original",
+          "changed"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "after_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original"
+        ],
+        "beforeLocal": [
+          "original"
+        ],
+        "executed": [
+          "original"
+        ],
+        "executeLocal": [
+          "original"
+        ],
+        "afterLocal": [
+          "replacement"
+        ],
+        "lateBefore": [
+          "original"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "number",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": 7
+          },
+          {
+            "stage": "execute",
+            "args": 7
+          },
+          {
+            "stage": "execute_after_update",
+            "args": 7
+          },
+          {
+            "stage": "after",
+            "args": 7
+          }
+        ],
+        "selected": 7,
+        "beforeLocal": 99,
+        "executed": 7,
+        "executeLocal": 7,
+        "afterLocal": 7,
+        "lateBefore": 99,
+        "raw": 7,
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "number",
+        "phase": "execute_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": 7
+          },
+          {
+            "stage": "execute",
+            "args": 7
+          },
+          {
+            "stage": "execute_after_update",
+            "args": 99
+          },
+          {
+            "stage": "after",
+            "args": 7
+          }
+        ],
+        "selected": 7,
+        "beforeLocal": 7,
+        "executed": 7,
+        "executeLocal": 99,
+        "afterLocal": 7,
+        "lateBefore": 7,
+        "raw": 7,
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "number",
+        "phase": "after_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": 7
+          },
+          {
+            "stage": "execute",
+            "args": 7
+          },
+          {
+            "stage": "execute_after_update",
+            "args": 7
+          },
+          {
+            "stage": "after",
+            "args": 7
+          }
+        ],
+        "selected": 7,
+        "beforeLocal": 7,
+        "executed": 7,
+        "executeLocal": 7,
+        "afterLocal": 99,
+        "lateBefore": 7,
+        "raw": 7,
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": {
+          "replacement": true
+        },
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "value": "original"
+        },
+        "afterLocal": {
+          "value": "original"
+        },
+        "lateBefore": {
+          "replacement": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "before_null"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": null,
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "value": "original"
+        },
+        "afterLocal": {
+          "value": "original"
+        },
+        "lateBefore": null,
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "before_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "value": "original",
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "before_mutate_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "replacement": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "replacement": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "before_replace_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": {
+          "replacement": true,
+          "changed": true
+        },
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "value": "original"
+        },
+        "afterLocal": {
+          "value": "original"
+        },
+        "lateBefore": {
+          "replacement": true,
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "execute_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "value": "original",
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "execute_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "replacement": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": {
+          "value": "original"
+        },
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "replacement": true
+        },
+        "afterLocal": {
+          "value": "original"
+        },
+        "lateBefore": {
+          "value": "original"
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "after_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "value": "original",
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "after_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": {
+          "value": "original"
+        },
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "value": "original"
+        },
+        "afterLocal": {
+          "replacement": true
+        },
+        "lateBefore": {
+          "value": "original"
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "update_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "value": "original",
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "late_before_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "value": "original",
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "late_before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": {
+          "value": "original"
+        },
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "value": "original"
+        },
+        "afterLocal": {
+          "value": "original"
+        },
+        "lateBefore": {
+          "replacement": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original"
+        ],
+        "beforeLocal": [
+          "replacement"
+        ],
+        "executed": [
+          "original"
+        ],
+        "executeLocal": [
+          "original"
+        ],
+        "afterLocal": [
+          "original"
+        ],
+        "lateBefore": [
+          "replacement"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "before_null"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original"
+        ],
+        "beforeLocal": null,
+        "executed": [
+          "original"
+        ],
+        "executeLocal": [
+          "original"
+        ],
+        "afterLocal": [
+          "original"
+        ],
+        "lateBefore": null,
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "before_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original",
+              "changed"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original",
+              "changed"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original",
+              "changed"
+            ]
+          }
+        ],
+        "selected": [
+          "original",
+          "changed"
+        ],
+        "beforeLocal": [
+          "original",
+          "changed"
+        ],
+        "executed": [
+          "original",
+          "changed"
+        ],
+        "executeLocal": [
+          "original",
+          "changed"
+        ],
+        "afterLocal": [
+          "original",
+          "changed"
+        ],
+        "lateBefore": [
+          "original",
+          "changed"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "before_mutate_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original",
+              "changed"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original",
+              "changed"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original",
+              "changed"
+            ]
+          }
+        ],
+        "selected": [
+          "original",
+          "changed"
+        ],
+        "beforeLocal": [
+          "replacement"
+        ],
+        "executed": [
+          "original",
+          "changed"
+        ],
+        "executeLocal": [
+          "original",
+          "changed"
+        ],
+        "afterLocal": [
+          "original",
+          "changed"
+        ],
+        "lateBefore": [
+          "replacement"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "before_replace_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original"
+        ],
+        "beforeLocal": [
+          "replacement",
+          "changed"
+        ],
+        "executed": [
+          "original"
+        ],
+        "executeLocal": [
+          "original"
+        ],
+        "afterLocal": [
+          "original"
+        ],
+        "lateBefore": [
+          "replacement",
+          "changed"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "execute_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original",
+              "changed"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original",
+              "changed"
+            ]
+          }
+        ],
+        "selected": [
+          "original",
+          "changed"
+        ],
+        "beforeLocal": [
+          "original",
+          "changed"
+        ],
+        "executed": [
+          "original",
+          "changed"
+        ],
+        "executeLocal": [
+          "original",
+          "changed"
+        ],
+        "afterLocal": [
+          "original",
+          "changed"
+        ],
+        "lateBefore": [
+          "original",
+          "changed"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "execute_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "replacement"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original"
+        ],
+        "beforeLocal": [
+          "original"
+        ],
+        "executed": [
+          "original"
+        ],
+        "executeLocal": [
+          "replacement"
+        ],
+        "afterLocal": [
+          "original"
+        ],
+        "lateBefore": [
+          "original"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "after_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original",
+          "changed"
+        ],
+        "beforeLocal": [
+          "original",
+          "changed"
+        ],
+        "executed": [
+          "original",
+          "changed"
+        ],
+        "executeLocal": [
+          "original",
+          "changed"
+        ],
+        "afterLocal": [
+          "original",
+          "changed"
+        ],
+        "lateBefore": [
+          "original",
+          "changed"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "after_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original"
+        ],
+        "beforeLocal": [
+          "original"
+        ],
+        "executed": [
+          "original"
+        ],
+        "executeLocal": [
+          "original"
+        ],
+        "afterLocal": [
+          "replacement"
+        ],
+        "lateBefore": [
+          "original"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "number",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": 7
+          },
+          {
+            "stage": "execute",
+            "args": 7
+          },
+          {
+            "stage": "execute_after_update",
+            "args": 7
+          },
+          {
+            "stage": "after",
+            "args": 7
+          }
+        ],
+        "selected": 7,
+        "beforeLocal": 99,
+        "executed": 7,
+        "executeLocal": 7,
+        "afterLocal": 7,
+        "lateBefore": 99,
+        "raw": 7,
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "number",
+        "phase": "execute_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": 7
+          },
+          {
+            "stage": "execute",
+            "args": 7
+          },
+          {
+            "stage": "execute_after_update",
+            "args": 99
+          },
+          {
+            "stage": "after",
+            "args": 7
+          }
+        ],
+        "selected": 7,
+        "beforeLocal": 7,
+        "executed": 7,
+        "executeLocal": 99,
+        "afterLocal": 7,
+        "lateBefore": 7,
+        "raw": 7,
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "number",
+        "phase": "after_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": 7
+          },
+          {
+            "stage": "execute",
+            "args": 7
+          },
+          {
+            "stage": "execute_after_update",
+            "args": 7
+          },
+          {
+            "stage": "after",
+            "args": 7
+          }
+        ],
+        "selected": 7,
+        "beforeLocal": 7,
+        "executed": 7,
+        "executeLocal": 7,
+        "afterLocal": 99,
+        "lateBefore": 7,
+        "raw": 7,
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": {
+          "replacement": true
+        },
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "value": "original"
+        },
+        "afterLocal": {
+          "value": "original"
+        },
+        "lateBefore": {
+          "replacement": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "before_null"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": null,
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "value": "original"
+        },
+        "afterLocal": {
+          "value": "original"
+        },
+        "lateBefore": null,
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "before_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "value": "original",
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "before_mutate_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "replacement": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "replacement": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "before_replace_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": {
+          "replacement": true,
+          "changed": true
+        },
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "value": "original"
+        },
+        "afterLocal": {
+          "value": "original"
+        },
+        "lateBefore": {
+          "replacement": true,
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "execute_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "value": "original",
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "execute_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "replacement": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": {
+          "value": "original"
+        },
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "replacement": true
+        },
+        "afterLocal": {
+          "value": "original"
+        },
+        "lateBefore": {
+          "value": "original"
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "after_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "value": "original",
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "after_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": {
+          "value": "original"
+        },
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "value": "original"
+        },
+        "afterLocal": {
+          "replacement": true
+        },
+        "lateBefore": {
+          "value": "original"
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "update_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "value": "original",
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "late_before_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original",
+              "changed": true
+            }
+          }
+        ],
+        "selected": {
+          "value": "original",
+          "changed": true
+        },
+        "beforeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "executed": {
+          "value": "original",
+          "changed": true
+        },
+        "executeLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "afterLocal": {
+          "value": "original",
+          "changed": true
+        },
+        "lateBefore": {
+          "value": "original",
+          "changed": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "late_before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "execute_after_update",
+            "args": {
+              "value": "original"
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "value": "original"
+            }
+          }
+        ],
+        "selected": {
+          "value": "original"
+        },
+        "beforeLocal": {
+          "value": "original"
+        },
+        "executed": {
+          "value": "original"
+        },
+        "executeLocal": {
+          "value": "original"
+        },
+        "afterLocal": {
+          "value": "original"
+        },
+        "lateBefore": {
+          "replacement": true
+        },
+        "raw": {
+          "value": "original"
+        },
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original"
+        ],
+        "beforeLocal": [
+          "replacement"
+        ],
+        "executed": [
+          "original"
+        ],
+        "executeLocal": [
+          "original"
+        ],
+        "afterLocal": [
+          "original"
+        ],
+        "lateBefore": [
+          "replacement"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "before_null"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original"
+        ],
+        "beforeLocal": null,
+        "executed": [
+          "original"
+        ],
+        "executeLocal": [
+          "original"
+        ],
+        "afterLocal": [
+          "original"
+        ],
+        "lateBefore": null,
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "before_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original",
+              "changed"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original",
+              "changed"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original",
+              "changed"
+            ]
+          }
+        ],
+        "selected": [
+          "original",
+          "changed"
+        ],
+        "beforeLocal": [
+          "original",
+          "changed"
+        ],
+        "executed": [
+          "original",
+          "changed"
+        ],
+        "executeLocal": [
+          "original",
+          "changed"
+        ],
+        "afterLocal": [
+          "original",
+          "changed"
+        ],
+        "lateBefore": [
+          "original",
+          "changed"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "before_mutate_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original",
+              "changed"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original",
+              "changed"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original",
+              "changed"
+            ]
+          }
+        ],
+        "selected": [
+          "original",
+          "changed"
+        ],
+        "beforeLocal": [
+          "replacement"
+        ],
+        "executed": [
+          "original",
+          "changed"
+        ],
+        "executeLocal": [
+          "original",
+          "changed"
+        ],
+        "afterLocal": [
+          "original",
+          "changed"
+        ],
+        "lateBefore": [
+          "replacement"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "before_replace_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original"
+        ],
+        "beforeLocal": [
+          "replacement",
+          "changed"
+        ],
+        "executed": [
+          "original"
+        ],
+        "executeLocal": [
+          "original"
+        ],
+        "afterLocal": [
+          "original"
+        ],
+        "lateBefore": [
+          "replacement",
+          "changed"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "execute_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original",
+              "changed"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original",
+              "changed"
+            ]
+          }
+        ],
+        "selected": [
+          "original",
+          "changed"
+        ],
+        "beforeLocal": [
+          "original",
+          "changed"
+        ],
+        "executed": [
+          "original",
+          "changed"
+        ],
+        "executeLocal": [
+          "original",
+          "changed"
+        ],
+        "afterLocal": [
+          "original",
+          "changed"
+        ],
+        "lateBefore": [
+          "original",
+          "changed"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "execute_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "replacement"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original"
+        ],
+        "beforeLocal": [
+          "original"
+        ],
+        "executed": [
+          "original"
+        ],
+        "executeLocal": [
+          "replacement"
+        ],
+        "afterLocal": [
+          "original"
+        ],
+        "lateBefore": [
+          "original"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "after_mutate"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original",
+          "changed"
+        ],
+        "beforeLocal": [
+          "original",
+          "changed"
+        ],
+        "executed": [
+          "original",
+          "changed"
+        ],
+        "executeLocal": [
+          "original",
+          "changed"
+        ],
+        "afterLocal": [
+          "original",
+          "changed"
+        ],
+        "lateBefore": [
+          "original",
+          "changed"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "after_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "execute_after_update",
+            "args": [
+              "original"
+            ]
+          },
+          {
+            "stage": "after",
+            "args": [
+              "original"
+            ]
+          }
+        ],
+        "selected": [
+          "original"
+        ],
+        "beforeLocal": [
+          "original"
+        ],
+        "executed": [
+          "original"
+        ],
+        "executeLocal": [
+          "original"
+        ],
+        "afterLocal": [
+          "replacement"
+        ],
+        "lateBefore": [
+          "original"
+        ],
+        "raw": [
+          "original"
+        ],
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "number",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": 7
+          },
+          {
+            "stage": "execute",
+            "args": 7
+          },
+          {
+            "stage": "execute_after_update",
+            "args": 7
+          },
+          {
+            "stage": "after",
+            "args": 7
+          }
+        ],
+        "selected": 7,
+        "beforeLocal": 99,
+        "executed": 7,
+        "executeLocal": 7,
+        "afterLocal": 7,
+        "lateBefore": 99,
+        "raw": 7,
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "number",
+        "phase": "execute_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": 7
+          },
+          {
+            "stage": "execute",
+            "args": 7
+          },
+          {
+            "stage": "execute_after_update",
+            "args": 99
+          },
+          {
+            "stage": "after",
+            "args": 7
+          }
+        ],
+        "selected": 7,
+        "beforeLocal": 7,
+        "executed": 7,
+        "executeLocal": 99,
+        "afterLocal": 7,
+        "lateBefore": 7,
+        "raw": 7,
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "number",
+        "phase": "after_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": 7
+          },
+          {
+            "stage": "execute",
+            "args": 7
+          },
+          {
+            "stage": "execute_after_update",
+            "args": 7
+          },
+          {
+            "stage": "after",
+            "args": 7
+          }
+        ],
+        "selected": 7,
+        "beforeLocal": 7,
+        "executed": 7,
+        "executeLocal": 7,
+        "afterLocal": 99,
+        "lateBefore": 7,
+        "raw": 7,
+        "same": true
+      }
+    }
+  ]
+}

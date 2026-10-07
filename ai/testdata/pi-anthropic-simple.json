@@ -1,0 +1,7213 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "model": {
+    "id": "test",
+    "name": "Test",
+    "api": "anthropic-messages",
+    "provider": "anthropic",
+    "baseUrl": "https://api.anthropic.com",
+    "reasoning": true,
+    "input": [
+      "text",
+      "image"
+    ],
+    "contextWindow": 4200,
+    "maxTokens": 8192,
+    "cost": {
+      "input": 0,
+      "output": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    }
+  },
+  "cases": [
+    {
+      "input": {
+        "name": "level off map 0",
+        "model": {},
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": null,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level minimal map 0",
+        "model": {},
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level low map 0",
+        "model": {},
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level medium map 0",
+        "model": {},
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level high map 0",
+        "model": {},
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level xhigh map 0",
+        "model": {},
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level max map 0",
+        "model": {},
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level unknown map 0",
+        "model": {},
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": null,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level off map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": null,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level minimal map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level low map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level medium map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level high map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level xhigh map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level max map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level unknown map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": null,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level off map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": null,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level minimal map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level low map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level medium map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level high map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level xhigh map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level max map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level unknown map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": null,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level off map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": null,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level minimal map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level low map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level medium map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level high map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level xhigh map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level max map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level unknown map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": null,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level off map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": null,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level minimal map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level low map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level medium map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level high map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level xhigh map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level max map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level unknown map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": null,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level off map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": null,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level minimal map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level low map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level medium map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level high map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level xhigh map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level max map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level unknown map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": null,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level off map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": null,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level minimal map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level low map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level medium map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level high map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level xhigh map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level max map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "level unknown map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": null,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "no reasoning model",
+        "model": {
+          "reasoning": false
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "no reasoning requested"
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "option projection",
+        "options": {
+          "temperature": 0,
+          "samplingParams": {
+            "temperature": 0.2
+          },
+          "maxTokens": 50,
+          "transport": "sse",
+          "cacheRetention": "long",
+          "sessionId": "session",
+          "headers": {
+            "x-extra": "header"
+          },
+          "timeoutMs": 1000,
+          "websocketConnectTimeoutMs": 300,
+          "maxRetries": 2,
+          "maxRetryDelayMs": 100,
+          "metadata": {
+            "a": 1
+          },
+          "env": {
+            "PI_CACHE_RETENTION": "short"
+          },
+          "toolChoice": "none",
+          "thinkingBudgets": {
+            "high": 50
+          },
+          "reasoning": "high",
+          "reasoningEffort": "discarded",
+          "unused": "discarded"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 100,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          },
+          "tool_choice": {
+            "type": "none"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max 0 window 0",
+        "model": {
+          "contextWindow": 0
+        },
+        "options": {
+          "maxTokens": 0
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 1,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max 0 window 4096",
+        "model": {
+          "contextWindow": 4096
+        },
+        "options": {
+          "maxTokens": 0
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 0,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max 0 window 4200",
+        "model": {
+          "contextWindow": 4200
+        },
+        "options": {
+          "maxTokens": 0
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 0,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max -5 window 0",
+        "model": {
+          "contextWindow": 0
+        },
+        "options": {
+          "maxTokens": -5
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 1,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max -5 window 4096",
+        "model": {
+          "contextWindow": 4096
+        },
+        "options": {
+          "maxTokens": -5
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": -5,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max -5 window 4200",
+        "model": {
+          "contextWindow": 4200
+        },
+        "options": {
+          "maxTokens": -5
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": -5,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max 1 window 0",
+        "model": {
+          "contextWindow": 0
+        },
+        "options": {
+          "maxTokens": 1
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 1,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max 1 window 4096",
+        "model": {
+          "contextWindow": 4096
+        },
+        "options": {
+          "maxTokens": 1
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 1,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max 1 window 4200",
+        "model": {
+          "contextWindow": 4200
+        },
+        "options": {
+          "maxTokens": 1
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 1,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max 100 window 0",
+        "model": {
+          "contextWindow": 0
+        },
+        "options": {
+          "maxTokens": 100
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 100,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max 100 window 4096",
+        "model": {
+          "contextWindow": 4096
+        },
+        "options": {
+          "maxTokens": 100
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 1,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max 100 window 4200",
+        "model": {
+          "contextWindow": 4200
+        },
+        "options": {
+          "maxTokens": 100
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 100,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max 8192 window 0",
+        "model": {
+          "contextWindow": 0
+        },
+        "options": {
+          "maxTokens": 8192
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 8192,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max 8192 window 4096",
+        "model": {
+          "contextWindow": 4096
+        },
+        "options": {
+          "maxTokens": 8192
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 1,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max 8192 window 4200",
+        "model": {
+          "contextWindow": 4200
+        },
+        "options": {
+          "maxTokens": 8192
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max null window 0",
+        "model": {
+          "contextWindow": 0
+        },
+        "options": {
+          "maxTokens": null
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 8192,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max null window 4096",
+        "model": {
+          "contextWindow": 4096
+        },
+        "options": {
+          "maxTokens": null
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 1,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "max null window 4200",
+        "model": {
+          "contextWindow": 4200
+        },
+        "options": {
+          "maxTokens": null
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "text UTF16 estimate",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "😀😀😀😀😀😀😀x",
+              "timestamp": 1
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "😀😀😀😀😀😀😀x",
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
+            }
+          ],
+          "max_tokens": 100,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "images estimate",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "hello"
+                },
+                {
+                  "type": "image",
+                  "data": "YQ==",
+                  "mimeType": "image/png"
+                }
+              ],
+              "timestamp": 1
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "hello"
+                },
+                {
+                  "type": "image",
+                  "source": {
+                    "type": "base64",
+                    "media_type": "image/png",
+                    "data": "YQ=="
+                  },
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
+            }
+          ],
+          "max_tokens": 1,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "system sections tools",
+        "context": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "ignored",
+              "sections": {
+                "first": "text",
+                "second": "😀"
+              },
+              "toolsAdded": [
+                {
+                  "name": "tool",
+                  "description": "<>&😀 ",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "input": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "input"
+                    ]
+                  }
+                }
+              ],
+              "toolsRemoved": [
+                {
+                  "name": "old"
+                }
+              ],
+              "timestamp": 1
+            },
+            {
+              "role": "user",
+              "content": "hello",
+              "timestamp": 1
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "hello",
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
+            }
+          ],
+          "max_tokens": 59,
+          "stream": true,
+          "system": [
+            {
+              "type": "text",
+              "text": "ignored\n\ntext\n\n😀",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ],
+          "tools": [
+            {
+              "name": "tool",
+              "description": "<>&😀 ",
+              "eager_input_streaming": true,
+              "input_schema": {
+                "type": "object",
+                "properties": {
+                  "input": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "input"
+                ]
+              },
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ],
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "assistant text thinking args",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "hello",
+              "timestamp": 1
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                },
+                {
+                  "type": "thinking",
+                  "thinking": "😀think"
+                },
+                {
+                  "type": "toolCall",
+                  "id": "c",
+                  "name": "tool",
+                  "arguments": {
+                    "1": "first",
+                    "2": "second",
+                    "code": "<>& "
+                  }
+                }
+              ],
+              "api": "anthropic-messages",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": "hello"
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                },
+                {
+                  "type": "text",
+                  "text": "😀think"
+                },
+                {
+                  "type": "tool_use",
+                  "id": "c",
+                  "name": "tool",
+                  "input": {
+                    "1": "first",
+                    "2": "second",
+                    "code": "<>& "
+                  }
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "tool_result",
+                  "tool_use_id": "c",
+                  "content": "No result provided",
+                  "is_error": true,
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
+            }
+          ],
+          "max_tokens": 87,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool result estimate",
+        "context": {
+          "messages": [
+            {
+              "role": "toolResult",
+              "toolCallId": "c",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                },
+                {
+                  "type": "image",
+                  "data": "YQ==",
+                  "mimeType": "image/png"
+                }
+              ],
+              "isError": false,
+              "timestamp": 3
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "tool_result",
+                  "tool_use_id": "c",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "done"
+                    },
+                    {
+                      "type": "image",
+                      "source": {
+                        "type": "base64",
+                        "media_type": "image/png",
+                        "data": "YQ=="
+                      }
+                    }
+                  ],
+                  "is_error": false,
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
+            }
+          ],
+          "max_tokens": 1,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "usage total takes precedence",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "hello",
+              "timestamp": 1
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "api": "anthropic-messages",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 10,
+                "output": 5,
+                "cacheRead": 2,
+                "cacheWrite": 3,
+                "totalTokens": 40,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 3
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": "hello"
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "next",
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
+            }
+          ],
+          "max_tokens": 63,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "usage fallback sum",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "hello",
+              "timestamp": 1
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "api": "anthropic-messages",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 10,
+                "output": 5,
+                "cacheRead": 2,
+                "cacheWrite": 3,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 3
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": "hello"
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "next",
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
+            }
+          ],
+          "max_tokens": 83,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "stale usage after inserted prefix",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "new summary",
+              "timestamp": 100
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "old answer"
+                }
+              ],
+              "api": "anthropic-messages",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 900,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            },
+            {
+              "role": "user",
+              "content": "new turn",
+              "timestamp": 101
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": "new summary"
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "old answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "new turn",
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
+            }
+          ],
+          "max_tokens": 96,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "equal timestamp usage accepted",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "summary",
+              "timestamp": 2
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "api": "anthropic-messages",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 10,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": "summary"
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ],
+          "max_tokens": 94,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "error usage ignored",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "error"
+                }
+              ],
+              "api": "anthropic-messages",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 900,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 102,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "aborted usage ignored",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "aborted"
+                }
+              ],
+              "api": "anthropic-messages",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "aborted",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 900,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 102,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "earlier usage retained after failed response",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "first"
+                }
+              ],
+              "api": "anthropic-messages",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 10,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 3
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "error"
+                }
+              ],
+              "api": "anthropic-messages",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 4,
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 900,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "first"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "next",
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
+            }
+          ],
+          "max_tokens": 91,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "latest usage wins",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "first"
+                }
+              ],
+              "api": "anthropic-messages",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 10,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 3
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "second"
+                }
+              ],
+              "api": "anthropic-messages",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 4,
+              "stopReason": "stop",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 70,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            },
+            {
+              "role": "user",
+              "content": "tail",
+              "timestamp": 5
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "first"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "second"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "tail",
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
+            }
+          ],
+          "max_tokens": 33,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool declarations without messages",
+        "context": {
+          "messages": [],
+          "tools": [
+            {
+              "name": "tool",
+              "description": "<>&😀 ",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "input": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "input"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 70,
+          "stream": true,
+          "tools": [
+            {
+              "name": "tool",
+              "description": "<>&😀 ",
+              "eager_input_streaming": true,
+              "input_schema": {
+                "type": "object",
+                "properties": {
+                  "input": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "input"
+                ]
+              },
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ],
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "context budget caps thinking",
+        "model": {
+          "contextWindow": 16000,
+          "compat": {
+            "supportsThinkingTokenBudget": true
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "api": "anthropic-messages",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 10000,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ],
+          "max_tokens": 1904,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 880,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive undefined",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          }
+        },
+        "options": {}
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive mapped undefined",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          },
+          "thinkingLevelMap": {
+            "off": "low",
+            "minimal": "low",
+            "low": "medium",
+            "medium": "high",
+            "high": "max",
+            "xhigh": "xhigh",
+            "max": "max",
+            "unknown": "custom"
+          }
+        },
+        "options": {}
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive off",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          }
+        },
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "high"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive mapped off",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          },
+          "thinkingLevelMap": {
+            "off": "low",
+            "minimal": "low",
+            "low": "medium",
+            "medium": "high",
+            "high": "max",
+            "xhigh": "xhigh",
+            "max": "max",
+            "unknown": "custom"
+          }
+        },
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "low"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive minimal",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          }
+        },
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "low"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive mapped minimal",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          },
+          "thinkingLevelMap": {
+            "off": "low",
+            "minimal": "low",
+            "low": "medium",
+            "medium": "high",
+            "high": "max",
+            "xhigh": "xhigh",
+            "max": "max",
+            "unknown": "custom"
+          }
+        },
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "low"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive low",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          }
+        },
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "low"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive mapped low",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          },
+          "thinkingLevelMap": {
+            "off": "low",
+            "minimal": "low",
+            "low": "medium",
+            "medium": "high",
+            "high": "max",
+            "xhigh": "xhigh",
+            "max": "max",
+            "unknown": "custom"
+          }
+        },
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "medium"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive medium",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          }
+        },
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "medium"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive mapped medium",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          },
+          "thinkingLevelMap": {
+            "off": "low",
+            "minimal": "low",
+            "low": "medium",
+            "medium": "high",
+            "high": "max",
+            "xhigh": "xhigh",
+            "max": "max",
+            "unknown": "custom"
+          }
+        },
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "high"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive high",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "high"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive mapped high",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          },
+          "thinkingLevelMap": {
+            "off": "low",
+            "minimal": "low",
+            "low": "medium",
+            "medium": "high",
+            "high": "max",
+            "xhigh": "xhigh",
+            "max": "max",
+            "unknown": "custom"
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "max"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive xhigh",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          }
+        },
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "high"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive mapped xhigh",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          },
+          "thinkingLevelMap": {
+            "off": "low",
+            "minimal": "low",
+            "low": "medium",
+            "medium": "high",
+            "high": "max",
+            "xhigh": "xhigh",
+            "max": "max",
+            "unknown": "custom"
+          }
+        },
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "xhigh"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive max",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          }
+        },
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "high"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive mapped max",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          },
+          "thinkingLevelMap": {
+            "off": "low",
+            "minimal": "low",
+            "low": "medium",
+            "medium": "high",
+            "high": "max",
+            "xhigh": "xhigh",
+            "max": "max",
+            "unknown": "custom"
+          }
+        },
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "max"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive unknown",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          }
+        },
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "high"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive mapped unknown",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          },
+          "thinkingLevelMap": {
+            "off": "low",
+            "minimal": "low",
+            "low": "medium",
+            "medium": "high",
+            "high": "max",
+            "xhigh": "xhigh",
+            "max": "max",
+            "unknown": "custom"
+          }
+        },
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "custom"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "missing credentials",
+        "options": {
+          "apiKey": null
+        }
+      },
+      "expected": {
+        "params": null,
+        "result": null,
+        "error": "No API key for provider: anthropic"
+      }
+    },
+    {
+      "input": {
+        "name": "header credentials",
+        "options": {
+          "apiKey": null,
+          "headers": {
+            "Authorization": "header-key"
+          }
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "x-api-key credentials",
+        "options": {
+          "apiKey": null,
+          "headers": {
+            "X-Api-Key": "header-key"
+          }
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "model header is not credential source",
+        "model": {
+          "headers": {
+            "Authorization": "model-key"
+          }
+        },
+        "options": {
+          "apiKey": null
+        }
+      },
+      "expected": {
+        "params": null,
+        "result": null,
+        "error": "No API key for provider: anthropic"
+      }
+    },
+    {
+      "input": {
+        "name": "provider options discarded",
+        "options": {
+          "effort": "max",
+          "thinkingEnabled": true,
+          "thinkingBudgetTokens": 777,
+          "thinkingDisplay": "omitted",
+          "interleavedThinking": false
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "custom thinking budget",
+        "model": {
+          "contextWindow": 200000,
+          "maxTokens": 64000
+        },
+        "options": {
+          "reasoning": "medium",
+          "maxTokens": 1000,
+          "thinkingBudgets": {
+            "medium": 2222
+          }
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 3222,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 2198,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "zero custom thinking budget",
+        "options": {
+          "reasoning": "low",
+          "thinkingBudgets": {
+            "low": 0
+          }
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "null custom thinking budget",
+        "options": {
+          "reasoning": "low",
+          "thinkingBudgets": {
+            "low": null
+          }
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "interleaved-thinking-2025-05-14"
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "adaptive null mapping defaults",
+        "model": {
+          "compat": {
+            "forceAdaptiveThinking": true
+          },
+          "thinkingLevelMap": {
+            "low": null
+          }
+        },
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized"
+          },
+          "output_config": {
+            "effort": "low"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "managed effort",
+        "model": {
+          "compat": {
+            "supportsMidConvoEffort": true,
+            "forceAdaptiveThinking": true
+          }
+        },
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "system",
+              "content": [],
+              "output_config": {
+                "effort": "medium"
+              }
+            }
+          ],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "mid-conversation-output-config-2026-07-01",
+            "thinking-binding-controls-2026-08-01"
+          ],
+          "thinking": {
+            "type": "adaptive",
+            "display": "summarized",
+            "block_binding": {
+              "prefix_mismatch_behavior": "drop_block"
+            }
+          },
+          "output_config": {
+            "effort": "high"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "providerThinkingLevel": "medium",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "OAuth simple request",
+        "options": {
+          "apiKey": "sk-ant-oat-fixture",
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 104,
+          "stream": true,
+          "betas": [
+            "claude-code-20250219",
+            "oauth-2025-04-20",
+            "interleaved-thinking-2025-05-14"
+          ],
+          "system": [
+            {
+              "type": "text",
+              "text": "You are Claude Code, Anthropic's official CLI for Claude.",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ],
+          "thinking": {
+            "type": "enabled",
+            "budget_tokens": 1024,
+            "display": "summarized"
+          }
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "no reasoning model still budgets",
+        "model": {
+          "reasoning": false,
+          "contextWindow": 200000
+        },
+        "options": {
+          "reasoning": "high",
+          "maxTokens": 1000
+        }
+      },
+      "expected": {
+        "params": {
+          "model": "test",
+          "messages": [],
+          "max_tokens": 8192,
+          "stream": true
+        },
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        },
+        "error": null
+      }
+    }
+  ]
+}

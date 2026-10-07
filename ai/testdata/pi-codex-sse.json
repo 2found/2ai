@@ -1,0 +1,196 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "name": "empty",
+        "wire": ""
+      },
+      "expected": []
+    },
+    {
+      "input": {
+        "name": "no body",
+        "wire": null
+      },
+      "expected": []
+    },
+    {
+      "input": {
+        "name": "one frame",
+        "wire": "data: {\"type\":\"a\"}\n\n"
+      },
+      "expected": [
+        {
+          "type": "a"
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "residual EOF",
+        "wire": "data:{\"type\":\"last\"}"
+      },
+      "expected": [
+        {
+          "type": "last"
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "comments ignored",
+        "wire": ": comment\nevent: ignored\ndata: {\"x\":1}\n\n"
+      },
+      "expected": [
+        {
+          "x": 1
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "multiline",
+        "wire": "data: {\"a\":\ndata: 1}\n\n"
+      },
+      "expected": [
+        {
+          "a": 1
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "done is skipped",
+        "wire": "data: [DONE]\n\ndata:{\"after\":true}\n\n"
+      },
+      "expected": [
+        {
+          "after": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "empty data skipped",
+        "wire": "data:\n\ndata:  \n\n"
+      },
+      "expected": []
+    },
+    {
+      "input": {
+        "name": "CRLF one residual frame",
+        "wire": "data: {\"x\":1}\r\n\r\n"
+      },
+      "expected": [
+        {
+          "x": 1
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "frame prefix exact",
+        "wire": " data: {\"ignored\":true}\nData: {\"ignored\":true}\ndata: {\"ok\":true}\n\n"
+      },
+      "expected": [
+        {
+          "ok": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "BOM initial",
+        "wire": "﻿data: {\"ok\":true}\n\n"
+      },
+      "expected": [
+        {
+          "ok": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "BOM in data trimmed",
+        "wire": "data: ﻿{\"ok\":true}﻿\n\n"
+      },
+      "expected": [
+        {
+          "ok": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "BOM in later line not stripped",
+        "wire": "data: {\"first\":true}\n\n﻿data:{\"ignored\":true}\n\n"
+      },
+      "expected": [
+        {
+          "first": true
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "split unicode 1",
+        "wire": "data: {\"text\":\"😀é漢字\"}\n\ndata: {\"next\":2}",
+        "chunkSize": 1
+      },
+      "expected": [
+        {
+          "text": "😀é漢字"
+        },
+        {
+          "next": 2
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "split unicode 2",
+        "wire": "data: {\"text\":\"😀é漢字\"}\n\ndata: {\"next\":2}",
+        "chunkSize": 2
+      },
+      "expected": [
+        {
+          "text": "😀é漢字"
+        },
+        {
+          "next": 2
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "split unicode 3",
+        "wire": "data: {\"text\":\"😀é漢字\"}\n\ndata: {\"next\":2}",
+        "chunkSize": 3
+      },
+      "expected": [
+        {
+          "text": "😀é漢字"
+        },
+        {
+          "next": 2
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "split unicode 7",
+        "wire": "data: {\"text\":\"😀é漢字\"}\n\ndata: {\"next\":2}",
+        "chunkSize": 7
+      },
+      "expected": [
+        {
+          "text": "😀é漢字"
+        },
+        {
+          "next": 2
+        }
+      ]
+    }
+  ]
+}

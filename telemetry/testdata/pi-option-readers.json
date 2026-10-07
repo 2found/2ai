@@ -1,0 +1,3197 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "scope": "root",
+        "phase": "plain",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value",
+          "child-name"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "value": "read"
+            },
+            "events": [
+              {
+                "name": "callback",
+                "attributes": {
+                  "value": true
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 2,
+            "parentId": 1,
+            "name": "callback-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 3,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 3
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "root",
+        "phase": "plain",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value",
+          "child-name"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "value": "read"
+            },
+            "events": [
+              {
+                "name": "callback",
+                "attributes": {
+                  "value": true
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 2,
+            "parentId": 1,
+            "name": "callback-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 3,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 3
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "root",
+        "phase": "name_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "root",
+        "phase": "name_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "root",
+        "phase": "name_nil_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "root",
+        "phase": "name_nil_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "root",
+        "phase": "attributes_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "root",
+        "phase": "attributes_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "root",
+        "phase": "value_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "root",
+        "phase": "value_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "root",
+        "phase": "attributes_change_name",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value",
+          "child-name"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "value": "read"
+            },
+            "events": [
+              {
+                "name": "callback",
+                "attributes": {
+                  "value": true
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 2,
+            "parentId": 1,
+            "name": "callback-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 3,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 3
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "root",
+        "phase": "attributes_change_name",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value",
+          "child-name"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "value": "read"
+            },
+            "events": [
+              {
+                "name": "callback",
+                "attributes": {
+                  "value": true
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 2,
+            "parentId": 1,
+            "name": "callback-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 3,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 3
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "root",
+        "phase": "reader_child",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value",
+          "child-name"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "reader-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "value": "read"
+            },
+            "events": [
+              {
+                "name": "callback",
+                "attributes": {
+                  "value": true
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 3
+          },
+          {
+            "id": 3,
+            "parentId": 2,
+            "name": "callback-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 4,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 4
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "root",
+        "phase": "reader_child",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value",
+          "child-name"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "reader-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "value": "read"
+            },
+            "events": [
+              {
+                "name": "callback",
+                "attributes": {
+                  "value": true
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 3
+          },
+          {
+            "id": 3,
+            "parentId": 2,
+            "name": "callback-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 4,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 4
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "root",
+        "phase": "reader_child_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "reader-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "root",
+        "phase": "reader_child_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes"
+        ],
+        "snapshots": [
+          []
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "reader-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "plain",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value",
+          "child-name"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 3
+          },
+          {
+            "id": 2,
+            "parentId": 1,
+            "name": "read",
+            "attributes": {
+              "value": "read"
+            },
+            "events": [
+              {
+                "name": "callback",
+                "attributes": {
+                  "value": true
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 3,
+            "parentId": 2,
+            "name": "callback-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 4,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 4
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "plain",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value",
+          "child-name"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 3
+          },
+          {
+            "id": 2,
+            "parentId": 1,
+            "name": "read",
+            "attributes": {
+              "value": "read"
+            },
+            "events": [
+              {
+                "name": "callback",
+                "attributes": {
+                  "value": true
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 3,
+            "parentId": 2,
+            "name": "callback-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 4,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 4
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "name_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "name_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "name_nil_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "name_nil_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "attributes_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "attributes_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "value_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "value_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "attributes_change_name",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value",
+          "child-name"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 3
+          },
+          {
+            "id": 2,
+            "parentId": 1,
+            "name": "read",
+            "attributes": {
+              "value": "read"
+            },
+            "events": [
+              {
+                "name": "callback",
+                "attributes": {
+                  "value": true
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 3,
+            "parentId": 2,
+            "name": "callback-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 4,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 4
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "attributes_change_name",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value",
+          "child-name"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 3
+          },
+          {
+            "id": 2,
+            "parentId": 1,
+            "name": "read",
+            "attributes": {
+              "value": "read"
+            },
+            "events": [
+              {
+                "name": "callback",
+                "attributes": {
+                  "value": true
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 3,
+            "parentId": 2,
+            "name": "callback-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 4,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 4
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "reader_child",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value",
+          "child-name"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 4
+          },
+          {
+            "id": 2,
+            "parentId": 1,
+            "name": "reader-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 3,
+            "parentId": 1,
+            "name": "read",
+            "attributes": {
+              "value": "read"
+            },
+            "events": [
+              {
+                "name": "callback",
+                "attributes": {
+                  "value": true
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 3
+          },
+          {
+            "id": 4,
+            "parentId": 3,
+            "name": "callback-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 5,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 5
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "reader_child",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes",
+          "value",
+          "child-name"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 4
+          },
+          {
+            "id": 2,
+            "parentId": 1,
+            "name": "reader-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 3,
+            "parentId": 1,
+            "name": "read",
+            "attributes": {
+              "value": "read"
+            },
+            "events": [
+              {
+                "name": "callback",
+                "attributes": {
+                  "value": true
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 3
+          },
+          {
+            "id": 4,
+            "parentId": 3,
+            "name": "callback-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 5,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 5
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "reader_child_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 2,
+            "parentId": 1,
+            "name": "reader-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 3,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 3
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "child",
+        "phase": "reader_child_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [
+          "name",
+          "attributes"
+        ],
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "parent",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          },
+          {
+            "id": 2,
+            "parentId": 1,
+            "name": "reader-child",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 3,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 3
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "plain",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "plain",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "name_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "name_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "name_nil_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "name_nil_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "attributes_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "attributes_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "value_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "value_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "attributes_change_name",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "attributes_change_name",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "reader_child",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "reader_child",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "reader_child_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "noop",
+        "phase": "reader_child_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "plain",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "plain",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "name_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "name_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "name_nil_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "name_nil_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "attributes_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "attributes_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "value_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "value_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "attributes_change_name",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "attributes_change_name",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "reader_child",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "reader_child",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "reader_child_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": true,
+        "errorSame": false,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "scope": "late",
+        "phase": "reader_child_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": [],
+        "snapshots": [],
+        "calls": 1,
+        "children": 1,
+        "valueSame": false,
+        "errorSame": true,
+        "unexpected": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "parent",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          },
+          {
+            "id": 2,
+            "parentId": null,
+            "name": "probe",
+            "attributes": {},
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 2
+          }
+        ]
+      }
+    }
+  ]
+}

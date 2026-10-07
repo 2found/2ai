@@ -1,0 +1,2384 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "sdkVersion": "0.129.0",
+  "model": {
+    "id": "test",
+    "api": "anthropic-messages",
+    "provider": "anthropic",
+    "baseUrl": "https://example.test",
+    "reasoning": false,
+    "input": [
+      "text"
+    ],
+    "maxTokens": 8192,
+    "contextWindow": 200000,
+    "cost": {
+      "input": 0,
+      "output": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    },
+    "headers": {
+      "User-Agent": "fixture"
+    }
+  },
+  "ignoredHeaders": [
+    "x-stainless-lang",
+    "x-stainless-package-version",
+    "x-stainless-os",
+    "x-stainless-arch",
+    "x-stainless-runtime",
+    "x-stainless-runtime-version"
+  ],
+  "cases": [
+    {
+      "input": {
+        "name": "exchange and cache",
+        "calls": 2
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer access-1",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer access-1",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          },
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "optional workspace service account",
+        "options": {
+          "env": {
+            "ANTHROPIC_WORKSPACE_ID": "workspace",
+            "ANTHROPIC_SERVICE_ACCOUNT_ID": "account"
+          }
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization",
+              "service_account_id": "account",
+              "workspace_id": "workspace"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer access-1",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "explicit key bypasses federation",
+        "options": {
+          "apiKey": "key"
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-api-key": "key",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "header auth bypasses federation",
+        "options": {
+          "headers": {
+            "Authorization": "Bearer header"
+          }
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer header",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "model auth overrides minted token",
+        "model": {
+          "headers": {
+            "Authorization": "Bearer model"
+          }
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer model",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "explicit auth omission still exchanges",
+        "options": {
+          "headers": {
+            "Authorization": null
+          }
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "beta appended after override",
+        "options": {
+          "headers": {
+            "anthropic-beta": "custom"
+          }
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "custom,oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer access-1",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "beta already present",
+        "options": {
+          "headers": {
+            "anthropic-beta": "custom, oauth-2025-04-20"
+          }
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "custom,oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer access-1",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "beta deletion cannot suppress auth beta",
+        "options": {
+          "headers": {
+            "anthropic-beta": null
+          }
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer access-1",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "non anthropic no federation",
+        "model": {
+          "provider": "custom"
+        }
+      },
+      "expected": {
+        "requests": [],
+        "results": [
+          {
+            "result": null,
+            "error": "No API key for provider: custom"
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "incomplete federation rejected",
+        "options": {
+          "env": {
+            "ANTHROPIC_FEDERATION_RULE_ID": ""
+          }
+        }
+      },
+      "expected": {
+        "requests": [],
+        "results": [
+          {
+            "result": null,
+            "error": "No API key for provider: anthropic"
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "insecure token endpoint rejected",
+        "model": {
+          "baseUrl": "http://example.test"
+        }
+      },
+      "expected": {
+        "requests": [],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "timestamp": 1000000,
+              "errorMessage": "Refusing to send credential over non-https token endpoint \"http://example.test\""
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "empty identity rejected",
+        "identity": "  \n "
+      },
+      "expected": {
+        "requests": [],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "timestamp": 1000000,
+              "errorMessage": "Identity token file at <identity-file> is empty"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "long identity rejected",
+        "identityRepeat": 16385
+      },
+      "expected": {
+        "requests": [],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "timestamp": 1000000,
+              "errorMessage": "Identity token is 17 KiB, exceeds the 16 KiB assertion limit"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "token HTTP redaction",
+        "tokenStatus": 403,
+        "tokenBody": "{\"error\":\"denied\",\"assertion\":\"fake-secret\",\"access_token\":\"fake-access\",\"error_description\":\"denied detail\"}"
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "timestamp": 1000000,
+              "errorMessage": "Token exchange failed with status 403 (request-id token-request): {\"error\":\"denied\",\"error_description\":\"denied detail\"}"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "token 401 hint",
+        "tokenStatus": 401,
+        "tokenBody": "{\"error\":\"denied\",\"refresh_token\":\"fake-refresh\"}"
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "timestamp": 1000000,
+              "errorMessage": "Token exchange failed with status 401 (request-id token-request): {\"error\":\"denied\"} Ensure your federation rule matches your identity token. If your federation rule is scoped to multiple workspaces, set the ANTHROPIC_WORKSPACE_ID environment variable, the 'workspace_id' config key, or the `workspaceId` option. View your authentication events in the Workload identity page of Claude Console for more details."
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "token 401 workspace hint",
+        "options": {
+          "env": {
+            "ANTHROPIC_WORKSPACE_ID": "workspace"
+          }
+        },
+        "tokenStatus": 401,
+        "tokenBody": "{\"error\":\"denied\"}"
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization",
+              "workspace_id": "workspace"
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "timestamp": 1000000,
+              "errorMessage": "Token exchange failed with status 401 (request-id token-request): {\"error\":\"denied\"} Ensure your federation rule matches your identity token. View your authentication events in the Workload identity page of Claude Console for more details."
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "non JSON token response",
+        "tokenBody": "not json"
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "timestamp": 1000000,
+              "errorMessage": "Token endpoint returned non-JSON response (status 200)"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "missing access token",
+        "tokenBody": "{\"expires_in\":3600,\"assertion\":\"fake-secret\"}"
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "timestamp": 1000000,
+              "errorMessage": "Token endpoint response missing access_token: {}"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "missing expiry",
+        "tokenBody": "{\"access_token\":\"fake-access\"}"
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "timestamp": 1000000,
+              "errorMessage": "Token endpoint response missing required fields: {}"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "unsupported type",
+        "tokenBody": "{\"access_token\":\"fake-access\",\"expires_in\":3600,\"token_type\":\"MAC\"}"
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "timestamp": 1000000,
+              "errorMessage": "Token endpoint response: unsupported token_type \"MAC\" (want Bearer)"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "mixed case bearer",
+        "tokenBody": "{\"access_token\":\"fake-access\",\"expires_in\":\"3600\",\"token_type\":\"bEaReR\"}"
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer fake-access",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "zero expiry refreshes",
+        "calls": 2,
+        "tokenBody": "{\"access_token\":\"fake-access\",\"expires_in\":0}"
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer fake-access",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          },
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer fake-access",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          },
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "API 401 invalidates next call",
+        "calls": 2,
+        "apiStatuses": [
+          401,
+          200
+        ],
+        "options": {
+          "maxRetries": 2
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer access-1",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          },
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer access-2",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "timestamp": 1000000,
+              "errorMessage": "401 {\"error\":{\"message\":\"try again\"}}"
+            },
+            "error": null
+          },
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "API retry reuses token",
+        "apiStatuses": [
+          429,
+          200
+        ],
+        "options": {
+          "maxRetries": 1
+        }
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer access-1",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer access-1",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "bounded token response",
+        "oversized": true
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "timestamp": 1000000,
+              "errorMessage": "Token endpoint returned non-JSON response (status 200)"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "identity file rotates after invalidation",
+        "calls": 2,
+        "apiStatuses": [
+          401,
+          200
+        ],
+        "rotateIdentity": true
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer access-1",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          },
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "rotated-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer access-2",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "timestamp": 1000000,
+              "errorMessage": "401 {\"error\":{\"message\":\"try again\"}}"
+            },
+            "error": null
+          },
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "expiry string null rejected",
+        "tokenBody": "{\"access_token\":\"fake-access\",\"expires_in\":\"null\"}"
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "error",
+              "timestamp": 1000000,
+              "errorMessage": "Token endpoint response missing required fields: {}"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "expiry boolean",
+        "tokenBody": "{\"access_token\":\"fake-access\",\"expires_in\":true}"
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer fake-access",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "expiry empty array",
+        "tokenBody": "{\"access_token\":\"fake-access\",\"expires_in\":[]}"
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer fake-access",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "expiry hex string",
+        "tokenBody": "{\"access_token\":\"fake-access\",\"expires_in\":\"0x1000\"}"
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer fake-access",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "numeric access token coerced",
+        "tokenBody": "{\"access_token\":123,\"expires_in\":3600}"
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer 123",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "token trailing whitespace trimmed",
+        "tokenBody": "{\"access_token\":\"fake-access  \",\"expires_in\":3600}"
+      },
+      "expected": {
+        "requests": [
+          {
+            "path": "/v1/oauth/token",
+            "query": "",
+            "headers": {
+              "anthropic-beta": "oauth-2025-04-20,oidc-federation-2026-04-01",
+              "content-type": "application/json",
+              "user-agent": "Anthropic/JS 0.129.0"
+            },
+            "body": {
+              "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion": "fixture-assertion",
+              "federation_rule_id": "rule",
+              "organization_id": "organization"
+            }
+          },
+          {
+            "path": "/v1/messages",
+            "query": "beta=true",
+            "headers": {
+              "accept": "application/json",
+              "anthropic-beta": "oauth-2025-04-20",
+              "anthropic-dangerous-direct-browser-access": "true",
+              "anthropic-version": "2023-06-01",
+              "authorization": "Bearer fake-access",
+              "content-type": "application/json",
+              "user-agent": "fixture",
+              "x-stainless-retry-count": "0",
+              "x-stainless-timeout": "600"
+            },
+            "body": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            }
+          }
+        ],
+        "results": [
+          {
+            "result": {
+              "role": "assistant",
+              "content": [],
+              "api": "anthropic-messages",
+              "provider": "anthropic",
+              "model": "test",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "stopReason": "stop",
+              "timestamp": 1000000,
+              "rawStopReason": "end_turn"
+            },
+            "error": null
+          }
+        ]
+      }
+    }
+  ]
+}

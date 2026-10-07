@@ -1,0 +1,4734 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "name": "byte array",
+      "start": {
+        "kind": "uint8[]",
+        "values": [
+          {
+            "kind": "float64",
+            "value": "0"
+          },
+          {
+            "kind": "float64",
+            "value": "1"
+          },
+          {
+            "kind": "float64",
+            "value": "255"
+          }
+        ]
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "byte array",
+            "attributes": {
+              "value": [
+                0,
+                1,
+                255
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    0,
+                    1,
+                    255
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "byte array",
+            "attributes": {
+              "value": [
+                0,
+                1,
+                255
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    0,
+                    1,
+                    255
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "nil byte slice",
+      "start": {
+        "kind": "uint8[]"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nil byte slice",
+            "attributes": {
+              "value": []
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": []
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nil byte slice",
+            "attributes": {
+              "value": []
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": []
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "mixed Go numeric kinds",
+      "start": {
+        "kind": "any[]",
+        "values": [
+          {
+            "kind": "int",
+            "value": "1"
+          },
+          {
+            "kind": "float64",
+            "value": "2.5"
+          },
+          {
+            "kind": "uint64",
+            "value": "3"
+          }
+        ]
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "mixed Go numeric kinds",
+            "attributes": {
+              "value": [
+                1,
+                2.5,
+                3
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    1,
+                    2.5,
+                    3
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "mixed Go numeric kinds",
+            "attributes": {
+              "value": [
+                1,
+                2.5,
+                3
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    1,
+                    2.5,
+                    3
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "mixed numeric widths",
+      "start": {
+        "kind": "any[]",
+        "values": [
+          {
+            "kind": "int8",
+            "value": "-128"
+          },
+          {
+            "kind": "int16",
+            "value": "32767"
+          },
+          {
+            "kind": "uint16",
+            "value": "65535"
+          },
+          {
+            "kind": "float32",
+            "value": "0.5"
+          }
+        ]
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "mixed numeric widths",
+            "attributes": {
+              "value": [
+                -128,
+                32767,
+                65535,
+                0.5
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    -128,
+                    32767,
+                    65535,
+                    0.5
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "mixed numeric widths",
+            "attributes": {
+              "value": [
+                -128,
+                32767,
+                65535,
+                0.5
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    -128,
+                    32767,
+                    65535,
+                    0.5
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty number array",
+      "start": {
+        "kind": "float64[]",
+        "values": []
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "empty number array",
+            "attributes": {
+              "value": []
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": []
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "empty number array",
+            "attributes": {
+              "value": []
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": []
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "not a number",
+      "start": {
+        "kind": "float64",
+        "value": "NaN"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "not a number",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "not a number",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "positive infinity",
+      "start": {
+        "kind": "float64",
+        "value": "Infinity"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "positive infinity",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "positive infinity",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "negative infinity",
+      "start": {
+        "kind": "float64",
+        "value": "-Infinity"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "negative infinity",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "negative infinity",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "negative zero",
+      "start": {
+        "kind": "float64",
+        "value": "-0"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "negative zero",
+            "attributes": {
+              "value": 0
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 0
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "negative zero",
+            "attributes": {
+              "value": 0
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 0
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "nonfinite numeric array",
+      "start": {
+        "kind": "float64[]",
+        "values": [
+          {
+            "kind": "float64",
+            "value": "NaN"
+          },
+          {
+            "kind": "float64",
+            "value": "Infinity"
+          },
+          {
+            "kind": "float64",
+            "value": "-Infinity"
+          },
+          {
+            "kind": "float64",
+            "value": "-0"
+          },
+          {
+            "kind": "float64",
+            "value": "1.25"
+          }
+        ]
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nonfinite numeric array",
+            "attributes": {
+              "value": [
+                null,
+                null,
+                null,
+                0,
+                1.25
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    null,
+                    null,
+                    null,
+                    0,
+                    1.25
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nonfinite numeric array",
+            "attributes": {
+              "value": [
+                null,
+                null,
+                null,
+                0,
+                1.25
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    null,
+                    null,
+                    null,
+                    0,
+                    1.25
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "nonfinite merge",
+      "start": {
+        "kind": "float64",
+        "value": "1"
+      },
+      "update": {
+        "kind": "float64",
+        "value": "NaN"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nonfinite merge",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nonfinite merge",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "finite merge replaces nonfinite",
+      "start": {
+        "kind": "float64",
+        "value": "Infinity"
+      },
+      "update": {
+        "kind": "float64",
+        "value": "2.5"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "finite merge replaces nonfinite",
+            "attributes": {
+              "value": 2.5
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "finite merge replaces nonfinite",
+            "attributes": {
+              "value": 2.5
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "omitted merge retains nonfinite",
+      "start": {
+        "kind": "float64",
+        "value": "NaN"
+      },
+      "update": {
+        "kind": "omit"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "omitted merge retains nonfinite",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "omitted merge retains nonfinite",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "max signed integer",
+      "start": {
+        "kind": "int64",
+        "value": "9223372036854775807"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "max signed integer",
+            "attributes": {
+              "value": 9223372036854776000
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 9223372036854776000
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "max signed integer",
+            "attributes": {
+              "value": 9223372036854776000
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 9223372036854776000
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "min signed integer",
+      "start": {
+        "kind": "int64",
+        "value": "-9223372036854775808"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "min signed integer",
+            "attributes": {
+              "value": -9223372036854776000
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": -9223372036854776000
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "min signed integer",
+            "attributes": {
+              "value": -9223372036854776000
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": -9223372036854776000
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "max unsigned integer",
+      "start": {
+        "kind": "uint64",
+        "value": "18446744073709551615"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "max unsigned integer",
+            "attributes": {
+              "value": 18446744073709552000
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 18446744073709552000
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "max unsigned integer",
+            "attributes": {
+              "value": 18446744073709552000
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 18446744073709552000
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "integer beyond exact binary64",
+      "start": {
+        "kind": "int64",
+        "value": "9007199254740993"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "integer beyond exact binary64",
+            "attributes": {
+              "value": 9007199254740992
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 9007199254740992
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "integer beyond exact binary64",
+            "attributes": {
+              "value": 9007199254740992
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 9007199254740992
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "max finite number",
+      "start": {
+        "kind": "float64",
+        "value": "1.7976931348623157e308"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "max finite number",
+            "attributes": {
+              "value": 1.7976931348623157e+308
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1.7976931348623157e+308
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "max finite number",
+            "attributes": {
+              "value": 1.7976931348623157e+308
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1.7976931348623157e+308
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "min positive number",
+      "start": {
+        "kind": "float64",
+        "value": "5e-324"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "min positive number",
+            "attributes": {
+              "value": 5e-324
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 5e-324
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "min positive number",
+            "attributes": {
+              "value": 5e-324
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 5e-324
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "string array",
+      "start": {
+        "kind": "any[]",
+        "values": [
+          {
+            "kind": "string",
+            "value": "xin chào"
+          },
+          {
+            "kind": "string",
+            "value": "42"
+          }
+        ]
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "string array",
+            "attributes": {
+              "value": [
+                "xin chào",
+                "42"
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    "xin chào",
+                    "42"
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "string array",
+            "attributes": {
+              "value": [
+                "xin chào",
+                "42"
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    "xin chào",
+                    "42"
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "boolean array",
+      "start": {
+        "kind": "any[]",
+        "values": [
+          {
+            "kind": "bool",
+            "value": "true"
+          },
+          {
+            "kind": "bool",
+            "value": "false"
+          }
+        ]
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "boolean array",
+            "attributes": {
+              "value": [
+                true,
+                false
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    true,
+                    false
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "boolean array",
+            "attributes": {
+              "value": [
+                true,
+                false
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    true,
+                    false
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "prototype setter scalar",
+      "key": "__proto__",
+      "start": {
+        "kind": "string",
+        "value": "ignored"
+      },
+      "update": {
+        "kind": "float64",
+        "value": "3"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "prototype setter scalar",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "prototype setter scalar",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "prototype setter array",
+      "key": "__proto__",
+      "start": {
+        "kind": "float64[]",
+        "values": [
+          {
+            "kind": "float64",
+            "value": "1"
+          },
+          {
+            "kind": "float64",
+            "value": "2"
+          }
+        ]
+      },
+      "update": {
+        "kind": "any[]",
+        "values": [
+          {
+            "kind": "string",
+            "value": "changed"
+          }
+        ]
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "prototype setter array",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "prototype setter array",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "constructor is an ordinary attribute",
+      "key": "constructor",
+      "start": {
+        "kind": "float64",
+        "value": "1"
+      },
+      "update": {
+        "kind": "float64",
+        "value": "2"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "constructor is an ordinary attribute",
+            "attributes": {
+              "constructor": 2
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "constructor": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "constructor is an ordinary attribute",
+            "attributes": {
+              "constructor": 2
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "constructor": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "toString is an ordinary attribute",
+      "key": "toString",
+      "start": {
+        "kind": "string",
+        "value": "kept"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "toString is an ordinary attribute",
+            "attributes": {
+              "toString": "kept"
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "toString": "kept"
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "toString is an ordinary attribute",
+            "attributes": {
+              "toString": "kept"
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "toString": "kept"
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "prototype is an ordinary attribute",
+      "key": "prototype",
+      "start": {
+        "kind": "bool",
+        "value": "false"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "prototype is an ordinary attribute",
+            "attributes": {
+              "prototype": false
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "prototype": false
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "prototype is an ordinary attribute",
+            "attributes": {
+              "prototype": false
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "prototype": false
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "mixed strings and numbers",
+      "start": {
+        "kind": "json",
+        "value": "[1,\"text\"]"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "mixed strings and numbers",
+            "attributes": {
+              "value": [
+                1,
+                "text"
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    1,
+                    "text"
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "mixed strings and numbers",
+            "attributes": {
+              "value": [
+                1,
+                "text"
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    1,
+                    "text"
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "merge mixed strings and numbers",
+      "start": {
+        "kind": "float64",
+        "value": "1"
+      },
+      "update": {
+        "kind": "json",
+        "value": "[1,\"text\"]"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge mixed strings and numbers",
+            "attributes": {
+              "value": [
+                1,
+                "text"
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge mixed strings and numbers",
+            "attributes": {
+              "value": [
+                1,
+                "text"
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "mixed booleans and numbers",
+      "start": {
+        "kind": "json",
+        "value": "[1,true]"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "mixed booleans and numbers",
+            "attributes": {
+              "value": [
+                1,
+                true
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    1,
+                    true
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "mixed booleans and numbers",
+            "attributes": {
+              "value": [
+                1,
+                true
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    1,
+                    true
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "merge mixed booleans and numbers",
+      "start": {
+        "kind": "float64",
+        "value": "1"
+      },
+      "update": {
+        "kind": "json",
+        "value": "[1,true]"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge mixed booleans and numbers",
+            "attributes": {
+              "value": [
+                1,
+                true
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge mixed booleans and numbers",
+            "attributes": {
+              "value": [
+                1,
+                true
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "null array element",
+      "start": {
+        "kind": "json",
+        "value": "[1,null]"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "null array element",
+            "attributes": {
+              "value": [
+                1,
+                null
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    1,
+                    null
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "null array element",
+            "attributes": {
+              "value": [
+                1,
+                null
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    1,
+                    null
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "merge null array element",
+      "start": {
+        "kind": "float64",
+        "value": "1"
+      },
+      "update": {
+        "kind": "json",
+        "value": "[1,null]"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge null array element",
+            "attributes": {
+              "value": [
+                1,
+                null
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge null array element",
+            "attributes": {
+              "value": [
+                1,
+                null
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "nested numeric arrays",
+      "start": {
+        "kind": "json",
+        "value": "[[1],[2,3]]"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested numeric arrays",
+            "attributes": {
+              "value": [
+                [
+                  1
+                ],
+                [
+                  2,
+                  3
+                ]
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    [
+                      1
+                    ],
+                    [
+                      2,
+                      3
+                    ]
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested numeric arrays",
+            "attributes": {
+              "value": [
+                [
+                  1
+                ],
+                [
+                  2,
+                  3
+                ]
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    [
+                      1
+                    ],
+                    [
+                      2,
+                      3
+                    ]
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "merge nested numeric arrays",
+      "start": {
+        "kind": "float64",
+        "value": "1"
+      },
+      "update": {
+        "kind": "json",
+        "value": "[[1],[2,3]]"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge nested numeric arrays",
+            "attributes": {
+              "value": [
+                [
+                  1
+                ],
+                [
+                  2,
+                  3
+                ]
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge nested numeric arrays",
+            "attributes": {
+              "value": [
+                [
+                  1
+                ],
+                [
+                  2,
+                  3
+                ]
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "object attribute",
+      "start": {
+        "kind": "json",
+        "value": "{\"nested\":1}"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "object attribute",
+            "attributes": {
+              "value": {
+                "nested": 1
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "nested": 1
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "object attribute",
+            "attributes": {
+              "value": {
+                "nested": 1
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "nested": 1
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "merge object attribute",
+      "start": {
+        "kind": "float64",
+        "value": "1"
+      },
+      "update": {
+        "kind": "json",
+        "value": "{\"nested\":1}"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge object attribute",
+            "attributes": {
+              "value": {
+                "nested": 1
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge object attribute",
+            "attributes": {
+              "value": {
+                "nested": 1
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "object array",
+      "start": {
+        "kind": "json",
+        "value": "[{\"nested\":1},{\"nested\":2}]"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "object array",
+            "attributes": {
+              "value": [
+                {
+                  "nested": 1
+                },
+                {
+                  "nested": 2
+                }
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    {
+                      "nested": 1
+                    },
+                    {
+                      "nested": 2
+                    }
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "object array",
+            "attributes": {
+              "value": [
+                {
+                  "nested": 1
+                },
+                {
+                  "nested": 2
+                }
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    {
+                      "nested": 1
+                    },
+                    {
+                      "nested": 2
+                    }
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "merge object array",
+      "start": {
+        "kind": "float64",
+        "value": "1"
+      },
+      "update": {
+        "kind": "json",
+        "value": "[{\"nested\":1},{\"nested\":2}]"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge object array",
+            "attributes": {
+              "value": [
+                {
+                  "nested": 1
+                },
+                {
+                  "nested": 2
+                }
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge object array",
+            "attributes": {
+              "value": [
+                {
+                  "nested": 1
+                },
+                {
+                  "nested": 2
+                }
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty object array",
+      "start": {
+        "kind": "json",
+        "value": "[]"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "empty object array",
+            "attributes": {
+              "value": []
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": []
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "empty object array",
+            "attributes": {
+              "value": []
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": []
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "merge empty object array",
+      "start": {
+        "kind": "float64",
+        "value": "1"
+      },
+      "update": {
+        "kind": "json",
+        "value": "[]"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge empty object array",
+            "attributes": {
+              "value": []
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge empty object array",
+            "attributes": {
+              "value": []
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "nested null field",
+      "start": {
+        "kind": "json",
+        "value": "{\"nested\":null}"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested null field",
+            "attributes": {
+              "value": {
+                "nested": null
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "nested": null
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested null field",
+            "attributes": {
+              "value": {
+                "nested": null
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "nested": null
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "merge nested null field",
+      "start": {
+        "kind": "float64",
+        "value": "1"
+      },
+      "update": {
+        "kind": "json",
+        "value": "{\"nested\":null}"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge nested null field",
+            "attributes": {
+              "value": {
+                "nested": null
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge nested null field",
+            "attributes": {
+              "value": {
+                "nested": null
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "nested mixed values",
+      "start": {
+        "kind": "json",
+        "value": "[{\"nested\":[1,true,\"x\",null]}]"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested mixed values",
+            "attributes": {
+              "value": [
+                {
+                  "nested": [
+                    1,
+                    true,
+                    "x",
+                    null
+                  ]
+                }
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    {
+                      "nested": [
+                        1,
+                        true,
+                        "x",
+                        null
+                      ]
+                    }
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested mixed values",
+            "attributes": {
+              "value": [
+                {
+                  "nested": [
+                    1,
+                    true,
+                    "x",
+                    null
+                  ]
+                }
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    {
+                      "nested": [
+                        1,
+                        true,
+                        "x",
+                        null
+                      ]
+                    }
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "merge nested mixed values",
+      "start": {
+        "kind": "float64",
+        "value": "1"
+      },
+      "update": {
+        "kind": "json",
+        "value": "[{\"nested\":[1,true,\"x\",null]}]"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge nested mixed values",
+            "attributes": {
+              "value": [
+                {
+                  "nested": [
+                    1,
+                    true,
+                    "x",
+                    null
+                  ]
+                }
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge nested mixed values",
+            "attributes": {
+              "value": [
+                {
+                  "nested": [
+                    1,
+                    true,
+                    "x",
+                    null
+                  ]
+                }
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "nested special keys",
+      "start": {
+        "kind": "json",
+        "value": "{\"__proto__\":{\"value\":1},\"constructor\":2}"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested special keys",
+            "attributes": {
+              "value": {
+                "__proto__": {
+                  "value": 1
+                },
+                "constructor": 2
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "__proto__": {
+                      "value": 1
+                    },
+                    "constructor": 2
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested special keys",
+            "attributes": {
+              "value": {
+                "__proto__": {
+                  "value": 1
+                },
+                "constructor": 2
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "__proto__": {
+                      "value": 1
+                    },
+                    "constructor": 2
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "merge nested special keys",
+      "start": {
+        "kind": "float64",
+        "value": "1"
+      },
+      "update": {
+        "kind": "json",
+        "value": "{\"__proto__\":{\"value\":1},\"constructor\":2}"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge nested special keys",
+            "attributes": {
+              "value": {
+                "__proto__": {
+                  "value": 1
+                },
+                "constructor": 2
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge nested special keys",
+            "attributes": {
+              "value": {
+                "__proto__": {
+                  "value": 1
+                },
+                "constructor": 2
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "nested numeric array/nonfinite",
+      "start": {
+        "kind": "any[]",
+        "values": [
+          {
+            "kind": "float64",
+            "value": "Infinity"
+          },
+          {
+            "kind": "any[]",
+            "values": [
+              {
+                "kind": "float64",
+                "value": "Infinity"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested numeric array/nonfinite",
+            "attributes": {
+              "value": [
+                null,
+                [
+                  null
+                ]
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    null,
+                    [
+                      null
+                    ]
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested numeric array/nonfinite",
+            "attributes": {
+              "value": [
+                null,
+                [
+                  null
+                ]
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    null,
+                    [
+                      null
+                    ]
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "nested numeric object/nonfinite",
+      "start": {
+        "kind": "object",
+        "entries": {
+          "nested": {
+            "kind": "float64",
+            "value": "Infinity"
+          }
+        }
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested numeric object/nonfinite",
+            "attributes": {
+              "value": {
+                "nested": null
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "nested": null
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested numeric object/nonfinite",
+            "attributes": {
+              "value": {
+                "nested": null
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "nested": null
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "nested numeric array/integer rounding",
+      "start": {
+        "kind": "any[]",
+        "values": [
+          {
+            "kind": "int64",
+            "value": "9223372036854775807"
+          },
+          {
+            "kind": "any[]",
+            "values": [
+              {
+                "kind": "int64",
+                "value": "9223372036854775807"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested numeric array/integer rounding",
+            "attributes": {
+              "value": [
+                9223372036854776000,
+                [
+                  9223372036854776000
+                ]
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    9223372036854776000,
+                    [
+                      9223372036854776000
+                    ]
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested numeric array/integer rounding",
+            "attributes": {
+              "value": [
+                9223372036854776000,
+                [
+                  9223372036854776000
+                ]
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    9223372036854776000,
+                    [
+                      9223372036854776000
+                    ]
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "nested numeric object/integer rounding",
+      "start": {
+        "kind": "object",
+        "entries": {
+          "nested": {
+            "kind": "int64",
+            "value": "9223372036854775807"
+          }
+        }
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested numeric object/integer rounding",
+            "attributes": {
+              "value": {
+                "nested": 9223372036854776000
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "nested": 9223372036854776000
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested numeric object/integer rounding",
+            "attributes": {
+              "value": {
+                "nested": 9223372036854776000
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "nested": 9223372036854776000
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "top-level null",
+      "start": {
+        "kind": "json",
+        "value": "null"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "top-level null",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "top-level null",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "null merge replaces value",
+      "start": {
+        "kind": "float64",
+        "value": "1"
+      },
+      "update": {
+        "kind": "json",
+        "value": "null"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "null merge replaces value",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "null merge replaces value",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "value merge replaces null",
+      "start": {
+        "kind": "json",
+        "value": "null"
+      },
+      "update": {
+        "kind": "float64",
+        "value": "2"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "value merge replaces null",
+            "attributes": {
+              "value": 2
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "value merge replaces null",
+            "attributes": {
+              "value": 2
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "omitted merge retains null",
+      "start": {
+        "kind": "json",
+        "value": "null"
+      },
+      "update": {
+        "kind": "omit"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "omitted merge retains null",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "omitted merge retains null",
+            "attributes": {
+              "value": null
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": null
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "omitted attribute",
+      "start": {
+        "kind": "omit"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "omitted attribute",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "omitted attribute",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "nested omitted field",
+      "start": {
+        "kind": "object",
+        "entries": {
+          "kept": {
+            "kind": "json",
+            "value": "null"
+          },
+          "omitted": {
+            "kind": "omit"
+          }
+        }
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested omitted field",
+            "attributes": {
+              "value": {
+                "kept": null
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "kept": null
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested omitted field",
+            "attributes": {
+              "value": {
+                "kept": null
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "kept": null
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "omitted array element",
+      "start": {
+        "kind": "any[]",
+        "values": [
+          {
+            "kind": "json",
+            "value": "null"
+          },
+          {
+            "kind": "omit"
+          },
+          {
+            "kind": "float64",
+            "value": "1"
+          }
+        ]
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "omitted array element",
+            "attributes": {
+              "value": [
+                null,
+                null,
+                1
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    null,
+                    null,
+                    1
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "omitted array element",
+            "attributes": {
+              "value": [
+                null,
+                null,
+                1
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    null,
+                    null,
+                    1
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "nested omitted array/object",
+      "start": {
+        "kind": "any[]",
+        "values": [
+          {
+            "kind": "object",
+            "entries": {
+              "kept": {
+                "kind": "json",
+                "value": "null"
+              },
+              "omitted": {
+                "kind": "omit"
+              }
+            }
+          },
+          {
+            "kind": "any[]",
+            "values": [
+              {
+                "kind": "omit"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested omitted array/object",
+            "attributes": {
+              "value": [
+                {
+                  "kept": null
+                },
+                [
+                  null
+                ]
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    {
+                      "kept": null
+                    },
+                    [
+                      null
+                    ]
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested omitted array/object",
+            "attributes": {
+              "value": [
+                {
+                  "kept": null
+                },
+                [
+                  null
+                ]
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    {
+                      "kept": null
+                    },
+                    [
+                      null
+                    ]
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "merge nested omitted field",
+      "start": {
+        "kind": "float64",
+        "value": "1"
+      },
+      "update": {
+        "kind": "object",
+        "entries": {
+          "kept": {
+            "kind": "json",
+            "value": "null"
+          },
+          "omitted": {
+            "kind": "omit"
+          }
+        }
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge nested omitted field",
+            "attributes": {
+              "value": {
+                "kept": null
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "merge nested omitted field",
+            "attributes": {
+              "value": {
+                "kept": null
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "prototype setter null",
+      "key": "__proto__",
+      "start": {
+        "kind": "json",
+        "value": "null"
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "prototype setter null",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "prototype setter null",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "nested prototype null",
+      "start": {
+        "kind": "object",
+        "entries": {
+          "__proto__": {
+            "kind": "json",
+            "value": "null"
+          },
+          "omitted": {
+            "kind": "omit"
+          }
+        }
+      },
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested prototype null",
+            "attributes": {
+              "value": {
+                "__proto__": null
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "__proto__": null
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested prototype null",
+            "attributes": {
+              "value": {
+                "__proto__": null
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "__proto__": null
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "function attribute",
+      "start": {
+        "kind": "function"
+      },
+      "inspectFunctions": true,
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "function attribute",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "function attribute",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ],
+        "functions": {
+          "active": [
+            "0.attributes.value",
+            "0.events.0.attributes.value"
+          ],
+          "settled": [
+            "0.attributes.value",
+            "0.events.0.attributes.value"
+          ]
+        }
+      }
+    },
+    {
+      "name": "function merge replaces number",
+      "start": {
+        "kind": "float64",
+        "value": "1"
+      },
+      "update": {
+        "kind": "function"
+      },
+      "inspectFunctions": true,
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "function merge replaces number",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "function merge replaces number",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ],
+        "functions": {
+          "active": [
+            "0.attributes.value"
+          ],
+          "settled": [
+            "0.attributes.value"
+          ]
+        }
+      }
+    },
+    {
+      "name": "number merge replaces function",
+      "start": {
+        "kind": "function"
+      },
+      "update": {
+        "kind": "float64",
+        "value": "2"
+      },
+      "inspectFunctions": true,
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "number merge replaces function",
+            "attributes": {
+              "value": 2
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "number merge replaces function",
+            "attributes": {
+              "value": 2
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ],
+        "functions": {
+          "active": [
+            "0.events.0.attributes.value"
+          ],
+          "settled": [
+            "0.events.0.attributes.value"
+          ]
+        }
+      }
+    },
+    {
+      "name": "undefined merge retains function",
+      "start": {
+        "kind": "function"
+      },
+      "update": {
+        "kind": "omit"
+      },
+      "inspectFunctions": true,
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "undefined merge retains function",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "undefined merge retains function",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ],
+        "functions": {
+          "active": [
+            "0.attributes.value",
+            "0.events.0.attributes.value"
+          ],
+          "settled": [
+            "0.attributes.value",
+            "0.events.0.attributes.value"
+          ]
+        }
+      }
+    },
+    {
+      "name": "nested function object",
+      "start": {
+        "kind": "object",
+        "entries": {
+          "callback": {
+            "kind": "function"
+          },
+          "kept": {
+            "kind": "float64",
+            "value": "1"
+          }
+        }
+      },
+      "inspectFunctions": true,
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested function object",
+            "attributes": {
+              "value": {
+                "kept": 1
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "kept": 1
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested function object",
+            "attributes": {
+              "value": {
+                "kept": 1
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "kept": 1
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ],
+        "functions": {
+          "active": [
+            "0.attributes.value.callback",
+            "0.events.0.attributes.value.callback"
+          ],
+          "settled": [
+            "0.attributes.value.callback",
+            "0.events.0.attributes.value.callback"
+          ]
+        }
+      }
+    },
+    {
+      "name": "function array element",
+      "start": {
+        "kind": "any[]",
+        "values": [
+          {
+            "kind": "function"
+          },
+          {
+            "kind": "float64",
+            "value": "1"
+          }
+        ]
+      },
+      "inspectFunctions": true,
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "function array element",
+            "attributes": {
+              "value": [
+                null,
+                1
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    null,
+                    1
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "function array element",
+            "attributes": {
+              "value": [
+                null,
+                1
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    null,
+                    1
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ],
+        "functions": {
+          "active": [
+            "0.attributes.value.0",
+            "0.events.0.attributes.value.0"
+          ],
+          "settled": [
+            "0.attributes.value.0",
+            "0.events.0.attributes.value.0"
+          ]
+        }
+      }
+    },
+    {
+      "name": "nested function arrays and objects",
+      "start": {
+        "kind": "any[]",
+        "values": [
+          {
+            "kind": "object",
+            "entries": {
+              "callback": {
+                "kind": "function"
+              }
+            }
+          },
+          {
+            "kind": "any[]",
+            "values": [
+              {
+                "kind": "function"
+              }
+            ]
+          }
+        ]
+      },
+      "inspectFunctions": true,
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested function arrays and objects",
+            "attributes": {
+              "value": [
+                {},
+                [
+                  null
+                ]
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    {},
+                    [
+                      null
+                    ]
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "nested function arrays and objects",
+            "attributes": {
+              "value": [
+                {},
+                [
+                  null
+                ]
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    {},
+                    [
+                      null
+                    ]
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ],
+        "functions": {
+          "active": [
+            "0.attributes.value.0.callback",
+            "0.attributes.value.1.0",
+            "0.events.0.attributes.value.0.callback",
+            "0.events.0.attributes.value.1.0"
+          ],
+          "settled": [
+            "0.attributes.value.0.callback",
+            "0.attributes.value.1.0",
+            "0.events.0.attributes.value.0.callback",
+            "0.events.0.attributes.value.1.0"
+          ]
+        }
+      }
+    },
+    {
+      "name": "prototype setter function",
+      "key": "__proto__",
+      "start": {
+        "kind": "function"
+      },
+      "inspectFunctions": true,
+      "expected": {
+        "active": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "prototype setter function",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": false
+          }
+        ],
+        "settled": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "prototype setter function",
+            "attributes": {},
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ],
+        "functions": {
+          "active": [],
+          "settled": []
+        }
+      }
+    }
+  ],
+  "graphs": [
+    {
+      "kind": "object",
+      "expected": {
+        "exportFailed": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "object",
+            "attributes": {
+              "value": {
+                "value": 3,
+                "nested": {
+                  "value": 4
+                }
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "value": 3,
+                    "nested": {
+                      "value": 4
+                    }
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "kind": "array",
+      "expected": {
+        "exportFailed": false,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "array",
+            "attributes": {
+              "value": [
+                1,
+                {
+                  "value": 4
+                },
+                [
+                  5
+                ]
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    1,
+                    {
+                      "value": 4
+                    },
+                    [
+                      5
+                    ]
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "kind": "cyclic-object",
+      "expected": {
+        "exportFailed": true,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "cyclic-object",
+            "attributes": {
+              "value": {
+                "self": "cleared"
+              }
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": {
+                    "self": "cleared"
+                  }
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "kind": "cyclic-array",
+      "expected": {
+        "exportFailed": true,
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "cyclic-array",
+            "attributes": {
+              "value": [
+                "original",
+                [
+                  "original",
+                  "cleared"
+                ]
+              ]
+            },
+            "events": [
+              {
+                "name": "copy",
+                "attributes": {
+                  "value": [
+                    "original",
+                    [
+                      "original",
+                      "cleared"
+                    ]
+                  ]
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    }
+  ]
+}

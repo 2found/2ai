@@ -1,0 +1,487 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "source": "packages/agent/src/agent-loop.ts",
+  "sourceSHA256": "e773e822a2587caf314e6bb66ea6370fce3468b7eecd26d6a67afe673f81eabc",
+  "cases": [
+    {
+      "phase": "message_start",
+      "field": "timestamp",
+      "expected": {
+        "provider": {
+          "timestamp": 1,
+          "text": "original",
+          "input": 1
+        },
+        "result": {
+          "timestamp": 1,
+          "text": "original",
+          "input": 1
+        },
+        "retained": [
+          {
+            "timestamp": 77,
+            "text": "original",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 1
+          }
+        ],
+        "finalSame": true,
+        "resultSame": true
+      }
+    },
+    {
+      "phase": "message_start",
+      "field": "text",
+      "expected": {
+        "provider": {
+          "timestamp": 1,
+          "text": "changed",
+          "input": 1
+        },
+        "result": {
+          "timestamp": 1,
+          "text": "changed",
+          "input": 1
+        },
+        "retained": [
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          }
+        ],
+        "finalSame": true,
+        "resultSame": true
+      }
+    },
+    {
+      "phase": "message_start",
+      "field": "usage",
+      "expected": {
+        "provider": {
+          "timestamp": 1,
+          "text": "original",
+          "input": 77
+        },
+        "result": {
+          "timestamp": 1,
+          "text": "original",
+          "input": 77
+        },
+        "retained": [
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          }
+        ],
+        "finalSame": true,
+        "resultSame": true
+      }
+    },
+    {
+      "phase": "message_update",
+      "field": "timestamp",
+      "expected": {
+        "provider": {
+          "timestamp": 1,
+          "text": "original",
+          "input": 1
+        },
+        "result": {
+          "timestamp": 1,
+          "text": "original",
+          "input": 1
+        },
+        "retained": [
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 1
+          },
+          {
+            "timestamp": 77,
+            "text": "original",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 1
+          }
+        ],
+        "finalSame": true,
+        "resultSame": true
+      }
+    },
+    {
+      "phase": "message_update",
+      "field": "text",
+      "expected": {
+        "provider": {
+          "timestamp": 1,
+          "text": "changed",
+          "input": 1
+        },
+        "result": {
+          "timestamp": 1,
+          "text": "changed",
+          "input": 1
+        },
+        "retained": [
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          }
+        ],
+        "finalSame": true,
+        "resultSame": true
+      }
+    },
+    {
+      "phase": "message_update",
+      "field": "usage",
+      "expected": {
+        "provider": {
+          "timestamp": 1,
+          "text": "original",
+          "input": 77
+        },
+        "result": {
+          "timestamp": 1,
+          "text": "original",
+          "input": 77
+        },
+        "retained": [
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          }
+        ],
+        "finalSame": true,
+        "resultSame": true
+      }
+    },
+    {
+      "phase": "message_end",
+      "field": "timestamp",
+      "expected": {
+        "provider": {
+          "timestamp": 77,
+          "text": "original",
+          "input": 1
+        },
+        "result": {
+          "timestamp": 77,
+          "text": "original",
+          "input": 1
+        },
+        "retained": [
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 1
+          },
+          {
+            "timestamp": 77,
+            "text": "original",
+            "input": 1
+          },
+          {
+            "timestamp": 77,
+            "text": "original",
+            "input": 1
+          }
+        ],
+        "finalSame": true,
+        "resultSame": true
+      }
+    },
+    {
+      "phase": "message_end",
+      "field": "text",
+      "expected": {
+        "provider": {
+          "timestamp": 1,
+          "text": "changed",
+          "input": 1
+        },
+        "result": {
+          "timestamp": 1,
+          "text": "changed",
+          "input": 1
+        },
+        "retained": [
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          }
+        ],
+        "finalSame": true,
+        "resultSame": true
+      }
+    },
+    {
+      "phase": "message_end",
+      "field": "usage",
+      "expected": {
+        "provider": {
+          "timestamp": 1,
+          "text": "original",
+          "input": 77
+        },
+        "result": {
+          "timestamp": 1,
+          "text": "original",
+          "input": 77
+        },
+        "retained": [
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          }
+        ],
+        "finalSame": true,
+        "resultSame": true
+      }
+    },
+    {
+      "phase": "finish",
+      "field": "timestamp",
+      "expected": {
+        "provider": {
+          "timestamp": 77,
+          "text": "original",
+          "input": 1
+        },
+        "result": {
+          "timestamp": 77,
+          "text": "original",
+          "input": 1
+        },
+        "retained": [
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 1
+          },
+          {
+            "timestamp": 77,
+            "text": "original",
+            "input": 1
+          },
+          {
+            "timestamp": 77,
+            "text": "original",
+            "input": 1
+          }
+        ],
+        "finalSame": true,
+        "resultSame": true
+      }
+    },
+    {
+      "phase": "finish",
+      "field": "text",
+      "expected": {
+        "provider": {
+          "timestamp": 1,
+          "text": "changed",
+          "input": 1
+        },
+        "result": {
+          "timestamp": 1,
+          "text": "changed",
+          "input": 1
+        },
+        "retained": [
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          },
+          {
+            "timestamp": 1,
+            "text": "changed",
+            "input": 1
+          }
+        ],
+        "finalSame": true,
+        "resultSame": true
+      }
+    },
+    {
+      "phase": "finish",
+      "field": "usage",
+      "expected": {
+        "provider": {
+          "timestamp": 1,
+          "text": "original",
+          "input": 77
+        },
+        "result": {
+          "timestamp": 1,
+          "text": "original",
+          "input": 77
+        },
+        "retained": [
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          },
+          {
+            "timestamp": 1,
+            "text": "original",
+            "input": 77
+          }
+        ],
+        "finalSame": true,
+        "resultSame": true
+      }
+    }
+  ]
+}

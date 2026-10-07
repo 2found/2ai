@@ -1,0 +1,5369 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "model": {
+    "id": "test",
+    "name": "Test",
+    "api": "openai-responses",
+    "provider": "openai",
+    "baseUrl": "https://api.openai.com/v1",
+    "reasoning": true,
+    "input": [
+      "text",
+      "image"
+    ],
+    "cost": {
+      "input": 0,
+      "output": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    },
+    "maxTokens": 1000,
+    "contextWindow": 10000
+  },
+  "allowed": [
+    "openai",
+    "openai-codex",
+    "opencode"
+  ],
+  "cases": [
+    {
+      "input": {
+        "name": "instructions",
+        "context": {
+          "systemPrompt": "system",
+          "messages": [
+            {
+              "role": "user",
+              "content": "hello",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "developer",
+            "content": "system"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "hello"
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "nonreasoning",
+        "model": {
+          "reasoning": false
+        },
+        "context": {
+          "systemPrompt": "system",
+          "messages": [
+            {
+              "role": "user",
+              "content": "",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "system"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": ""
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "developer role false",
+        "model": {
+          "compat": {
+            "supportsDeveloperRole": false
+          }
+        },
+        "context": {
+          "systemPrompt": "system",
+          "messages": [
+            {
+              "role": "user",
+              "content": "hi",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "system"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "hi"
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "developer role null",
+        "model": {
+          "compat": {
+            "supportsDeveloperRole": null
+          }
+        },
+        "context": {
+          "systemPrompt": "system",
+          "messages": [
+            {
+              "role": "user",
+              "content": "hi",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "developer",
+            "content": "system"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "hi"
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "developer role true",
+        "model": {
+          "compat": {
+            "supportsDeveloperRole": true
+          }
+        },
+        "context": {
+          "systemPrompt": "system",
+          "messages": [
+            {
+              "role": "user",
+              "content": "hi",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "developer",
+            "content": "system"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "hi"
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "exclude leading prompt",
+        "options": {
+          "includeSystemPrompt": false
+        },
+        "context": {
+          "systemPrompt": "system",
+          "messages": [
+            {
+              "role": "user",
+              "content": "hi",
+              "timestamp": 100
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "hi"
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_1"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "user blocks",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": ""
+                },
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                },
+                {
+                  "type": "text",
+                  "text": "hello"
+                }
+              ],
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": [],
+              "timestamp": 100
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "one"
+                },
+                {
+                  "type": "text",
+                  "text": "two"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": ""
+              },
+              {
+                "type": "input_image",
+                "detail": "auto",
+                "image_url": "data:image/png;base64,YQ=="
+              },
+              {
+                "type": "input_text",
+                "text": "hello"
+              }
+            ]
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "one",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_1"
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "two",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_1_1"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "nonvision",
+        "model": {
+          "input": [
+            "text"
+          ]
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                },
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                },
+                {
+                  "type": "text",
+                  "text": "hello"
+                }
+              ],
+              "timestamp": 100
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                },
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "(image omitted: model does not support images)"
+              },
+              {
+                "type": "input_text",
+                "text": "hello"
+              }
+            ]
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "(tool image omitted: model does not support images)"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "empty assistant skips index",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "reason"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": ""
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "next"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0"
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "next",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_1"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "text signature 0",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer",
+                  "textSignature": "legacy"
+                },
+                {
+                  "type": "text",
+                  "text": "next"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "legacy"
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "next",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0_1"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "text signature 1",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer",
+                  "textSignature": ""
+                },
+                {
+                  "type": "text",
+                  "text": "next"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0"
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "next",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0_1"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "text signature 2",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer",
+                  "textSignature": " {\"v\":1,\"id\":\"msg_space\"}"
+                },
+                {
+                  "type": "text",
+                  "text": "next"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": " {\"v\":1,\"id\":\"msg_space\"}"
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "next",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0_1"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "text signature 3",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer",
+                  "textSignature": "{\"v\":1,\"id\":\"msg_one\",\"phase\":\"commentary\"}"
+                },
+                {
+                  "type": "text",
+                  "text": "next"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_one",
+            "phase": "commentary"
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "next",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0_1"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "text signature 4",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer",
+                  "textSignature": "{\"v\":1,\"id\":\"msg_two\",\"phase\":\"final_answer\"}"
+                },
+                {
+                  "type": "text",
+                  "text": "next"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_two",
+            "phase": "final_answer"
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "next",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0_1"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "text signature 5",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer",
+                  "textSignature": "{\"v\":1,\"id\":\"\",\"phase\":\"final_answer\"}"
+                },
+                {
+                  "type": "text",
+                  "text": "next"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0",
+            "phase": "final_answer"
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "next",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0_1"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "text signature 6",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer",
+                  "textSignature": "{\"v\":1,\"id\":\"msg_one\",\"phase\":\"unknown\"}"
+                },
+                {
+                  "type": "text",
+                  "text": "next"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_one"
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "next",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0_1"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "text signature 7",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer",
+                  "textSignature": "{\"v\":2,\"id\":\"wrong\"}"
+                },
+                {
+                  "type": "text",
+                  "text": "next"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "{\"v\":2,\"id\":\"wrong\"}"
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "next",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0_1"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "text signature 8",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer",
+                  "textSignature": "{\"v\":1,\"id\":42}"
+                },
+                {
+                  "type": "text",
+                  "text": "next"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "{\"v\":1,\"id\":42}"
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "next",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0_1"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "text signature 9",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer",
+                  "textSignature": "{"
+                },
+                {
+                  "type": "text",
+                  "text": "next"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "{"
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "next",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0_1"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "long text signature 0",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer",
+                  "textSignature": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "long text signature 1",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer",
+                  "textSignature": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_ukn6xk14snk63"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "long text signature 2",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer",
+                  "textSignature": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_smzk6g1t3negr"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning signature",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "summary",
+                  "thinkingSignature": "{\"type\":\"reasoning\",\"id\":\"rs_1\",\"summary\":[{\"type\":\"summary_text\",\"text\":\"summary\"}],\"encrypted_content\":\"opaque\"}"
+                },
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "reasoning",
+            "id": "rs_1",
+            "summary": [
+              {
+                "type": "summary_text",
+                "text": "summary"
+              }
+            ],
+            "encrypted_content": "opaque"
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning numeric semantics",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "summary",
+                  "thinkingSignature": "{\"type\":\"reasoning\",\"value\":9007199254740993,\"infinite\":1e400}"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "reasoning",
+            "value": 9007199254740992,
+            "infinite": null
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning unvalidated JSON null",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "summary",
+                  "thinkingSignature": "null"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          null
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning unvalidated JSON 42",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "summary",
+                  "thinkingSignature": "42"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          42
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning unvalidated JSON []",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "summary",
+                  "thinkingSignature": "[]"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          []
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "reasoning unvalidated JSON \"text\"",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "summary",
+                  "thinkingSignature": "\"text\""
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          "text"
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "cross model signatures",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "thinking",
+                  "thinking": "summary",
+                  "thinkingSignature": "{\"type\":\"reasoning\"}"
+                },
+                {
+                  "type": "text",
+                  "text": "answer",
+                  "textSignature": "msg_old"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "other"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "summary",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0"
+          },
+          {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "answer",
+                "annotations": []
+              }
+            ],
+            "status": "completed",
+            "id": "msg_pi_0_1"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 0 variant 0",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|fc_item",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|fc_item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_item",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}",
+            "namespace": "ns"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 0 variant 1",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|ctc_item",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|ctc_item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}",
+            "namespace": "ns"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 0 variant 2",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call+/😀|rs_a+/=",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call+/😀|rs_a+/=",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "call_id": "call+/😀",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}",
+            "namespace": "ns"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call+/😀",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 0 variant 3",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}",
+            "namespace": "ns"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 0 variant 4",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "!😀xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx__|item",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "!😀xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx__|item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "call_id": "!😀xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx__",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}",
+            "namespace": "ns"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "!😀xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx__",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 0 variant 5",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|item|ignored",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|item|ignored",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}",
+            "namespace": "ns"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 1 variant 0",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|fc_item",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "other"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|fc_item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 1 variant 1",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|ctc_item",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "other"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|ctc_item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 1 variant 2",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call+/😀|rs_a+/=",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "other"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call+/😀|rs_a+/=",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 1 variant 3",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "other"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 1 variant 4",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "!😀xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx__|item",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "other"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "!😀xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx__|item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "call_id": "___xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "___xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 1 variant 5",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|item|ignored",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "other"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|item|ignored",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 2 variant 0",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|fc_item",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "anthropic",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|fc_item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_1feikx61p2cuyc",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 2 variant 1",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|ctc_item",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "anthropic",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|ctc_item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_w0bast180jsa7",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 2 variant 2",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call+/😀|rs_a+/=",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "anthropic",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call+/😀|rs_a+/=",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_1en1awu11sohlq",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 2 variant 3",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "anthropic",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_k4n83c7h0j2b",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 2 variant 4",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "!😀xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx__|item",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "anthropic",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "!😀xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx__|item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_1c0dv6z7f3wp3",
+            "call_id": "___xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "___xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 2 variant 5",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|item|ignored",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "anthropic",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|item|ignored",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_1c0dv6z7f3wp3",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 3 variant 0",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|fc_item",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|fc_item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_1feikx61p2cuyc",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 3 variant 1",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|ctc_item",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|ctc_item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_w0bast180jsa7",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 3 variant 2",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call+/😀|rs_a+/=",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call+/😀|rs_a+/=",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_1en1awu11sohlq",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 3 variant 3",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_k4n83c7h0j2b",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 3 variant 4",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "!😀xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx__|item",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "!😀xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx__|item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_1c0dv6z7f3wp3",
+            "call_id": "___xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "___xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool id source 3 variant 5",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|item|ignored",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": "ns"
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|item|ignored",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_1c0dv6z7f3wp3",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "disallowed provider",
+        "model": {
+          "provider": "custom"
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call+/|item+/",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call+/|item+/",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "call_id": "call___item",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call___item",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "same model null namespace",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|fc_item",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  },
+                  "namespace": null
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|fc_item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_item",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}",
+            "namespace": null
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool arguments JS stringify",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|fc_item",
+                  "name": "tool",
+                  "arguments": {
+                    "2": "two",
+                    "10": "ten",
+                    "z": "<>& ",
+                    "a": [
+                      0,
+                      1e-7,
+                      1e+21,
+                      0.000001
+                    ]
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|fc_item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_item",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"2\":\"two\",\"10\":\"ten\",\"z\":\"<>& \",\"a\":[0,1e-7,1e+21,0.000001]}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "repair orphan and drop rejected",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|fc_item",
+                  "name": "tool",
+                  "arguments": {
+                    "z": "<>&  ",
+                    "a": 1
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "failed"
+                }
+              ],
+              "stopReason": "error",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "aborted"
+                }
+              ],
+              "stopReason": "aborted",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call",
+            "id": "fc_item",
+            "call_id": "call",
+            "name": "tool",
+            "arguments": "{\"z\":\"<>&  \",\"a\":1}"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call",
+            "output": "No result provided"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "next"
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool image output",
+        "context": {
+          "messages": [
+            {
+              "role": "toolResult",
+              "toolCallId": "a",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "b",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": ""
+                },
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "c",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "a"
+                },
+                {
+                  "type": "text",
+                  "text": "b"
+                },
+                {
+                  "type": "image",
+                  "mimeType": "image/png",
+                  "data": "YQ=="
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "d",
+              "toolName": "tool",
+              "content": [],
+              "isError": false,
+              "timestamp": 100
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "e",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": ""
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "function_call_output",
+            "call_id": "a",
+            "output": [
+              {
+                "type": "input_image",
+                "detail": "auto",
+                "image_url": "data:image/png;base64,YQ=="
+              }
+            ]
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "b",
+            "output": [
+              {
+                "type": "input_image",
+                "detail": "auto",
+                "image_url": "data:image/png;base64,YQ=="
+              }
+            ]
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "c",
+            "output": [
+              {
+                "type": "input_text",
+                "text": "a\nb"
+              },
+              {
+                "type": "input_image",
+                "detail": "auto",
+                "image_url": "data:image/png;base64,YQ=="
+              }
+            ]
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "d",
+            "output": "(no tool output)"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "e",
+            "output": "(no tool output)"
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "system folded",
+        "context": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "first",
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "hi",
+              "timestamp": 100
+            },
+            {
+              "role": "system",
+              "content": "new",
+              "toolsAdded": [
+                {
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "z": {
+                        "type": "string"
+                      },
+                      "a": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              ],
+              "sections": {
+                "scope": "latest"
+              },
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "developer",
+            "content": "first\n\nnew\n\nlatest"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "hi"
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "next"
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "system additions 0",
+        "options": {
+          "supportsMidConvoSystemMessages": true
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "first",
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "hi",
+              "timestamp": 100
+            },
+            {
+              "role": "system",
+              "content": "new",
+              "toolsAdded": [
+                {
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "z": {
+                        "type": "string"
+                      },
+                      "a": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              ],
+              "sections": {
+                "scope": "latest"
+              },
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "developer",
+            "content": "first"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "hi"
+              }
+            ]
+          },
+          {
+            "role": "developer",
+            "content": "new\n\nUpdated system prompt section \"scope\":\n\nlatest"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "next"
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "system additions 1",
+        "options": {
+          "supportsMidConvoSystemMessages": true,
+          "supportsAdditionalTools": true
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "first",
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "hi",
+              "timestamp": 100
+            },
+            {
+              "role": "system",
+              "content": "new",
+              "toolsAdded": [
+                {
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "z": {
+                        "type": "string"
+                      },
+                      "a": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              ],
+              "sections": {
+                "scope": "latest"
+              },
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "developer",
+            "content": "first"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "hi"
+              }
+            ]
+          },
+          {
+            "type": "additional_tools",
+            "role": "developer",
+            "tools": [
+              {
+                "type": "function",
+                "name": "tool",
+                "description": "Tool",
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "z": {
+                      "type": "string"
+                    },
+                    "a": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "strict": false
+              }
+            ]
+          },
+          {
+            "role": "developer",
+            "content": "new\n\nUpdated system prompt section \"scope\":\n\nlatest"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "next"
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "system additions 2",
+        "options": {
+          "supportsMidConvoSystemMessages": true,
+          "supportsToolSearch": true
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "first",
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "hi",
+              "timestamp": 100
+            },
+            {
+              "role": "system",
+              "content": "new",
+              "toolsAdded": [
+                {
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "z": {
+                        "type": "string"
+                      },
+                      "a": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              ],
+              "sections": {
+                "scope": "latest"
+              },
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "developer",
+            "content": "first"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "hi"
+              }
+            ]
+          },
+          {
+            "type": "tool_search_call",
+            "call_id": "pi_tool_load_lmvylawxm9nf",
+            "execution": "client",
+            "status": "completed",
+            "arguments": {
+              "query": "tool",
+              "limit": 1
+            }
+          },
+          {
+            "type": "tool_search_output",
+            "call_id": "pi_tool_load_lmvylawxm9nf",
+            "execution": "client",
+            "status": "completed",
+            "tools": [
+              {
+                "type": "function",
+                "name": "tool",
+                "description": "Tool",
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "z": {
+                      "type": "string"
+                    },
+                    "a": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "defer_loading": true,
+                "strict": false
+              }
+            ]
+          },
+          {
+            "role": "developer",
+            "content": "new\n\nUpdated system prompt section \"scope\":\n\nlatest"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "next"
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "system additions 3",
+        "options": {
+          "supportsMidConvoSystemMessages": true,
+          "supportsAdditionalTools": true,
+          "supportsToolSearch": true
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "first",
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "hi",
+              "timestamp": 100
+            },
+            {
+              "role": "system",
+              "content": "new",
+              "toolsAdded": [
+                {
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "z": {
+                        "type": "string"
+                      },
+                      "a": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              ],
+              "sections": {
+                "scope": "latest"
+              },
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "developer",
+            "content": "first"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "hi"
+              }
+            ]
+          },
+          {
+            "type": "additional_tools",
+            "role": "developer",
+            "tools": [
+              {
+                "type": "function",
+                "name": "tool",
+                "description": "Tool",
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "z": {
+                      "type": "string"
+                    },
+                    "a": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "strict": false
+              }
+            ]
+          },
+          {
+            "role": "developer",
+            "content": "new\n\nUpdated system prompt section \"scope\":\n\nlatest"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "next"
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "system additions 4",
+        "options": {
+          "supportsMidConvoSystemMessages": true,
+          "supportsToolSearch": true,
+          "includeSystemPrompt": false
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "first",
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "hi",
+              "timestamp": 100
+            },
+            {
+              "role": "system",
+              "content": "new",
+              "toolsAdded": [
+                {
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "z": {
+                        "type": "string"
+                      },
+                      "a": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              ],
+              "sections": {
+                "scope": "latest"
+              },
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "hi"
+              }
+            ]
+          },
+          {
+            "type": "tool_search_call",
+            "call_id": "pi_tool_load_lmvylawxm9nf",
+            "execution": "client",
+            "status": "completed",
+            "arguments": {
+              "query": "tool",
+              "limit": 1
+            }
+          },
+          {
+            "type": "tool_search_output",
+            "call_id": "pi_tool_load_lmvylawxm9nf",
+            "execution": "client",
+            "status": "completed",
+            "tools": [
+              {
+                "type": "function",
+                "name": "tool",
+                "description": "Tool",
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "z": {
+                      "type": "string"
+                    },
+                    "a": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "defer_loading": true,
+                "strict": false
+              }
+            ]
+          },
+          {
+            "role": "developer",
+            "content": "new\n\nUpdated system prompt section \"scope\":\n\nlatest"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "next"
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "system additions 5",
+        "options": {
+          "supportsToolSearch": true
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "first",
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "hi",
+              "timestamp": 100
+            },
+            {
+              "role": "system",
+              "content": "new",
+              "toolsAdded": [
+                {
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "z": {
+                        "type": "string"
+                      },
+                      "a": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              ],
+              "sections": {
+                "scope": "latest"
+              },
+              "timestamp": 100
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "developer",
+            "content": "first\n\nnew\n\nlatest"
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "hi"
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "next"
+              }
+            ]
+          }
+        ],
+        "tools": [],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar replay ctc_item",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code"
+              ]
+            },
+            "constrainedSampling": {
+              "type": "grammar",
+              "variants": {
+                "openai_regex": ".*"
+              }
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "supportsOpenAIGrammarTools": true
+          }
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|ctc_item",
+                  "name": "tool",
+                  "arguments": {
+                    "code": "x < y\n"
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|ctc_item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "custom_tool_call",
+            "id": "ctc_item",
+            "call_id": "call",
+            "name": "tool",
+            "input": "x < y\n"
+          },
+          {
+            "type": "custom_tool_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [
+          {
+            "type": "custom",
+            "name": "tool",
+            "description": "Tool",
+            "format": {
+              "type": "grammar",
+              "syntax": "regex",
+              "definition": ".*"
+            }
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar replay fc_item",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code"
+              ]
+            },
+            "constrainedSampling": {
+              "type": "grammar",
+              "variants": {
+                "openai_regex": ".*"
+              }
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "supportsOpenAIGrammarTools": true
+          }
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|fc_item",
+                  "name": "tool",
+                  "arguments": {
+                    "code": "x < y\n"
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|fc_item",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "custom_tool_call",
+            "call_id": "call",
+            "name": "tool",
+            "input": "x < y\n"
+          },
+          {
+            "type": "custom_tool_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [
+          {
+            "type": "custom",
+            "name": "tool",
+            "description": "Tool",
+            "format": {
+              "type": "grammar",
+              "syntax": "regex",
+              "definition": ".*"
+            }
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar replay ",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code"
+              ]
+            },
+            "constrainedSampling": {
+              "type": "grammar",
+              "variants": {
+                "openai_regex": ".*"
+              }
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "supportsOpenAIGrammarTools": true
+          }
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|",
+                  "name": "tool",
+                  "arguments": {
+                    "code": "x < y\n"
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            },
+            {
+              "role": "toolResult",
+              "toolCallId": "call|",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "result"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "custom_tool_call",
+            "call_id": "call",
+            "name": "tool",
+            "input": "x < y\n"
+          },
+          {
+            "type": "custom_tool_call_output",
+            "call_id": "call",
+            "output": "result"
+          }
+        ],
+        "tools": [
+          {
+            "type": "custom",
+            "name": "tool",
+            "description": "Tool",
+            "format": {
+              "type": "grammar",
+              "syntax": "regex",
+              "definition": ".*"
+            }
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar cross model",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code"
+              ]
+            },
+            "constrainedSampling": {
+              "type": "grammar",
+              "variants": {
+                "openai_regex": ".*"
+              }
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "supportsOpenAIGrammarTools": true
+          }
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|ctc_item",
+                  "name": "tool",
+                  "arguments": {
+                    "code": "x"
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "other"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "type": "custom_tool_call",
+            "call_id": "call",
+            "name": "tool",
+            "input": "x"
+          },
+          {
+            "type": "custom_tool_call_output",
+            "call_id": "call",
+            "output": "No result provided"
+          }
+        ],
+        "tools": [
+          {
+            "type": "custom",
+            "name": "tool",
+            "description": "Tool",
+            "format": {
+              "type": "grammar",
+              "syntax": "regex",
+              "definition": ".*"
+            }
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar invalid argument",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code"
+              ]
+            },
+            "constrainedSampling": {
+              "type": "grammar",
+              "variants": {
+                "openai_regex": ".*"
+              }
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "supportsOpenAIGrammarTools": true
+          }
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call|ctc_item",
+                  "name": "tool",
+                  "arguments": {
+                    "code": 42
+                  }
+                }
+              ],
+              "stopReason": "stop",
+              "timestamp": 100,
+              "api": "openai-responses",
+              "provider": "openai",
+              "model": "test"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": null,
+        "tools": null,
+        "error": "Grammar tool call \"tool\" requires argument \"code\" to be a string."
+      }
+    },
+    {
+      "input": {
+        "name": "tool defaults 0",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {}
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "messages": [],
+        "tools": [
+          {
+            "type": "function",
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            },
+            "strict": false
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool defaults 1",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "strict": null
+          }
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "messages": [],
+        "tools": [
+          {
+            "type": "function",
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            },
+            "strict": null
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool defaults 2",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "strict": true
+          }
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "messages": [],
+        "tools": [
+          {
+            "type": "function",
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "a": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "z",
+                "a"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool defaults 3",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "strict": false
+          }
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "messages": [],
+        "tools": [
+          {
+            "type": "function",
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            },
+            "strict": false
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool defaults 4",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "supportsStrictMode": false
+          }
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "messages": [],
+        "tools": [
+          {
+            "type": "function",
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool defaults 5",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "supportsStrictMode": false,
+            "strict": true
+          }
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "messages": [],
+        "tools": [
+          {
+            "type": "function",
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "a": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "z",
+                "a"
+              ],
+              "additionalProperties": false
+            }
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool defaults 6",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "toolSearchResult": true
+          }
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "messages": [],
+        "tools": [
+          {
+            "type": "function",
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            },
+            "defer_loading": true,
+            "strict": false
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool strict require supported true",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            },
+            "constrainedSampling": {
+              "type": "json_schema",
+              "strict": "require"
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "supportsStrictMode": true
+          }
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "messages": [],
+        "tools": [
+          {
+            "type": "function",
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "a": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "z",
+                "a"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool strict prefer supported true",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            },
+            "constrainedSampling": {
+              "type": "json_schema",
+              "strict": "prefer"
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "supportsStrictMode": true
+          }
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "messages": [],
+        "tools": [
+          {
+            "type": "function",
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "a": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "z",
+                "a"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "tool strict require supported false",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            },
+            "constrainedSampling": {
+              "type": "json_schema",
+              "strict": "require"
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "supportsStrictMode": false
+          }
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "messages": [],
+        "tools": null,
+        "error": "Tool \"tool\" requires JSON-schema constrained sampling, but strict tools are unsupported."
+      }
+    },
+    {
+      "input": {
+        "name": "tool strict prefer supported false",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            },
+            "constrainedSampling": {
+              "type": "json_schema",
+              "strict": "prefer"
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "supportsStrictMode": false
+          }
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "messages": [],
+        "tools": [
+          {
+            "type": "function",
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "deferred grammar",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code"
+              ]
+            },
+            "constrainedSampling": {
+              "type": "grammar",
+              "variants": {
+                "openai_regex": ".*"
+              }
+            }
+          }
+        ],
+        "options": {
+          "toolOptions": {
+            "supportsOpenAIGrammarTools": true,
+            "toolSearchResult": true
+          }
+        },
+        "context": {
+          "messages": []
+        }
+      },
+      "expected": {
+        "messages": [],
+        "tools": [
+          {
+            "type": "custom",
+            "name": "tool",
+            "description": "Tool",
+            "format": {
+              "type": "grammar",
+              "syntax": "regex",
+              "definition": ".*"
+            },
+            "defer_loading": true
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar added through search",
+        "tools": [
+          {
+            "name": "tool",
+            "description": "Tool",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code"
+              ]
+            },
+            "constrainedSampling": {
+              "type": "grammar",
+              "variants": {
+                "openai_regex": ".*"
+              }
+            }
+          }
+        ],
+        "options": {
+          "supportsMidConvoSystemMessages": true,
+          "supportsToolSearch": true,
+          "toolOptions": {
+            "supportsOpenAIGrammarTools": true
+          }
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "hi",
+              "timestamp": 100
+            },
+            {
+              "role": "system",
+              "toolsAdded": [
+                {
+                  "name": "tool",
+                  "description": "Tool",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  },
+                  "constrainedSampling": {
+                    "type": "grammar",
+                    "variants": {
+                      "openai_regex": ".*"
+                    }
+                  }
+                }
+              ],
+              "timestamp": 100
+            }
+          ]
+        }
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "hi"
+              }
+            ]
+          },
+          {
+            "type": "tool_search_call",
+            "call_id": "pi_tool_load_lmvylawxm9nf",
+            "execution": "client",
+            "status": "completed",
+            "arguments": {
+              "query": "tool",
+              "limit": 1
+            }
+          },
+          {
+            "type": "tool_search_output",
+            "call_id": "pi_tool_load_lmvylawxm9nf",
+            "execution": "client",
+            "status": "completed",
+            "tools": [
+              {
+                "type": "custom",
+                "name": "tool",
+                "description": "Tool",
+                "format": {
+                  "type": "grammar",
+                  "syntax": "regex",
+                  "definition": ".*"
+                },
+                "defer_loading": true
+              }
+            ]
+          }
+        ],
+        "tools": [
+          {
+            "type": "custom",
+            "name": "tool",
+            "description": "Tool",
+            "format": {
+              "type": "grammar",
+              "syntax": "regex",
+              "definition": ".*"
+            }
+          }
+        ],
+        "error": null
+      }
+    }
+  ]
+}

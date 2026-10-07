@@ -1,0 +1,1962 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "pages": [
+    {
+      "message": "",
+      "detail": null,
+      "success": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication successful</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication successful</h1>\n    <p></p>\n    \n  </main>\n</body>\n</html>",
+      "error": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication failed</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication failed</h1>\n    <p></p>\n    \n  </main>\n</body>\n</html>"
+    },
+    {
+      "message": "",
+      "detail": "",
+      "success": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication successful</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication successful</h1>\n    <p></p>\n    \n  </main>\n</body>\n</html>",
+      "error": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication failed</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication failed</h1>\n    <p></p>\n    \n  </main>\n</body>\n</html>"
+    },
+    {
+      "message": "",
+      "detail": "<&>\"'\n",
+      "success": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication successful</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication successful</h1>\n    <p></p>\n    \n  </main>\n</body>\n</html>",
+      "error": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication failed</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication failed</h1>\n    <p></p>\n    <div class=\"details\">&lt;&amp;&gt;&quot;&#39;\n</div>\n  </main>\n</body>\n</html>"
+    },
+    {
+      "message": "<&>\"' &amp;",
+      "detail": null,
+      "success": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication successful</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication successful</h1>\n    <p>&lt;&amp;&gt;&quot;&#39; &amp;amp;</p>\n    \n  </main>\n</body>\n</html>",
+      "error": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication failed</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication failed</h1>\n    <p>&lt;&amp;&gt;&quot;&#39; &amp;amp;</p>\n    \n  </main>\n</body>\n</html>"
+    },
+    {
+      "message": "<&>\"' &amp;",
+      "detail": "",
+      "success": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication successful</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication successful</h1>\n    <p>&lt;&amp;&gt;&quot;&#39; &amp;amp;</p>\n    \n  </main>\n</body>\n</html>",
+      "error": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication failed</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication failed</h1>\n    <p>&lt;&amp;&gt;&quot;&#39; &amp;amp;</p>\n    \n  </main>\n</body>\n</html>"
+    },
+    {
+      "message": "<&>\"' &amp;",
+      "detail": "<&>\"'\n",
+      "success": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication successful</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication successful</h1>\n    <p>&lt;&amp;&gt;&quot;&#39; &amp;amp;</p>\n    \n  </main>\n</body>\n</html>",
+      "error": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication failed</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication failed</h1>\n    <p>&lt;&amp;&gt;&quot;&#39; &amp;amp;</p>\n    <div class=\"details\">&lt;&amp;&gt;&quot;&#39;\n</div>\n  </main>\n</body>\n</html>"
+    },
+    {
+      "message": "Đăng nhập 🐱\nsecond line",
+      "detail": null,
+      "success": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication successful</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication successful</h1>\n    <p>Đăng nhập 🐱\nsecond line</p>\n    \n  </main>\n</body>\n</html>",
+      "error": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication failed</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication failed</h1>\n    <p>Đăng nhập 🐱\nsecond line</p>\n    \n  </main>\n</body>\n</html>"
+    },
+    {
+      "message": "Đăng nhập 🐱\nsecond line",
+      "detail": "",
+      "success": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication successful</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication successful</h1>\n    <p>Đăng nhập 🐱\nsecond line</p>\n    \n  </main>\n</body>\n</html>",
+      "error": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication failed</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication failed</h1>\n    <p>Đăng nhập 🐱\nsecond line</p>\n    \n  </main>\n</body>\n</html>"
+    },
+    {
+      "message": "Đăng nhập 🐱\nsecond line",
+      "detail": "<&>\"'\n",
+      "success": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication successful</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication successful</h1>\n    <p>Đăng nhập 🐱\nsecond line</p>\n    \n  </main>\n</body>\n</html>",
+      "error": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Authentication failed</title>\n  <style>\n    :root {\n      --text: #fafafa;\n      --text-dim: #a1a1aa;\n      --page-bg: #09090b;\n      --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n    }\n    * { box-sizing: border-box; }\n    html { color-scheme: dark; }\n    body {\n      margin: 0;\n      min-height: 100vh;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 24px;\n      background: var(--page-bg);\n      color: var(--text);\n      font-family: var(--font-sans);\n      text-align: center;\n    }\n    main {\n      width: 100%;\n      max-width: 560px;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n    }\n    .logo {\n      width: 72px;\n      height: 72px;\n      display: block;\n      margin-bottom: 24px;\n    }\n    h1 {\n      margin: 0 0 10px;\n      font-size: 28px;\n      line-height: 1.15;\n      font-weight: 650;\n      color: var(--text);\n    }\n    p {\n      margin: 0;\n      line-height: 1.7;\n      color: var(--text-dim);\n      font-size: 15px;\n    }\n    .details {\n      margin-top: 16px;\n      font-family: var(--font-mono);\n      font-size: 13px;\n      color: var(--text-dim);\n      white-space: pre-wrap;\n      word-break: break-word;\n    }\n  </style>\n</head>\n<body>\n  <main>\n    <div class=\"logo\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" aria-hidden=\"true\"><path fill=\"#F09082\" d=\"M165.29 165.29H517.36V400H400V282.65H165.29Z\"/><path fill=\"#4D9ABF\" d=\"M165.29 282.65H282.65V400H400V517.36H282.65V634.72H165.29Z\"/><path fill=\"#F1BE58\" d=\"M517.36 400H634.72V634.72H517.36Z\"/></svg></div>\n    <h1>Authentication failed</h1>\n    <p>Đăng nhập 🐱\nsecond line</p>\n    <div class=\"details\">&lt;&amp;&gt;&quot;&#39;\n</div>\n  </main>\n</body>\n</html>"
+    }
+  ],
+  "cases": [
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [
+        "final"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "POST",
+            "path": "/callback?state=s&code=x"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [
+        "final"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "HEAD",
+            "path": "/callback?state=s&code=x"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [
+        "final"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?code=x"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        },
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [
+        "final"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        },
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [
+        "final"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?state=s"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "26ca113d47a0a45203568ddee243f688be5624aed7a21616754e1a99a097c404"
+        },
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [
+        "final"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code="
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "26ca113d47a0a45203568ddee243f688be5624aed7a21616754e1a99a097c404"
+        },
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [
+        "final"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/call%62ack?state=s&code=x"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [
+        "final"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/x/../callback?state=s&code=x"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        },
+        {
+          "status": 409,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [
+        "x"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=first&code=second"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        },
+        {
+          "status": 409,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [
+        "first"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?state=s&state=wrong&code=x"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        },
+        {
+          "status": 409,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [
+        "x"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&state=s&code=x"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        },
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [
+        "final"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=%FF"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        },
+        {
+          "status": 409,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [
+        "�"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=a+b%2Bc"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        },
+        {
+          "status": 409,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [
+        "a b+c"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?state=s&error=denied"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "1a56aacb2bd9e11283d0fae7a62ef0112d322d4c10729c0e75bed83ff84e62e8"
+        },
+        {
+          "status": 409,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [],
+      "output": {
+        "error": "Example <&> authorization failed: denied",
+        "same": false
+      },
+      "afterClose": {
+        "error": "Example <&> authorization failed: denied"
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?state=s&error=denied&error_description="
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "50d1ce04907c127e67f802c932e5b33b29fb9b00b383d67b18f5a99f51e44ec9"
+        },
+        {
+          "status": 409,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [],
+      "output": {
+        "error": "Example <&> authorization failed: ",
+        "same": false
+      },
+      "afterClose": {
+        "error": "Example <&> authorization failed: "
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?state=s&error=denied&error_description=%3Cbad%3E%26"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "8841aaba77fd4e2fcdca83349607703d7a092e54d552d535d3f78f872f678cc7"
+        },
+        {
+          "status": 409,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [],
+      "output": {
+        "error": "Example <&> authorization failed: <bad>&",
+        "same": false
+      },
+      "afterClose": {
+        "error": "Example <&> authorization failed: <bad>&"
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?state=s&error=&code=x"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=final"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=wrong&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        },
+        {
+          "status": 409,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+        },
+        {
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "dab0c2754c6a6b4c7770ddc306c6a3dd4e663bec6a38ab0993792da9bc34e3ae"
+        },
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        }
+      ],
+      "codes": [
+        "x"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": null,
+        "completion": "success",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        }
+      ],
+      "codes": [
+        "x"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    },
+    {
+      "input": {
+        "state": null,
+        "completion": "failure",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 502,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "7daabb0d12bcbfeb122656d4e97e8a802c09a7b4e43e1c2b26846d2c8bab9940"
+        }
+      ],
+      "codes": [
+        "x"
+      ],
+      "output": {
+        "error": "exchange <failed>",
+        "same": true
+      },
+      "afterClose": {
+        "error": "exchange <failed>"
+      }
+    },
+    {
+      "input": {
+        "state": null,
+        "completion": "null",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        }
+      ],
+      "codes": [
+        "x"
+      ],
+      "output": {
+        "value": null,
+        "same": false
+      },
+      "afterClose": {
+        "value": null
+      }
+    },
+    {
+      "input": {
+        "state": null,
+        "completion": "undefined",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        }
+      ],
+      "codes": [
+        "x"
+      ],
+      "output": {
+        "absent": true,
+        "same": false
+      },
+      "afterClose": {
+        "absent": true
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "action": "cancel",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 409,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+        }
+      ],
+      "codes": [],
+      "output": {
+        "absent": true,
+        "same": false
+      },
+      "afterClose": {
+        "absent": true
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "action": "abort",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 409,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+        }
+      ],
+      "codes": [],
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      },
+      "afterClose": {
+        "error": "Login cancelled"
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "action": "timeout",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?state=s&code=x"
+          }
+        ]
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [
+        {
+          "status": 409,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+        }
+      ],
+      "codes": [],
+      "output": {
+        "error": "Example <&> sign-in timed out",
+        "same": false
+      },
+      "afterClose": {
+        "error": "Example <&> sign-in timed out"
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "action": "close",
+        "requests": []
+      },
+      "uri": "http://127.0.0.1:PORT/callback",
+      "responses": [],
+      "codes": [],
+      "output": {
+        "error": "OAuth callback server closed",
+        "same": false
+      },
+      "afterClose": {
+        "error": "OAuth callback server closed"
+      }
+    },
+    {
+      "input": {
+        "state": "s",
+        "action": "preabort",
+        "requests": []
+      },
+      "start": {
+        "error": "Login cancelled"
+      }
+    },
+    {
+      "input": {
+        "state": "",
+        "redirectHost": "localhost",
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/callback?code=x"
+          },
+          {
+            "method": "GET",
+            "path": "/callback?state=&code=x"
+          }
+        ]
+      },
+      "uri": "http://localhost:PORT/callback",
+      "responses": [
+        {
+          "status": 400,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "9a0ff4ce3d8ca479d2fca790688fba1ed37d231962c1aea82bf9e5d04e5d2b32"
+        },
+        {
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "cache": "no-store",
+          "sha256": "ac69f11dc014d2fbe215c70a422cfdd514b208d92839b0ff86b9be8c350ba3d9"
+        }
+      ],
+      "codes": [
+        "x"
+      ],
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      },
+      "afterClose": {
+        "value": {
+          "token": "shared"
+        }
+      }
+    }
+  ],
+  "races": [
+    {
+      "action": "cancel",
+      "fail": false,
+      "duplicate": {
+        "status": 409,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+      },
+      "early": null,
+      "response": {
+        "status": 200,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "35d21d537bcd26dcfd1a9294b8d6fc04e12280382e967220d837d90019a90739"
+      },
+      "output": {
+        "value": {
+          "token": "shared"
+        },
+        "same": true
+      }
+    },
+    {
+      "action": "cancel",
+      "fail": true,
+      "duplicate": {
+        "status": 409,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+      },
+      "early": null,
+      "response": {
+        "status": 502,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "af0e0fbaeab0d59dd7cc381695001d1a0594059b37da7039e7ac9c16ac007d7a"
+      },
+      "output": {
+        "error": "exchange failed",
+        "same": true
+      }
+    },
+    {
+      "action": "abort",
+      "fail": false,
+      "duplicate": {
+        "status": 409,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+      },
+      "early": {
+        "error": "Login cancelled"
+      },
+      "response": {
+        "status": 200,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "35d21d537bcd26dcfd1a9294b8d6fc04e12280382e967220d837d90019a90739"
+      },
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      }
+    },
+    {
+      "action": "abort",
+      "fail": true,
+      "duplicate": {
+        "status": 409,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+      },
+      "early": {
+        "error": "Login cancelled"
+      },
+      "response": {
+        "status": 502,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "af0e0fbaeab0d59dd7cc381695001d1a0594059b37da7039e7ac9c16ac007d7a"
+      },
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      }
+    },
+    {
+      "action": "timeout",
+      "fail": false,
+      "duplicate": {
+        "status": 409,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+      },
+      "early": {
+        "error": "Example sign-in timed out"
+      },
+      "response": {
+        "status": 200,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "35d21d537bcd26dcfd1a9294b8d6fc04e12280382e967220d837d90019a90739"
+      },
+      "output": {
+        "error": "Example sign-in timed out",
+        "same": false
+      }
+    },
+    {
+      "action": "timeout",
+      "fail": true,
+      "duplicate": {
+        "status": 409,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+      },
+      "early": {
+        "error": "Example sign-in timed out"
+      },
+      "response": {
+        "status": 502,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "af0e0fbaeab0d59dd7cc381695001d1a0594059b37da7039e7ac9c16ac007d7a"
+      },
+      "output": {
+        "error": "Example sign-in timed out",
+        "same": false
+      }
+    },
+    {
+      "action": "close",
+      "fail": false,
+      "duplicate": {
+        "status": 409,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+      },
+      "early": {
+        "error": "OAuth callback server closed"
+      },
+      "response": {
+        "status": 200,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "35d21d537bcd26dcfd1a9294b8d6fc04e12280382e967220d837d90019a90739"
+      },
+      "output": {
+        "error": "OAuth callback server closed",
+        "same": false
+      }
+    },
+    {
+      "action": "close",
+      "fail": true,
+      "duplicate": {
+        "status": 409,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "2f55ecfcbab5512906fae88c7381af02f26e3ea954cccc256136184335dd8d2d"
+      },
+      "early": {
+        "error": "OAuth callback server closed"
+      },
+      "response": {
+        "status": 502,
+        "contentType": "text/html; charset=utf-8",
+        "cache": "no-store",
+        "sha256": "af0e0fbaeab0d59dd7cc381695001d1a0594059b37da7039e7ac9c16ac007d7a"
+      },
+      "output": {
+        "error": "OAuth callback server closed",
+        "same": false
+      }
+    }
+  ],
+  "manual": [
+    {
+      "callbackMode": "none",
+      "manualMode": "value",
+      "output": {
+        "value": {
+          "type": "manual",
+          "input": "pasted"
+        }
+      },
+      "cancelled": 0,
+      "aborted": true
+    },
+    {
+      "callbackMode": "none",
+      "manualMode": "null",
+      "output": {
+        "value": {
+          "type": "manual",
+          "input": ""
+        }
+      },
+      "cancelled": 0,
+      "aborted": true
+    },
+    {
+      "callbackMode": "none",
+      "manualMode": "undefined",
+      "output": {
+        "value": {
+          "type": "manual",
+          "input": ""
+        }
+      },
+      "cancelled": 0,
+      "aborted": true
+    },
+    {
+      "callbackMode": "none",
+      "manualMode": "error",
+      "output": {
+        "error": "manual failed",
+        "same": true
+      },
+      "cancelled": 0,
+      "aborted": true
+    },
+    {
+      "callbackMode": "undefined",
+      "manualMode": "value",
+      "output": {
+        "value": {
+          "type": "manual",
+          "input": "pasted"
+        }
+      },
+      "cancelled": 1,
+      "aborted": true
+    },
+    {
+      "callbackMode": "undefined",
+      "manualMode": "null",
+      "output": {
+        "value": {
+          "type": "manual",
+          "input": ""
+        }
+      },
+      "cancelled": 1,
+      "aborted": true
+    },
+    {
+      "callbackMode": "undefined",
+      "manualMode": "undefined",
+      "output": {
+        "value": {
+          "type": "manual",
+          "input": ""
+        }
+      },
+      "cancelled": 1,
+      "aborted": true
+    },
+    {
+      "callbackMode": "undefined",
+      "manualMode": "error",
+      "output": {
+        "error": "manual failed",
+        "same": true
+      },
+      "cancelled": 1,
+      "aborted": true
+    },
+    {
+      "callbackMode": "null",
+      "manualMode": "value",
+      "output": {
+        "value": {
+          "type": "callback",
+          "value": null
+        }
+      },
+      "cancelled": 1,
+      "aborted": true
+    },
+    {
+      "callbackMode": "null",
+      "manualMode": "null",
+      "output": {
+        "value": {
+          "type": "callback",
+          "value": null
+        }
+      },
+      "cancelled": 1,
+      "aborted": true
+    },
+    {
+      "callbackMode": "null",
+      "manualMode": "undefined",
+      "output": {
+        "value": {
+          "type": "callback",
+          "value": null
+        }
+      },
+      "cancelled": 1,
+      "aborted": true
+    },
+    {
+      "callbackMode": "null",
+      "manualMode": "error",
+      "output": {
+        "error": "manual failed",
+        "same": true
+      },
+      "cancelled": 1,
+      "aborted": true
+    },
+    {
+      "callbackMode": "value",
+      "manualMode": "value",
+      "output": {
+        "value": {
+          "type": "callback",
+          "value": {
+            "token": "browser"
+          }
+        }
+      },
+      "cancelled": 1,
+      "aborted": true
+    },
+    {
+      "callbackMode": "value",
+      "manualMode": "null",
+      "output": {
+        "value": {
+          "type": "callback",
+          "value": {
+            "token": "browser"
+          }
+        }
+      },
+      "cancelled": 1,
+      "aborted": true
+    },
+    {
+      "callbackMode": "value",
+      "manualMode": "undefined",
+      "output": {
+        "value": {
+          "type": "callback",
+          "value": {
+            "token": "browser"
+          }
+        }
+      },
+      "cancelled": 1,
+      "aborted": true
+    },
+    {
+      "callbackMode": "value",
+      "manualMode": "error",
+      "output": {
+        "error": "manual failed",
+        "same": true
+      },
+      "cancelled": 1,
+      "aborted": true
+    },
+    {
+      "callbackMode": "error",
+      "manualMode": "value",
+      "output": {
+        "error": "callback failed",
+        "same": true
+      },
+      "cancelled": 1,
+      "aborted": true
+    },
+    {
+      "callbackMode": "error",
+      "manualMode": "null",
+      "output": {
+        "error": "callback failed",
+        "same": true
+      },
+      "cancelled": 1,
+      "aborted": true
+    },
+    {
+      "callbackMode": "error",
+      "manualMode": "undefined",
+      "output": {
+        "error": "callback failed",
+        "same": true
+      },
+      "cancelled": 1,
+      "aborted": true
+    },
+    {
+      "callbackMode": "error",
+      "manualMode": "error",
+      "output": {
+        "error": "callback failed",
+        "same": true
+      },
+      "cancelled": 1,
+      "aborted": true
+    }
+  ],
+  "browser": [
+    {
+      "mode": "success",
+      "descriptor": {
+        "type": "manual_code",
+        "message": "paste",
+        "placeholder": "url",
+        "initiallyAborted": false
+      },
+      "output": {
+        "value": {
+          "type": "callback",
+          "value": "browser"
+        }
+      },
+      "aborted": true
+    },
+    {
+      "mode": "failure",
+      "descriptor": {
+        "type": "manual_code",
+        "message": "paste",
+        "placeholder": "url",
+        "initiallyAborted": false
+      },
+      "output": {
+        "error": "exchange failed",
+        "same": true
+      },
+      "aborted": true
+    },
+    {
+      "mode": "null",
+      "descriptor": {
+        "type": "manual_code",
+        "message": "paste",
+        "placeholder": "url",
+        "initiallyAborted": false
+      },
+      "output": {
+        "value": {
+          "type": "callback",
+          "value": null
+        }
+      },
+      "aborted": true
+    },
+    {
+      "mode": "undefined",
+      "descriptor": {
+        "type": "manual_code",
+        "message": "paste",
+        "placeholder": "url",
+        "initiallyAborted": false
+      },
+      "output": {
+        "value": {
+          "type": "manual",
+          "input": "fallback"
+        }
+      },
+      "aborted": true
+    }
+  ]
+}

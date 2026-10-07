@@ -1,0 +1,2204 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "name": "ephemeral",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "",
+            "account": "a"
+          },
+          {
+            "op": "release",
+            "lease": "x",
+            "keep": true
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": false
+            }
+          ],
+          "entries": [],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": false
+            }
+          ],
+          "entries": [],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "done"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "reuse",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "release",
+            "lease": "x",
+            "keep": true
+          },
+          {
+            "op": "acquire",
+            "lease": "y",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "release",
+            "lease": "y",
+            "keep": false
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 0,
+              "reused": true,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 0,
+              "reused": true,
+              "cached": true
+            }
+          ],
+          "entries": [],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "done"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "busy sibling",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "acquire",
+            "lease": "y",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "release",
+            "lease": "y",
+            "keep": true
+          },
+          {
+            "op": "release",
+            "lease": "x",
+            "keep": true
+          },
+          {
+            "op": "acquire",
+            "lease": "z",
+            "session": "s",
+            "account": "a"
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": false
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": false
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": [
+            {
+              "socket": 1,
+              "code": 1000,
+              "reason": "done"
+            }
+          ]
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": false
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            }
+          ],
+          "closes": [
+            {
+              "socket": 1,
+              "code": 1000,
+              "reason": "done"
+            }
+          ]
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": false
+            },
+            {
+              "name": "z",
+              "socket": 0,
+              "reused": true,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": [
+            {
+              "socket": 1,
+              "code": 1000,
+              "reason": "done"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "account isolation",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "acquire",
+            "lease": "y",
+            "session": "s",
+            "account": "b"
+          },
+          {
+            "op": "release",
+            "lease": "x",
+            "keep": true
+          },
+          {
+            "op": "acquire",
+            "lease": "z",
+            "session": "s",
+            "account": "a"
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            },
+            {
+              "session": "s",
+              "account": "b",
+              "socket": 1,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            },
+            {
+              "session": "s",
+              "account": "b",
+              "socket": 1,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "z",
+              "socket": 0,
+              "reused": true,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            },
+            {
+              "session": "s",
+              "account": "b",
+              "socket": 1,
+              "busy": true
+            }
+          ],
+          "closes": []
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "session isolation",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "acquire",
+            "lease": "y",
+            "session": "t",
+            "account": "a"
+          },
+          {
+            "op": "close",
+            "session": "s"
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            },
+            {
+              "session": "t",
+              "account": "a",
+              "socket": 1,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "t",
+              "account": "a",
+              "socket": 1,
+              "busy": true
+            }
+          ],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "debug_close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "idle expiry",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "release",
+            "lease": "x",
+            "keep": true
+          },
+          {
+            "op": "time",
+            "ms": 299999,
+            "fire": true
+          },
+          {
+            "op": "time",
+            "ms": 1,
+            "fire": true
+          },
+          {
+            "op": "acquire",
+            "lease": "y",
+            "session": "s",
+            "account": "a"
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "idle_timeout"
+            }
+          ]
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 1,
+              "busy": true
+            }
+          ],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "idle_timeout"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "cancel idle on reuse",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "release",
+            "lease": "x",
+            "keep": true
+          },
+          {
+            "op": "time",
+            "ms": 299999,
+            "fire": true
+          },
+          {
+            "op": "acquire",
+            "lease": "y",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "time",
+            "ms": 1,
+            "fire": true
+          },
+          {
+            "op": "release",
+            "lease": "y",
+            "keep": true
+          },
+          {
+            "op": "time",
+            "ms": 300000,
+            "fire": true
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 0,
+              "reused": true,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 0,
+              "reused": true,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 0,
+              "reused": true,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 0,
+              "reused": true,
+              "cached": true
+            }
+          ],
+          "entries": [],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "idle_timeout"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "age expiry",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "release",
+            "lease": "x",
+            "keep": true
+          },
+          {
+            "op": "time",
+            "ms": 3300000,
+            "fire": false
+          },
+          {
+            "op": "acquire",
+            "lease": "y",
+            "session": "s",
+            "account": "a"
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 1,
+              "busy": true
+            }
+          ],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "connection_age_limit"
+            },
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "done"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "busy age retained",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "time",
+            "ms": 3300000,
+            "fire": true
+          },
+          {
+            "op": "acquire",
+            "lease": "y",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "release",
+            "lease": "y",
+            "keep": true
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": false
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": false
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": [
+            {
+              "socket": 1,
+              "code": 1000,
+              "reason": "done"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "closed socket",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "release",
+            "lease": "x",
+            "keep": true
+          },
+          {
+            "op": "state",
+            "lease": "x",
+            "state": 3
+          },
+          {
+            "op": "acquire",
+            "lease": "y",
+            "session": "s",
+            "account": "a"
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 1,
+              "busy": true
+            }
+          ],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "done"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "unknown state",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "release",
+            "lease": "x",
+            "keep": true
+          },
+          {
+            "op": "state",
+            "lease": "x"
+          },
+          {
+            "op": "acquire",
+            "lease": "y",
+            "session": "s",
+            "account": "a"
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 0,
+              "reused": true,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "closed at release",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "state",
+            "lease": "x",
+            "state": 3
+          },
+          {
+            "op": "release",
+            "lease": "x",
+            "keep": true
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "done"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "stale release preserves replacement",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "close",
+            "session": "s"
+          },
+          {
+            "op": "acquire",
+            "lease": "y",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "release",
+            "lease": "x",
+            "keep": false
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "debug_close"
+            }
+          ]
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 1,
+              "busy": true
+            }
+          ],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "debug_close"
+            }
+          ]
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 1,
+              "busy": true
+            }
+          ],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "debug_close"
+            },
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "done"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "nested insertion order",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "acquire",
+            "lease": "y",
+            "session": "t",
+            "account": "a"
+          },
+          {
+            "op": "acquire",
+            "lease": "z",
+            "session": "s",
+            "account": "b"
+          },
+          {
+            "op": "close",
+            "session": ""
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            },
+            {
+              "session": "t",
+              "account": "a",
+              "socket": 1,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "z",
+              "socket": 2,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            },
+            {
+              "session": "s",
+              "account": "b",
+              "socket": 2,
+              "busy": true
+            },
+            {
+              "session": "t",
+              "account": "a",
+              "socket": 1,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "z",
+              "socket": 2,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "debug_close"
+            },
+            {
+              "socket": 2,
+              "code": 1000,
+              "reason": "debug_close"
+            },
+            {
+              "socket": 1,
+              "code": 1000,
+              "reason": "debug_close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "close all",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "acquire",
+            "lease": "y",
+            "session": "t",
+            "account": "a"
+          },
+          {
+            "op": "release",
+            "lease": "x",
+            "keep": true
+          },
+          {
+            "op": "release",
+            "lease": "y",
+            "keep": true
+          },
+          {
+            "op": "close",
+            "session": ""
+          },
+          {
+            "op": "time",
+            "ms": 300000,
+            "fire": true
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            },
+            {
+              "session": "t",
+              "account": "a",
+              "socket": 1,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            },
+            {
+              "session": "t",
+              "account": "a",
+              "socket": 1,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            },
+            {
+              "session": "t",
+              "account": "a",
+              "socket": 1,
+              "busy": false
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "debug_close"
+            },
+            {
+              "socket": 1,
+              "code": 1000,
+              "reason": "debug_close"
+            }
+          ]
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 1,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "debug_close"
+            },
+            {
+              "socket": 1,
+              "code": 1000,
+              "reason": "debug_close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "repeated reused release",
+        "actions": [
+          {
+            "op": "acquire",
+            "lease": "x",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "release",
+            "lease": "x",
+            "keep": true
+          },
+          {
+            "op": "acquire",
+            "lease": "y",
+            "session": "s",
+            "account": "a"
+          },
+          {
+            "op": "release",
+            "lease": "y",
+            "keep": true
+          },
+          {
+            "op": "release",
+            "lease": "y",
+            "keep": false
+          },
+          {
+            "op": "time",
+            "ms": 300000,
+            "fire": true
+          }
+        ]
+      },
+      "expected": [
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 0,
+              "reused": true,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": true
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 0,
+              "reused": true,
+              "cached": true
+            }
+          ],
+          "entries": [
+            {
+              "session": "s",
+              "account": "a",
+              "socket": 0,
+              "busy": false
+            }
+          ],
+          "closes": []
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 0,
+              "reused": true,
+              "cached": true
+            }
+          ],
+          "entries": [],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "done"
+            }
+          ]
+        },
+        {
+          "leases": [
+            {
+              "name": "x",
+              "socket": 0,
+              "reused": false,
+              "cached": true
+            },
+            {
+              "name": "y",
+              "socket": 0,
+              "reused": true,
+              "cached": true
+            }
+          ],
+          "entries": [],
+          "closes": [
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "done"
+            },
+            {
+              "socket": 0,
+              "code": 1000,
+              "reason": "idle_timeout"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2026 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "first": "login",
+      "mode": "ok",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "login",
+      "mode": "load-reject",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        }
+      ],
+      "outputs": [
+        {
+          "error": "load failed",
+          "same": true
+        },
+        {
+          "error": "load failed",
+          "same": true
+        },
+        {
+          "error": "load failed",
+          "same": true
+        },
+        {
+          "error": "load failed",
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "login",
+      "mode": "load-throw-once",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 2,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "load": "original"
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "error": "load failed",
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "login",
+      "mode": "method-reject",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "login",
+      "mode": "method-throw",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "login",
+      "mode": "replace-before",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "replaced"
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "login",
+      "mode": "replace-after",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "login",
+      "mode": "method-replace",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "replaced",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "replaced",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "replaced",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "replaced"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "replaced"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "replaced"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "login",
+      "mode": "preabort",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": true
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": true
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": true
+        }
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "refresh",
+      "mode": "ok",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "refresh",
+      "mode": "load-reject",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        }
+      ],
+      "outputs": [
+        {
+          "error": "load failed",
+          "same": true
+        },
+        {
+          "error": "load failed",
+          "same": true
+        },
+        {
+          "error": "load failed",
+          "same": true
+        },
+        {
+          "error": "load failed",
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "refresh",
+      "mode": "load-throw-once",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 2,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "load": "original"
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "error": "load failed",
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "refresh",
+      "mode": "method-reject",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "refresh",
+      "mode": "method-throw",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "refresh",
+      "mode": "replace-before",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "replaced"
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "refresh",
+      "mode": "replace-after",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "refresh",
+      "mode": "method-replace",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "replaced",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "replaced",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "replaced",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "replaced"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "replaced"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "replaced"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "refresh",
+      "mode": "preabort",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": true
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": true
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": true
+        }
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "toAuth",
+      "mode": "ok",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "toAuth",
+      "mode": "load-reject",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        }
+      ],
+      "outputs": [
+        {
+          "error": "load failed",
+          "same": true
+        },
+        {
+          "error": "load failed",
+          "same": true
+        },
+        {
+          "error": "load failed",
+          "same": true
+        },
+        {
+          "error": "load failed",
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "toAuth",
+      "mode": "load-throw-once",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 2,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "load": "original"
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "error": "load failed",
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "toAuth",
+      "mode": "method-reject",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "toAuth",
+      "mode": "method-throw",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        },
+        {
+          "error": "method failed",
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "toAuth",
+      "mode": "replace-before",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "replaced"
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "toAuth",
+      "mode": "replace-after",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "toAuth",
+      "mode": "method-replace",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "replaced",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "refresh",
+          "label": "replaced",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "toAuth",
+          "label": "replaced",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "replaced"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "replaced"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "replaced"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "first": "toAuth",
+      "mode": "preabort",
+      "metadata": {
+        "name": "Visible",
+        "isSubscription": false,
+        "loginLabel": "Sign in"
+      },
+      "loads": 1,
+      "log": [
+        {
+          "load": "original"
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        },
+        {
+          "kind": "login",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": true
+        },
+        {
+          "kind": "refresh",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": true
+        },
+        {
+          "kind": "toAuth",
+          "label": "original",
+          "argumentSame": true,
+          "secondSame": true,
+          "aborted": false
+        }
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "login",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh",
+            "label": "original"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth",
+            "label": "original"
+          },
+          "same": true
+        }
+      ]
+    }
+  ],
+  "metadata": [
+    {
+      "input": {
+        "isSubscription": null,
+        "loginLabel": null
+      },
+      "output": {
+        "name": "N",
+        "hasSubscription": true,
+        "hasLabel": true,
+        "loads": 0
+      }
+    },
+    {
+      "input": {
+        "isSubscription": null,
+        "loginLabel": ""
+      },
+      "output": {
+        "name": "N",
+        "loginLabel": "",
+        "hasSubscription": true,
+        "hasLabel": true,
+        "loads": 0
+      }
+    },
+    {
+      "input": {
+        "isSubscription": null,
+        "loginLabel": "Login"
+      },
+      "output": {
+        "name": "N",
+        "loginLabel": "Login",
+        "hasSubscription": true,
+        "hasLabel": true,
+        "loads": 0
+      }
+    },
+    {
+      "input": {
+        "isSubscription": false,
+        "loginLabel": null
+      },
+      "output": {
+        "name": "N",
+        "isSubscription": false,
+        "hasSubscription": true,
+        "hasLabel": true,
+        "loads": 0
+      }
+    },
+    {
+      "input": {
+        "isSubscription": false,
+        "loginLabel": ""
+      },
+      "output": {
+        "name": "N",
+        "isSubscription": false,
+        "loginLabel": "",
+        "hasSubscription": true,
+        "hasLabel": true,
+        "loads": 0
+      }
+    },
+    {
+      "input": {
+        "isSubscription": false,
+        "loginLabel": "Login"
+      },
+      "output": {
+        "name": "N",
+        "isSubscription": false,
+        "loginLabel": "Login",
+        "hasSubscription": true,
+        "hasLabel": true,
+        "loads": 0
+      }
+    },
+    {
+      "input": {
+        "isSubscription": true,
+        "loginLabel": null
+      },
+      "output": {
+        "name": "N",
+        "isSubscription": true,
+        "hasSubscription": true,
+        "hasLabel": true,
+        "loads": 0
+      }
+    },
+    {
+      "input": {
+        "isSubscription": true,
+        "loginLabel": ""
+      },
+      "output": {
+        "name": "N",
+        "isSubscription": true,
+        "loginLabel": "",
+        "hasSubscription": true,
+        "hasLabel": true,
+        "loads": 0
+      }
+    },
+    {
+      "input": {
+        "isSubscription": true,
+        "loginLabel": "Login"
+      },
+      "output": {
+        "name": "N",
+        "isSubscription": true,
+        "loginLabel": "Login",
+        "hasSubscription": true,
+        "hasLabel": true,
+        "loads": 0
+      }
+    }
+  ],
+  "concurrent": [
+    {
+      "fail": false,
+      "before": {
+        "loads": 1,
+        "settled": 0,
+        "called": []
+      },
+      "loads": 1,
+      "called": [
+        "login",
+        "refresh",
+        "toAuth"
+      ],
+      "outputs": [
+        {
+          "value": {
+            "kind": "login"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "refresh"
+          },
+          "same": true
+        },
+        {
+          "value": {
+            "kind": "toAuth"
+          },
+          "same": true
+        }
+      ]
+    },
+    {
+      "fail": true,
+      "before": {
+        "loads": 1,
+        "settled": 0,
+        "called": []
+      },
+      "loads": 1,
+      "called": [],
+      "outputs": [
+        {
+          "error": "shared load failed",
+          "same": true
+        },
+        {
+          "error": "shared load failed",
+          "same": true
+        },
+        {
+          "error": "shared load failed",
+          "same": true
+        }
+      ]
+    }
+  ],
+  "integration": [
+    {
+      "first": "login",
+      "before": {
+        "check": {
+          "source": "OAuth",
+          "type": "oauth"
+        },
+        "loads": 0
+      },
+      "loginSame": true,
+      "firstAuth": {
+        "auth": {
+          "apiKey": "new"
+        },
+        "source": "OAuth"
+      },
+      "secondAuth": {
+        "auth": {
+          "apiKey": "new"
+        },
+        "source": "OAuth"
+      },
+      "storedSame": true,
+      "afterLogout": null,
+      "reloginSame": true,
+      "loads": 1,
+      "log": [
+        "login",
+        {
+          "refreshSame": true
+        },
+        {
+          "toAuthSame": true
+        },
+        {
+          "toAuthSame": true
+        },
+        "login"
+      ]
+    },
+    {
+      "first": "refresh",
+      "before": {
+        "check": {
+          "source": "OAuth",
+          "type": "oauth"
+        },
+        "loads": 0
+      },
+      "loginSame": null,
+      "firstAuth": {
+        "auth": {
+          "apiKey": "new"
+        },
+        "source": "OAuth"
+      },
+      "secondAuth": {
+        "auth": {
+          "apiKey": "new"
+        },
+        "source": "OAuth"
+      },
+      "storedSame": true,
+      "afterLogout": null,
+      "reloginSame": true,
+      "loads": 1,
+      "log": [
+        {
+          "refreshSame": true
+        },
+        {
+          "toAuthSame": true
+        },
+        {
+          "toAuthSame": true
+        },
+        "login"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,613 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "sdkVersion": "0.129.0",
+  "cases": [
+    {
+      "input": {
+        "name": "fresh cached",
+        "actions": [
+          "get",
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": "token-1",
+          "error": null,
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": "token-1",
+          "error": null,
+          "calls": [
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "no expiry cached",
+        "responses": [
+          {
+            "token": "forever",
+            "expiresAt": null
+          }
+        ],
+        "actions": [
+          "get",
+          100000,
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": "forever",
+          "error": null,
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": "forever",
+          "error": null,
+          "calls": [
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "above advisory threshold",
+        "actions": [
+          "get",
+          1879,
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": "token-1",
+          "error": null,
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": "token-1",
+          "error": null,
+          "calls": [
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "advisory boundary",
+        "actions": [
+          "get",
+          1880,
+          "get",
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": "token-1",
+          "error": null,
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": "token-1",
+          "error": null,
+          "calls": [
+            false,
+            false
+          ]
+        },
+        {
+          "value": "token-2",
+          "error": null,
+          "calls": [
+            false,
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "above mandatory threshold",
+        "actions": [
+          "get",
+          1969,
+          "get",
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": "token-1",
+          "error": null,
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": "token-1",
+          "error": null,
+          "calls": [
+            false,
+            false
+          ]
+        },
+        {
+          "value": "token-2",
+          "error": null,
+          "calls": [
+            false,
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "mandatory boundary",
+        "actions": [
+          "get",
+          1970,
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": "token-1",
+          "error": null,
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": "token-2",
+          "error": null,
+          "calls": [
+            false,
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "expired",
+        "actions": [
+          "get",
+          2001,
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": "token-1",
+          "error": null,
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": "token-2",
+          "error": null,
+          "calls": [
+            false,
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "invalidation forces",
+        "actions": [
+          "get",
+          "invalidate",
+          "get",
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": "token-1",
+          "error": null,
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": "token-2",
+          "error": null,
+          "calls": [
+            false,
+            true
+          ]
+        },
+        {
+          "value": "token-2",
+          "error": null,
+          "calls": [
+            false,
+            true
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "invalidation before first get",
+        "actions": [
+          "invalidate",
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": "token-1",
+          "error": null,
+          "calls": [
+            true
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "first failure retried",
+        "responses": [
+          {
+            "error": "exchange failed"
+          }
+        ],
+        "actions": [
+          "get",
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": null,
+          "error": "exchange failed",
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": "token-2",
+          "error": null,
+          "calls": [
+            false,
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "mandatory failure propagates keeps cache",
+        "responses": [
+          {
+            "token": "old",
+            "expiresAt": 2000
+          },
+          {
+            "error": "mandatory failed"
+          }
+        ],
+        "actions": [
+          "get",
+          1970,
+          "get",
+          1000,
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": "old",
+          "error": null,
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": null,
+          "error": "mandatory failed",
+          "calls": [
+            false,
+            false
+          ]
+        },
+        {
+          "value": "old",
+          "error": null,
+          "calls": [
+            false,
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "advisory failure keeps cache and backs off",
+        "responses": [
+          {
+            "token": "old",
+            "expiresAt": 2000
+          },
+          {
+            "error": "advisory failed"
+          }
+        ],
+        "actions": [
+          "get",
+          1880,
+          "get",
+          "get",
+          1884,
+          "get",
+          1885,
+          "get",
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": "old",
+          "error": null,
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": "old",
+          "error": null,
+          "calls": [
+            false,
+            false
+          ]
+        },
+        {
+          "value": "old",
+          "error": null,
+          "calls": [
+            false,
+            false
+          ]
+        },
+        {
+          "value": "old",
+          "error": null,
+          "calls": [
+            false,
+            false
+          ]
+        },
+        {
+          "value": "old",
+          "error": null,
+          "calls": [
+            false,
+            false,
+            false
+          ]
+        },
+        {
+          "value": "token-3",
+          "error": null,
+          "calls": [
+            false,
+            false,
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "mandatory bypasses advisory backoff",
+        "responses": [
+          {
+            "token": "old",
+            "expiresAt": 2000
+          },
+          {
+            "error": "advisory failed"
+          }
+        ],
+        "actions": [
+          "get",
+          1969,
+          "get",
+          1970,
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": "old",
+          "error": null,
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": "old",
+          "error": null,
+          "calls": [
+            false,
+            false
+          ]
+        },
+        {
+          "value": "token-3",
+          "error": null,
+          "calls": [
+            false,
+            false,
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "forced bypasses advisory backoff",
+        "responses": [
+          {
+            "token": "old",
+            "expiresAt": 2000
+          },
+          {
+            "error": "advisory failed"
+          }
+        ],
+        "actions": [
+          "get",
+          1880,
+          "get",
+          "invalidate",
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": "old",
+          "error": null,
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": "old",
+          "error": null,
+          "calls": [
+            false,
+            false
+          ]
+        },
+        {
+          "value": "token-3",
+          "error": null,
+          "calls": [
+            false,
+            false,
+            true
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "failed forced refresh retries unforced",
+        "responses": [
+          {
+            "token": "old",
+            "expiresAt": 2000
+          },
+          {
+            "error": "forced failed"
+          }
+        ],
+        "actions": [
+          "get",
+          "invalidate",
+          "get",
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": "old",
+          "error": null,
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": null,
+          "error": "forced failed",
+          "calls": [
+            false,
+            true
+          ]
+        },
+        {
+          "value": "token-3",
+          "error": null,
+          "calls": [
+            false,
+            true,
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "input": {
+        "name": "initial advisory backoff near epoch",
+        "responses": [
+          {
+            "token": "old",
+            "expiresAt": 100
+          }
+        ],
+        "actions": [
+          0,
+          "get",
+          "get",
+          5,
+          "get",
+          "get"
+        ]
+      },
+      "expected": [
+        {
+          "value": "old",
+          "error": null,
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": "old",
+          "error": null,
+          "calls": [
+            false
+          ]
+        },
+        {
+          "value": "old",
+          "error": null,
+          "calls": [
+            false,
+            false
+          ]
+        },
+        {
+          "value": "token-2",
+          "error": null,
+          "calls": [
+            false,
+            false
+          ]
+        }
+      ]
+    }
+  ]
+}

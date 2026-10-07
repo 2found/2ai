@@ -1,0 +1,963 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "source": "packages/agent/src/agent-loop.ts",
+  "sourceSHA256": "e773e822a2587caf314e6bb66ea6370fce3468b7eecd26d6a67afe673f81eabc",
+  "cases": [
+    {
+      "phase": "message_start",
+      "operation": "append",
+      "expected": {
+        "produced": {
+          "length": 4,
+          "keys": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ],
+          "values": [
+            "a",
+            "b",
+            "changed",
+            "tail"
+          ]
+        },
+        "result": {
+          "length": 4,
+          "keys": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ],
+          "values": [
+            "a",
+            "b",
+            "changed",
+            "tail"
+          ]
+        },
+        "original": {
+          "length": 4,
+          "keys": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ],
+          "values": [
+            "a",
+            "b",
+            "changed",
+            "tail"
+          ]
+        },
+        "retained": [
+          {
+            "length": 4,
+            "keys": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ],
+            "values": [
+              "a",
+              "b",
+              "changed",
+              "tail"
+            ]
+          },
+          {
+            "length": 4,
+            "keys": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ],
+            "values": [
+              "a",
+              "b",
+              "changed",
+              "tail"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "phase": "message_start",
+      "operation": "pop",
+      "expected": {
+        "produced": {
+          "length": 1,
+          "keys": [
+            "0"
+          ],
+          "values": [
+            "a"
+          ]
+        },
+        "result": {
+          "length": 1,
+          "keys": [
+            "0"
+          ],
+          "values": [
+            "a"
+          ]
+        },
+        "original": {
+          "length": 1,
+          "keys": [
+            "0"
+          ],
+          "values": [
+            "a"
+          ]
+        },
+        "retained": [
+          {
+            "length": 1,
+            "keys": [
+              "0"
+            ],
+            "values": [
+              "a"
+            ]
+          },
+          {
+            "length": 1,
+            "keys": [
+              "0"
+            ],
+            "values": [
+              "a"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "phase": "message_start",
+      "operation": "truncate",
+      "expected": {
+        "produced": {
+          "length": 0,
+          "keys": [],
+          "values": []
+        },
+        "result": {
+          "length": 0,
+          "keys": [],
+          "values": []
+        },
+        "original": {
+          "length": 0,
+          "keys": [],
+          "values": []
+        },
+        "retained": [
+          {
+            "length": 0,
+            "keys": [],
+            "values": []
+          },
+          {
+            "length": 0,
+            "keys": [],
+            "values": []
+          }
+        ]
+      }
+    },
+    {
+      "phase": "message_start",
+      "operation": "extend",
+      "expected": {
+        "produced": {
+          "length": 5,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "a",
+            "b",
+            null,
+            null,
+            null
+          ]
+        },
+        "result": {
+          "length": 5,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "a",
+            "b",
+            null,
+            null,
+            null
+          ]
+        },
+        "original": {
+          "length": 5,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "a",
+            "b",
+            null,
+            null,
+            null
+          ]
+        },
+        "retained": [
+          {
+            "length": 5,
+            "keys": [
+              "0",
+              "1"
+            ],
+            "values": [
+              "a",
+              "b",
+              null,
+              null,
+              null
+            ]
+          },
+          {
+            "length": 5,
+            "keys": [
+              "0",
+              "1"
+            ],
+            "values": [
+              "a",
+              "b",
+              null,
+              null,
+              null
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "phase": "message_start",
+      "operation": "delete",
+      "expected": {
+        "produced": {
+          "length": 2,
+          "keys": [
+            "1"
+          ],
+          "values": [
+            null,
+            "b"
+          ]
+        },
+        "result": {
+          "length": 2,
+          "keys": [
+            "1"
+          ],
+          "values": [
+            null,
+            "b"
+          ]
+        },
+        "original": {
+          "length": 2,
+          "keys": [
+            "1"
+          ],
+          "values": [
+            null,
+            "b"
+          ]
+        },
+        "retained": [
+          {
+            "length": 2,
+            "keys": [
+              "1"
+            ],
+            "values": [
+              null,
+              "b"
+            ]
+          },
+          {
+            "length": 2,
+            "keys": [
+              "1"
+            ],
+            "values": [
+              null,
+              "b"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "phase": "message_start",
+      "operation": "replace_entry",
+      "expected": {
+        "produced": {
+          "length": 2,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "changed",
+            "b"
+          ]
+        },
+        "result": {
+          "length": 2,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "changed",
+            "b"
+          ]
+        },
+        "original": {
+          "length": 2,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "changed",
+            "b"
+          ]
+        },
+        "retained": [
+          {
+            "length": 2,
+            "keys": [
+              "0",
+              "1"
+            ],
+            "values": [
+              "changed",
+              "b"
+            ]
+          },
+          {
+            "length": 2,
+            "keys": [
+              "0",
+              "1"
+            ],
+            "values": [
+              "changed",
+              "b"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "phase": "message_start",
+      "operation": "replace_list",
+      "expected": {
+        "produced": {
+          "length": 2,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "a",
+            "b"
+          ]
+        },
+        "result": {
+          "length": 1,
+          "keys": [
+            "0"
+          ],
+          "values": [
+            "changed"
+          ]
+        },
+        "original": {
+          "length": 2,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "a",
+            "b"
+          ]
+        },
+        "retained": [
+          {
+            "length": 1,
+            "keys": [
+              "0"
+            ],
+            "values": [
+              "changed"
+            ]
+          },
+          {
+            "length": 1,
+            "keys": [
+              "0"
+            ],
+            "values": [
+              "changed"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "phase": "message_start",
+      "operation": "clear_append",
+      "expected": {
+        "produced": {
+          "length": 1,
+          "keys": [
+            "0"
+          ],
+          "values": [
+            "changed"
+          ]
+        },
+        "result": {
+          "length": 1,
+          "keys": [
+            "0"
+          ],
+          "values": [
+            "changed"
+          ]
+        },
+        "original": {
+          "length": 1,
+          "keys": [
+            "0"
+          ],
+          "values": [
+            "changed"
+          ]
+        },
+        "retained": [
+          {
+            "length": 1,
+            "keys": [
+              "0"
+            ],
+            "values": [
+              "changed"
+            ]
+          },
+          {
+            "length": 1,
+            "keys": [
+              "0"
+            ],
+            "values": [
+              "changed"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "phase": "message_end",
+      "operation": "append",
+      "expected": {
+        "produced": {
+          "length": 4,
+          "keys": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ],
+          "values": [
+            "a",
+            "b",
+            "changed",
+            "tail"
+          ]
+        },
+        "result": {
+          "length": 4,
+          "keys": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ],
+          "values": [
+            "a",
+            "b",
+            "changed",
+            "tail"
+          ]
+        },
+        "original": {
+          "length": 4,
+          "keys": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ],
+          "values": [
+            "a",
+            "b",
+            "changed",
+            "tail"
+          ]
+        },
+        "retained": [
+          {
+            "length": 4,
+            "keys": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ],
+            "values": [
+              "a",
+              "b",
+              "changed",
+              "tail"
+            ]
+          },
+          {
+            "length": 4,
+            "keys": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ],
+            "values": [
+              "a",
+              "b",
+              "changed",
+              "tail"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "phase": "message_end",
+      "operation": "pop",
+      "expected": {
+        "produced": {
+          "length": 1,
+          "keys": [
+            "0"
+          ],
+          "values": [
+            "a"
+          ]
+        },
+        "result": {
+          "length": 1,
+          "keys": [
+            "0"
+          ],
+          "values": [
+            "a"
+          ]
+        },
+        "original": {
+          "length": 1,
+          "keys": [
+            "0"
+          ],
+          "values": [
+            "a"
+          ]
+        },
+        "retained": [
+          {
+            "length": 1,
+            "keys": [
+              "0"
+            ],
+            "values": [
+              "a"
+            ]
+          },
+          {
+            "length": 1,
+            "keys": [
+              "0"
+            ],
+            "values": [
+              "a"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "phase": "message_end",
+      "operation": "truncate",
+      "expected": {
+        "produced": {
+          "length": 0,
+          "keys": [],
+          "values": []
+        },
+        "result": {
+          "length": 0,
+          "keys": [],
+          "values": []
+        },
+        "original": {
+          "length": 0,
+          "keys": [],
+          "values": []
+        },
+        "retained": [
+          {
+            "length": 0,
+            "keys": [],
+            "values": []
+          },
+          {
+            "length": 0,
+            "keys": [],
+            "values": []
+          }
+        ]
+      }
+    },
+    {
+      "phase": "message_end",
+      "operation": "extend",
+      "expected": {
+        "produced": {
+          "length": 5,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "a",
+            "b",
+            null,
+            null,
+            null
+          ]
+        },
+        "result": {
+          "length": 5,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "a",
+            "b",
+            null,
+            null,
+            null
+          ]
+        },
+        "original": {
+          "length": 5,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "a",
+            "b",
+            null,
+            null,
+            null
+          ]
+        },
+        "retained": [
+          {
+            "length": 5,
+            "keys": [
+              "0",
+              "1"
+            ],
+            "values": [
+              "a",
+              "b",
+              null,
+              null,
+              null
+            ]
+          },
+          {
+            "length": 5,
+            "keys": [
+              "0",
+              "1"
+            ],
+            "values": [
+              "a",
+              "b",
+              null,
+              null,
+              null
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "phase": "message_end",
+      "operation": "delete",
+      "expected": {
+        "produced": {
+          "length": 2,
+          "keys": [
+            "1"
+          ],
+          "values": [
+            null,
+            "b"
+          ]
+        },
+        "result": {
+          "length": 2,
+          "keys": [
+            "1"
+          ],
+          "values": [
+            null,
+            "b"
+          ]
+        },
+        "original": {
+          "length": 2,
+          "keys": [
+            "1"
+          ],
+          "values": [
+            null,
+            "b"
+          ]
+        },
+        "retained": [
+          {
+            "length": 2,
+            "keys": [
+              "1"
+            ],
+            "values": [
+              null,
+              "b"
+            ]
+          },
+          {
+            "length": 2,
+            "keys": [
+              "1"
+            ],
+            "values": [
+              null,
+              "b"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "phase": "message_end",
+      "operation": "replace_entry",
+      "expected": {
+        "produced": {
+          "length": 2,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "changed",
+            "b"
+          ]
+        },
+        "result": {
+          "length": 2,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "changed",
+            "b"
+          ]
+        },
+        "original": {
+          "length": 2,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "changed",
+            "b"
+          ]
+        },
+        "retained": [
+          {
+            "length": 2,
+            "keys": [
+              "0",
+              "1"
+            ],
+            "values": [
+              "changed",
+              "b"
+            ]
+          },
+          {
+            "length": 2,
+            "keys": [
+              "0",
+              "1"
+            ],
+            "values": [
+              "changed",
+              "b"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "phase": "message_end",
+      "operation": "replace_list",
+      "expected": {
+        "produced": {
+          "length": 2,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "a",
+            "b"
+          ]
+        },
+        "result": {
+          "length": 1,
+          "keys": [
+            "0"
+          ],
+          "values": [
+            "changed"
+          ]
+        },
+        "original": {
+          "length": 2,
+          "keys": [
+            "0",
+            "1"
+          ],
+          "values": [
+            "a",
+            "b"
+          ]
+        },
+        "retained": [
+          {
+            "length": 1,
+            "keys": [
+              "0"
+            ],
+            "values": [
+              "changed"
+            ]
+          },
+          {
+            "length": 1,
+            "keys": [
+              "0"
+            ],
+            "values": [
+              "changed"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "phase": "message_end",
+      "operation": "clear_append",
+      "expected": {
+        "produced": {
+          "length": 1,
+          "keys": [
+            "0"
+          ],
+          "values": [
+            "changed"
+          ]
+        },
+        "result": {
+          "length": 1,
+          "keys": [
+            "0"
+          ],
+          "values": [
+            "changed"
+          ]
+        },
+        "original": {
+          "length": 1,
+          "keys": [
+            "0"
+          ],
+          "values": [
+            "changed"
+          ]
+        },
+        "retained": [
+          {
+            "length": 1,
+            "keys": [
+              "0"
+            ],
+            "values": [
+              "changed"
+            ]
+          },
+          {
+            "length": 1,
+            "keys": [
+              "0"
+            ],
+            "values": [
+              "changed"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

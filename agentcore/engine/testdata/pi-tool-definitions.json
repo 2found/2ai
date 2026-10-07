@@ -1,0 +1,3268 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "mode": "programmatic",
+        "phase": "plain"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          }
+        ],
+        "results": [
+          {
+            "toolCallId": "first",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "isError": false
+          }
+        ],
+        "retained": "original",
+        "slot": "original",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "phase": "before_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "toolCallId": "first",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "isError": false
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          }
+        ],
+        "results": [
+          {
+            "toolCallId": "first",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "isError": false
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "phase": "before_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "toolCallId": "first",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "isError": false
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "phase": "prepare_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "toolCallId": "first",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "isError": false
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "phase": "prepare_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          }
+        ],
+        "results": [
+          {
+            "toolCallId": "first",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "isError": false
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "phase": "prepare_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "toolCallId": "first",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "isError": false
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "phase": "plain"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "original"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "original",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "phase": "before_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "replacement"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "replacement"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "phase": "before_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "phase": "prepare_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "phase": "prepare_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "replacement"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "replacement"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "phase": "prepare_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "phase": "next_before_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "phase": "next_before_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "original"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "phase": "next_before_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "phase": "plain"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "original"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "original",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "phase": "before_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "replacement"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "replacement"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "phase": "before_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "phase": "prepare_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "phase": "prepare_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "replacement"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "replacement"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "phase": "prepare_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "phase": "next_before_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "phase": "next_before_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "original"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "phase": "next_before_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_sequential",
+        "phase": "plain"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "original"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "original",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_sequential",
+        "phase": "before_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_sequential",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "replacement"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "replacement"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_sequential",
+        "phase": "before_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_sequential",
+        "phase": "prepare_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_sequential",
+        "phase": "prepare_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "replacement"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "replacement"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_sequential",
+        "phase": "prepare_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_sequential",
+        "phase": "next_before_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_sequential",
+        "phase": "next_before_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "original"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_sequential",
+        "phase": "next_before_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_parallel",
+        "phase": "plain"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "original"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "original",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_parallel",
+        "phase": "before_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_parallel",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "replacement"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "replacement"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_parallel",
+        "phase": "before_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_parallel",
+        "phase": "prepare_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_parallel",
+        "phase": "prepare_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "replacement"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "replacement"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_parallel",
+        "phase": "prepare_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_parallel",
+        "phase": "next_before_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_parallel",
+        "phase": "next_before_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "original"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_parallel",
+        "phase": "next_before_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_sequential",
+        "phase": "plain"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "original"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "original",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_sequential",
+        "phase": "before_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_sequential",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "replacement"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "replacement"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_sequential",
+        "phase": "before_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_sequential",
+        "phase": "prepare_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_sequential",
+        "phase": "prepare_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "replacement"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "replacement"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_sequential",
+        "phase": "prepare_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_sequential",
+        "phase": "next_before_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_sequential",
+        "phase": "next_before_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "original"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_sequential",
+        "phase": "next_before_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_parallel",
+        "phase": "plain"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "original"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "original",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_parallel",
+        "phase": "before_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_parallel",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "replacement"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "replacement"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_parallel",
+        "phase": "before_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_parallel",
+        "phase": "prepare_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_parallel",
+        "phase": "prepare_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "replacement"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "replacement"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_parallel",
+        "phase": "prepare_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_parallel",
+        "phase": "next_before_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_parallel",
+        "phase": "next_before_replace"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "original"
+          },
+          {
+            "id": "second",
+            "executor": "original"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "original"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "original",
+        "slot": "replacement",
+        "same": false
+      }
+    },
+    {
+      "input": {
+        "mode": "agent_set_parallel",
+        "phase": "next_before_grow_mutate"
+      },
+      "expected": {
+        "executed": [
+          {
+            "id": "first",
+            "executor": "mutated"
+          },
+          {
+            "id": "second",
+            "executor": "mutated"
+          }
+        ],
+        "results": [
+          {
+            "role": "toolResult",
+            "toolCallId": "first",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "second",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "mutated"
+              }
+            ],
+            "details": {},
+            "isError": false,
+            "timestamp": 1000
+          }
+        ],
+        "retained": "mutated",
+        "slot": "mutated",
+        "same": true
+      }
+    }
+  ]
+}

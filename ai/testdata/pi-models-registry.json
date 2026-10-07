@@ -1,0 +1,6924 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "runtime": "Bun 1.3.14",
+  "sources": {
+    "packages/ai/src/models.ts": {
+      "git_blob": "d8693c978c0f424808f70647f97f92fef6617e7d",
+      "sha256": "4739010c7e4f7596607b1dd495b9d5ab6cd921e29f55c5c331259a04b7253269",
+      "mode": "100644"
+    },
+    "packages/ai/src/utils/model-operations.ts": {
+      "git_blob": "bdf510f9ccbd3e2ad4ca4b2e2ed6139eb0bd24af",
+      "sha256": "d024c049a08df73498362f297ca10c45a401fb5a3364c0a4d7890ec92a3c4763",
+      "mode": "100644"
+    }
+  },
+  "definitions": [
+    {
+      "id": "a",
+      "chat": [
+        {
+          "id": "same",
+          "provider": "a",
+          "v": 1
+        }
+      ],
+      "all": [
+        {
+          "id": "same",
+          "provider": "a",
+          "v": 1
+        },
+        {
+          "id": "same",
+          "provider": "a",
+          "type": "image"
+        },
+        {
+          "id": "class",
+          "type": "classifier",
+          "provider": "a"
+        },
+        {
+          "id": "next",
+          "provider": "a",
+          "type": "future"
+        }
+      ]
+    },
+    {
+      "id": "b",
+      "chat": [
+        {
+          "id": "same",
+          "provider": "b"
+        }
+      ]
+    },
+    {
+      "id": "a",
+      "chat": [
+        {
+          "id": "replacement",
+          "provider": "a"
+        }
+      ]
+    },
+    {
+      "id": "",
+      "chat": [
+        {
+          "id": "empty-provider"
+        }
+      ]
+    },
+    {
+      "id": "throws-chat",
+      "chat": "throw"
+    },
+    {
+      "id": "throws-all",
+      "chat": [
+        {
+          "id": "fallback"
+        }
+      ],
+      "all": "throw"
+    },
+    {
+      "id": "nil-all",
+      "chat": [
+        {
+          "id": "fallback"
+        }
+      ],
+      "all": null
+    },
+    {
+      "id": "nil-chat",
+      "chat": null
+    },
+    {
+      "id": "null-model",
+      "chat": [
+        null
+      ]
+    },
+    {
+      "id": "legacy",
+      "chat": [
+        {
+          "id": "a"
+        },
+        {
+          "id": "a",
+          "type": null
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "op": {
+        "set": 0
+      },
+      "providers": [
+        "a"
+      ],
+      "probes": [
+        {
+          "provider": null,
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "a",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "b",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "missing",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "null-model",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "legacy",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "op": {
+        "set": 1
+      },
+      "providers": [
+        "a",
+        "b"
+      ],
+      "probes": [
+        {
+          "provider": null,
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              },
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                },
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "a",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "b",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "b"
+            }
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "missing",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "null-model",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "legacy",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "op": {
+        "set": 2
+      },
+      "providers": [
+        "a",
+        "b"
+      ],
+      "probes": [
+        {
+          "provider": null,
+          "chat": {
+            "value": [
+              {
+                "id": "replacement",
+                "provider": "a"
+              },
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "replacement",
+                "provider": "a"
+              },
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "replacement",
+                  "provider": "a"
+                },
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "a",
+          "chat": {
+            "value": [
+              {
+                "id": "replacement",
+                "provider": "a"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "replacement",
+                "provider": "a"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "replacement",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "b",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "b"
+            }
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "missing",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "null-model",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "legacy",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "op": {
+        "delete": "a"
+      },
+      "providers": [
+        "b"
+      ],
+      "probes": [
+        {
+          "provider": null,
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "a",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "b",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "b"
+            }
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "missing",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "null-model",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "legacy",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "op": {
+        "set": 0
+      },
+      "providers": [
+        "b",
+        "a"
+      ],
+      "probes": [
+        {
+          "provider": null,
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                },
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "a",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "b",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "b"
+            }
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "missing",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "null-model",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "legacy",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "op": {
+        "set": 3
+      },
+      "providers": [
+        "b",
+        "a",
+        ""
+      ],
+      "probes": [
+        {
+          "provider": null,
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              },
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                },
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                },
+                {
+                  "id": "empty-provider"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "",
+          "chat": {
+            "value": [
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "empty-provider"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "a",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "b",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "b"
+            }
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "missing",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "null-model",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "legacy",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "op": {
+        "set": 4
+      },
+      "providers": [
+        "b",
+        "a",
+        "",
+        "throws-chat"
+      ],
+      "probes": [
+        {
+          "provider": null,
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              },
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                },
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                },
+                {
+                  "id": "empty-provider"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "",
+          "chat": {
+            "value": [
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "empty-provider"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "a",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "b",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "b"
+            }
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "missing",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "null-model",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "legacy",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "op": {
+        "set": 5
+      },
+      "providers": [
+        "b",
+        "a",
+        "",
+        "throws-chat",
+        "throws-all"
+      ],
+      "probes": [
+        {
+          "provider": null,
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "empty-provider"
+              },
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              },
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                },
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                },
+                {
+                  "id": "empty-provider"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "",
+          "chat": {
+            "value": [
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "empty-provider"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "a",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "b",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "b"
+            }
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "missing",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-all",
+          "chat": {
+            "value": [
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "null-model",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "legacy",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "op": {
+        "set": 6
+      },
+      "providers": [
+        "b",
+        "a",
+        "",
+        "throws-chat",
+        "throws-all",
+        "nil-all"
+      ],
+      "probes": [
+        {
+          "provider": null,
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "empty-provider"
+              },
+              {
+                "id": "fallback"
+              },
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              },
+              {
+                "id": "empty-provider"
+              },
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                },
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                },
+                {
+                  "id": "empty-provider"
+                },
+                {
+                  "id": "fallback"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "",
+          "chat": {
+            "value": [
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "empty-provider"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "a",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "b",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "b"
+            }
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "missing",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-all",
+          "chat": {
+            "value": [
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-all",
+          "chat": {
+            "value": [
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "fallback"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "null-model",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "legacy",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "op": {
+        "set": 7
+      },
+      "providers": [
+        "b",
+        "a",
+        "",
+        "throws-chat",
+        "throws-all",
+        "nil-all",
+        "nil-chat"
+      ],
+      "probes": [
+        {
+          "provider": null,
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "empty-provider"
+              },
+              {
+                "id": "fallback"
+              },
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              },
+              {
+                "id": "empty-provider"
+              },
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                },
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                },
+                {
+                  "id": "empty-provider"
+                },
+                {
+                  "id": "fallback"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "",
+          "chat": {
+            "value": [
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "empty-provider"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "a",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "b",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "b"
+            }
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "missing",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-all",
+          "chat": {
+            "value": [
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-all",
+          "chat": {
+            "value": [
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "fallback"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-chat",
+          "chat": {
+            "value": null
+          },
+          "all": {
+            "value": null
+          },
+          "types": [
+            {
+              "error": "null is not an object (evaluating 'this.getAllModels(provider).filter')"
+            },
+            {
+              "error": "null is not an object (evaluating 'this.getAllModels(provider).filter')"
+            },
+            {
+              "error": "null is not an object (evaluating 'this.getAllModels(provider).filter')"
+            },
+            {
+              "error": "null is not an object (evaluating 'this.getAllModels(provider).filter')"
+            }
+          ],
+          "find": {
+            "error": "null is not an object (evaluating 'this.getModels(provider).find')"
+          },
+          "findImage": {
+            "error": "null is not an object (evaluating 'this.getAllModels(provider).filter')"
+          }
+        },
+        {
+          "provider": "null-model",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "legacy",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "op": {
+        "set": 8
+      },
+      "providers": [
+        "b",
+        "a",
+        "",
+        "throws-chat",
+        "throws-all",
+        "nil-all",
+        "nil-chat",
+        "null-model"
+      ],
+      "probes": [
+        {
+          "provider": null,
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "empty-provider"
+              },
+              {
+                "id": "fallback"
+              },
+              {
+                "id": "fallback"
+              },
+              null
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              },
+              {
+                "id": "empty-provider"
+              },
+              {
+                "id": "fallback"
+              },
+              null
+            ]
+          },
+          "types": [
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            },
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            },
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            },
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "",
+          "chat": {
+            "value": [
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "empty-provider"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "a",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "b",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "b"
+            }
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "missing",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-all",
+          "chat": {
+            "value": [
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-all",
+          "chat": {
+            "value": [
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "fallback"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-chat",
+          "chat": {
+            "value": null
+          },
+          "all": {
+            "value": null
+          },
+          "types": [
+            {
+              "error": "null is not an object (evaluating 'this.getAllModels(provider).filter')"
+            },
+            {
+              "error": "null is not an object (evaluating 'this.getAllModels(provider).filter')"
+            },
+            {
+              "error": "null is not an object (evaluating 'this.getAllModels(provider).filter')"
+            },
+            {
+              "error": "null is not an object (evaluating 'this.getAllModels(provider).filter')"
+            }
+          ],
+          "find": {
+            "error": "null is not an object (evaluating 'this.getModels(provider).find')"
+          },
+          "findImage": {
+            "error": "null is not an object (evaluating 'this.getAllModels(provider).filter')"
+          }
+        },
+        {
+          "provider": "null-model",
+          "chat": {
+            "value": [
+              null
+            ]
+          },
+          "all": {
+            "value": [
+              null
+            ]
+          },
+          "types": [
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            },
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            },
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            },
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            }
+          ],
+          "find": {
+            "error": "null is not an object (evaluating 'model.id')"
+          },
+          "findImage": {
+            "error": "null is not an object (evaluating 'model.type')"
+          }
+        },
+        {
+          "provider": "legacy",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "op": {
+        "set": 9
+      },
+      "providers": [
+        "b",
+        "a",
+        "",
+        "throws-chat",
+        "throws-all",
+        "nil-all",
+        "nil-chat",
+        "null-model",
+        "legacy"
+      ],
+      "probes": [
+        {
+          "provider": null,
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "empty-provider"
+              },
+              {
+                "id": "fallback"
+              },
+              {
+                "id": "fallback"
+              },
+              null,
+              {
+                "id": "a"
+              },
+              {
+                "id": "a",
+                "type": null
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              },
+              {
+                "id": "empty-provider"
+              },
+              {
+                "id": "fallback"
+              },
+              null,
+              {
+                "id": "a"
+              },
+              {
+                "id": "a",
+                "type": null
+              }
+            ]
+          },
+          "types": [
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            },
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            },
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            },
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "",
+          "chat": {
+            "value": [
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "empty-provider"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "empty-provider"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "a",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "a",
+                "v": 1
+              },
+              {
+                "id": "same",
+                "provider": "a",
+                "type": "image"
+              },
+              {
+                "id": "class",
+                "type": "classifier",
+                "provider": "a"
+              },
+              {
+                "id": "next",
+                "provider": "a",
+                "type": "future"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "v": 1
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "a",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "class",
+                  "type": "classifier",
+                  "provider": "a"
+                }
+              ]
+            },
+            {
+              "value": [
+                {
+                  "id": "next",
+                  "provider": "a",
+                  "type": "future"
+                }
+              ]
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "v": 1
+            }
+          },
+          "findImage": {
+            "value": {
+              "id": "same",
+              "provider": "a",
+              "type": "image"
+            }
+          }
+        },
+        {
+          "provider": "b",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "b"
+            }
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "missing",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-all",
+          "chat": {
+            "value": [
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-all",
+          "chat": {
+            "value": [
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "fallback"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "fallback"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-chat",
+          "chat": {
+            "value": null
+          },
+          "all": {
+            "value": null
+          },
+          "types": [
+            {
+              "error": "null is not an object (evaluating 'this.getAllModels(provider).filter')"
+            },
+            {
+              "error": "null is not an object (evaluating 'this.getAllModels(provider).filter')"
+            },
+            {
+              "error": "null is not an object (evaluating 'this.getAllModels(provider).filter')"
+            },
+            {
+              "error": "null is not an object (evaluating 'this.getAllModels(provider).filter')"
+            }
+          ],
+          "find": {
+            "error": "null is not an object (evaluating 'this.getModels(provider).find')"
+          },
+          "findImage": {
+            "error": "null is not an object (evaluating 'this.getAllModels(provider).filter')"
+          }
+        },
+        {
+          "provider": "null-model",
+          "chat": {
+            "value": [
+              null
+            ]
+          },
+          "all": {
+            "value": [
+              null
+            ]
+          },
+          "types": [
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            },
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            },
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            },
+            {
+              "error": "null is not an object (evaluating 'model.type')"
+            }
+          ],
+          "find": {
+            "error": "null is not an object (evaluating 'model.id')"
+          },
+          "findImage": {
+            "error": "null is not an object (evaluating 'model.type')"
+          }
+        },
+        {
+          "provider": "legacy",
+          "chat": {
+            "value": [
+              {
+                "id": "a"
+              },
+              {
+                "id": "a",
+                "type": null
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "a"
+              },
+              {
+                "id": "a",
+                "type": null
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "a"
+                },
+                {
+                  "id": "a",
+                  "type": null
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "op": {
+        "clear": true
+      },
+      "providers": [],
+      "probes": [
+        {
+          "provider": null,
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "a",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "b",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "missing",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "null-model",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "legacy",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        }
+      ]
+    },
+    {
+      "op": {
+        "set": 1
+      },
+      "providers": [
+        "b"
+      ],
+      "probes": [
+        {
+          "provider": null,
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "a",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "b",
+          "chat": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "all": {
+            "value": [
+              {
+                "id": "same",
+                "provider": "b"
+              }
+            ]
+          },
+          "types": [
+            {
+              "value": [
+                {
+                  "id": "same",
+                  "provider": "b"
+                }
+              ]
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "value": {
+              "id": "same",
+              "provider": "b"
+            }
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "missing",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "throws-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-all",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "nil-chat",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "null-model",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        },
+        {
+          "provider": "legacy",
+          "chat": {
+            "value": []
+          },
+          "all": {
+            "value": []
+          },
+          "types": [
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            },
+            {
+              "value": []
+            }
+          ],
+          "find": {
+            "absent": true
+          },
+          "findImage": {
+            "absent": true
+          }
+        }
+      ]
+    }
+  ],
+  "mutations": [
+    {
+      "mode": "append",
+      "all": false,
+      "calls": [
+        "a",
+        "b",
+        "c"
+      ],
+      "models": [
+        {
+          "id": "a"
+        },
+        {
+          "id": "b"
+        },
+        {
+          "id": "c"
+        }
+      ],
+      "providers": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "mode": "append",
+      "all": true,
+      "calls": [
+        "a",
+        "b",
+        "c"
+      ],
+      "models": [
+        {
+          "id": "a"
+        },
+        {
+          "id": "b"
+        },
+        {
+          "id": "c"
+        }
+      ],
+      "providers": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "mode": "delete-next",
+      "all": false,
+      "calls": [
+        "a"
+      ],
+      "models": [
+        {
+          "id": "a"
+        }
+      ],
+      "providers": [
+        "a"
+      ]
+    },
+    {
+      "mode": "delete-next",
+      "all": true,
+      "calls": [
+        "a"
+      ],
+      "models": [
+        {
+          "id": "a"
+        }
+      ],
+      "providers": [
+        "a"
+      ]
+    },
+    {
+      "mode": "replace-next",
+      "all": false,
+      "calls": [
+        "a",
+        "b2"
+      ],
+      "models": [
+        {
+          "id": "a"
+        },
+        {
+          "id": "b2"
+        }
+      ],
+      "providers": [
+        "a",
+        "b"
+      ]
+    },
+    {
+      "mode": "replace-next",
+      "all": true,
+      "calls": [
+        "a",
+        "b2"
+      ],
+      "models": [
+        {
+          "id": "a"
+        },
+        {
+          "id": "b2"
+        }
+      ],
+      "providers": [
+        "a",
+        "b"
+      ]
+    },
+    {
+      "mode": "clear-add",
+      "all": false,
+      "calls": [
+        "a",
+        "c"
+      ],
+      "models": [
+        {
+          "id": "a"
+        },
+        {
+          "id": "c"
+        }
+      ],
+      "providers": [
+        "c"
+      ]
+    },
+    {
+      "mode": "clear-add",
+      "all": true,
+      "calls": [
+        "a",
+        "c"
+      ],
+      "models": [
+        {
+          "id": "a"
+        },
+        {
+          "id": "c"
+        }
+      ],
+      "providers": [
+        "c"
+      ]
+    },
+    {
+      "mode": "delete-self-add",
+      "all": false,
+      "calls": [
+        "a",
+        "b",
+        "a"
+      ],
+      "models": [
+        {
+          "id": "a"
+        },
+        {
+          "id": "b"
+        },
+        {
+          "id": "a"
+        }
+      ],
+      "providers": [
+        "b",
+        "a"
+      ]
+    },
+    {
+      "mode": "delete-self-add",
+      "all": true,
+      "calls": [
+        "a",
+        "b",
+        "a"
+      ],
+      "models": [
+        {
+          "id": "a"
+        },
+        {
+          "id": "b"
+        },
+        {
+          "id": "a"
+        }
+      ],
+      "providers": [
+        "b",
+        "a"
+      ]
+    }
+  ],
+  "references": {
+    "scoped": true,
+    "union": false,
+    "scopedKeys": [
+      "1"
+    ],
+    "unionKeys": [
+      "0",
+      "1",
+      "2"
+    ],
+    "provider": true,
+    "find": {
+      "error": "undefined is not an object (evaluating 'model.id')"
+    },
+    "typed": {
+      "value": [
+        {
+          "id": "a"
+        }
+      ]
+    }
+  },
+  "scopes": [
+    {
+      "mode": "finish-publish",
+      "aborted": false,
+      "newAborted": null,
+      "updates": 1,
+      "result": {
+        "accepted": true
+      }
+    },
+    {
+      "mode": "finish-begin",
+      "aborted": false,
+      "newAborted": false,
+      "updates": 0,
+      "result": {
+        "accepted": false
+      }
+    },
+    {
+      "mode": "finish-replace",
+      "aborted": false,
+      "newAborted": null,
+      "updates": 0,
+      "result": {
+        "accepted": false
+      }
+    },
+    {
+      "mode": "finish-delete",
+      "aborted": false,
+      "newAborted": null,
+      "updates": 0,
+      "result": {
+        "accepted": false
+      }
+    },
+    {
+      "mode": "finish-clear",
+      "aborted": false,
+      "newAborted": null,
+      "updates": 0,
+      "result": {
+        "accepted": false
+      }
+    },
+    {
+      "mode": "active-replace",
+      "aborted": true,
+      "newAborted": null,
+      "updates": 0,
+      "result": {
+        "cancelled": true
+      }
+    },
+    {
+      "mode": "old-finish",
+      "aborted": true,
+      "newAborted": true,
+      "updates": 0,
+      "result": {
+        "cancelled": true
+      }
+    },
+    {
+      "mode": "finish-parent-abort",
+      "aborted": true,
+      "newAborted": null,
+      "updates": 0,
+      "result": {
+        "cancelled": true
+      }
+    },
+    {
+      "mode": "finished-unregistered-clear",
+      "aborted": false,
+      "newAborted": null,
+      "updates": 1,
+      "result": {
+        "accepted": true
+      }
+    },
+    {
+      "mode": "active-unregistered-clear",
+      "aborted": true,
+      "newAborted": null,
+      "updates": 0,
+      "result": {
+        "cancelled": true
+      }
+    }
+  ],
+  "storeBinding": [
+    [
+      "new-write",
+      "p",
+      {
+        "models": []
+      }
+    ],
+    [
+      "new-delete",
+      "p"
+    ]
+  ]
+}

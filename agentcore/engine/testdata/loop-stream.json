@@ -1,0 +1,2217 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "model": {
+    "id": "test",
+    "api": "test",
+    "provider": "test"
+  },
+  "assistant": {
+    "role": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "done"
+      }
+    ],
+    "timestamp": 100,
+    "api": "test",
+    "provider": "test",
+    "model": "test",
+    "stopReason": "stop",
+    "usage": {
+      "input": 1,
+      "output": 2,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 3,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "now": 100,
+  "cases": [
+    {
+      "input": {
+        "name": "prompt"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "stop",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "stop",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "stop",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            },
+            "toolResults": []
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "user",
+                "content": "go",
+                "timestamp": 100
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "done"
+                  }
+                ],
+                "timestamp": 100,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "stop",
+                "usage": {
+                  "input": 1,
+                  "output": 2,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 3,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "thinkingLevel": "off"
+              }
+            ]
+          }
+        ],
+        "requests": [
+          {
+            "model": {
+              "id": "test",
+              "api": "test",
+              "provider": "test"
+            },
+            "context": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "go",
+                  "timestamp": 100
+                }
+              ]
+            },
+            "options": {
+              "model": {
+                "id": "test",
+                "api": "test",
+                "provider": "test"
+              }
+            }
+          }
+        ],
+        "result": [
+          {
+            "role": "user",
+            "content": "go",
+            "timestamp": 100
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "done"
+              }
+            ],
+            "timestamp": 100,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "stop",
+            "usage": {
+              "input": 1,
+              "output": 2,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 3,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "thinkingLevel": "off"
+          }
+        ],
+        "syncError": null,
+        "producerError": null,
+        "resultPending": false,
+        "queuePending": false
+      }
+    },
+    {
+      "input": {
+        "name": "continue",
+        "resume": true
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "stop",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "stop",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "stop",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            },
+            "toolResults": []
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "done"
+                  }
+                ],
+                "timestamp": 100,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "stop",
+                "usage": {
+                  "input": 1,
+                  "output": 2,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 3,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "thinkingLevel": "off"
+              }
+            ]
+          }
+        ],
+        "requests": [
+          {
+            "model": {
+              "id": "test",
+              "api": "test",
+              "provider": "test"
+            },
+            "context": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "go",
+                  "timestamp": 100
+                }
+              ]
+            },
+            "options": {
+              "model": {
+                "id": "test",
+                "api": "test",
+                "provider": "test"
+              }
+            }
+          }
+        ],
+        "result": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "done"
+              }
+            ],
+            "timestamp": 100,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "stop",
+            "usage": {
+              "input": 1,
+              "output": 2,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 3,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "thinkingLevel": "off"
+          }
+        ],
+        "syncError": null,
+        "producerError": null,
+        "resultPending": false,
+        "queuePending": false
+      }
+    },
+    {
+      "input": {
+        "name": "empty continuation",
+        "resume": true,
+        "empty": true
+      },
+      "expected": {
+        "events": [],
+        "requests": [],
+        "result": null,
+        "syncError": "Cannot continue: no messages in context",
+        "producerError": null,
+        "resultPending": false,
+        "queuePending": false
+      }
+    },
+    {
+      "input": {
+        "name": "assistant continuation",
+        "resume": true,
+        "assistantTail": true
+      },
+      "expected": {
+        "events": [],
+        "requests": [],
+        "result": null,
+        "syncError": "Cannot continue from message role: assistant",
+        "producerError": null,
+        "resultPending": false,
+        "queuePending": false
+      }
+    },
+    {
+      "input": {
+        "name": "custom continuation",
+        "resume": true,
+        "custom": true
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "stop",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "stop",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "stop",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            },
+            "toolResults": []
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "done"
+                  }
+                ],
+                "timestamp": 100,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "stop",
+                "usage": {
+                  "input": 1,
+                  "output": 2,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 3,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "thinkingLevel": "off"
+              }
+            ]
+          }
+        ],
+        "requests": [
+          {
+            "model": {
+              "id": "test",
+              "api": "test",
+              "provider": "test"
+            },
+            "context": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "go",
+                  "timestamp": 100
+                }
+              ]
+            },
+            "options": {
+              "model": {
+                "id": "test",
+                "api": "test",
+                "provider": "test"
+              }
+            }
+          }
+        ],
+        "result": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "done"
+              }
+            ],
+            "timestamp": 100,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "stop",
+            "usage": {
+              "input": 1,
+              "output": 2,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 3,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "thinkingLevel": "off"
+          }
+        ],
+        "syncError": null,
+        "producerError": null,
+        "resultPending": false,
+        "queuePending": false
+      }
+    },
+    {
+      "input": {
+        "name": "provider returned error",
+        "stopReason": "error"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "errorMessage": "failed"
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "errorMessage": "failed",
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "errorMessage": "failed",
+              "thinkingLevel": "off"
+            },
+            "toolResults": []
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "user",
+                "content": "go",
+                "timestamp": 100
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "done"
+                  }
+                ],
+                "timestamp": 100,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 1,
+                  "output": 2,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 3,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "errorMessage": "failed",
+                "thinkingLevel": "off"
+              }
+            ]
+          }
+        ],
+        "requests": [
+          {
+            "model": {
+              "id": "test",
+              "api": "test",
+              "provider": "test"
+            },
+            "context": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "go",
+                  "timestamp": 100
+                }
+              ]
+            },
+            "options": {
+              "model": {
+                "id": "test",
+                "api": "test",
+                "provider": "test"
+              }
+            }
+          }
+        ],
+        "result": [
+          {
+            "role": "user",
+            "content": "go",
+            "timestamp": 100
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "done"
+              }
+            ],
+            "timestamp": 100,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "error",
+            "usage": {
+              "input": 1,
+              "output": 2,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 3,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "errorMessage": "failed",
+            "thinkingLevel": "off"
+          }
+        ],
+        "syncError": null,
+        "producerError": null,
+        "resultPending": false,
+        "queuePending": false
+      }
+    },
+    {
+      "input": {
+        "name": "provider returned aborted",
+        "stopReason": "aborted"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "aborted",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "errorMessage": "failed"
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "aborted",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "errorMessage": "failed",
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "aborted",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "errorMessage": "failed",
+              "thinkingLevel": "off"
+            },
+            "toolResults": []
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "user",
+                "content": "go",
+                "timestamp": 100
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "done"
+                  }
+                ],
+                "timestamp": 100,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "aborted",
+                "usage": {
+                  "input": 1,
+                  "output": 2,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 3,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "errorMessage": "failed",
+                "thinkingLevel": "off"
+              }
+            ]
+          }
+        ],
+        "requests": [
+          {
+            "model": {
+              "id": "test",
+              "api": "test",
+              "provider": "test"
+            },
+            "context": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "go",
+                  "timestamp": 100
+                }
+              ]
+            },
+            "options": {
+              "model": {
+                "id": "test",
+                "api": "test",
+                "provider": "test"
+              }
+            }
+          }
+        ],
+        "result": [
+          {
+            "role": "user",
+            "content": "go",
+            "timestamp": 100
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "done"
+              }
+            ],
+            "timestamp": 100,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "aborted",
+            "usage": {
+              "input": 1,
+              "output": 2,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 3,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "errorMessage": "failed",
+            "thinkingLevel": "off"
+          }
+        ],
+        "syncError": null,
+        "producerError": null,
+        "resultPending": false,
+        "queuePending": false
+      }
+    },
+    {
+      "input": {
+        "name": "provider rejection",
+        "providerFailure": "provider failed"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          }
+        ],
+        "requests": [
+          {
+            "model": {
+              "id": "test",
+              "api": "test",
+              "provider": "test"
+            },
+            "context": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "go",
+                  "timestamp": 100
+                }
+              ]
+            },
+            "options": {
+              "model": {
+                "id": "test",
+                "api": "test",
+                "provider": "test"
+              }
+            }
+          }
+        ],
+        "result": null,
+        "syncError": null,
+        "producerError": "provider failed",
+        "resultPending": true,
+        "queuePending": true
+      }
+    },
+    {
+      "input": {
+        "name": "transform rejection",
+        "transformFailure": "transform failed"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          }
+        ],
+        "requests": [],
+        "result": null,
+        "syncError": null,
+        "producerError": "transform failed",
+        "resultPending": true,
+        "queuePending": true
+      }
+    },
+    {
+      "input": {
+        "name": "missing default",
+        "missing": true
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          }
+        ],
+        "requests": [],
+        "result": null,
+        "syncError": null,
+        "producerError": "No default stream function configured. Pass streamFn explicitly or call setDefaultStreamFn().",
+        "resultPending": true,
+        "queuePending": true
+      }
+    },
+    {
+      "input": {
+        "name": "configured default",
+        "useDefault": true
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "stop",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "stop",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "stop",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            },
+            "toolResults": []
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "user",
+                "content": "go",
+                "timestamp": 100
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "done"
+                  }
+                ],
+                "timestamp": 100,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "stop",
+                "usage": {
+                  "input": 1,
+                  "output": 2,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 3,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "thinkingLevel": "off"
+              }
+            ]
+          }
+        ],
+        "requests": [
+          {
+            "model": {
+              "id": "test",
+              "api": "test",
+              "provider": "test"
+            },
+            "context": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "go",
+                  "timestamp": 100
+                }
+              ]
+            },
+            "options": {
+              "model": {
+                "id": "test",
+                "api": "test",
+                "provider": "test"
+              }
+            }
+          }
+        ],
+        "result": [
+          {
+            "role": "user",
+            "content": "go",
+            "timestamp": 100
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "done"
+              }
+            ],
+            "timestamp": 100,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "stop",
+            "usage": {
+              "input": 1,
+              "output": 2,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 3,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "thinkingLevel": "off"
+          }
+        ],
+        "syncError": null,
+        "producerError": null,
+        "resultPending": false,
+        "queuePending": false
+      }
+    },
+    {
+      "input": {
+        "name": "result without terminal event",
+        "omitTerminal": true
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "stop",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "stop",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "stop",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            },
+            "toolResults": []
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "user",
+                "content": "go",
+                "timestamp": 100
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "done"
+                  }
+                ],
+                "timestamp": 100,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "stop",
+                "usage": {
+                  "input": 1,
+                  "output": 2,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 3,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "thinkingLevel": "off"
+              }
+            ]
+          }
+        ],
+        "requests": [
+          {
+            "model": {
+              "id": "test",
+              "api": "test",
+              "provider": "test"
+            },
+            "context": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "go",
+                  "timestamp": 100
+                }
+              ]
+            },
+            "options": {
+              "model": {
+                "id": "test",
+                "api": "test",
+                "provider": "test"
+              }
+            }
+          }
+        ],
+        "result": [
+          {
+            "role": "user",
+            "content": "go",
+            "timestamp": 100
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "done"
+              }
+            ],
+            "timestamp": 100,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "stop",
+            "usage": {
+              "input": 1,
+              "output": 2,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 3,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "thinkingLevel": "off"
+          }
+        ],
+        "syncError": null,
+        "producerError": null,
+        "resultPending": false,
+        "queuePending": false
+      }
+    },
+    {
+      "input": {
+        "name": "tool update and termination",
+        "tool": true
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "system",
+              "content": "",
+              "timestamp": 100,
+              "toolsAdded": [
+                {
+                  "name": "echo",
+                  "description": "Echo",
+                  "parameters": {
+                    "type": "object"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "system",
+              "content": "",
+              "timestamp": 100,
+              "toolsAdded": [
+                {
+                  "name": "echo",
+                  "description": "Echo",
+                  "parameters": {
+                    "type": "object"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "c1",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "toolUse",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "c1",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "toolUse",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "tool_execution_start",
+            "toolCallId": "c1",
+            "toolName": "echo",
+            "args": {}
+          },
+          {
+            "type": "tool_execution_update",
+            "toolCallId": "c1",
+            "toolName": "echo",
+            "args": {},
+            "partialResult": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "working"
+                }
+              ]
+            }
+          },
+          {
+            "type": "tool_execution_end",
+            "toolCallId": "c1",
+            "toolName": "echo",
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "terminate": true
+            },
+            "isError": false
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "toolResult",
+              "toolCallId": "c1",
+              "toolName": "echo",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "toolResult",
+              "toolCallId": "c1",
+              "toolName": "echo",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                }
+              ],
+              "isError": false,
+              "timestamp": 100
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "c1",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 100,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "toolUse",
+              "usage": {
+                "input": 1,
+                "output": 2,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 3,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            },
+            "toolResults": [
+              {
+                "role": "toolResult",
+                "toolCallId": "c1",
+                "toolName": "echo",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "done"
+                  }
+                ],
+                "isError": false,
+                "timestamp": 100
+              }
+            ]
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "system",
+                "content": "",
+                "timestamp": 100,
+                "toolsAdded": [
+                  {
+                    "name": "echo",
+                    "description": "Echo",
+                    "parameters": {
+                      "type": "object"
+                    }
+                  }
+                ]
+              },
+              {
+                "role": "user",
+                "content": "go",
+                "timestamp": 100
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "c1",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 100,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "toolUse",
+                "usage": {
+                  "input": 1,
+                  "output": 2,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 3,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "thinkingLevel": "off"
+              },
+              {
+                "role": "toolResult",
+                "toolCallId": "c1",
+                "toolName": "echo",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "done"
+                  }
+                ],
+                "isError": false,
+                "timestamp": 100
+              }
+            ]
+          }
+        ],
+        "requests": [
+          {
+            "model": {
+              "id": "test",
+              "api": "test",
+              "provider": "test"
+            },
+            "context": {
+              "messages": [
+                {
+                  "role": "system",
+                  "content": "",
+                  "timestamp": 100,
+                  "toolsAdded": [
+                    {
+                      "name": "echo",
+                      "description": "Echo",
+                      "parameters": {
+                        "type": "object"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "role": "user",
+                  "content": "go",
+                  "timestamp": 100
+                }
+              ]
+            },
+            "options": {
+              "model": {
+                "id": "test",
+                "api": "test",
+                "provider": "test"
+              }
+            }
+          }
+        ],
+        "result": [
+          {
+            "role": "system",
+            "content": "",
+            "timestamp": 100,
+            "toolsAdded": [
+              {
+                "name": "echo",
+                "description": "Echo",
+                "parameters": {
+                  "type": "object"
+                }
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": "go",
+            "timestamp": 100
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "toolCall",
+                "id": "c1",
+                "name": "echo",
+                "arguments": {}
+              }
+            ],
+            "timestamp": 100,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "toolUse",
+            "usage": {
+              "input": 1,
+              "output": 2,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 3,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "thinkingLevel": "off"
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "c1",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "done"
+              }
+            ],
+            "isError": false,
+            "timestamp": 100
+          }
+        ],
+        "syncError": null,
+        "producerError": null,
+        "resultPending": false,
+        "queuePending": false
+      }
+    }
+  ]
+}

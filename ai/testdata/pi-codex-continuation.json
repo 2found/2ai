@@ -1,0 +1,1341 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "name": "matching prefix",
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ]
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "store": false,
+            "input": [
+              {
+                "role": "user",
+                "content": "question"
+              }
+            ]
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": [
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ],
+          "previous_response_id": "response"
+        },
+        "retained": true
+      }
+    },
+    {
+      "input": {
+        "name": "no continuation",
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ]
+        },
+        "retained": false
+      }
+    },
+    {
+      "input": {
+        "name": "empty delta",
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "store": false,
+            "input": [
+              {
+                "role": "user",
+                "content": "question"
+              }
+            ]
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": [
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [],
+          "previous_response_id": "response"
+        },
+        "retained": true
+      }
+    },
+    {
+      "input": {
+        "name": "short prefix",
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            }
+          ]
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "store": false,
+            "input": [
+              {
+                "role": "user",
+                "content": "question"
+              }
+            ]
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": [
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            }
+          ]
+        },
+        "retained": false
+      }
+    },
+    {
+      "input": {
+        "name": "changed input",
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "changed"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "store": false,
+            "input": [
+              {
+                "role": "user",
+                "content": "question"
+              }
+            ]
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": [
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "changed"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        },
+        "retained": false
+      }
+    },
+    {
+      "input": {
+        "name": "changed output",
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "other",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "store": false,
+            "input": [
+              {
+                "role": "user",
+                "content": "question"
+              }
+            ]
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": [
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "other",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        },
+        "retained": false
+      }
+    },
+    {
+      "input": {
+        "name": "changed model",
+        "body": {
+          "model": "other",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ]
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "store": false,
+            "input": [
+              {
+                "role": "user",
+                "content": "question"
+              }
+            ]
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": [
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "other",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ]
+        },
+        "retained": false
+      }
+    },
+    {
+      "input": {
+        "name": "changed store",
+        "body": {
+          "model": "test",
+          "store": true,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ]
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "store": false,
+            "input": [
+              {
+                "role": "user",
+                "content": "question"
+              }
+            ]
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": [
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "store": true,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ]
+        },
+        "retained": false
+      }
+    },
+    {
+      "input": {
+        "name": "added option",
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ],
+          "temperature": 0
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "store": false,
+            "input": [
+              {
+                "role": "user",
+                "content": "question"
+              }
+            ]
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": [
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ],
+          "temperature": 0
+        },
+        "retained": false
+      }
+    },
+    {
+      "input": {
+        "name": "missing option",
+        "body": {
+          "model": "test",
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ]
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "store": false,
+            "input": [
+              {
+                "role": "user",
+                "content": "question"
+              }
+            ]
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": [
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ]
+        },
+        "retained": false
+      }
+    },
+    {
+      "input": {
+        "name": "settings key order changed",
+        "body": {
+          "store": false,
+          "model": "test",
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ]
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "store": false,
+            "input": [
+              {
+                "role": "user",
+                "content": "question"
+              }
+            ]
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": [
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "body": {
+          "store": false,
+          "model": "test",
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ]
+        },
+        "retained": false
+      }
+    },
+    {
+      "input": {
+        "name": "input key order changed",
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "content": "question",
+              "role": "user"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "store": false,
+            "input": [
+              {
+                "role": "user",
+                "content": "question"
+              }
+            ]
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": [
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "content": "question",
+              "role": "user"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        },
+        "retained": false
+      }
+    },
+    {
+      "input": {
+        "name": "old previous id ignored",
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ],
+          "previous_response_id": "old"
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "store": false,
+            "input": [
+              {
+                "role": "user",
+                "content": "question"
+              }
+            ]
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": [
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ],
+          "previous_response_id": "response"
+        },
+        "retained": true
+      }
+    },
+    {
+      "input": {
+        "name": "prior previous id ignored",
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ]
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "store": false,
+            "input": [
+              {
+                "role": "user",
+                "content": "question"
+              }
+            ],
+            "previous_response_id": "old"
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": [
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ],
+          "previous_response_id": "response"
+        },
+        "retained": true
+      }
+    },
+    {
+      "input": {
+        "name": "empty response id invalidates",
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ]
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "store": false,
+            "input": [
+              {
+                "role": "user",
+                "content": "question"
+              }
+            ]
+          },
+          "lastResponseId": "",
+          "lastResponseItems": [
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "store": false,
+          "input": [
+            {
+              "role": "user",
+              "content": "question"
+            },
+            {
+              "type": "message",
+              "id": "answer",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "answer"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ]
+        },
+        "retained": false
+      }
+    },
+    {
+      "input": {
+        "name": "empty input undefined prior undefined",
+        "body": {
+          "model": "test"
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test"
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": []
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "input": [],
+          "previous_response_id": "response"
+        },
+        "retained": true
+      }
+    },
+    {
+      "input": {
+        "name": "empty input undefined prior null",
+        "body": {
+          "model": "test"
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "input": null
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": []
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "input": [],
+          "previous_response_id": "response"
+        },
+        "retained": true
+      }
+    },
+    {
+      "input": {
+        "name": "empty input undefined prior []",
+        "body": {
+          "model": "test"
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "input": []
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": []
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "input": [],
+          "previous_response_id": "response"
+        },
+        "retained": true
+      }
+    },
+    {
+      "input": {
+        "name": "empty input null prior undefined",
+        "body": {
+          "model": "test",
+          "input": null
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test"
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": []
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "input": [],
+          "previous_response_id": "response"
+        },
+        "retained": true
+      }
+    },
+    {
+      "input": {
+        "name": "empty input null prior null",
+        "body": {
+          "model": "test",
+          "input": null
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "input": null
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": []
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "input": [],
+          "previous_response_id": "response"
+        },
+        "retained": true
+      }
+    },
+    {
+      "input": {
+        "name": "empty input null prior []",
+        "body": {
+          "model": "test",
+          "input": null
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "input": []
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": []
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "input": [],
+          "previous_response_id": "response"
+        },
+        "retained": true
+      }
+    },
+    {
+      "input": {
+        "name": "empty input [] prior undefined",
+        "body": {
+          "model": "test",
+          "input": []
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test"
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": []
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "input": [],
+          "previous_response_id": "response"
+        },
+        "retained": true
+      }
+    },
+    {
+      "input": {
+        "name": "empty input [] prior null",
+        "body": {
+          "model": "test",
+          "input": []
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "input": null
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": []
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "input": [],
+          "previous_response_id": "response"
+        },
+        "retained": true
+      }
+    },
+    {
+      "input": {
+        "name": "empty input [] prior []",
+        "body": {
+          "model": "test",
+          "input": []
+        },
+        "continuation": {
+          "lastRequestBody": {
+            "model": "test",
+            "input": []
+          },
+          "lastResponseId": "response",
+          "lastResponseItems": []
+        }
+      },
+      "expected": {
+        "body": {
+          "model": "test",
+          "input": [],
+          "previous_response_id": "response"
+        },
+        "retained": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,1914 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "sdkVersion": "7.19.0",
+  "cases": [
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://resource.openai.azure.com",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "v1"
+      },
+      "requests": [
+        {
+          "url": "https://resource.openai.azure.com/openai/v1/responses?api-version=v1",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://resource.openai.azure.com",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "custom /&?"
+      },
+      "requests": [
+        {
+          "url": "https://resource.openai.azure.com/openai/v1/responses?api-version=custom%20%2F%26%3F",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://resource.openai.azure.com",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "tiếng Việt😀"
+      },
+      "requests": [
+        {
+          "url": "https://resource.openai.azure.com/openai/v1/responses?api-version=ti%E1%BA%BFng%20Vi%E1%BB%87t%F0%9F%98%80",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://resource.openai.azure.com/openai?discard=1#keep",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "v1"
+      },
+      "requests": [
+        {
+          "url": "https://resource.openai.azure.com/openai/v1?api-version=v1#keep/responses",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://resource.openai.azure.com/openai?discard=1#keep",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "custom /&?"
+      },
+      "requests": [
+        {
+          "url": "https://resource.openai.azure.com/openai/v1?api-version=custom%20%2F%26%3F#keep/responses",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://resource.openai.azure.com/openai?discard=1#keep",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "tiếng Việt😀"
+      },
+      "requests": [
+        {
+          "url": "https://resource.openai.azure.com/openai/v1?api-version=ti%E1%BA%BFng%20Vi%E1%BB%87t%F0%9F%98%80#keep/responses",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://resource.openai.azure.com/openai/v1/responses",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "v1"
+      },
+      "requests": [
+        {
+          "url": "https://resource.openai.azure.com/openai/v1/responses?api-version=v1",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://resource.openai.azure.com/openai/v1/responses",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "custom /&?"
+      },
+      "requests": [
+        {
+          "url": "https://resource.openai.azure.com/openai/v1/responses?api-version=custom%20%2F%26%3F",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://resource.openai.azure.com/openai/v1/responses",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "tiếng Việt😀"
+      },
+      "requests": [
+        {
+          "url": "https://resource.openai.azure.com/openai/v1/responses?api-version=ti%E1%BA%BFng%20Vi%E1%BB%87t%F0%9F%98%80",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1/",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "v1"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1/responses?api-version=v1",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1/",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "custom /&?"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1/responses?api-version=custom%20%2F%26%3F",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1/",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "tiếng Việt😀"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1/responses?api-version=ti%E1%BA%BFng%20Vi%E1%BB%87t%F0%9F%98%80",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?z=one&z=two&a=hello+world",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "v1"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?z=two&a=hello%20world%2Fresponses&api-version=v1",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?z=one&z=two&a=hello+world",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "custom /&?"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?z=two&a=hello%20world%2Fresponses&api-version=custom%20%2F%26%3F",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?z=one&z=two&a=hello+world",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "tiếng Việt😀"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?z=two&a=hello%20world%2Fresponses&api-version=ti%E1%BA%BFng%20Vi%E1%BB%87t%F0%9F%98%80",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?api-version=old&2=two&1=one",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "v1"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?1=one%2Fresponses&2=two&api-version=v1",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?api-version=old&2=two&1=one",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "custom /&?"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?1=one%2Fresponses&2=two&api-version=custom%20%2F%26%3F",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?api-version=old&2=two&1=one",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "tiếng Việt😀"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?1=one%2Fresponses&2=two&api-version=ti%E1%BA%BFng%20Vi%E1%BB%87t%F0%9F%98%80",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?punctuation=!()*'~",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "v1"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?punctuation=%21%28%29%2A%27~%2Fresponses&api-version=v1",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?punctuation=!()*'~",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "custom /&?"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?punctuation=%21%28%29%2A%27~%2Fresponses&api-version=custom%20%2F%26%3F",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?punctuation=!()*'~",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "tiếng Việt😀"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?punctuation=%21%28%29%2A%27~%2Fresponses&api-version=ti%E1%BA%BFng%20Vi%E1%BB%87t%F0%9F%98%80",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?__proto__=own&constructor=value",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "v1"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?__proto__=own&constructor=value%2Fresponses&api-version=v1",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?__proto__=own&constructor=value",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "custom /&?"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?__proto__=own&constructor=value%2Fresponses&api-version=custom%20%2F%26%3F",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?__proto__=own&constructor=value",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "tiếng Việt😀"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?__proto__=own&constructor=value%2Fresponses&api-version=ti%E1%BA%BFng%20Vi%E1%BB%87t%F0%9F%98%80",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1#fragment",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "v1"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?api-version=v1#fragment/responses",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1#fragment",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "custom /&?"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?api-version=custom%20%2F%26%3F#fragment/responses",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1#fragment",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "tiếng Việt😀"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?api-version=ti%E1%BA%BFng%20Vi%E1%BB%87t%F0%9F%98%80#fragment/responses",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?bad=%FF&x=%2b",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "v1"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?bad=%EF%BF%BD&x=%2B%2Fresponses&api-version=v1",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?bad=%FF&x=%2b",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "custom /&?"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?bad=%EF%BF%BD&x=%2B%2Fresponses&api-version=custom%20%2F%26%3F",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?bad=%FF&x=%2b",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "tiếng Việt😀"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?bad=%EF%BF%BD&x=%2B%2Fresponses&api-version=ti%E1%BA%BFng%20Vi%E1%BB%87t%F0%9F%98%80",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?bad=%FF%FF&partial=%F0%9F&surrogate=%ED%A0%80&bom=%EF%BB%BF",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "v1"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?bad=%EF%BF%BD%EF%BF%BD&partial=%EF%BF%BD&surrogate=%EF%BF%BD%EF%BF%BD%EF%BF%BD&bom=%EF%BB%BF%2Fresponses&api-version=v1",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?bad=%FF%FF&partial=%F0%9F&surrogate=%ED%A0%80&bom=%EF%BB%BF",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "custom /&?"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?bad=%EF%BF%BD%EF%BF%BD&partial=%EF%BF%BD&surrogate=%EF%BF%BD%EF%BF%BD%EF%BF%BD&bom=%EF%BB%BF%2Fresponses&api-version=custom%20%2F%26%3F",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?bad=%FF%FF&partial=%F0%9F&surrogate=%ED%A0%80&bom=%EF%BB%BF",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "tiếng Việt😀"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?bad=%EF%BF%BD%EF%BF%BD&partial=%EF%BF%BD&surrogate=%EF%BF%BD%EF%BF%BD%EF%BF%BD&bom=%EF%BB%BF%2Fresponses&api-version=ti%E1%BA%BFng%20Vi%E1%BB%87t%F0%9F%98%80",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?literal=%&invalid=%G0&short=%a&space=+&plus=%2B",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "v1"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?literal=%25&invalid=%25G0&short=%25a&space=%20&plus=%2B%2Fresponses&api-version=v1",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?literal=%&invalid=%G0&short=%a&space=+&plus=%2B",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "custom /&?"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?literal=%25&invalid=%25G0&short=%25a&space=%20&plus=%2B%2Fresponses&api-version=custom%20%2F%26%3F",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    },
+    {
+      "model": {
+        "id": "test",
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "baseUrl": "https://example.test/v1?literal=%&invalid=%G0&short=%a&space=+&plus=%2B",
+        "reasoning": false,
+        "input": [
+          "text"
+        ],
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      "options": {
+        "apiKey": "fixture-key",
+        "azureApiVersion": "tiếng Việt😀"
+      },
+      "requests": [
+        {
+          "url": "https://example.test/v1?literal=%25&invalid=%25G0&short=%25a&space=%20&plus=%2B%2Fresponses&api-version=ti%E1%BA%BFng%20Vi%E1%BB%87t%F0%9F%98%80",
+          "redirect": "manual"
+        }
+      ],
+      "result": {
+        "role": "assistant",
+        "content": [],
+        "api": "azure-openai-responses",
+        "provider": "azure-openai-responses",
+        "model": "test",
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "stop",
+        "timestamp": 100,
+        "rawStopReason": "completed"
+      }
+    }
+  ]
+}

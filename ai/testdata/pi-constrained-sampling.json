@@ -1,0 +1,1715 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "name": "property order and optional null",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "2": {
+              "type": "boolean"
+            },
+            "10": {
+              "type": "integer"
+            },
+            "z": {
+              "type": "string"
+            },
+            "a": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "z"
+          ]
+        }
+      },
+      "expected": {
+        "result": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "2": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "10": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "z": {
+                "type": "string"
+              },
+              "a": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "2",
+              "10",
+              "z",
+              "a"
+            ],
+            "additionalProperties": false
+          },
+          "second": {
+            "type": "object",
+            "properties": {
+              "2": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "10": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "z": {
+                "type": "string"
+              },
+              "a": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "2",
+              "10",
+              "z",
+              "a"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "nested schemas",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "nested": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "nullable": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "constant": {
+              "const": null
+            },
+            "enum": {
+              "enum": [
+                1,
+                null
+              ]
+            }
+          }
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "object and array unions are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "empty object",
+        "schema": {
+          "type": "object"
+        }
+      },
+      "expected": {
+        "result": {
+          "schema": {
+            "type": "object",
+            "required": [],
+            "additionalProperties": false
+          },
+          "second": {
+            "type": "object",
+            "required": [],
+            "additionalProperties": false
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "root boolean",
+        "schema": true
+      },
+      "expected": {
+        "result": null,
+        "error": "root schema must have type object"
+      }
+    },
+    {
+      "input": {
+        "name": "root scalar",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "root schema must have type object"
+      }
+    },
+    {
+      "input": {
+        "name": "reject $ref",
+        "schema": {
+          "type": "object",
+          "$ref": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "$ref schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "reject $defs",
+        "schema": {
+          "type": "object",
+          "$defs": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "$defs schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "reject definitions",
+        "schema": {
+          "type": "object",
+          "definitions": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "definitions schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "reject allOf",
+        "schema": {
+          "type": "object",
+          "allOf": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "allOf schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "reject oneOf",
+        "schema": {
+          "type": "object",
+          "oneOf": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "oneOf schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "reject patternProperties",
+        "schema": {
+          "type": "object",
+          "patternProperties": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "patternProperties schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "reject dependentSchemas",
+        "schema": {
+          "type": "object",
+          "dependentSchemas": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "dependentSchemas schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "reject dependencies",
+        "schema": {
+          "type": "object",
+          "dependencies": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "dependencies schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "reject unevaluatedProperties",
+        "schema": {
+          "type": "object",
+          "unevaluatedProperties": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "unevaluatedProperties schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "reject propertyNames",
+        "schema": {
+          "type": "object",
+          "propertyNames": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "propertyNames schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "reject contains",
+        "schema": {
+          "type": "object",
+          "contains": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "contains schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "reject prefixItems",
+        "schema": {
+          "type": "object",
+          "prefixItems": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "prefixItems schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "reject not",
+        "schema": {
+          "type": "object",
+          "not": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "not schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "reject if",
+        "schema": {
+          "type": "object",
+          "if": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "if schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "reject then",
+        "schema": {
+          "type": "object",
+          "then": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "then schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "reject else",
+        "schema": {
+          "type": "object",
+          "else": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "else schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "invalid schema 0",
+        "schema": {
+          "type": "object",
+          "properties": true
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "object properties must be a schema map"
+      }
+    },
+    {
+      "input": {
+        "name": "invalid schema 1",
+        "schema": {
+          "type": "object",
+          "required": null
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "object required must be a string array"
+      }
+    },
+    {
+      "input": {
+        "name": "invalid schema 2",
+        "schema": {
+          "type": "object",
+          "required": [
+            1
+          ]
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "object required must be a string array"
+      }
+    },
+    {
+      "input": {
+        "name": "invalid schema 3",
+        "schema": {
+          "type": "object",
+          "required": [
+            "missing"
+          ]
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "required contains an unknown property"
+      }
+    },
+    {
+      "input": {
+        "name": "invalid schema 4",
+        "schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "schema-valued or true additionalProperties is unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "invalid schema 5",
+        "schema": {
+          "type": "object",
+          "additionalProperties": {}
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "schema-valued or true additionalProperties is unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "invalid schema 6",
+        "schema": {
+          "type": "object",
+          "anyOf": []
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "anyOf must contain at least one schema"
+      }
+    },
+    {
+      "input": {
+        "name": "invalid schema 7",
+        "schema": {
+          "type": "object",
+          "anyOf": {}
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "anyOf must contain at least one schema"
+      }
+    },
+    {
+      "input": {
+        "name": "invalid schema 8",
+        "schema": {
+          "type": "object",
+          "anyOf": [
+            {
+              "type": "object"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "object and array unions are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "invalid schema 9",
+        "schema": {
+          "type": "object",
+          "anyOf": [
+            {
+              "type": [
+                "null",
+                "array"
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "object and array unions are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "invalid schema 10",
+        "schema": {
+          "type": "object",
+          "anyOf": [
+            {
+              "properties": {}
+            }
+          ]
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "object and array unions are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "invalid schema 11",
+        "schema": {
+          "type": "object",
+          "items": []
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "tuple schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "invalid schema 12",
+        "schema": {
+          "type": "object",
+          "items": false
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "boolean schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "invalid schema 13",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "bad": false
+          }
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "boolean schemas are unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "invalid schema 14",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "bad": {
+              "properties": {}
+            }
+          }
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "properties require type object"
+      }
+    },
+    {
+      "input": {
+        "name": "extra strict restriction",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "string",
+              "format": "email"
+            }
+          }
+        },
+        "rejectKey": "format"
+      },
+      "expected": {
+        "result": null,
+        "error": "format: \"email\" is unsupported"
+      }
+    },
+    {
+      "input": {
+        "name": "strict false prefer false",
+        "mode": "strict",
+        "supported": false,
+        "tool": {
+          "name": "tool",
+          "description": "Tool",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "2": {
+                "type": "boolean"
+              },
+              "10": {
+                "type": "integer"
+              },
+              "z": {
+                "type": "string"
+              },
+              "a": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "z"
+            ]
+          },
+          "constrainedSampling": {
+            "type": "json_schema",
+            "strict": "prefer"
+          }
+        }
+      },
+      "expected": {
+        "result": {
+          "strict": null,
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "2": {
+                "type": "boolean"
+              },
+              "10": {
+                "type": "integer"
+              },
+              "z": {
+                "type": "string"
+              },
+              "a": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "z"
+            ]
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "strict false prefer true",
+        "mode": "strict",
+        "supported": false,
+        "tool": {
+          "name": "tool",
+          "description": "Tool",
+          "parameters": {
+            "type": "object",
+            "oneOf": []
+          },
+          "constrainedSampling": {
+            "type": "json_schema",
+            "strict": "prefer"
+          }
+        }
+      },
+      "expected": {
+        "result": {
+          "strict": null,
+          "parameters": {
+            "type": "object",
+            "oneOf": []
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "strict false require false",
+        "mode": "strict",
+        "supported": false,
+        "tool": {
+          "name": "tool",
+          "description": "Tool",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "2": {
+                "type": "boolean"
+              },
+              "10": {
+                "type": "integer"
+              },
+              "z": {
+                "type": "string"
+              },
+              "a": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "z"
+            ]
+          },
+          "constrainedSampling": {
+            "type": "json_schema",
+            "strict": "require"
+          }
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "Tool \"tool\" requires JSON-schema constrained sampling, but strict tools are unsupported."
+      }
+    },
+    {
+      "input": {
+        "name": "strict false require true",
+        "mode": "strict",
+        "supported": false,
+        "tool": {
+          "name": "tool",
+          "description": "Tool",
+          "parameters": {
+            "type": "object",
+            "oneOf": []
+          },
+          "constrainedSampling": {
+            "type": "json_schema",
+            "strict": "require"
+          }
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "Tool \"tool\" requires JSON-schema constrained sampling, but strict tools are unsupported."
+      }
+    },
+    {
+      "input": {
+        "name": "strict true prefer false",
+        "mode": "strict",
+        "supported": true,
+        "tool": {
+          "name": "tool",
+          "description": "Tool",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "2": {
+                "type": "boolean"
+              },
+              "10": {
+                "type": "integer"
+              },
+              "z": {
+                "type": "string"
+              },
+              "a": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "z"
+            ]
+          },
+          "constrainedSampling": {
+            "type": "json_schema",
+            "strict": "prefer"
+          }
+        }
+      },
+      "expected": {
+        "result": {
+          "strict": true,
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "2": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "10": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "z": {
+                "type": "string"
+              },
+              "a": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "2",
+              "10",
+              "z",
+              "a"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "strict true prefer true",
+        "mode": "strict",
+        "supported": true,
+        "tool": {
+          "name": "tool",
+          "description": "Tool",
+          "parameters": {
+            "type": "object",
+            "oneOf": []
+          },
+          "constrainedSampling": {
+            "type": "json_schema",
+            "strict": "prefer"
+          }
+        }
+      },
+      "expected": {
+        "result": {
+          "strict": null,
+          "parameters": {
+            "type": "object",
+            "oneOf": []
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "strict true require false",
+        "mode": "strict",
+        "supported": true,
+        "tool": {
+          "name": "tool",
+          "description": "Tool",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "2": {
+                "type": "boolean"
+              },
+              "10": {
+                "type": "integer"
+              },
+              "z": {
+                "type": "string"
+              },
+              "a": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "z"
+            ]
+          },
+          "constrainedSampling": {
+            "type": "json_schema",
+            "strict": "require"
+          }
+        }
+      },
+      "expected": {
+        "result": {
+          "strict": true,
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "2": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "10": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "z": {
+                "type": "string"
+              },
+              "a": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "2",
+              "10",
+              "z",
+              "a"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "strict true require true",
+        "mode": "strict",
+        "supported": true,
+        "tool": {
+          "name": "tool",
+          "description": "Tool",
+          "parameters": {
+            "type": "object",
+            "oneOf": []
+          },
+          "constrainedSampling": {
+            "type": "json_schema",
+            "strict": "require"
+          }
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "Tool \"tool\" requires JSON-schema constrained sampling, but oneOf schemas are unsupported."
+      }
+    },
+    {
+      "input": {
+        "name": "strict not requested",
+        "mode": "strict",
+        "supported": true,
+        "tool": {
+          "name": "tool",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "2": {
+                "type": "boolean"
+              },
+              "10": {
+                "type": "integer"
+              },
+              "z": {
+                "type": "string"
+              },
+              "a": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "z"
+            ]
+          }
+        }
+      },
+      "expected": {
+        "result": {
+          "strict": null,
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "2": {
+                "type": "boolean"
+              },
+              "10": {
+                "type": "integer"
+              },
+              "z": {
+                "type": "string"
+              },
+              "a": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "z"
+            ]
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar variants 0 false",
+        "mode": "grammar",
+        "supported": false,
+        "tool": {
+          "name": "grammar",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          },
+          "constrainedSampling": {
+            "type": "grammar",
+            "variants": {
+              "openai_lark": "start: /.+/",
+              "openai_regex": ".*"
+            }
+          }
+        }
+      },
+      "expected": {
+        "result": {
+          "grammar": null,
+          "properties": {}
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar variants 0 true",
+        "mode": "grammar",
+        "supported": true,
+        "tool": {
+          "name": "grammar",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          },
+          "constrainedSampling": {
+            "type": "grammar",
+            "variants": {
+              "openai_lark": "start: /.+/",
+              "openai_regex": ".*"
+            }
+          }
+        }
+      },
+      "expected": {
+        "result": {
+          "grammar": {
+            "format": "lark",
+            "definition": "start: /.+/",
+            "inputProperty": "input"
+          },
+          "properties": {
+            "grammar": "input"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar variants 1 false",
+        "mode": "grammar",
+        "supported": false,
+        "tool": {
+          "name": "grammar",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          },
+          "constrainedSampling": {
+            "type": "grammar",
+            "variants": {
+              "openai_lark": " ",
+              "openai_regex": ".*"
+            }
+          }
+        }
+      },
+      "expected": {
+        "result": {
+          "grammar": null,
+          "properties": {}
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar variants 1 true",
+        "mode": "grammar",
+        "supported": true,
+        "tool": {
+          "name": "grammar",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          },
+          "constrainedSampling": {
+            "type": "grammar",
+            "variants": {
+              "openai_lark": " ",
+              "openai_regex": ".*"
+            }
+          }
+        }
+      },
+      "expected": {
+        "result": {
+          "grammar": {
+            "format": "regex",
+            "definition": ".*",
+            "inputProperty": "input"
+          },
+          "properties": {
+            "grammar": "input"
+          }
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar variants 2 false",
+        "mode": "grammar",
+        "supported": false,
+        "tool": {
+          "name": "grammar",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          },
+          "constrainedSampling": {
+            "type": "grammar",
+            "variants": {}
+          }
+        }
+      },
+      "expected": {
+        "result": {
+          "grammar": null,
+          "properties": {}
+        },
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar variants 2 true",
+        "mode": "grammar",
+        "supported": true,
+        "tool": {
+          "name": "grammar",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          },
+          "constrainedSampling": {
+            "type": "grammar",
+            "variants": {}
+          }
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "Tool \"grammar\" cannot use grammar constrained sampling: no supported grammar variant was provided."
+      }
+    },
+    {
+      "input": {
+        "name": "grammar schema 0",
+        "mode": "grammar",
+        "supported": true,
+        "tool": {
+          "name": "grammar",
+          "parameters": {
+            "type": "array"
+          },
+          "constrainedSampling": {
+            "type": "grammar",
+            "variants": {
+              "openai_regex": ".*"
+            }
+          }
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "Tool \"grammar\" cannot use grammar constrained sampling: grammar constrained sampling requires an object parameter schema."
+      }
+    },
+    {
+      "input": {
+        "name": "grammar schema 1",
+        "mode": "grammar",
+        "supported": true,
+        "tool": {
+          "name": "grammar",
+          "parameters": {
+            "type": "object"
+          },
+          "constrainedSampling": {
+            "type": "grammar",
+            "variants": {
+              "openai_regex": ".*"
+            }
+          }
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "Tool \"grammar\" cannot use grammar constrained sampling: grammar constrained sampling requires exactly one required string property."
+      }
+    },
+    {
+      "input": {
+        "name": "grammar schema 2",
+        "mode": "grammar",
+        "supported": true,
+        "tool": {
+          "name": "grammar",
+          "parameters": {
+            "type": "object",
+            "required": [
+              "x",
+              "y"
+            ]
+          },
+          "constrainedSampling": {
+            "type": "grammar",
+            "variants": {
+              "openai_regex": ".*"
+            }
+          }
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "Tool \"grammar\" cannot use grammar constrained sampling: grammar constrained sampling requires exactly one required string property."
+      }
+    },
+    {
+      "input": {
+        "name": "grammar schema 3",
+        "mode": "grammar",
+        "supported": true,
+        "tool": {
+          "name": "grammar",
+          "parameters": {
+            "type": "object",
+            "required": [
+              null
+            ]
+          },
+          "constrainedSampling": {
+            "type": "grammar",
+            "variants": {
+              "openai_regex": ".*"
+            }
+          }
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "Tool \"grammar\" cannot use grammar constrained sampling: grammar constrained sampling requires exactly one required string property."
+      }
+    },
+    {
+      "input": {
+        "name": "grammar schema 4",
+        "mode": "grammar",
+        "supported": true,
+        "tool": {
+          "name": "grammar",
+          "parameters": {
+            "type": "object",
+            "required": [
+              "x"
+            ]
+          },
+          "constrainedSampling": {
+            "type": "grammar",
+            "variants": {
+              "openai_regex": ".*"
+            }
+          }
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "Tool \"grammar\" cannot use grammar constrained sampling: grammar constrained sampling requires a properties entry for x."
+      }
+    },
+    {
+      "input": {
+        "name": "grammar schema 5",
+        "mode": "grammar",
+        "supported": true,
+        "tool": {
+          "name": "grammar",
+          "parameters": {
+            "type": "object",
+            "required": [
+              "x"
+            ],
+            "properties": {
+              "x": {
+                "type": "number"
+              }
+            }
+          },
+          "constrainedSampling": {
+            "type": "grammar",
+            "variants": {
+              "openai_regex": ".*"
+            }
+          }
+        }
+      },
+      "expected": {
+        "result": null,
+        "error": "Tool \"grammar\" cannot use grammar constrained sampling: grammar constrained sampling property x must have type string."
+      }
+    },
+    {
+      "input": {
+        "name": "grammar input 0",
+        "mode": "input",
+        "args": {},
+        "property": "input"
+      },
+      "expected": {
+        "result": null,
+        "error": "Grammar tool call \"grammar\" requires argument \"input\" to be a string."
+      }
+    },
+    {
+      "input": {
+        "name": "grammar input 1",
+        "mode": "input",
+        "args": {
+          "input": null
+        },
+        "property": "input"
+      },
+      "expected": {
+        "result": null,
+        "error": "Grammar tool call \"grammar\" requires argument \"input\" to be a string."
+      }
+    },
+    {
+      "input": {
+        "name": "grammar input 2",
+        "mode": "input",
+        "args": {
+          "input": 3
+        },
+        "property": "input"
+      },
+      "expected": {
+        "result": null,
+        "error": "Grammar tool call \"grammar\" requires argument \"input\" to be a string."
+      }
+    },
+    {
+      "input": {
+        "name": "grammar input 3",
+        "mode": "input",
+        "args": {
+          "input": ""
+        },
+        "property": "input"
+      },
+      "expected": {
+        "result": "",
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar input 4",
+        "mode": "input",
+        "args": {
+          "input": "<>&  \\u2028\n"
+        },
+        "property": "input"
+      },
+      "expected": {
+        "result": "<>&  \\u2028\n",
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar deltas escape exact strings",
+        "mode": "delta",
+        "property": "a\"\n<>& ",
+        "steps": [
+          {
+            "input": "",
+            "close": false
+          },
+          {
+            "input": "a\n\"",
+            "close": false
+          },
+          {
+            "input": "a\n\"<>&  \\u2028",
+            "close": false
+          },
+          {
+            "input": "a\n\"<>&  \\u2028",
+            "close": true
+          },
+          {
+            "input": "a\n\"<>&  \\u2028",
+            "close": true
+          },
+          {
+            "input": "changed",
+            "close": true
+          }
+        ]
+      },
+      "expected": {
+        "result": [
+          {
+            "delta": null,
+            "error": null,
+            "buffer": {
+              "input": "",
+              "started": false,
+              "closed": false
+            }
+          },
+          {
+            "delta": "{\"a\\\"\\n<>& \":\"a\\n\\\"",
+            "error": null,
+            "buffer": {
+              "input": "a\n\"",
+              "started": true,
+              "closed": false
+            }
+          },
+          {
+            "delta": "<>&  \\\\u2028",
+            "error": null,
+            "buffer": {
+              "input": "a\n\"<>&  \\u2028",
+              "started": true,
+              "closed": false
+            }
+          },
+          {
+            "delta": "\"}",
+            "error": null,
+            "buffer": {
+              "input": "a\n\"<>&  \\u2028",
+              "started": true,
+              "closed": true
+            }
+          },
+          {
+            "delta": null,
+            "error": null,
+            "buffer": {
+              "input": "a\n\"<>&  \\u2028",
+              "started": true,
+              "closed": true
+            }
+          },
+          {
+            "delta": null,
+            "error": "grammar tool input for property \"a\"\n<>& \" changed after it was closed",
+            "buffer": {
+              "input": "a\n\"<>&  \\u2028",
+              "started": true,
+              "closed": true
+            }
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "grammar nonmonotonic delta",
+        "mode": "delta",
+        "property": "input",
+        "steps": [
+          {
+            "input": "abc",
+            "close": false
+          },
+          {
+            "input": "ab",
+            "close": false
+          },
+          {
+            "input": "abcd",
+            "close": true
+          },
+          {
+            "input": "abcd",
+            "close": false
+          }
+        ]
+      },
+      "expected": {
+        "result": [
+          {
+            "delta": "{\"input\":\"abc",
+            "error": null,
+            "buffer": {
+              "input": "abc",
+              "started": true,
+              "closed": false
+            }
+          },
+          {
+            "delta": null,
+            "error": "grammar tool input for property \"input\" changed non-monotonically",
+            "buffer": {
+              "input": "abc",
+              "started": true,
+              "closed": false
+            }
+          },
+          {
+            "delta": "d\"}",
+            "error": null,
+            "buffer": {
+              "input": "abcd",
+              "started": true,
+              "closed": true
+            }
+          },
+          {
+            "delta": null,
+            "error": "grammar tool input for property \"input\" changed after it was closed",
+            "buffer": {
+              "input": "abcd",
+              "started": true,
+              "closed": true
+            }
+          }
+        ],
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "empty grammar close",
+        "mode": "delta",
+        "property": "input",
+        "steps": [
+          {
+            "input": "",
+            "close": true
+          }
+        ]
+      },
+      "expected": {
+        "result": [
+          {
+            "delta": "{\"input\":\"\"}",
+            "error": null,
+            "buffer": {
+              "input": "",
+              "started": true,
+              "closed": true
+            }
+          }
+        ],
+        "error": null
+      }
+    }
+  ]
+}

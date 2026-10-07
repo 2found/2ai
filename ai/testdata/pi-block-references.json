@@ -1,0 +1,1980 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "name": "assistant/text/same",
+        "messages": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "answer",
+                "textSignature": "text-signature"
+              },
+              {
+                "type": "thinking",
+                "thinking": "reason"
+              },
+              {
+                "type": "thinking",
+                "thinking": "",
+                "thinkingSignature": "signed"
+              },
+              {
+                "type": "thinking",
+                "thinking": "redacted",
+                "redacted": true
+              },
+              {
+                "type": "toolCall",
+                "id": "signed-call",
+                "name": "echo",
+                "arguments": {},
+                "thoughtSignature": "signed"
+              },
+              {
+                "type": "toolCall",
+                "id": "plain-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "custom",
+                "text": "extension"
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "source",
+            "stopReason": "stop",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          }
+        ],
+        "model": {
+          "id": "source",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text"
+          ]
+        },
+        "normalize": false
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "answer",
+                "textSignature": "text-signature"
+              },
+              {
+                "type": "thinking",
+                "thinking": "reason"
+              },
+              {
+                "type": "thinking",
+                "thinking": "",
+                "thinkingSignature": "signed"
+              },
+              {
+                "type": "thinking",
+                "thinking": "redacted",
+                "redacted": true
+              },
+              {
+                "type": "toolCall",
+                "id": "signed-call",
+                "name": "echo",
+                "arguments": {},
+                "thoughtSignature": "signed"
+              },
+              {
+                "type": "toolCall",
+                "id": "plain-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "custom",
+                "text": "extension"
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "source",
+            "stopReason": "stop",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "signed-call",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "No result provided"
+              }
+            ],
+            "isError": true,
+            "timestamp": 100
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "plain-call",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "No result provided"
+              }
+            ],
+            "isError": true,
+            "timestamp": 100
+          }
+        ],
+        "indices": [
+          [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          [
+            -1
+          ],
+          [
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "assistant/text/cross",
+        "messages": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "answer",
+                "textSignature": "text-signature"
+              },
+              {
+                "type": "thinking",
+                "thinking": "reason"
+              },
+              {
+                "type": "thinking",
+                "thinking": "",
+                "thinkingSignature": "signed"
+              },
+              {
+                "type": "thinking",
+                "thinking": "redacted",
+                "redacted": true
+              },
+              {
+                "type": "toolCall",
+                "id": "signed-call",
+                "name": "echo",
+                "arguments": {},
+                "thoughtSignature": "signed"
+              },
+              {
+                "type": "toolCall",
+                "id": "plain-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "custom",
+                "text": "extension"
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "source",
+            "stopReason": "stop",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          }
+        ],
+        "model": {
+          "id": "target",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text"
+          ]
+        },
+        "normalize": false
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "answer"
+              },
+              {
+                "type": "text",
+                "text": "reason"
+              },
+              {
+                "type": "toolCall",
+                "id": "signed-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "toolCall",
+                "id": "plain-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "custom",
+                "text": "extension"
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "source",
+            "stopReason": "stop",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "signed-call",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "No result provided"
+              }
+            ],
+            "isError": true,
+            "timestamp": 100
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "plain-call",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "No result provided"
+              }
+            ],
+            "isError": true,
+            "timestamp": 100
+          }
+        ],
+        "indices": [
+          [
+            -1,
+            -1,
+            -1,
+            5,
+            6
+          ],
+          [
+            -1
+          ],
+          [
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "assistant/text/normalize",
+        "messages": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "answer",
+                "textSignature": "text-signature"
+              },
+              {
+                "type": "thinking",
+                "thinking": "reason"
+              },
+              {
+                "type": "thinking",
+                "thinking": "",
+                "thinkingSignature": "signed"
+              },
+              {
+                "type": "thinking",
+                "thinking": "redacted",
+                "redacted": true
+              },
+              {
+                "type": "toolCall",
+                "id": "signed-call",
+                "name": "echo",
+                "arguments": {},
+                "thoughtSignature": "signed"
+              },
+              {
+                "type": "toolCall",
+                "id": "plain-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "custom",
+                "text": "extension"
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "source",
+            "stopReason": "stop",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          }
+        ],
+        "model": {
+          "id": "target",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text"
+          ]
+        },
+        "normalize": true
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "answer"
+              },
+              {
+                "type": "text",
+                "text": "reason"
+              },
+              {
+                "type": "toolCall",
+                "id": "normalized-signed-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "toolCall",
+                "id": "normalized-plain-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "custom",
+                "text": "extension"
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "source",
+            "stopReason": "stop",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "normalized-signed-call",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "No result provided"
+              }
+            ],
+            "isError": true,
+            "timestamp": 100
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "normalized-plain-call",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "No result provided"
+              }
+            ],
+            "isError": true,
+            "timestamp": 100
+          }
+        ],
+        "indices": [
+          [
+            -1,
+            -1,
+            -1,
+            -1,
+            6
+          ],
+          [
+            -1
+          ],
+          [
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "assistant/vision/same",
+        "messages": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "answer",
+                "textSignature": "text-signature"
+              },
+              {
+                "type": "thinking",
+                "thinking": "reason"
+              },
+              {
+                "type": "thinking",
+                "thinking": "",
+                "thinkingSignature": "signed"
+              },
+              {
+                "type": "thinking",
+                "thinking": "redacted",
+                "redacted": true
+              },
+              {
+                "type": "toolCall",
+                "id": "signed-call",
+                "name": "echo",
+                "arguments": {},
+                "thoughtSignature": "signed"
+              },
+              {
+                "type": "toolCall",
+                "id": "plain-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "custom",
+                "text": "extension"
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "source",
+            "stopReason": "stop",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          }
+        ],
+        "model": {
+          "id": "source",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text",
+            "image"
+          ]
+        },
+        "normalize": false
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "answer",
+                "textSignature": "text-signature"
+              },
+              {
+                "type": "thinking",
+                "thinking": "reason"
+              },
+              {
+                "type": "thinking",
+                "thinking": "",
+                "thinkingSignature": "signed"
+              },
+              {
+                "type": "thinking",
+                "thinking": "redacted",
+                "redacted": true
+              },
+              {
+                "type": "toolCall",
+                "id": "signed-call",
+                "name": "echo",
+                "arguments": {},
+                "thoughtSignature": "signed"
+              },
+              {
+                "type": "toolCall",
+                "id": "plain-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "custom",
+                "text": "extension"
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "source",
+            "stopReason": "stop",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "signed-call",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "No result provided"
+              }
+            ],
+            "isError": true,
+            "timestamp": 100
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "plain-call",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "No result provided"
+              }
+            ],
+            "isError": true,
+            "timestamp": 100
+          }
+        ],
+        "indices": [
+          [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          [
+            -1
+          ],
+          [
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "assistant/vision/cross",
+        "messages": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "answer",
+                "textSignature": "text-signature"
+              },
+              {
+                "type": "thinking",
+                "thinking": "reason"
+              },
+              {
+                "type": "thinking",
+                "thinking": "",
+                "thinkingSignature": "signed"
+              },
+              {
+                "type": "thinking",
+                "thinking": "redacted",
+                "redacted": true
+              },
+              {
+                "type": "toolCall",
+                "id": "signed-call",
+                "name": "echo",
+                "arguments": {},
+                "thoughtSignature": "signed"
+              },
+              {
+                "type": "toolCall",
+                "id": "plain-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "custom",
+                "text": "extension"
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "source",
+            "stopReason": "stop",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          }
+        ],
+        "model": {
+          "id": "target",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text",
+            "image"
+          ]
+        },
+        "normalize": false
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "answer"
+              },
+              {
+                "type": "text",
+                "text": "reason"
+              },
+              {
+                "type": "toolCall",
+                "id": "signed-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "toolCall",
+                "id": "plain-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "custom",
+                "text": "extension"
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "source",
+            "stopReason": "stop",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "signed-call",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "No result provided"
+              }
+            ],
+            "isError": true,
+            "timestamp": 100
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "plain-call",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "No result provided"
+              }
+            ],
+            "isError": true,
+            "timestamp": 100
+          }
+        ],
+        "indices": [
+          [
+            -1,
+            -1,
+            -1,
+            5,
+            6
+          ],
+          [
+            -1
+          ],
+          [
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "assistant/vision/normalize",
+        "messages": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "answer",
+                "textSignature": "text-signature"
+              },
+              {
+                "type": "thinking",
+                "thinking": "reason"
+              },
+              {
+                "type": "thinking",
+                "thinking": "",
+                "thinkingSignature": "signed"
+              },
+              {
+                "type": "thinking",
+                "thinking": "redacted",
+                "redacted": true
+              },
+              {
+                "type": "toolCall",
+                "id": "signed-call",
+                "name": "echo",
+                "arguments": {},
+                "thoughtSignature": "signed"
+              },
+              {
+                "type": "toolCall",
+                "id": "plain-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "custom",
+                "text": "extension"
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "source",
+            "stopReason": "stop",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          }
+        ],
+        "model": {
+          "id": "target",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text",
+            "image"
+          ]
+        },
+        "normalize": true
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "answer"
+              },
+              {
+                "type": "text",
+                "text": "reason"
+              },
+              {
+                "type": "toolCall",
+                "id": "normalized-signed-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "toolCall",
+                "id": "normalized-plain-call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "custom",
+                "text": "extension"
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "source",
+            "stopReason": "stop",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "normalized-signed-call",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "No result provided"
+              }
+            ],
+            "isError": true,
+            "timestamp": 100
+          },
+          {
+            "role": "toolResult",
+            "toolCallId": "normalized-plain-call",
+            "toolName": "echo",
+            "content": [
+              {
+                "type": "text",
+                "text": "No result provided"
+              }
+            ],
+            "isError": true,
+            "timestamp": 100
+          }
+        ],
+        "indices": [
+          [
+            -1,
+            -1,
+            -1,
+            -1,
+            6
+          ],
+          [
+            -1
+          ],
+          [
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "user/text/same",
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1
+          }
+        ],
+        "model": {
+          "id": "source",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text"
+          ]
+        },
+        "normalize": false
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "(image omitted: model does not support images)"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "text",
+                "text": "(image omitted: model does not support images)"
+              }
+            ],
+            "timestamp": 1
+          }
+        ],
+        "indices": [
+          [
+            -1,
+            1,
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "user/text/cross",
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1
+          }
+        ],
+        "model": {
+          "id": "target",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text"
+          ]
+        },
+        "normalize": false
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "(image omitted: model does not support images)"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "text",
+                "text": "(image omitted: model does not support images)"
+              }
+            ],
+            "timestamp": 1
+          }
+        ],
+        "indices": [
+          [
+            -1,
+            1,
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "user/text/normalize",
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1
+          }
+        ],
+        "model": {
+          "id": "target",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text"
+          ]
+        },
+        "normalize": true
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "(image omitted: model does not support images)"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "text",
+                "text": "(image omitted: model does not support images)"
+              }
+            ],
+            "timestamp": 1
+          }
+        ],
+        "indices": [
+          [
+            -1,
+            1,
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "user/vision/same",
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1
+          }
+        ],
+        "model": {
+          "id": "source",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text",
+            "image"
+          ]
+        },
+        "normalize": false
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1
+          }
+        ],
+        "indices": [
+          [
+            0,
+            1,
+            2,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "user/vision/cross",
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1
+          }
+        ],
+        "model": {
+          "id": "target",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text",
+            "image"
+          ]
+        },
+        "normalize": false
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1
+          }
+        ],
+        "indices": [
+          [
+            0,
+            1,
+            2,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "user/vision/normalize",
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1
+          }
+        ],
+        "model": {
+          "id": "target",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text",
+            "image"
+          ]
+        },
+        "normalize": true
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1
+          }
+        ],
+        "indices": [
+          [
+            0,
+            1,
+            2,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "toolResult/text/same",
+        "messages": [
+          {
+            "role": "toolResult",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1,
+            "toolCallId": "call",
+            "toolName": "echo",
+            "isError": false
+          }
+        ],
+        "model": {
+          "id": "source",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text"
+          ]
+        },
+        "normalize": false
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "toolResult",
+            "content": [
+              {
+                "type": "text",
+                "text": "(tool image omitted: model does not support images)"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "text",
+                "text": "(tool image omitted: model does not support images)"
+              }
+            ],
+            "timestamp": 1,
+            "toolCallId": "call",
+            "toolName": "echo",
+            "isError": false
+          }
+        ],
+        "indices": [
+          [
+            -1,
+            1,
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "toolResult/text/cross",
+        "messages": [
+          {
+            "role": "toolResult",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1,
+            "toolCallId": "call",
+            "toolName": "echo",
+            "isError": false
+          }
+        ],
+        "model": {
+          "id": "target",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text"
+          ]
+        },
+        "normalize": false
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "toolResult",
+            "content": [
+              {
+                "type": "text",
+                "text": "(tool image omitted: model does not support images)"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "text",
+                "text": "(tool image omitted: model does not support images)"
+              }
+            ],
+            "timestamp": 1,
+            "toolCallId": "call",
+            "toolName": "echo",
+            "isError": false
+          }
+        ],
+        "indices": [
+          [
+            -1,
+            1,
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "toolResult/text/normalize",
+        "messages": [
+          {
+            "role": "toolResult",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1,
+            "toolCallId": "call",
+            "toolName": "echo",
+            "isError": false
+          }
+        ],
+        "model": {
+          "id": "target",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text"
+          ]
+        },
+        "normalize": true
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "toolResult",
+            "content": [
+              {
+                "type": "text",
+                "text": "(tool image omitted: model does not support images)"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "text",
+                "text": "(tool image omitted: model does not support images)"
+              }
+            ],
+            "timestamp": 1,
+            "toolCallId": "call",
+            "toolName": "echo",
+            "isError": false
+          }
+        ],
+        "indices": [
+          [
+            -1,
+            1,
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "toolResult/vision/same",
+        "messages": [
+          {
+            "role": "toolResult",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1,
+            "toolCallId": "call",
+            "toolName": "echo",
+            "isError": false
+          }
+        ],
+        "model": {
+          "id": "source",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text",
+            "image"
+          ]
+        },
+        "normalize": false
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "toolResult",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1,
+            "toolCallId": "call",
+            "toolName": "echo",
+            "isError": false
+          }
+        ],
+        "indices": [
+          [
+            0,
+            1,
+            2,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "toolResult/vision/cross",
+        "messages": [
+          {
+            "role": "toolResult",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1,
+            "toolCallId": "call",
+            "toolName": "echo",
+            "isError": false
+          }
+        ],
+        "model": {
+          "id": "target",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text",
+            "image"
+          ]
+        },
+        "normalize": false
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "toolResult",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1,
+            "toolCallId": "call",
+            "toolName": "echo",
+            "isError": false
+          }
+        ],
+        "indices": [
+          [
+            0,
+            1,
+            2,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "toolResult/vision/normalize",
+        "messages": [
+          {
+            "role": "toolResult",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1,
+            "toolCallId": "call",
+            "toolName": "echo",
+            "isError": false
+          }
+        ],
+        "model": {
+          "id": "target",
+          "api": "test",
+          "provider": "test",
+          "input": [
+            "text",
+            "image"
+          ]
+        },
+        "normalize": true
+      },
+      "expected": {
+        "messages": [
+          {
+            "role": "toolResult",
+            "content": [
+              {
+                "type": "image",
+                "data": "a",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "text",
+                "text": "caption"
+              },
+              {
+                "type": "image",
+                "data": "b",
+                "mimeType": "image/png"
+              },
+              {
+                "type": "image",
+                "data": "c",
+                "mimeType": "image/png"
+              }
+            ],
+            "timestamp": 1,
+            "toolCallId": "call",
+            "toolName": "echo",
+            "isError": false
+          }
+        ],
+        "indices": [
+          [
+            0,
+            1,
+            2,
+            3
+          ]
+        ]
+      }
+    }
+  ]
+}

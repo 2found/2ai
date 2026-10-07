@@ -1,0 +1,1733 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "kind": "object",
+        "mode": "explicit",
+        "phase": "plain"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "object",
+        "mode": "explicit",
+        "phase": "input-nested"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "object",
+        "mode": "explicit",
+        "phase": "snapshot-nested"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "object",
+        "mode": "explicit",
+        "phase": "input-replace"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "input": "{\"name\":\"\",\"message\":null}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "object",
+        "mode": "explicit",
+        "phase": "snapshot-replace"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":\"\"}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "object",
+        "mode": "explicit",
+        "phase": "settled-nested"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "object",
+        "mode": "automatic",
+        "phase": "plain"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "object",
+        "mode": "automatic",
+        "phase": "input-nested"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "object",
+        "mode": "automatic",
+        "phase": "snapshot-nested"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "object",
+        "mode": "automatic",
+        "phase": "input-replace"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "input": "{\"name\":\"\",\"message\":null}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "object",
+        "mode": "automatic",
+        "phase": "snapshot-replace"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":\"\"}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "object",
+        "mode": "automatic",
+        "phase": "settled-nested"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"z\":1,\"a\":2}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "array",
+        "mode": "explicit",
+        "phase": "plain"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":[1,2],\"message\":[1,2]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "array",
+        "mode": "explicit",
+        "phase": "input-nested"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":[1,2,3],\"message\":[1,2]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "array",
+        "mode": "explicit",
+        "phase": "snapshot-nested"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":[1,2,3],\"message\":[1,2]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "array",
+        "mode": "explicit",
+        "phase": "input-replace"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "input": "{\"name\":\"\",\"message\":null}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "array",
+        "mode": "explicit",
+        "phase": "snapshot-replace"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":\"\"}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":[1,2],\"message\":[1,2]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "array",
+        "mode": "explicit",
+        "phase": "settled-nested"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":[1,2,3],\"message\":[1,2]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "array",
+        "mode": "automatic",
+        "phase": "plain"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":[1,2],\"message\":[1,2]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "array",
+        "mode": "automatic",
+        "phase": "input-nested"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":[1,2,3],\"message\":[1,2]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "array",
+        "mode": "automatic",
+        "phase": "snapshot-nested"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":[1,2,3],\"message\":[1,2]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "array",
+        "mode": "automatic",
+        "phase": "input-replace"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "input": "{\"name\":\"\",\"message\":null}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "array",
+        "mode": "automatic",
+        "phase": "snapshot-replace"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":\"\"}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":[1,2],\"message\":[1,2]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "array",
+        "mode": "automatic",
+        "phase": "settled-nested"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": false
+        },
+        "input": "{\"name\":[1,2,3],\"message\":[1,2]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-object",
+        "mode": "explicit",
+        "phase": "plain"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-object",
+        "mode": "explicit",
+        "phase": "input-nested"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-object",
+        "mode": "explicit",
+        "phase": "snapshot-nested"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-object",
+        "mode": "explicit",
+        "phase": "input-replace"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": true
+        },
+        "input": "{\"name\":\"\",\"message\":null}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-object",
+        "mode": "explicit",
+        "phase": "snapshot-replace"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":\"\"}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-object",
+        "mode": "explicit",
+        "phase": "settled-nested"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-object",
+        "mode": "automatic",
+        "phase": "plain"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-object",
+        "mode": "automatic",
+        "phase": "input-nested"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-object",
+        "mode": "automatic",
+        "phase": "snapshot-nested"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-object",
+        "mode": "automatic",
+        "phase": "input-replace"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": true
+        },
+        "input": "{\"name\":\"\",\"message\":null}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-object",
+        "mode": "automatic",
+        "phase": "snapshot-replace"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":\"\"}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-object",
+        "mode": "automatic",
+        "phase": "settled-nested"
+      },
+      "raw": "{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"z\":1,\"a\":2},\"message\":{\"z\":1,\"a\":2}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":{\"a\":2,\"late\":3,\"z\":4},\"message\":{\"a\":2,\"late\":3,\"z\":4}}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-array",
+        "mode": "explicit",
+        "phase": "plain"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":[1,2],\"message\":[1,2]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-array",
+        "mode": "explicit",
+        "phase": "input-nested"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":[1,2,3],\"message\":[1,2,3]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-array",
+        "mode": "explicit",
+        "phase": "snapshot-nested"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":[1,2,3],\"message\":[1,2,3]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-array",
+        "mode": "explicit",
+        "phase": "input-replace"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": true
+        },
+        "input": "{\"name\":\"\",\"message\":null}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-array",
+        "mode": "explicit",
+        "phase": "snapshot-replace"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":\"\"}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":[1,2],\"message\":[1,2]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-array",
+        "mode": "explicit",
+        "phase": "settled-nested"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":[1,2,3],\"message\":[1,2,3]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-array",
+        "mode": "automatic",
+        "phase": "plain"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":[1,2],\"message\":[1,2]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-array",
+        "mode": "automatic",
+        "phase": "input-nested"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":[1,2,3],\"message\":[1,2,3]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-array",
+        "mode": "automatic",
+        "phase": "snapshot-nested"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":[1,2,3],\"message\":[1,2,3]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-array",
+        "mode": "automatic",
+        "phase": "input-replace"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": true
+        },
+        "input": "{\"name\":\"\",\"message\":null}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-array",
+        "mode": "automatic",
+        "phase": "snapshot-replace"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":\"\"}}",
+          "nameInput": false,
+          "messageInput": false,
+          "same": false
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":[1,2],\"message\":[1,2]}",
+        "failurePreserved": true
+      }
+    },
+    {
+      "input": {
+        "kind": "shared-array",
+        "mode": "automatic",
+        "phase": "settled-nested"
+      },
+      "raw": "{\"name\":[1,2],\"message\":[1,2]}",
+      "expected": {
+        "before": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "active": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2],\"message\":[1,2]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "retained": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "settled": {
+          "wire": "{\"status\":\"error\",\"error\":{\"name\":[1,2,3],\"message\":[1,2,3]}}",
+          "nameInput": true,
+          "messageInput": true,
+          "same": true
+        },
+        "input": "{\"name\":[1,2,3],\"message\":[1,2,3]}",
+        "failurePreserved": true
+      }
+    }
+  ]
+}

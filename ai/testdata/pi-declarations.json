@@ -1,0 +1,293 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "name": "parameters/distinct lone surrogates",
+      "field": "parameters",
+      "left": "{\"value\":\"\\ud800\"}",
+      "right": "{\"value\":\"\\udc00\"}",
+      "expected": {
+        "left": "{\"value\":\"\\ud800\"}",
+        "right": "{\"value\":\"\\udc00\"}",
+        "equal": false,
+        "changed": true
+      }
+    },
+    {
+      "name": "constrainedSampling/distinct lone surrogates",
+      "field": "constrainedSampling",
+      "left": "{\"value\":\"\\ud800\"}",
+      "right": "{\"value\":\"\\udc00\"}",
+      "expected": {
+        "left": "{\"value\":\"\\ud800\"}",
+        "right": "{\"value\":\"\\udc00\"}",
+        "equal": false,
+        "changed": true
+      }
+    },
+    {
+      "name": "parameters/surrogate versus replacement",
+      "field": "parameters",
+      "left": "{\"value\":\"\\ud800\"}",
+      "right": "{\"value\":\"\\ufffd\"}",
+      "expected": {
+        "left": "{\"value\":\"\\ud800\"}",
+        "right": "{\"value\":\"�\"}",
+        "equal": false,
+        "changed": true
+      }
+    },
+    {
+      "name": "constrainedSampling/surrogate versus replacement",
+      "field": "constrainedSampling",
+      "left": "{\"value\":\"\\ud800\"}",
+      "right": "{\"value\":\"\\ufffd\"}",
+      "expected": {
+        "left": "{\"value\":\"\\ud800\"}",
+        "right": "{\"value\":\"�\"}",
+        "equal": false,
+        "changed": true
+      }
+    },
+    {
+      "name": "parameters/distinct surrogate keys",
+      "field": "parameters",
+      "left": "{\"\\ud800\":1}",
+      "right": "{\"\\udc00\":1}",
+      "expected": {
+        "left": "{\"\\ud800\":1}",
+        "right": "{\"\\udc00\":1}",
+        "equal": false,
+        "changed": true
+      }
+    },
+    {
+      "name": "constrainedSampling/distinct surrogate keys",
+      "field": "constrainedSampling",
+      "left": "{\"\\ud800\":1}",
+      "right": "{\"\\udc00\":1}",
+      "expected": {
+        "left": "{\"\\ud800\":1}",
+        "right": "{\"\\udc00\":1}",
+        "equal": false,
+        "changed": true
+      }
+    },
+    {
+      "name": "parameters/surrogate key collision",
+      "field": "parameters",
+      "left": "{\"\\ud800\":1,\"\\udc00\":2}",
+      "right": "{\"\\ud800\":2}",
+      "expected": {
+        "left": "{\"\\ud800\":1,\"\\udc00\":2}",
+        "right": "{\"\\ud800\":2}",
+        "equal": false,
+        "changed": true
+      }
+    },
+    {
+      "name": "constrainedSampling/surrogate key collision",
+      "field": "constrainedSampling",
+      "left": "{\"\\ud800\":1,\"\\udc00\":2}",
+      "right": "{\"\\ud800\":2}",
+      "expected": {
+        "left": "{\"\\ud800\":1,\"\\udc00\":2}",
+        "right": "{\"\\ud800\":2}",
+        "equal": false,
+        "changed": true
+      }
+    },
+    {
+      "name": "parameters/surrogate escape casing",
+      "field": "parameters",
+      "left": "{\"value\":\"\\uD800\"}",
+      "right": "{\"value\":\"\\ud800\"}",
+      "expected": {
+        "left": "{\"value\":\"\\ud800\"}",
+        "right": "{\"value\":\"\\ud800\"}",
+        "equal": true,
+        "changed": false
+      }
+    },
+    {
+      "name": "constrainedSampling/surrogate escape casing",
+      "field": "constrainedSampling",
+      "left": "{\"value\":\"\\uD800\"}",
+      "right": "{\"value\":\"\\ud800\"}",
+      "expected": {
+        "left": "{\"value\":\"\\ud800\"}",
+        "right": "{\"value\":\"\\ud800\"}",
+        "equal": true,
+        "changed": false
+      }
+    },
+    {
+      "name": "parameters/index key order",
+      "field": "parameters",
+      "left": "{\"z\":1,\"10\":2,\"2\":3}",
+      "right": "{\"2\":3,\"10\":2,\"z\":1}",
+      "expected": {
+        "left": "{\"2\":3,\"10\":2,\"z\":1}",
+        "right": "{\"2\":3,\"10\":2,\"z\":1}",
+        "equal": true,
+        "changed": false
+      }
+    },
+    {
+      "name": "constrainedSampling/index key order",
+      "field": "constrainedSampling",
+      "left": "{\"z\":1,\"10\":2,\"2\":3}",
+      "right": "{\"2\":3,\"10\":2,\"z\":1}",
+      "expected": {
+        "left": "{\"2\":3,\"10\":2,\"z\":1}",
+        "right": "{\"2\":3,\"10\":2,\"z\":1}",
+        "equal": true,
+        "changed": false
+      }
+    },
+    {
+      "name": "parameters/ordinary key order",
+      "field": "parameters",
+      "left": "{\"z\":1,\"a\":2}",
+      "right": "{\"a\":2,\"z\":1}",
+      "expected": {
+        "left": "{\"z\":1,\"a\":2}",
+        "right": "{\"a\":2,\"z\":1}",
+        "equal": false,
+        "changed": true
+      }
+    },
+    {
+      "name": "constrainedSampling/ordinary key order",
+      "field": "constrainedSampling",
+      "left": "{\"z\":1,\"a\":2}",
+      "right": "{\"a\":2,\"z\":1}",
+      "expected": {
+        "left": "{\"z\":1,\"a\":2}",
+        "right": "{\"a\":2,\"z\":1}",
+        "equal": false,
+        "changed": true
+      }
+    },
+    {
+      "name": "parameters/duplicate keys",
+      "field": "parameters",
+      "left": "{\"a\":1,\"b\":2,\"a\":3}",
+      "right": "{\"a\":3,\"b\":2}",
+      "expected": {
+        "left": "{\"a\":3,\"b\":2}",
+        "right": "{\"a\":3,\"b\":2}",
+        "equal": true,
+        "changed": false
+      }
+    },
+    {
+      "name": "constrainedSampling/duplicate keys",
+      "field": "constrainedSampling",
+      "left": "{\"a\":1,\"b\":2,\"a\":3}",
+      "right": "{\"a\":3,\"b\":2}",
+      "expected": {
+        "left": "{\"a\":3,\"b\":2}",
+        "right": "{\"a\":3,\"b\":2}",
+        "equal": true,
+        "changed": false
+      }
+    },
+    {
+      "name": "parameters/number rounding",
+      "field": "parameters",
+      "left": "{\"value\":9007199254740993}",
+      "right": "{\"value\":9007199254740992}",
+      "expected": {
+        "left": "{\"value\":9007199254740992}",
+        "right": "{\"value\":9007199254740992}",
+        "equal": true,
+        "changed": false
+      }
+    },
+    {
+      "name": "constrainedSampling/number rounding",
+      "field": "constrainedSampling",
+      "left": "{\"value\":9007199254740993}",
+      "right": "{\"value\":9007199254740992}",
+      "expected": {
+        "left": "{\"value\":9007199254740992}",
+        "right": "{\"value\":9007199254740992}",
+        "equal": true,
+        "changed": false
+      }
+    },
+    {
+      "name": "parameters/number overflow",
+      "field": "parameters",
+      "left": "{\"value\":1e309}",
+      "right": "{\"value\":null}",
+      "expected": {
+        "left": "{\"value\":null}",
+        "right": "{\"value\":null}",
+        "equal": true,
+        "changed": false
+      }
+    },
+    {
+      "name": "constrainedSampling/number overflow",
+      "field": "constrainedSampling",
+      "left": "{\"value\":1e309}",
+      "right": "{\"value\":null}",
+      "expected": {
+        "left": "{\"value\":null}",
+        "right": "{\"value\":null}",
+        "equal": true,
+        "changed": false
+      }
+    },
+    {
+      "name": "parameters/zero spelling",
+      "field": "parameters",
+      "left": "{\"value\":-0}",
+      "right": "{\"value\":0}",
+      "expected": {
+        "left": "{\"value\":0}",
+        "right": "{\"value\":0}",
+        "equal": true,
+        "changed": false
+      }
+    },
+    {
+      "name": "constrainedSampling/zero spelling",
+      "field": "constrainedSampling",
+      "left": "{\"value\":-0}",
+      "right": "{\"value\":0}",
+      "expected": {
+        "left": "{\"value\":0}",
+        "right": "{\"value\":0}",
+        "equal": true,
+        "changed": false
+      }
+    },
+    {
+      "name": "parameters/HTML and separators",
+      "field": "parameters",
+      "left": "{\"value\":\"\\u003c\\u003e\\u0026\\u2028\\u2029\"}",
+      "right": "{\"value\":\"<>&  \"}",
+      "expected": {
+        "left": "{\"value\":\"<>&  \"}",
+        "right": "{\"value\":\"<>&  \"}",
+        "equal": true,
+        "changed": false
+      }
+    },
+    {
+      "name": "constrainedSampling/HTML and separators",
+      "field": "constrainedSampling",
+      "left": "{\"value\":\"\\u003c\\u003e\\u0026\\u2028\\u2029\"}",
+      "right": "{\"value\":\"<>&  \"}",
+      "expected": {
+        "left": "{\"value\":\"<>&  \"}",
+        "right": "{\"value\":\"<>&  \"}",
+        "equal": true,
+        "changed": false
+      }
+    }
+  ]
+}

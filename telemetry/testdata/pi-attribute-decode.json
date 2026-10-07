@@ -1,0 +1,3614 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "raw": "{}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {},
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {}
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {}
+        }
+      }
+    },
+    {
+      "raw": "{}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {},
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {},
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {}
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {}
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "null",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {},
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {}
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {},
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {}
+        }
+      }
+    },
+    {
+      "raw": "null",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {},
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "null",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {},
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {}
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {}
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":null}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {},
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {}
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {}
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":null}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {},
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {}
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {}
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":null}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {},
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": null
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": null
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":1e400}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "7ff0000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "7ff0000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "7ff0000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":1e400}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "7ff0000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "7ff0000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "7ff0000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":1e400}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "7ff0000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": null
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "7ff0000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": null
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "7ff0000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":-1e400}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "fff0000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "fff0000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "fff0000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":-1e400}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "fff0000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "fff0000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "fff0000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":-1e400}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "fff0000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": null
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "fff0000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": null
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "fff0000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":-0}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "8000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "8000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "8000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":-0}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "8000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "8000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "8000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":-0}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "8000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 0
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "8000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 0
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "8000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":-1e-400}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "8000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "8000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "8000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":-1e-400}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "8000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "8000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "8000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":-1e-400}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "8000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 0
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "8000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 0
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "8000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":1e-400}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "0000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":1e-400}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "0000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":1e-400}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "0000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 0
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "0000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 0
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "0000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":9007199254740993}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "4340000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 9007199254740992
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "4340000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 9007199254740992
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "4340000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":9007199254740993}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "4340000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 9007199254740992
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "4340000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 9007199254740992
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "4340000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":9007199254740993}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "4340000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 9007199254740992
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "4340000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 9007199254740992
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "4340000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":18446744073709551615}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "43f0000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 18446744073709552000
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "43f0000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 18446744073709552000
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "43f0000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":18446744073709551615}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "43f0000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 18446744073709552000
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "43f0000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 18446744073709552000
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "43f0000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":18446744073709551615}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "43f0000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 18446744073709552000
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "43f0000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 18446744073709552000
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "43f0000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":1.7976931348623157e308}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "7fefffffffffffff"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 1.7976931348623157e+308
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "7fefffffffffffff"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 1.7976931348623157e+308
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "7fefffffffffffff"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":1.7976931348623157e308}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "7fefffffffffffff"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 1.7976931348623157e+308
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "7fefffffffffffff"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 1.7976931348623157e+308
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "7fefffffffffffff"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":1.7976931348623157e308}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "7fefffffffffffff"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 1.7976931348623157e+308
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "7fefffffffffffff"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 1.7976931348623157e+308
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "7fefffffffffffff"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":1.7976931348623159e308}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "7ff0000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "7ff0000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "7ff0000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":1.7976931348623159e308}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "7ff0000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "7ff0000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": null
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "7ff0000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":1.7976931348623159e308}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "7ff0000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": null
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "7ff0000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": null
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "7ff0000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":5e-324}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "0000000000000001"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 5e-324
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000001"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 5e-324
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000001"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":5e-324}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "0000000000000001"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 5e-324
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000001"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 5e-324
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000001"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":5e-324}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "0000000000000001"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 5e-324
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "0000000000000001"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 5e-324
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "0000000000000001"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":2.4703282292062327e-324}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "0000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":2.4703282292062327e-324}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "0000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 0
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":2.4703282292062327e-324}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "0000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 0
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "0000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 0
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "0000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":2.4703282292062328e-324}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "0000000000000001"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 5e-324
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000001"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 5e-324
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000001"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":2.4703282292062328e-324}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "0000000000000001"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 5e-324
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000001"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 5e-324
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "0000000000000001"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":2.4703282292062328e-324}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "0000000000000001"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 5e-324
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "0000000000000001"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 5e-324
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "0000000000000001"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":[1e400,-1e400,-0,9007199254740993,null,true,\"1e400\"]}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/value/0": "7ff0000000000000",
+          "/value/1": "fff0000000000000",
+          "/value/2": "8000000000000000",
+          "/value/3": "4340000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": [
+                  null,
+                  null,
+                  0,
+                  9007199254740992,
+                  null,
+                  true,
+                  "1e400"
+                ]
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value/0": "7ff0000000000000",
+            "/0/attributes/value/1": "fff0000000000000",
+            "/0/attributes/value/2": "8000000000000000",
+            "/0/attributes/value/3": "4340000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": [
+                  null,
+                  null,
+                  0,
+                  9007199254740992,
+                  null,
+                  true,
+                  "1e400"
+                ]
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value/0": "7ff0000000000000",
+            "/0/attributes/value/1": "fff0000000000000",
+            "/0/attributes/value/2": "8000000000000000",
+            "/0/attributes/value/3": "4340000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":[1e400,-1e400,-0,9007199254740993,null,true,\"1e400\"]}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/value/0": "7ff0000000000000",
+          "/value/1": "fff0000000000000",
+          "/value/2": "8000000000000000",
+          "/value/3": "4340000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": [
+                  null,
+                  null,
+                  0,
+                  9007199254740992,
+                  null,
+                  true,
+                  "1e400"
+                ]
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value/0": "7ff0000000000000",
+            "/0/attributes/value/1": "fff0000000000000",
+            "/0/attributes/value/2": "8000000000000000",
+            "/0/attributes/value/3": "4340000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": [
+                  null,
+                  null,
+                  0,
+                  9007199254740992,
+                  null,
+                  true,
+                  "1e400"
+                ]
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value/0": "7ff0000000000000",
+            "/0/attributes/value/1": "fff0000000000000",
+            "/0/attributes/value/2": "8000000000000000",
+            "/0/attributes/value/3": "4340000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":[1e400,-1e400,-0,9007199254740993,null,true,\"1e400\"]}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/value/0": "7ff0000000000000",
+          "/value/1": "fff0000000000000",
+          "/value/2": "8000000000000000",
+          "/value/3": "4340000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": [
+                      null,
+                      null,
+                      0,
+                      9007199254740992,
+                      null,
+                      true,
+                      "1e400"
+                    ]
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value/0": "7ff0000000000000",
+            "/0/events/0/value/1": "fff0000000000000",
+            "/0/events/0/value/2": "8000000000000000",
+            "/0/events/0/value/3": "4340000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": [
+                      null,
+                      null,
+                      0,
+                      9007199254740992,
+                      null,
+                      true,
+                      "1e400"
+                    ]
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value/0": "7ff0000000000000",
+            "/0/events/0/value/1": "fff0000000000000",
+            "/0/events/0/value/2": "8000000000000000",
+            "/0/events/0/value/3": "4340000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":{\"nested\":[{\"overflow\":1e400,\"zero\":-0}],\"finite\":9007199254740993}}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/value/nested/0/overflow": "7ff0000000000000",
+          "/value/nested/0/zero": "8000000000000000",
+          "/value/finite": "4340000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": {
+                  "nested": [
+                    {
+                      "overflow": null,
+                      "zero": 0
+                    }
+                  ],
+                  "finite": 9007199254740992
+                }
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value/nested/0/overflow": "7ff0000000000000",
+            "/0/attributes/value/nested/0/zero": "8000000000000000",
+            "/0/attributes/value/finite": "4340000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": {
+                  "nested": [
+                    {
+                      "overflow": null,
+                      "zero": 0
+                    }
+                  ],
+                  "finite": 9007199254740992
+                }
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value/nested/0/overflow": "7ff0000000000000",
+            "/0/attributes/value/nested/0/zero": "8000000000000000",
+            "/0/attributes/value/finite": "4340000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":{\"nested\":[{\"overflow\":1e400,\"zero\":-0}],\"finite\":9007199254740993}}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/value/nested/0/overflow": "7ff0000000000000",
+          "/value/nested/0/zero": "8000000000000000",
+          "/value/finite": "4340000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": {
+                  "nested": [
+                    {
+                      "overflow": null,
+                      "zero": 0
+                    }
+                  ],
+                  "finite": 9007199254740992
+                }
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value/nested/0/overflow": "7ff0000000000000",
+            "/0/attributes/value/nested/0/zero": "8000000000000000",
+            "/0/attributes/value/finite": "4340000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": {
+                  "nested": [
+                    {
+                      "overflow": null,
+                      "zero": 0
+                    }
+                  ],
+                  "finite": 9007199254740992
+                }
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value/nested/0/overflow": "7ff0000000000000",
+            "/0/attributes/value/nested/0/zero": "8000000000000000",
+            "/0/attributes/value/finite": "4340000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":{\"nested\":[{\"overflow\":1e400,\"zero\":-0}],\"finite\":9007199254740993}}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/value/nested/0/overflow": "7ff0000000000000",
+          "/value/nested/0/zero": "8000000000000000",
+          "/value/finite": "4340000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": {
+                      "nested": [
+                        {
+                          "overflow": null,
+                          "zero": 0
+                        }
+                      ],
+                      "finite": 9007199254740992
+                    }
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value/nested/0/overflow": "7ff0000000000000",
+            "/0/events/0/value/nested/0/zero": "8000000000000000",
+            "/0/events/0/value/finite": "4340000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": {
+                      "nested": [
+                        {
+                          "overflow": null,
+                          "zero": 0
+                        }
+                      ],
+                      "finite": 9007199254740992
+                    }
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value/nested/0/overflow": "7ff0000000000000",
+            "/0/events/0/value/nested/0/zero": "8000000000000000",
+            "/0/events/0/value/finite": "4340000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":1e400,\"value\":42,\"duplicate\":{\"n\":-1e400,\"n\":-0}}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "4045000000000000",
+          "/duplicate/n": "8000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 42,
+                "duplicate": {
+                  "n": 0
+                }
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "4045000000000000",
+            "/0/attributes/duplicate/n": "8000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "value": 42,
+                "duplicate": {
+                  "n": 0
+                }
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "4045000000000000",
+            "/0/attributes/duplicate/n": "8000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":1e400,\"value\":42,\"duplicate\":{\"n\":-1e400,\"n\":-0}}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "4045000000000000",
+          "/duplicate/n": "8000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 42,
+                "duplicate": {
+                  "n": 0
+                }
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "4045000000000000",
+            "/0/attributes/duplicate/n": "8000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 42,
+                "duplicate": {
+                  "n": 0
+                }
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "4045000000000000",
+            "/0/attributes/duplicate/n": "8000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":1e400,\"value\":42,\"duplicate\":{\"n\":-1e400,\"n\":-0}}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/value": "4045000000000000",
+          "/duplicate/n": "8000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 42,
+                    "duplicate": {
+                      "n": 0
+                    }
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "4045000000000000",
+            "/0/events/0/duplicate/n": "8000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "value": 42,
+                    "duplicate": {
+                      "n": 0
+                    }
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/value": "4045000000000000",
+            "/0/events/0/duplicate/n": "8000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"__proto__\":{\"value\":1e400},\"constructor\":-0,\"toString\":9007199254740993}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/__proto__/value": "7ff0000000000000",
+          "/constructor": "8000000000000000",
+          "/toString": "4340000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "constructor": 0,
+                "toString": 9007199254740992
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/constructor": "8000000000000000",
+            "/0/attributes/toString": "4340000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "constructor": 0,
+                "toString": 9007199254740992
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/constructor": "8000000000000000",
+            "/0/attributes/toString": "4340000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"__proto__\":{\"value\":1e400},\"constructor\":-0,\"toString\":9007199254740993}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/__proto__/value": "7ff0000000000000",
+          "/constructor": "8000000000000000",
+          "/toString": "4340000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7,
+                "constructor": 0,
+                "toString": 9007199254740992
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/attributes/constructor": "8000000000000000",
+            "/0/attributes/toString": "4340000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7,
+                "constructor": 0,
+                "toString": 9007199254740992
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/attributes/constructor": "8000000000000000",
+            "/0/attributes/toString": "4340000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"__proto__\":{\"value\":1e400},\"constructor\":-0,\"toString\":9007199254740993}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/__proto__/value": "7ff0000000000000",
+          "/constructor": "8000000000000000",
+          "/toString": "4340000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "constructor": 0,
+                    "toString": 9007199254740992
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/constructor": "8000000000000000",
+            "/0/events/0/toString": "4340000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "constructor": 0,
+                    "toString": 9007199254740992
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/constructor": "8000000000000000",
+            "/0/events/0/toString": "4340000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":{\"__proto__\":{\"value\":1e400},\"constructor\":-0},\"0\":1e400,\"10\":-0,\"2\":null}",
+      "phase": "start",
+      "expected": {
+        "decodedNumbers": {
+          "/0": "7ff0000000000000",
+          "/10": "8000000000000000",
+          "/value/__proto__/value": "7ff0000000000000",
+          "/value/constructor": "8000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "0": null,
+                "2": null,
+                "10": 0,
+                "value": {
+                  "__proto__": {
+                    "value": null
+                  },
+                  "constructor": 0
+                }
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/0": "7ff0000000000000",
+            "/0/attributes/10": "8000000000000000",
+            "/0/attributes/value/__proto__/value": "7ff0000000000000",
+            "/0/attributes/value/constructor": "8000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "0": null,
+                "2": null,
+                "10": 0,
+                "value": {
+                  "__proto__": {
+                    "value": null
+                  },
+                  "constructor": 0
+                }
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/0": "7ff0000000000000",
+            "/0/attributes/10": "8000000000000000",
+            "/0/attributes/value/__proto__/value": "7ff0000000000000",
+            "/0/attributes/value/constructor": "8000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":{\"__proto__\":{\"value\":1e400},\"constructor\":-0},\"0\":1e400,\"10\":-0,\"2\":null}",
+      "phase": "merge",
+      "expected": {
+        "decodedNumbers": {
+          "/0": "7ff0000000000000",
+          "/10": "8000000000000000",
+          "/value/__proto__/value": "7ff0000000000000",
+          "/value/constructor": "8000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "0": null,
+                "2": null,
+                "10": 0,
+                "kept": true,
+                "value": {
+                  "__proto__": {
+                    "value": null
+                  },
+                  "constructor": 0
+                }
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/0": "7ff0000000000000",
+            "/0/attributes/10": "8000000000000000",
+            "/0/attributes/value/__proto__/value": "7ff0000000000000",
+            "/0/attributes/value/constructor": "8000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "0": null,
+                "2": null,
+                "10": 0,
+                "kept": true,
+                "value": {
+                  "__proto__": {
+                    "value": null
+                  },
+                  "constructor": 0
+                }
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/0": "7ff0000000000000",
+            "/0/attributes/10": "8000000000000000",
+            "/0/attributes/value/__proto__/value": "7ff0000000000000",
+            "/0/attributes/value/constructor": "8000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "raw": "{\"value\":{\"__proto__\":{\"value\":1e400},\"constructor\":-0},\"0\":1e400,\"10\":-0,\"2\":null}",
+      "phase": "event",
+      "expected": {
+        "decodedNumbers": {
+          "/0": "7ff0000000000000",
+          "/10": "8000000000000000",
+          "/value/__proto__/value": "7ff0000000000000",
+          "/value/constructor": "8000000000000000"
+        },
+        "active": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "0": null,
+                    "2": null,
+                    "10": 0,
+                    "value": {
+                      "__proto__": {
+                        "value": null
+                      },
+                      "constructor": 0
+                    }
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/0": "7ff0000000000000",
+            "/0/events/0/10": "8000000000000000",
+            "/0/events/0/value/__proto__/value": "7ff0000000000000",
+            "/0/events/0/value/constructor": "8000000000000000"
+          }
+        },
+        "settled": {
+          "spans": [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "decoded",
+              "attributes": {
+                "kept": true,
+                "value": 7
+              },
+              "events": [
+                {
+                  "name": "decoded",
+                  "attributes": {
+                    "0": null,
+                    "2": null,
+                    "10": 0,
+                    "value": {
+                      "__proto__": {
+                        "value": null
+                      },
+                      "constructor": 0
+                    }
+                  }
+                }
+              ],
+              "status": {
+                "status": "ok"
+              },
+              "settled": true,
+              "endSequence": 1
+            }
+          ],
+          "numbers": {
+            "/0/attributes/value": "401c000000000000",
+            "/0/events/0/0": "7ff0000000000000",
+            "/0/events/0/10": "8000000000000000",
+            "/0/events/0/value/__proto__/value": "7ff0000000000000",
+            "/0/events/0/value/constructor": "8000000000000000"
+          }
+        }
+      }
+    }
+  ]
+}

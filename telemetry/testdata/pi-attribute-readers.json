@@ -1,0 +1,2687 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "value",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ],
+              "outer": "read"
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "value",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ],
+              "outer": "read"
+            },
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "nil_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "nil_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "nested",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ],
+              "outer": "read"
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "nested",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ],
+              "outer": "read"
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "nested_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "changed",
+              "kept": [
+                1
+              ],
+              "inner": true
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "nested_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "changed",
+              "kept": [
+                1
+              ],
+              "inner": true
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "snapshot",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "initial",
+                "kept": [
+                  1
+                ]
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ],
+              "outer": "read"
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "snapshot",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "initial",
+                "kept": [
+                  1
+                ]
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ],
+              "outer": "read"
+            },
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "nested_undefined",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "nested_undefined",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "nested_null",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ],
+              "outer": null
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "memory",
+        "phase": "nested_null",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ],
+              "outer": null
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "noop",
+        "phase": "value",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "noop",
+        "phase": "panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "noop",
+        "phase": "nil_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "noop",
+        "phase": "nested",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "noop",
+        "phase": "nested_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "noop",
+        "phase": "snapshot",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "noop",
+        "phase": "nested_undefined",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "noop",
+        "phase": "nested_null",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "late",
+        "phase": "value",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "late",
+        "phase": "panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "late",
+        "phase": "nil_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "late",
+        "phase": "nested",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "late",
+        "phase": "nested_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "late",
+        "phase": "snapshot",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "late",
+        "phase": "nested_undefined",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "attributes",
+        "scope": "late",
+        "phase": "nested_null",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "value",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [
+              {
+                "name": "outer",
+                "attributes": {
+                  "outer": "read"
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "value",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [
+              {
+                "name": "outer",
+                "attributes": {
+                  "outer": "read"
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "nil_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "nil_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "nested",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "changed",
+              "kept": [
+                1
+              ],
+              "inner": true
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              },
+              {
+                "name": "outer",
+                "attributes": {
+                  "outer": "read"
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "nested",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "changed",
+              "kept": [
+                1
+              ],
+              "inner": true
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              },
+              {
+                "name": "outer",
+                "attributes": {
+                  "outer": "read"
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "nested_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "changed",
+              "kept": [
+                1
+              ],
+              "inner": true
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "nested_panic",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "changed",
+              "kept": [
+                1
+              ],
+              "inner": true
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "snapshot",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "initial",
+                "kept": [
+                  1
+                ]
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [
+              {
+                "name": "outer",
+                "attributes": {
+                  "outer": "read"
+                }
+              }
+            ],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "snapshot",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "initial",
+                "kept": [
+                  1
+                ]
+              },
+              "events": [],
+              "status": {
+                "status": "ok"
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [
+              {
+                "name": "outer",
+                "attributes": {
+                  "outer": "read"
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Error",
+                "message": "callback failed"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "nested_undefined",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "changed",
+              "kept": [
+                1
+              ],
+              "inner": true
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              },
+              {
+                "name": "outer",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "nested_undefined",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "changed",
+              "kept": [
+                1
+              ],
+              "inner": true
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              },
+              {
+                "name": "outer",
+                "attributes": {}
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "nested_null",
+        "fail": false
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "changed",
+              "kept": [
+                1
+              ],
+              "inner": true
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              },
+              {
+                "name": "outer",
+                "attributes": {
+                  "outer": null
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "memory",
+        "phase": "nested_null",
+        "fail": true
+      },
+      "expected": {
+        "reads": 1,
+        "panicked": false,
+        "callbackError": true,
+        "snapshots": [
+          [
+            {
+              "id": 1,
+              "parentId": null,
+              "name": "read",
+              "attributes": {
+                "base": "changed",
+                "kept": [
+                  1
+                ],
+                "inner": true
+              },
+              "events": [
+                {
+                  "name": "inner",
+                  "attributes": {
+                    "value": 1
+                  }
+                }
+              ],
+              "status": {
+                "status": "error",
+                "error": {
+                  "name": "Nested",
+                  "message": "inner"
+                }
+              },
+              "settled": false
+            }
+          ]
+        ],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "changed",
+              "kept": [
+                1
+              ],
+              "inner": true
+            },
+            "events": [
+              {
+                "name": "inner",
+                "attributes": {
+                  "value": 1
+                }
+              },
+              {
+                "name": "outer",
+                "attributes": {
+                  "outer": null
+                }
+              }
+            ],
+            "status": {
+              "status": "error",
+              "error": {
+                "name": "Nested",
+                "message": "inner"
+              }
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "noop",
+        "phase": "value",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "noop",
+        "phase": "panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "noop",
+        "phase": "nil_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "noop",
+        "phase": "nested",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "noop",
+        "phase": "nested_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "noop",
+        "phase": "snapshot",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "noop",
+        "phase": "nested_undefined",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "noop",
+        "phase": "nested_null",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": []
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "late",
+        "phase": "value",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "late",
+        "phase": "panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "late",
+        "phase": "nil_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "late",
+        "phase": "nested",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "late",
+        "phase": "nested_panic",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "late",
+        "phase": "snapshot",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "late",
+        "phase": "nested_undefined",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "method": "event",
+        "scope": "late",
+        "phase": "nested_null",
+        "fail": false
+      },
+      "expected": {
+        "reads": 0,
+        "panicked": false,
+        "callbackError": false,
+        "snapshots": [],
+        "spans": [
+          {
+            "id": 1,
+            "parentId": null,
+            "name": "read",
+            "attributes": {
+              "base": "initial",
+              "kept": [
+                1
+              ]
+            },
+            "events": [],
+            "status": {
+              "status": "ok"
+            },
+            "settled": true,
+            "endSequence": 1
+          }
+        ]
+      }
+    }
+  ]
+}

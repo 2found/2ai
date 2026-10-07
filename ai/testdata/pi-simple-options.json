@@ -1,0 +1,5688 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "model": {
+    "id": "test",
+    "name": "Test",
+    "api": "openai-completions",
+    "provider": "openai",
+    "baseUrl": "https://api.openai.com/v1",
+    "reasoning": true,
+    "input": [
+      "text",
+      "image"
+    ],
+    "contextWindow": 4200,
+    "maxTokens": 8192,
+    "cost": {
+      "input": 0,
+      "output": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    }
+  },
+  "cases": [
+    {
+      "input": {
+        "name": "level off map 0",
+        "model": {},
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level minimal map 0",
+        "model": {},
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "minimal"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "minimal"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level low map 0",
+        "model": {},
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "low"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "low"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level medium map 0",
+        "model": {},
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "medium"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "medium"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level high map 0",
+        "model": {},
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "high"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "high"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level xhigh map 0",
+        "model": {},
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "high"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "high"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level max map 0",
+        "model": {},
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "high"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "high"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level unknown map 0",
+        "model": {},
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level off map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level minimal map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "minimal"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "minimal"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level low map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "low"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "low"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level medium map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "medium"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "medium"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level high map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "medium"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "medium"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level xhigh map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "medium"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "medium"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level max map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "medium"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "medium"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level unknown map 1",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level off map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "minimal"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "minimal"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level minimal map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "minimal"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "minimal"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level low map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "low"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "low"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level medium map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "medium"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "medium"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level high map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "high"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "high"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level xhigh map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "high"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "high"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level max map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "high"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "high"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level unknown map 2",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null
+          }
+        },
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "minimal"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "minimal"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level off map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level minimal map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level low map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level medium map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level high map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level xhigh map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level max map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level unknown map 3",
+        "model": {
+          "thinkingLevelMap": {
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null
+          }
+        },
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level off map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "xhigh"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level minimal map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "minimal"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "minimal"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "xhigh"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level low map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "low"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "low"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "xhigh"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level medium map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "medium"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "medium"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "xhigh"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level high map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "xhigh"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "extra"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "xhigh"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level xhigh map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "xhigh"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "extra"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "xhigh"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level max map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "xhigh"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "extra"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "xhigh"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level unknown map 4",
+        "model": {
+          "thinkingLevelMap": {
+            "high": null,
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "xhigh"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level off map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level minimal map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "minimal"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "minimal"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level low map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "low"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "low"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level medium map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "medium"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "medium"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level high map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "high"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "high"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level xhigh map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "xhigh"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "extra"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level max map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "max"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104,
+          "reasoning_effort": "maximum"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level unknown map 5",
+        "model": {
+          "thinkingLevelMap": {
+            "max": "maximum",
+            "xhigh": "extra"
+          }
+        },
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "level off map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "off"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": []
+      }
+    },
+    {
+      "input": {
+        "name": "level minimal map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "minimal"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": []
+      }
+    },
+    {
+      "input": {
+        "name": "level low map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "low"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": []
+      }
+    },
+    {
+      "input": {
+        "name": "level medium map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "medium"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": []
+      }
+    },
+    {
+      "input": {
+        "name": "level high map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": []
+      }
+    },
+    {
+      "input": {
+        "name": "level xhigh map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "xhigh"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": []
+      }
+    },
+    {
+      "input": {
+        "name": "level max map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "max"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": []
+      }
+    },
+    {
+      "input": {
+        "name": "level unknown map 6",
+        "model": {
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": null,
+            "low": null,
+            "medium": null,
+            "high": null,
+            "xhigh": null,
+            "max": null
+          }
+        },
+        "options": {
+          "reasoning": "unknown"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": []
+      }
+    },
+    {
+      "input": {
+        "name": "no reasoning model",
+        "model": {
+          "reasoning": false
+        },
+        "options": {
+          "reasoning": "high"
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "no reasoning requested"
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "option projection",
+        "options": {
+          "temperature": 0,
+          "samplingParams": {
+            "temperature": 0.2
+          },
+          "maxTokens": 50,
+          "transport": "sse",
+          "cacheRetention": "long",
+          "sessionId": "session",
+          "headers": {
+            "x-extra": "header"
+          },
+          "timeoutMs": 1000,
+          "websocketConnectTimeoutMs": 300,
+          "maxRetries": 2,
+          "maxRetryDelayMs": 100,
+          "metadata": {
+            "a": 1
+          },
+          "env": {
+            "PI_CACHE_RETENTION": "short"
+          },
+          "toolChoice": "none",
+          "thinkingBudgets": {
+            "high": 50
+          },
+          "reasoning": "high",
+          "reasoningEffort": "discarded",
+          "unused": "discarded"
+        }
+      },
+      "expected": {
+        "options": {
+          "temperature": 0,
+          "samplingParams": {
+            "temperature": 0.2
+          },
+          "maxTokens": 50,
+          "apiKey": "fixture-key",
+          "transport": "sse",
+          "cacheRetention": "long",
+          "sessionId": "session",
+          "headers": {
+            "x-extra": "header"
+          },
+          "timeoutMs": 1000,
+          "websocketConnectTimeoutMs": 300,
+          "maxRetries": 2,
+          "maxRetryDelayMs": 100,
+          "metadata": {
+            "a": 1
+          },
+          "env": {
+            "PI_CACHE_RETENTION": "short"
+          },
+          "toolChoice": "none",
+          "reasoningEffort": "high",
+          "thinkingBudgets": {
+            "high": 50
+          }
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "prompt_cache_key": "session",
+          "prompt_cache_retention": "24h",
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 50,
+          "temperature": 0.2,
+          "tool_choice": "none",
+          "reasoning_effort": "high"
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max 0 window 0",
+        "model": {
+          "contextWindow": 0
+        },
+        "options": {
+          "maxTokens": 0
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 1,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 1
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max 0 window 4096",
+        "model": {
+          "contextWindow": 4096
+        },
+        "options": {
+          "maxTokens": 0
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 0,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max 0 window 4200",
+        "model": {
+          "contextWindow": 4200
+        },
+        "options": {
+          "maxTokens": 0
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 0,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max -5 window 0",
+        "model": {
+          "contextWindow": 0
+        },
+        "options": {
+          "maxTokens": -5
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 1,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 1
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max -5 window 4096",
+        "model": {
+          "contextWindow": 4096
+        },
+        "options": {
+          "maxTokens": -5
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": -5,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": -5
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max -5 window 4200",
+        "model": {
+          "contextWindow": 4200
+        },
+        "options": {
+          "maxTokens": -5
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": -5,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": -5
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max 1 window 0",
+        "model": {
+          "contextWindow": 0
+        },
+        "options": {
+          "maxTokens": 1
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 1,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 1
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max 1 window 4096",
+        "model": {
+          "contextWindow": 4096
+        },
+        "options": {
+          "maxTokens": 1
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 1,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 1
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max 1 window 4200",
+        "model": {
+          "contextWindow": 4200
+        },
+        "options": {
+          "maxTokens": 1
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 1,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 1
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max 100 window 0",
+        "model": {
+          "contextWindow": 0
+        },
+        "options": {
+          "maxTokens": 100
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 100,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 100
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max 100 window 4096",
+        "model": {
+          "contextWindow": 4096
+        },
+        "options": {
+          "maxTokens": 100
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 1,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 1
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max 100 window 4200",
+        "model": {
+          "contextWindow": 4200
+        },
+        "options": {
+          "maxTokens": 100
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 100,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 100
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max 8192 window 0",
+        "model": {
+          "contextWindow": 0
+        },
+        "options": {
+          "maxTokens": 8192
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 8192,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 8192
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max 8192 window 4096",
+        "model": {
+          "contextWindow": 4096
+        },
+        "options": {
+          "maxTokens": 8192
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 1,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 1
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max 8192 window 4200",
+        "model": {
+          "contextWindow": 4200
+        },
+        "options": {
+          "maxTokens": 8192
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max null window 0",
+        "model": {
+          "contextWindow": 0
+        },
+        "options": {
+          "maxTokens": null
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 8192,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 8192
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max null window 4096",
+        "model": {
+          "contextWindow": 4096
+        },
+        "options": {
+          "maxTokens": null
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 1,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 1
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "max null window 4200",
+        "model": {
+          "contextWindow": 4200
+        },
+        "options": {
+          "maxTokens": null
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 104,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 104
+        },
+        "estimate": {
+          "tokens": 0,
+          "usageTokens": 0,
+          "trailingTokens": 0,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "text UTF16 estimate",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "😀😀😀😀😀😀😀x",
+              "timestamp": 1
+            }
+          ]
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 100,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": "😀😀😀😀😀😀😀x"
+            }
+          ],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 100
+        },
+        "estimate": {
+          "tokens": 4,
+          "usageTokens": 0,
+          "trailingTokens": 4,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [
+          4
+        ],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "images estimate",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "hello"
+                },
+                {
+                  "type": "image",
+                  "data": "YQ==",
+                  "mimeType": "image/png"
+                }
+              ],
+              "timestamp": 1
+            }
+          ]
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 1,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "hello"
+                },
+                {
+                  "type": "image_url",
+                  "image_url": {
+                    "url": "data:image/png;base64,YQ=="
+                  }
+                }
+              ]
+            }
+          ],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 1
+        },
+        "estimate": {
+          "tokens": 1202,
+          "usageTokens": 0,
+          "trailingTokens": 1202,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [
+          1202
+        ],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "system sections tools",
+        "context": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "ignored",
+              "sections": {
+                "first": "text",
+                "second": "😀"
+              },
+              "toolsAdded": [
+                {
+                  "name": "tool",
+                  "description": "<>&😀 ",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "input": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "input"
+                    ]
+                  }
+                }
+              ],
+              "toolsRemoved": [
+                {
+                  "name": "old"
+                }
+              ],
+              "timestamp": 1
+            },
+            {
+              "role": "user",
+              "content": "hello",
+              "timestamp": 1
+            }
+          ]
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 59,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "developer",
+              "content": "ignored\n\ntext\n\n😀"
+            },
+            {
+              "role": "user",
+              "content": "hello"
+            }
+          ],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 59,
+          "tools": [
+            {
+              "type": "function",
+              "function": {
+                "name": "tool",
+                "description": "<>&😀 ",
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "input": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "input"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "estimate": {
+          "tokens": 45,
+          "usageTokens": 0,
+          "trailingTokens": 45,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [
+          43,
+          2
+        ],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "assistant text thinking args",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "hello",
+              "timestamp": 1
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                },
+                {
+                  "type": "thinking",
+                  "thinking": "😀think"
+                },
+                {
+                  "type": "toolCall",
+                  "id": "c",
+                  "name": "tool",
+                  "arguments": {
+                    "1": "first",
+                    "2": "second",
+                    "code": "<>& "
+                  }
+                }
+              ],
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 87,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": "hello"
+            },
+            {
+              "role": "assistant",
+              "content": "answer",
+              "tool_calls": [
+                {
+                  "id": "c",
+                  "type": "function",
+                  "function": {
+                    "name": "tool",
+                    "arguments": "{\"1\":\"first\",\"2\":\"second\",\"code\":\"<>& \"}"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "tool",
+              "content": "No result provided",
+              "tool_call_id": "c"
+            }
+          ],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 87,
+          "tools": []
+        },
+        "estimate": {
+          "tokens": 17,
+          "usageTokens": 0,
+          "trailingTokens": 17,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [
+          2,
+          15
+        ],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "tool result estimate",
+        "context": {
+          "messages": [
+            {
+              "role": "toolResult",
+              "toolCallId": "c",
+              "toolName": "tool",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done"
+                },
+                {
+                  "type": "image",
+                  "data": "YQ==",
+                  "mimeType": "image/png"
+                }
+              ],
+              "isError": false,
+              "timestamp": 3
+            }
+          ]
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 1,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "tool",
+              "content": "done",
+              "tool_call_id": "c"
+            },
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Attached image(s) from tool result:"
+                },
+                {
+                  "type": "image_url",
+                  "image_url": {
+                    "url": "data:image/png;base64,YQ=="
+                  }
+                }
+              ]
+            }
+          ],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 1,
+          "tools": []
+        },
+        "estimate": {
+          "tokens": 1201,
+          "usageTokens": 0,
+          "trailingTokens": 1201,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [
+          1201
+        ],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "usage total takes precedence",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "hello",
+              "timestamp": 1
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 10,
+                "output": 5,
+                "cacheRead": 2,
+                "cacheWrite": 3,
+                "totalTokens": 40,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 3
+            }
+          ]
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 63,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": "hello"
+            },
+            {
+              "role": "assistant",
+              "content": "answer"
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 63
+        },
+        "estimate": {
+          "tokens": 41,
+          "usageTokens": 40,
+          "trailingTokens": 1,
+          "lastUsageIndex": 1
+        },
+        "messageTokens": [
+          2,
+          2,
+          1
+        ],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "usage fallback sum",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "hello",
+              "timestamp": 1
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 10,
+                "output": 5,
+                "cacheRead": 2,
+                "cacheWrite": 3,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 3
+            }
+          ]
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 83,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": "hello"
+            },
+            {
+              "role": "assistant",
+              "content": "answer"
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 83
+        },
+        "estimate": {
+          "tokens": 21,
+          "usageTokens": 20,
+          "trailingTokens": 1,
+          "lastUsageIndex": 1
+        },
+        "messageTokens": [
+          2,
+          2,
+          1
+        ],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "stale usage after inserted prefix",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "new summary",
+              "timestamp": 100
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "old answer"
+                }
+              ],
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 900,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            },
+            {
+              "role": "user",
+              "content": "new turn",
+              "timestamp": 101
+            }
+          ]
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 96,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": "new summary"
+            },
+            {
+              "role": "assistant",
+              "content": "old answer"
+            },
+            {
+              "role": "user",
+              "content": "new turn"
+            }
+          ],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 96
+        },
+        "estimate": {
+          "tokens": 8,
+          "usageTokens": 0,
+          "trailingTokens": 8,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [
+          3,
+          3,
+          2
+        ],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "equal timestamp usage accepted",
+        "context": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "summary",
+              "timestamp": 2
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 10,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 94,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "user",
+              "content": "summary"
+            },
+            {
+              "role": "assistant",
+              "content": "answer"
+            }
+          ],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 94
+        },
+        "estimate": {
+          "tokens": 10,
+          "usageTokens": 10,
+          "trailingTokens": 0,
+          "lastUsageIndex": 1
+        },
+        "messageTokens": [
+          2,
+          2
+        ],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "error usage ignored",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "error"
+                }
+              ],
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 900,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 102,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 102
+        },
+        "estimate": {
+          "tokens": 2,
+          "usageTokens": 0,
+          "trailingTokens": 2,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [
+          2
+        ],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "aborted usage ignored",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "aborted"
+                }
+              ],
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "aborted",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 900,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 102,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 102
+        },
+        "estimate": {
+          "tokens": 2,
+          "usageTokens": 0,
+          "trailingTokens": 2,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [
+          2
+        ],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "earlier usage retained after failed response",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "first"
+                }
+              ],
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 10,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 3
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "error"
+                }
+              ],
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 4,
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 900,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 91,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "assistant",
+              "content": "first"
+            },
+            {
+              "role": "user",
+              "content": "next"
+            }
+          ],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 91
+        },
+        "estimate": {
+          "tokens": 13,
+          "usageTokens": 10,
+          "trailingTokens": 3,
+          "lastUsageIndex": 0
+        },
+        "messageTokens": [
+          2,
+          1,
+          2
+        ],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "latest usage wins",
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "first"
+                }
+              ],
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 10,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            },
+            {
+              "role": "user",
+              "content": "next",
+              "timestamp": 3
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "second"
+                }
+              ],
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 4,
+              "stopReason": "stop",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 70,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            },
+            {
+              "role": "user",
+              "content": "tail",
+              "timestamp": 5
+            }
+          ]
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 33,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "assistant",
+              "content": "first"
+            },
+            {
+              "role": "user",
+              "content": "next"
+            },
+            {
+              "role": "assistant",
+              "content": "second"
+            },
+            {
+              "role": "user",
+              "content": "tail"
+            }
+          ],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 33
+        },
+        "estimate": {
+          "tokens": 71,
+          "usageTokens": 70,
+          "trailingTokens": 1,
+          "lastUsageIndex": 2
+        },
+        "messageTokens": [
+          2,
+          1,
+          2,
+          1
+        ],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "tool declarations without messages",
+        "context": {
+          "messages": [],
+          "tools": [
+            {
+              "name": "tool",
+              "description": "<>&😀 ",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "input": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "input"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 70,
+          "apiKey": "fixture-key"
+        },
+        "params": {
+          "model": "test",
+          "messages": [],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 70,
+          "tools": [
+            {
+              "type": "function",
+              "function": {
+                "name": "tool",
+                "description": "<>&😀 ",
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "input": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "input"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "estimate": {
+          "tokens": 34,
+          "usageTokens": 0,
+          "trailingTokens": 34,
+          "lastUsageIndex": null
+        },
+        "messageTokens": [
+          34
+        ],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "input": {
+        "name": "context budget caps thinking",
+        "model": {
+          "contextWindow": 16000,
+          "compat": {
+            "supportsThinkingTokenBudget": true
+          }
+        },
+        "options": {
+          "reasoning": "high"
+        },
+        "context": {
+          "messages": [
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answer"
+                }
+              ],
+              "api": "openai-completions",
+              "provider": "openai",
+              "model": "test",
+              "timestamp": 2,
+              "stopReason": "stop",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 10000,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "options": {
+          "maxTokens": 1904,
+          "apiKey": "fixture-key",
+          "reasoningEffort": "high"
+        },
+        "params": {
+          "model": "test",
+          "messages": [
+            {
+              "role": "assistant",
+              "content": "answer"
+            }
+          ],
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          },
+          "store": false,
+          "max_completion_tokens": 1904,
+          "reasoning_effort": "high",
+          "thinking_token_budget": 880
+        },
+        "estimate": {
+          "tokens": 10000,
+          "usageTokens": 10000,
+          "trailingTokens": 0,
+          "lastUsageIndex": 0
+        },
+        "messageTokens": [
+          2
+        ],
+        "levels": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    }
+  ],
+  "budgets": [
+    {
+      "input": {
+        "level": "minimal",
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "minimal",
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 1024
+      }
+    },
+    {
+      "input": {
+        "level": "minimal",
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 32768,
+        "thinkingBudget": 1024
+      }
+    },
+    {
+      "input": {
+        "level": "minimal",
+        "base": 0,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "minimal",
+        "base": 0,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 1024,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "minimal",
+        "base": 0,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 1024,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "minimal",
+        "base": 1000,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "minimal",
+        "base": 1000,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 2024,
+        "thinkingBudget": 1024
+      }
+    },
+    {
+      "input": {
+        "level": "minimal",
+        "base": 1000,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 2024,
+        "thinkingBudget": 1024
+      }
+    },
+    {
+      "input": {
+        "level": "minimal",
+        "base": 20000,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "minimal",
+        "base": 20000,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 1024
+      }
+    },
+    {
+      "input": {
+        "level": "minimal",
+        "base": 20000,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 21024,
+        "thinkingBudget": 1024
+      }
+    },
+    {
+      "input": {
+        "level": "low",
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "low",
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 2048
+      }
+    },
+    {
+      "input": {
+        "level": "low",
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 32768,
+        "thinkingBudget": 2048
+      }
+    },
+    {
+      "input": {
+        "level": "low",
+        "base": 0,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "low",
+        "base": 0,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 2048,
+        "thinkingBudget": 1024
+      }
+    },
+    {
+      "input": {
+        "level": "low",
+        "base": 0,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 2048,
+        "thinkingBudget": 1024
+      }
+    },
+    {
+      "input": {
+        "level": "low",
+        "base": 1000,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "low",
+        "base": 1000,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 3048,
+        "thinkingBudget": 2048
+      }
+    },
+    {
+      "input": {
+        "level": "low",
+        "base": 1000,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 3048,
+        "thinkingBudget": 2048
+      }
+    },
+    {
+      "input": {
+        "level": "low",
+        "base": 20000,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "low",
+        "base": 20000,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 2048
+      }
+    },
+    {
+      "input": {
+        "level": "low",
+        "base": 20000,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 22048,
+        "thinkingBudget": 2048
+      }
+    },
+    {
+      "input": {
+        "level": "medium",
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "medium",
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "medium",
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 32768,
+        "thinkingBudget": 8192
+      }
+    },
+    {
+      "input": {
+        "level": "medium",
+        "base": 0,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "medium",
+        "base": 0,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "medium",
+        "base": 0,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "medium",
+        "base": 1000,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "medium",
+        "base": 1000,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "medium",
+        "base": 1000,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 9192,
+        "thinkingBudget": 8192
+      }
+    },
+    {
+      "input": {
+        "level": "medium",
+        "base": 20000,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "medium",
+        "base": 20000,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "medium",
+        "base": 20000,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 28192,
+        "thinkingBudget": 8192
+      }
+    },
+    {
+      "input": {
+        "level": "high",
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "high",
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "high",
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 32768,
+        "thinkingBudget": 12345
+      }
+    },
+    {
+      "input": {
+        "level": "high",
+        "base": 0,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "high",
+        "base": 0,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "high",
+        "base": 0,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 12345,
+        "thinkingBudget": 11321
+      }
+    },
+    {
+      "input": {
+        "level": "high",
+        "base": 1000,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "high",
+        "base": 1000,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "high",
+        "base": 1000,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 13345,
+        "thinkingBudget": 12345
+      }
+    },
+    {
+      "input": {
+        "level": "high",
+        "base": 20000,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "high",
+        "base": 20000,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "high",
+        "base": 20000,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 32345,
+        "thinkingBudget": 12345
+      }
+    },
+    {
+      "input": {
+        "level": "xhigh",
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "xhigh",
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "xhigh",
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 32768,
+        "thinkingBudget": 12345
+      }
+    },
+    {
+      "input": {
+        "level": "xhigh",
+        "base": 0,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "xhigh",
+        "base": 0,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "xhigh",
+        "base": 0,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 12345,
+        "thinkingBudget": 11321
+      }
+    },
+    {
+      "input": {
+        "level": "xhigh",
+        "base": 1000,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "xhigh",
+        "base": 1000,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "xhigh",
+        "base": 1000,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 13345,
+        "thinkingBudget": 12345
+      }
+    },
+    {
+      "input": {
+        "level": "xhigh",
+        "base": 20000,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "xhigh",
+        "base": 20000,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "xhigh",
+        "base": 20000,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 32345,
+        "thinkingBudget": 12345
+      }
+    },
+    {
+      "input": {
+        "level": "max",
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "max",
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "max",
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 32768,
+        "thinkingBudget": 12345
+      }
+    },
+    {
+      "input": {
+        "level": "max",
+        "base": 0,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "max",
+        "base": 0,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "max",
+        "base": 0,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 12345,
+        "thinkingBudget": 11321
+      }
+    },
+    {
+      "input": {
+        "level": "max",
+        "base": 1000,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "max",
+        "base": 1000,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "max",
+        "base": 1000,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 13345,
+        "thinkingBudget": 12345
+      }
+    },
+    {
+      "input": {
+        "level": "max",
+        "base": 20000,
+        "ceiling": 512,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 512,
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "input": {
+        "level": "max",
+        "base": 20000,
+        "ceiling": 8192,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 8192,
+        "thinkingBudget": 7168
+      }
+    },
+    {
+      "input": {
+        "level": "max",
+        "base": 20000,
+        "ceiling": 32768,
+        "custom": {
+          "high": 12345
+        }
+      },
+      "expected": {
+        "maxTokens": 32345,
+        "thinkingBudget": 12345
+      }
+    }
+  ]
+}

@@ -1,0 +1,231 @@
+{
+  "upstreamCommit": "200387122ca450d6387f033949423114a270b96c",
+  "sourceFiles": [
+    "packages/ai/src/api/simple-options.ts",
+    "packages/ai/src/models.ts"
+  ],
+  "sourceSliceSHA256": "32388ba41d9ce6ab33d823cd88fa4f78accceddcbc46fe33a4dd88348f4e6dd9",
+  "cases": [
+    {
+      "name": "absent",
+      "model": {},
+      "level": "off"
+    },
+    {
+      "name": "empty-model-defaults",
+      "model": {
+        "samplingParams": {}
+      },
+      "level": "off",
+      "expected": {}
+    },
+    {
+      "name": "empty-request",
+      "model": {},
+      "level": "low",
+      "request": {},
+      "expected": {}
+    },
+    {
+      "name": "null-request",
+      "model": {},
+      "level": "low",
+      "request": null
+    },
+    {
+      "name": "model-defaults",
+      "model": {
+        "samplingParams": {
+          "temperature": 1,
+          "top_p": 0.9
+        }
+      },
+      "level": "off",
+      "expected": {
+        "temperature": 1,
+        "top_p": 0.9
+      }
+    },
+    {
+      "name": "disabled-off",
+      "model": {
+        "reasoning": false,
+        "samplingParamsByThinkingLevel": {
+          "off": {
+            "temperature": 0.7
+          },
+          "high": {
+            "temperature": 0.1
+          }
+        }
+      },
+      "level": "high",
+      "expected": {
+        "temperature": 0.7
+      }
+    },
+    {
+      "name": "clamped-up",
+      "model": {
+        "reasoning": true,
+        "thinkingLevelMap": {
+          "low": null,
+          "medium": null
+        },
+        "samplingParams": {
+          "temperature": 1,
+          "top_p": 0.9
+        },
+        "samplingParamsByThinkingLevel": {
+          "high": {
+            "temperature": 0.8,
+            "top_k": 64
+          },
+          "low": {
+            "temperature": 0.2
+          }
+        }
+      },
+      "level": "low",
+      "expected": {
+        "temperature": 0.8,
+        "top_p": 0.9,
+        "top_k": 64
+      }
+    },
+    {
+      "name": "clamped-down",
+      "model": {
+        "reasoning": true,
+        "samplingParamsByThinkingLevel": {
+          "high": {
+            "top_k": 64
+          },
+          "max": {
+            "top_k": 1
+          }
+        }
+      },
+      "level": "max",
+      "expected": {
+        "top_k": 64
+      }
+    },
+    {
+      "name": "request-wins",
+      "model": {
+        "reasoning": true,
+        "samplingParams": {
+          "temperature": 1,
+          "top_p": 0.9,
+          "config": {
+            "model": true
+          }
+        },
+        "samplingParamsByThinkingLevel": {
+          "low": {
+            "temperature": 0.6,
+            "top_k": 64,
+            "config": {
+              "level": true
+            }
+          }
+        }
+      },
+      "level": "low",
+      "request": {
+        "top_p": 0,
+        "temperature": null,
+        "config": {
+          "request": true
+        }
+      },
+      "expected": {
+        "temperature": null,
+        "top_p": 0,
+        "config": {
+          "request": true
+        },
+        "top_k": 64
+      }
+    },
+    {
+      "name": "mapped-name-is-not-level",
+      "model": {
+        "reasoning": true,
+        "thinkingLevelMap": {
+          "high": "vendor_high"
+        },
+        "samplingParamsByThinkingLevel": {
+          "high": {
+            "temperature": 0.8
+          },
+          "vendor_high": {
+            "temperature": 0.1
+          }
+        }
+      },
+      "level": "high",
+      "expected": {
+        "temperature": 0.8
+      }
+    },
+    {
+      "name": "no-supported-level",
+      "model": {
+        "reasoning": true,
+        "thinkingLevelMap": {
+          "off": null,
+          "minimal": null,
+          "low": null,
+          "medium": null,
+          "high": null,
+          "xhigh": null,
+          "max": null
+        },
+        "samplingParamsByThinkingLevel": {
+          "off": {
+            "temperature": 0.7
+          }
+        }
+      },
+      "level": "max",
+      "expected": {
+        "temperature": 0.7
+      }
+    },
+    {
+      "name": "missing-level",
+      "model": {
+        "reasoning": true,
+        "samplingParamsByThinkingLevel": {
+          "off": {
+            "temperature": 0.7
+          }
+        }
+      },
+      "level": "high"
+    },
+    {
+      "name": "null-level",
+      "model": {
+        "reasoning": true,
+        "samplingParamsByThinkingLevel": {
+          "high": null
+        }
+      },
+      "level": "high"
+    },
+    {
+      "name": "empty-level",
+      "model": {
+        "reasoning": true,
+        "samplingParamsByThinkingLevel": {
+          "high": {}
+        }
+      },
+      "level": "high",
+      "expected": {}
+    }
+  ]
+}

@@ -1,0 +1,3968 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "metadata": {
+    "name": "OpenRouter OAuth",
+    "loginLabel": "Sign in with OpenRouter",
+    "isSubscription": null
+  },
+  "cases": [
+    {
+      "input": {
+        "manual": "authorization-code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"authorization-code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "test-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "  code  ",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "test-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "﻿ code ",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "test-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "code=a+b%2Bc",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"a b+c\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "test-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "?code=first&code=second",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"first\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "test-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "https://example.test/callback?code=a+b%2Bc",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"a b+c\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "test-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "https://example.test/callback?code=%FF",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"�\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "test-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "https://example.test/no-code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "Missing authorization code",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "manual": "custom:code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "Missing authorization code",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "manual": "relative/path?code=x",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "Missing authorization code",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "manual": "a%20b",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"a%20b\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "test-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "not a URL",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"not a URL\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "test-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "Missing authorization code",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "manual": "  \n",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "Missing authorization code",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "manual": "code=",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "Missing authorization code",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "manual": "?code=x",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"x\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "test-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "https://example.test/?code=&code=x",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "Missing authorization code",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "manual": "code=x#fragment",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"x#fragment\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "test-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "test-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "{\"key\":\" \"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": " ",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "{\"key\":\"\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth response carries no \"key\"",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "{\"key\":1}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth response carries no \"key\"",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "{}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth response carries no \"key\"",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "null"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth response carries no \"key\"",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "[]"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth response carries no \"key\"",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "true"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth response carries no \"key\"",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "\"text\""
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth response carries no \"key\"",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "not json"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth returned invalid JSON",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": ""
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth returned invalid JSON",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "{\"error_description\":\"description\",\"message\":\"message\",\"error\":\"error\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth response carries no \"key\"",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "{\"error_description\":\"\",\"message\":\"hidden\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth response carries no \"key\"",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "{\"message\":\"message\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth response carries no \"key\"",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "{\"error\":\"error\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth response carries no \"key\"",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "{\"error\":{\"message\":\"nested\"}}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth response carries no \"key\"",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "{\"error\":[{\"message\":\"ignored\"}]}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth response carries no \"key\"",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 200,
+        "body": "{\"error_description\":3,\"message\":false,\"error\":{\"message\":\"nested\"}}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth response carries no \"key\"",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "{\"key\":\" \"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "{\"key\":\"\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "{\"key\":1}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "{}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "null"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "[]"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "true"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "\"text\""
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "not json"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": ""
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "{\"error_description\":\"description\",\"message\":\"message\",\"error\":\"error\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400): description",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "{\"error_description\":\"\",\"message\":\"hidden\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "{\"message\":\"message\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400): message",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "{\"error\":\"error\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400): error",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "{\"error\":{\"message\":\"nested\"}}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400): nested",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "{\"error\":[{\"message\":\"ignored\"}]}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "quote\"\nĐăng nhập",
+        "status": 400,
+        "body": "{\"error_description\":3,\"message\":false,\"error\":{\"message\":\"nested\"}}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"quote\\\"\\nĐăng nhập\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400): nested",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}",
+        "action": "preabort"
+      },
+      "log": [],
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      },
+      "promptAborted": null,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}",
+        "action": "notify-abort"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}",
+        "action": "prompt-abort"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}",
+        "action": "prompt-error"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "injected failure",
+        "same": true
+      },
+      "promptAborted": true,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}",
+        "action": "notify-error"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "injected failure",
+        "same": true
+      },
+      "promptAborted": null,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}",
+        "action": "fetch-error"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "injected failure",
+        "same": true
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}",
+        "action": "fetch-abort-error"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": true
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}",
+        "action": "fetch-abort-success"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "test-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": true
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}",
+        "action": "body-error"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth returned invalid JSON",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}",
+        "action": "body-abort-error"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "Login cancelled",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": true
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}",
+        "action": "body-abort-success"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "test-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": true
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}",
+        "action": "fetch-timeout"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth token exchange timed out",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": true
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}",
+        "action": "body-timeout"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth token exchange timed out",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": true
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}",
+        "action": "post-success-abort"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "test-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 400,
+        "body": "{\"message\":\"detail\"}",
+        "action": "body-error"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": false
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 400,
+        "body": "{\"message\":\"detail\"}",
+        "action": "body-abort-error"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": true
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 400,
+        "body": "{\"message\":\"detail\"}",
+        "action": "body-abort-success"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400): detail",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": true
+    },
+    {
+      "input": {
+        "manual": "code",
+        "status": 400,
+        "body": "{\"message\":\"detail\"}",
+        "action": "body-timeout"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Exchanging authorization code for an API key..."
+          }
+        },
+        {
+          "request": {
+            "url": "https://openrouter.ai/api/v1/auth/keys",
+            "method": "POST",
+            "headers": {
+              "accept": "application/json",
+              "content-type": "application/json"
+            },
+            "body": "{\"code\":\"code\",\"code_verifier\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"code_challenge_method\":\"S256\"}"
+          }
+        }
+      ],
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 400)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": true
+    },
+    {
+      "input": {
+        "manual": null,
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "Missing authorization code",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "manual": 17,
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "input.trim is not a function. (In 'input.trim()', 'input.trim' is undefined)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "manual": true,
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "input.trim is not a function. (In 'input.trim()', 'input.trim' is undefined)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "manual": {},
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "input.trim is not a function. (In 'input.trim()', 'input.trim' is undefined)",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": null
+    },
+    {
+      "input": {
+        "status": 200,
+        "body": "{\"key\":\"test-key\"}"
+      },
+      "log": [
+        {
+          "notify": {
+            "type": "progress",
+            "message": "Listening for OpenRouter OAuth callback on http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        },
+        {
+          "notify": {
+            "type": "auth_url",
+            "url": "https://openrouter.ai/auth?callback_url=http%3A%2F%2F127.0.0.1%3APORT%2Foauth%2Fcallback%2F12345678-1234-4234-8234-123456789abc&code_challenge=DwBzhbb51LfusnSGBa_hqYSgo7-j8BTQnip4TOnlzRo&code_challenge_method=S256",
+            "instructions": "Complete sign-in in your browser. If the browser is on another machine, paste the final redirect URL here."
+          }
+        },
+        {
+          "prompt": {
+            "type": "manual_code",
+            "message": "Complete sign-in in your browser, or paste the authorization code / redirect URL here:",
+            "placeholder": "http://127.0.0.1:PORT/oauth/callback/12345678-1234-4234-8234-123456789abc"
+          }
+        }
+      ],
+      "output": {
+        "error": "Missing authorization code",
+        "same": false
+      },
+      "promptAborted": true,
+      "requestAborted": null
+    }
+  ],
+  "helpers": [
+    {
+      "credential": {
+        "type": "oauth",
+        "access": "stored"
+      },
+      "refreshSame": true,
+      "auth": {
+        "value": {
+          "apiKey": "stored"
+        }
+      }
+    },
+    {
+      "credential": {},
+      "refreshSame": true,
+      "auth": {
+        "value": {}
+      }
+    },
+    {
+      "credential": {
+        "access": ""
+      },
+      "refreshSame": true,
+      "auth": {
+        "value": {
+          "apiKey": ""
+        }
+      }
+    },
+    {
+      "credential": {
+        "access": null
+      },
+      "refreshSame": true,
+      "auth": {
+        "value": {
+          "apiKey": null
+        }
+      }
+    },
+    {
+      "credential": {
+        "access": 17
+      },
+      "refreshSame": true,
+      "auth": {
+        "value": {
+          "apiKey": 17
+        }
+      }
+    },
+    {
+      "credential": "text",
+      "refreshSame": true,
+      "auth": {
+        "value": {}
+      }
+    },
+    {
+      "credential": 17,
+      "refreshSame": true,
+      "auth": {
+        "value": {}
+      }
+    },
+    {
+      "credential": null,
+      "refreshSame": true,
+      "auth": {
+        "error": "null is not an object (evaluating 'credential.access')"
+      }
+    },
+    {
+      "credential": {
+        "absent": true
+      },
+      "refreshSame": true,
+      "auth": {
+        "error": "undefined is not an object (evaluating 'credential.access')"
+      }
+    }
+  ],
+  "browser": [
+    {
+      "mode": "success",
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "browser-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "calls": 1,
+      "requests": [
+        {
+          "code": "browser-code",
+          "code_verifier": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "code_challenge_method": "S256"
+        }
+      ],
+      "status": 200,
+      "duplicate": null,
+      "promptAborted": true,
+      "successPage": true
+    },
+    {
+      "mode": "failure",
+      "output": {
+        "error": "OpenRouter OAuth key exchange failed (HTTP 401): denied"
+      },
+      "calls": 1,
+      "requests": [
+        {
+          "code": "browser-code",
+          "code_verifier": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "code_challenge_method": "S256"
+        }
+      ],
+      "status": 502,
+      "duplicate": null,
+      "promptAborted": true,
+      "successPage": false
+    },
+    {
+      "mode": "missing-key",
+      "output": {
+        "error": "OpenRouter OAuth response carries no \"key\""
+      },
+      "calls": 1,
+      "requests": [
+        {
+          "code": "browser-code",
+          "code_verifier": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "code_challenge_method": "S256"
+        }
+      ],
+      "status": 502,
+      "duplicate": null,
+      "promptAborted": true,
+      "successPage": false
+    },
+    {
+      "mode": "duplicate",
+      "output": {
+        "value": {
+          "type": "oauth",
+          "access": "browser-key",
+          "refresh": "",
+          "expires": 9007199254740991
+        }
+      },
+      "calls": 1,
+      "requests": [
+        {
+          "code": "browser-code",
+          "code_verifier": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "code_challenge_method": "S256"
+        }
+      ],
+      "status": 200,
+      "duplicate": 409,
+      "promptAborted": true,
+      "successPage": true
+    }
+  ],
+  "integration": {
+    "loads": 1,
+    "credential": {
+      "type": "oauth",
+      "access": "stored-key",
+      "refresh": "",
+      "expires": 9007199254740991
+    },
+    "storedSame": true,
+    "chatAuth": {
+      "auth": {
+        "apiKey": "stored-key"
+      },
+      "source": "OAuth"
+    },
+    "imageAuth": {
+      "auth": {
+        "apiKey": "stored-key"
+      },
+      "source": "OAuth"
+    },
+    "check": {
+      "source": "OAuth",
+      "type": "oauth"
+    },
+    "afterLogout": {
+      "absent": true
+    }
+  }
+}

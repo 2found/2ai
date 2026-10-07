@@ -1,0 +1,522 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "accounts": [
+    {
+      "token": "header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+      "account": "account",
+      "error": null
+    },
+    {
+      "token": "header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiIn19.signature",
+      "account": null,
+      "error": "Failed to extract accountId from token"
+    },
+    {
+      "token": "header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjpudWxsfX0=.signature",
+      "account": null,
+      "error": "Failed to extract accountId from token"
+    },
+    {
+      "token": "header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjowfX0=.signature",
+      "account": null,
+      "error": "Failed to extract accountId from token"
+    },
+    {
+      "token": "header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoxfX0=.signature",
+      "account": "1",
+      "error": null
+    },
+    {
+      "token": "header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjpmYWxzZX19.signature",
+      "account": null,
+      "error": "Failed to extract accountId from token"
+    },
+    {
+      "token": "header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjp0cnVlfX0=.signature",
+      "account": "true",
+      "error": null
+    },
+    {
+      "token": "header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjpbImEiLCJiIl19fQ==.signature",
+      "account": "a,b",
+      "error": null
+    },
+    {
+      "token": "header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjp7fX19.signature",
+      "account": "[object Object]",
+      "error": null
+    },
+    {
+      "token": "header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiw6kifX0=.signature",
+      "account": "Ã©",
+      "error": null
+    },
+    {
+      "token": "bad",
+      "account": null,
+      "error": "Failed to extract accountId from token"
+    },
+    {
+      "token": "a.b.c.d",
+      "account": null,
+      "error": "Failed to extract accountId from token"
+    },
+    {
+      "token": "a.@@.b",
+      "account": null,
+      "error": "Failed to extract accountId from token"
+    },
+    {
+      "token": "a.e30=.b",
+      "account": null,
+      "error": "Failed to extract accountId from token"
+    },
+    {
+      "token": "a.bnVsbA==.b",
+      "account": null,
+      "error": "Failed to extract accountId from token"
+    },
+    {
+      "token": "header.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ.signature",
+      "account": "account",
+      "error": null
+    },
+    {
+      "token": "header. \neyJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiYWNjb3VudCJ9fQ==.signature",
+      "account": "account",
+      "error": null
+    }
+  ],
+  "urls": [
+    {
+      "url": "https://chatgpt.com/backend-api/codex/responses"
+    },
+    {
+      "base": "",
+      "url": "https://chatgpt.com/backend-api/codex/responses"
+    },
+    {
+      "base": " \t﻿",
+      "url": "https://chatgpt.com/backend-api/codex/responses"
+    },
+    {
+      "base": "https://chatgpt.com/backend-api",
+      "url": "https://chatgpt.com/backend-api/codex/responses"
+    },
+    {
+      "base": "https://example.test/",
+      "url": "https://example.test/codex/responses"
+    },
+    {
+      "base": "https://example.test/codex///",
+      "url": "https://example.test/codex/responses"
+    },
+    {
+      "base": "https://example.test/codex/responses///",
+      "url": "https://example.test/codex/responses"
+    },
+    {
+      "base": " https://example.test/x ",
+      "url": " https://example.test/x /codex/responses"
+    },
+    {
+      "base": "https://example.test/x?query=1",
+      "url": "https://example.test/x?query=1/codex/responses"
+    }
+  ],
+  "headers": [
+    {
+      "input": {
+        "name": "defaults",
+        "websocket": false
+      },
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "user-agent": "<platform>"
+      }
+    },
+    {
+      "input": {
+        "name": "defaults",
+        "websocket": true,
+        "session": "request"
+      },
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "request",
+        "user-agent": "<platform>",
+        "x-client-request-id": "request"
+      }
+    },
+    {
+      "input": {
+        "name": "session",
+        "session": "session",
+        "websocket": false
+      },
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "session-id": "session",
+        "user-agent": "<platform>",
+        "x-client-request-id": "session"
+      }
+    },
+    {
+      "input": {
+        "name": "session",
+        "session": "session",
+        "websocket": true
+      },
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "session",
+        "user-agent": "<platform>",
+        "x-client-request-id": "session"
+      }
+    },
+    {
+      "input": {
+        "name": "empty session",
+        "session": "",
+        "websocket": false
+      },
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "user-agent": "<platform>"
+      }
+    },
+    {
+      "input": {
+        "name": "empty session",
+        "session": "",
+        "websocket": true
+      },
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "",
+        "user-agent": "<platform>",
+        "x-client-request-id": ""
+      }
+    },
+    {
+      "input": {
+        "name": "model values",
+        "initial": {
+          "X-Custom": "  value  ",
+          "Accept": "model",
+          "Content-Type": "model",
+          "OpenAI-Beta": "model",
+          "Session-Id": "model"
+        },
+        "websocket": false
+      },
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "session-id": "model",
+        "user-agent": "<platform>",
+        "x-custom": "value"
+      }
+    },
+    {
+      "input": {
+        "name": "model values",
+        "initial": {
+          "X-Custom": "  value  ",
+          "Accept": "model",
+          "Content-Type": "model",
+          "OpenAI-Beta": "model",
+          "Session-Id": "model"
+        },
+        "websocket": true,
+        "session": "request"
+      },
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "request",
+        "user-agent": "<platform>",
+        "x-client-request-id": "request",
+        "x-custom": "value"
+      }
+    },
+    {
+      "input": {
+        "name": "override/delete",
+        "initial": {
+          "X-Custom": "model",
+          "X-Delete": "delete",
+          "session-id": "initial"
+        },
+        "additional": {
+          "x-custom": "request",
+          "x-delete": null,
+          "session-id": null
+        },
+        "websocket": false
+      },
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "user-agent": "<platform>",
+        "x-custom": "request"
+      }
+    },
+    {
+      "input": {
+        "name": "override/delete",
+        "initial": {
+          "X-Custom": "model",
+          "X-Delete": "delete",
+          "session-id": "initial"
+        },
+        "additional": {
+          "x-custom": "request",
+          "x-delete": null,
+          "session-id": null
+        },
+        "websocket": true,
+        "session": "request"
+      },
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "request",
+        "user-agent": "<platform>",
+        "x-client-request-id": "request",
+        "x-custom": "request"
+      }
+    },
+    {
+      "input": {
+        "name": "case collisions",
+        "initial": {
+          "X-Custom": "one",
+          "x-custom": "two"
+        },
+        "additional": {
+          "X-Other": "a",
+          "x-other": "b"
+        },
+        "websocket": false
+      },
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "user-agent": "<platform>",
+        "x-custom": "one, two",
+        "x-other": "b"
+      }
+    },
+    {
+      "input": {
+        "name": "case collisions",
+        "initial": {
+          "X-Custom": "one",
+          "x-custom": "two"
+        },
+        "additional": {
+          "X-Other": "a",
+          "x-other": "b"
+        },
+        "websocket": true,
+        "session": "request"
+      },
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "request",
+        "user-agent": "<platform>",
+        "x-client-request-id": "request",
+        "x-custom": "one, two",
+        "x-other": "b"
+      }
+    },
+    {
+      "input": {
+        "name": "auth protected",
+        "initial": {
+          "Authorization": "model",
+          "chatgpt-account-id": "model",
+          "originator": "model",
+          "User-Agent": "model"
+        },
+        "additional": {
+          "authorization": null,
+          "chatgpt-account-id": "request",
+          "originator": "request",
+          "user-agent": null
+        },
+        "websocket": false
+      },
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "user-agent": "<platform>"
+      }
+    },
+    {
+      "input": {
+        "name": "auth protected",
+        "initial": {
+          "Authorization": "model",
+          "chatgpt-account-id": "model",
+          "originator": "model",
+          "User-Agent": "model"
+        },
+        "additional": {
+          "authorization": null,
+          "chatgpt-account-id": "request",
+          "originator": "request",
+          "user-agent": null
+        },
+        "websocket": true,
+        "session": "request"
+      },
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "request",
+        "user-agent": "<platform>",
+        "x-client-request-id": "request"
+      }
+    },
+    {
+      "input": {
+        "name": "model null is literal",
+        "initial": {
+          "X-Custom": null
+        },
+        "websocket": false
+      },
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "user-agent": "<platform>",
+        "x-custom": "null"
+      }
+    },
+    {
+      "input": {
+        "name": "model null is literal",
+        "initial": {
+          "X-Custom": null
+        },
+        "websocket": true,
+        "session": "request"
+      },
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "request",
+        "user-agent": "<platform>",
+        "x-client-request-id": "request",
+        "x-custom": "null"
+      }
+    },
+    {
+      "input": {
+        "name": "session supersedes both",
+        "session": "bound",
+        "initial": {
+          "session-id": "model",
+          "x-client-request-id": "model"
+        },
+        "additional": {
+          "session-id": "request",
+          "x-client-request-id": "request"
+        },
+        "websocket": false
+      },
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "session-id": "bound",
+        "user-agent": "<platform>",
+        "x-client-request-id": "bound"
+      }
+    },
+    {
+      "input": {
+        "name": "session supersedes both",
+        "session": "bound",
+        "initial": {
+          "session-id": "model",
+          "x-client-request-id": "model"
+        },
+        "additional": {
+          "session-id": "request",
+          "x-client-request-id": "request"
+        },
+        "websocket": true
+      },
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "bound",
+        "user-agent": "<platform>",
+        "x-client-request-id": "bound"
+      }
+    }
+  ]
+}

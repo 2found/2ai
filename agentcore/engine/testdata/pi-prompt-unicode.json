@@ -1,0 +1,2261 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "sources": {
+    "packages/agent/src/agent.ts": "7024a3145a6ebc951a0f030164adb1dfb12d33d6e0dbbac15ef0efda49c87457",
+    "packages/agent/src/agent-loop.ts": "e773e822a2587caf314e6bb66ea6370fce3468b7eecd26d6a67afe673f81eabc",
+    "packages/agent/src/stream-fn.ts": "1f9dee101a5ce1052558458d9ce47e53e05187224e879217899059a80d90bc45",
+    "packages/ai/src/utils/event-stream.ts": "147084657f76665ff7d6c8dcd6eb0745149e3aaee3e7b9c272b315a1b5679386",
+    "packages/ai/src/utils/transcript.ts": "e0814f35bdcc93b017fa45589a6920e46b5480b88fba01ef93e5d2d4e815f0f2",
+    "packages/ai/src/utils/text.ts": "d37c1825855c7fc71669a545b5b266810242c1c7e58d57228c0c143f29c1c544",
+    "packages/ai/src/utils/validation.ts": "460786b57dead200e411b9afec916a5049c96ebcff4da082096456ac06d44fb7"
+  },
+  "cases": [
+    {
+      "name": "empty/content",
+      "input": {
+        "role": "system",
+        "content": "",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "",
+          "system": "first\n\nlast",
+          "update": "Updated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast",
+          "current": "first\n\nlast",
+          "state": "first\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "/edited",
+          "system": "/edited\n\nfirst/edited\n\nlast/edited",
+          "update": "/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast/edited",
+          "current": "/edited\n\nfirst/edited\n\nlast/edited",
+          "state": "/edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "empty/section_name",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "": "last",
+          "�": "replacement"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nlast\n\nreplacement",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"\":\n\nlast\n\nUpdated system prompt section \"�\":\n\nreplacement",
+          "current": "body\n\nfirst\n\nlast\n\nreplacement",
+          "state": "body\n\nfirst\n\nlast\n\nreplacement",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "": "last",
+              "�": "replacement"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"\":\n\nlast/edited\n\nUpdated system prompt section \"�\":\n\nreplacement/edited",
+          "current": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "state": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "": "last/edited",
+              "�": "replacement/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "empty/section_value",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": ""
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n",
+          "current": "body\n\nfirst",
+          "state": "body\n\nfirst",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": ""
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\n/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n/edited",
+          "current": "body/edited\n\nfirst/edited\n\n/edited",
+          "state": "body/edited\n\nfirst/edited\n\n/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "ascii/content",
+      "input": {
+        "role": "system",
+        "content": "hello",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "hello",
+          "system": "hello\n\nfirst\n\nlast",
+          "update": "hello\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast",
+          "current": "hello\n\nfirst\n\nlast",
+          "state": "hello\n\nfirst\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "hello",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "hello/edited",
+          "system": "hello/edited\n\nfirst/edited\n\nlast/edited",
+          "update": "hello/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast/edited",
+          "current": "hello/edited\n\nfirst/edited\n\nlast/edited",
+          "state": "hello/edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "hello/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "ascii/section_name",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "hello": "last",
+          "�": "replacement"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nlast\n\nreplacement",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"hello\":\n\nlast\n\nUpdated system prompt section \"�\":\n\nreplacement",
+          "current": "body\n\nfirst\n\nlast\n\nreplacement",
+          "state": "body\n\nfirst\n\nlast\n\nreplacement",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "hello": "last",
+              "�": "replacement"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"hello\":\n\nlast/edited\n\nUpdated system prompt section \"�\":\n\nreplacement/edited",
+          "current": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "state": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "hello": "last/edited",
+              "�": "replacement/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "ascii/section_value",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "hello"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nhello",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nhello",
+          "current": "body\n\nfirst\n\nhello",
+          "state": "body\n\nfirst\n\nhello",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "hello"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nhello/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nhello/edited",
+          "current": "body/edited\n\nfirst/edited\n\nhello/edited",
+          "state": "body/edited\n\nfirst/edited\n\nhello/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "hello/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "vietnamese/content",
+      "input": {
+        "role": "system",
+        "content": "Tiếng Việt",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "Tiếng Việt",
+          "system": "Tiếng Việt\n\nfirst\n\nlast",
+          "update": "Tiếng Việt\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast",
+          "current": "Tiếng Việt\n\nfirst\n\nlast",
+          "state": "Tiếng Việt\n\nfirst\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "Tiếng Việt",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "Tiếng Việt/edited",
+          "system": "Tiếng Việt/edited\n\nfirst/edited\n\nlast/edited",
+          "update": "Tiếng Việt/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast/edited",
+          "current": "Tiếng Việt/edited\n\nfirst/edited\n\nlast/edited",
+          "state": "Tiếng Việt/edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "Tiếng Việt/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "vietnamese/section_name",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "Tiếng Việt": "last",
+          "�": "replacement"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nlast\n\nreplacement",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"Tiếng Việt\":\n\nlast\n\nUpdated system prompt section \"�\":\n\nreplacement",
+          "current": "body\n\nfirst\n\nlast\n\nreplacement",
+          "state": "body\n\nfirst\n\nlast\n\nreplacement",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "Tiếng Việt": "last",
+              "�": "replacement"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"Tiếng Việt\":\n\nlast/edited\n\nUpdated system prompt section \"�\":\n\nreplacement/edited",
+          "current": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "state": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "Tiếng Việt": "last/edited",
+              "�": "replacement/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "vietnamese/section_value",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "Tiếng Việt"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nTiếng Việt",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nTiếng Việt",
+          "current": "body\n\nfirst\n\nTiếng Việt",
+          "state": "body\n\nfirst\n\nTiếng Việt",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "Tiếng Việt"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nTiếng Việt/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nTiếng Việt/edited",
+          "current": "body/edited\n\nfirst/edited\n\nTiếng Việt/edited",
+          "state": "body/edited\n\nfirst/edited\n\nTiếng Việt/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "Tiếng Việt/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "pair/content",
+      "input": {
+        "role": "system",
+        "content": "🚀",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "🚀",
+          "system": "🚀\n\nfirst\n\nlast",
+          "update": "🚀\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast",
+          "current": "🚀\n\nfirst\n\nlast",
+          "state": "🚀\n\nfirst\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "🚀",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "🚀/edited",
+          "system": "🚀/edited\n\nfirst/edited\n\nlast/edited",
+          "update": "🚀/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast/edited",
+          "current": "🚀/edited\n\nfirst/edited\n\nlast/edited",
+          "state": "🚀/edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "🚀/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "pair/section_name",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "🚀": "last",
+          "�": "replacement"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nlast\n\nreplacement",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"🚀\":\n\nlast\n\nUpdated system prompt section \"�\":\n\nreplacement",
+          "current": "body\n\nfirst\n\nlast\n\nreplacement",
+          "state": "body\n\nfirst\n\nlast\n\nreplacement",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "🚀": "last",
+              "�": "replacement"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"🚀\":\n\nlast/edited\n\nUpdated system prompt section \"�\":\n\nreplacement/edited",
+          "current": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "state": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "🚀": "last/edited",
+              "�": "replacement/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "pair/section_value",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "🚀"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\n🚀",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n🚀",
+          "current": "body\n\nfirst\n\n🚀",
+          "state": "body\n\nfirst\n\n🚀",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "🚀"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\n🚀/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n🚀/edited",
+          "current": "body/edited\n\nfirst/edited\n\n🚀/edited",
+          "state": "body/edited\n\nfirst/edited\n\n🚀/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "🚀/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "high/content",
+      "input": {
+        "role": "system",
+        "content": "\ud800",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "\ud800",
+          "system": "\ud800\n\nfirst\n\nlast",
+          "update": "\ud800\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast",
+          "current": "\ud800\n\nfirst\n\nlast",
+          "state": "\ud800\n\nfirst\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "\ud800",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "\ud800/edited",
+          "system": "\ud800/edited\n\nfirst/edited\n\nlast/edited",
+          "update": "\ud800/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast/edited",
+          "current": "\ud800/edited\n\nfirst/edited\n\nlast/edited",
+          "state": "\ud800/edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "\ud800/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "high/section_name",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "\ud800": "last",
+          "�": "replacement"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nlast\n\nreplacement",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"\ud800\":\n\nlast\n\nUpdated system prompt section \"�\":\n\nreplacement",
+          "current": "body\n\nfirst\n\nlast\n\nreplacement",
+          "state": "body\n\nfirst\n\nlast\n\nreplacement",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "\ud800": "last",
+              "�": "replacement"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"\ud800\":\n\nlast/edited\n\nUpdated system prompt section \"�\":\n\nreplacement/edited",
+          "current": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "state": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "\ud800": "last/edited",
+              "�": "replacement/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "high/section_value",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "\ud800"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\n\ud800",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n\ud800",
+          "current": "body\n\nfirst\n\n\ud800",
+          "state": "body\n\nfirst\n\n\ud800",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "\ud800"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\n\ud800/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n\ud800/edited",
+          "current": "body/edited\n\nfirst/edited\n\n\ud800/edited",
+          "state": "body/edited\n\nfirst/edited\n\n\ud800/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "\ud800/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "low/content",
+      "input": {
+        "role": "system",
+        "content": "\udfff",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "\udfff",
+          "system": "\udfff\n\nfirst\n\nlast",
+          "update": "\udfff\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast",
+          "current": "\udfff\n\nfirst\n\nlast",
+          "state": "\udfff\n\nfirst\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "\udfff",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "\udfff/edited",
+          "system": "\udfff/edited\n\nfirst/edited\n\nlast/edited",
+          "update": "\udfff/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast/edited",
+          "current": "\udfff/edited\n\nfirst/edited\n\nlast/edited",
+          "state": "\udfff/edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "\udfff/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "low/section_name",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "\udfff": "last",
+          "�": "replacement"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nlast\n\nreplacement",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"\udfff\":\n\nlast\n\nUpdated system prompt section \"�\":\n\nreplacement",
+          "current": "body\n\nfirst\n\nlast\n\nreplacement",
+          "state": "body\n\nfirst\n\nlast\n\nreplacement",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "\udfff": "last",
+              "�": "replacement"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"\udfff\":\n\nlast/edited\n\nUpdated system prompt section \"�\":\n\nreplacement/edited",
+          "current": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "state": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "\udfff": "last/edited",
+              "�": "replacement/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "low/section_value",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "\udfff"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\n\udfff",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n\udfff",
+          "current": "body\n\nfirst\n\n\udfff",
+          "state": "body\n\nfirst\n\n\udfff",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "\udfff"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\n\udfff/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n\udfff/edited",
+          "current": "body/edited\n\nfirst/edited\n\n\udfff/edited",
+          "state": "body/edited\n\nfirst/edited\n\n\udfff/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "\udfff/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "two_high/content",
+      "input": {
+        "role": "system",
+        "content": "\ud800\ud801",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "\ud800\ud801",
+          "system": "\ud800\ud801\n\nfirst\n\nlast",
+          "update": "\ud800\ud801\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast",
+          "current": "\ud800\ud801\n\nfirst\n\nlast",
+          "state": "\ud800\ud801\n\nfirst\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "\ud800\ud801",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "\ud800\ud801/edited",
+          "system": "\ud800\ud801/edited\n\nfirst/edited\n\nlast/edited",
+          "update": "\ud800\ud801/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast/edited",
+          "current": "\ud800\ud801/edited\n\nfirst/edited\n\nlast/edited",
+          "state": "\ud800\ud801/edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "\ud800\ud801/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "two_high/section_name",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "\ud800\ud801": "last",
+          "�": "replacement"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nlast\n\nreplacement",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"\ud800\ud801\":\n\nlast\n\nUpdated system prompt section \"�\":\n\nreplacement",
+          "current": "body\n\nfirst\n\nlast\n\nreplacement",
+          "state": "body\n\nfirst\n\nlast\n\nreplacement",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "\ud800\ud801": "last",
+              "�": "replacement"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"\ud800\ud801\":\n\nlast/edited\n\nUpdated system prompt section \"�\":\n\nreplacement/edited",
+          "current": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "state": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "\ud800\ud801": "last/edited",
+              "�": "replacement/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "two_high/section_value",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "\ud800\ud801"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\n\ud800\ud801",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n\ud800\ud801",
+          "current": "body\n\nfirst\n\n\ud800\ud801",
+          "state": "body\n\nfirst\n\n\ud800\ud801",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "\ud800\ud801"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\n\ud800\ud801/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n\ud800\ud801/edited",
+          "current": "body/edited\n\nfirst/edited\n\n\ud800\ud801/edited",
+          "state": "body/edited\n\nfirst/edited\n\n\ud800\ud801/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "\ud800\ud801/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "two_low/content",
+      "input": {
+        "role": "system",
+        "content": "\udc00\udfff",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "\udc00\udfff",
+          "system": "\udc00\udfff\n\nfirst\n\nlast",
+          "update": "\udc00\udfff\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast",
+          "current": "\udc00\udfff\n\nfirst\n\nlast",
+          "state": "\udc00\udfff\n\nfirst\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "\udc00\udfff",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "\udc00\udfff/edited",
+          "system": "\udc00\udfff/edited\n\nfirst/edited\n\nlast/edited",
+          "update": "\udc00\udfff/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast/edited",
+          "current": "\udc00\udfff/edited\n\nfirst/edited\n\nlast/edited",
+          "state": "\udc00\udfff/edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "\udc00\udfff/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "two_low/section_name",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "\udc00\udfff": "last",
+          "�": "replacement"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nlast\n\nreplacement",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"\udc00\udfff\":\n\nlast\n\nUpdated system prompt section \"�\":\n\nreplacement",
+          "current": "body\n\nfirst\n\nlast\n\nreplacement",
+          "state": "body\n\nfirst\n\nlast\n\nreplacement",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "\udc00\udfff": "last",
+              "�": "replacement"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"\udc00\udfff\":\n\nlast/edited\n\nUpdated system prompt section \"�\":\n\nreplacement/edited",
+          "current": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "state": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "\udc00\udfff": "last/edited",
+              "�": "replacement/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "two_low/section_value",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "\udc00\udfff"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\n\udc00\udfff",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n\udc00\udfff",
+          "current": "body\n\nfirst\n\n\udc00\udfff",
+          "state": "body\n\nfirst\n\n\udc00\udfff",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "\udc00\udfff"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\n\udc00\udfff/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n\udc00\udfff/edited",
+          "current": "body/edited\n\nfirst/edited\n\n\udc00\udfff/edited",
+          "state": "body/edited\n\nfirst/edited\n\n\udc00\udfff/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "\udc00\udfff/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "reverse/content",
+      "input": {
+        "role": "system",
+        "content": "\udc00\ud800",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "\udc00\ud800",
+          "system": "\udc00\ud800\n\nfirst\n\nlast",
+          "update": "\udc00\ud800\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast",
+          "current": "\udc00\ud800\n\nfirst\n\nlast",
+          "state": "\udc00\ud800\n\nfirst\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "\udc00\ud800",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "\udc00\ud800/edited",
+          "system": "\udc00\ud800/edited\n\nfirst/edited\n\nlast/edited",
+          "update": "\udc00\ud800/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast/edited",
+          "current": "\udc00\ud800/edited\n\nfirst/edited\n\nlast/edited",
+          "state": "\udc00\ud800/edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "\udc00\ud800/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "reverse/section_name",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "\udc00\ud800": "last",
+          "�": "replacement"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nlast\n\nreplacement",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"\udc00\ud800\":\n\nlast\n\nUpdated system prompt section \"�\":\n\nreplacement",
+          "current": "body\n\nfirst\n\nlast\n\nreplacement",
+          "state": "body\n\nfirst\n\nlast\n\nreplacement",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "\udc00\ud800": "last",
+              "�": "replacement"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"\udc00\ud800\":\n\nlast/edited\n\nUpdated system prompt section \"�\":\n\nreplacement/edited",
+          "current": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "state": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "\udc00\ud800": "last/edited",
+              "�": "replacement/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "reverse/section_value",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "\udc00\ud800"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\n\udc00\ud800",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n\udc00\ud800",
+          "current": "body\n\nfirst\n\n\udc00\ud800",
+          "state": "body\n\nfirst\n\n\udc00\ud800",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "\udc00\ud800"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\n\udc00\ud800/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n\udc00\ud800/edited",
+          "current": "body/edited\n\nfirst/edited\n\n\udc00\ud800/edited",
+          "state": "body/edited\n\nfirst/edited\n\n\udc00\ud800/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "\udc00\ud800/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "embedded/content",
+      "input": {
+        "role": "system",
+        "content": "a\ud800b\udfffz",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "a\ud800b\udfffz",
+          "system": "a\ud800b\udfffz\n\nfirst\n\nlast",
+          "update": "a\ud800b\udfffz\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast",
+          "current": "a\ud800b\udfffz\n\nfirst\n\nlast",
+          "state": "a\ud800b\udfffz\n\nfirst\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "a\ud800b\udfffz",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "a\ud800b\udfffz/edited",
+          "system": "a\ud800b\udfffz/edited\n\nfirst/edited\n\nlast/edited",
+          "update": "a\ud800b\udfffz/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast/edited",
+          "current": "a\ud800b\udfffz/edited\n\nfirst/edited\n\nlast/edited",
+          "state": "a\ud800b\udfffz/edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "a\ud800b\udfffz/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "embedded/section_name",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "a\ud800b\udfffz": "last",
+          "�": "replacement"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nlast\n\nreplacement",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"a\ud800b\udfffz\":\n\nlast\n\nUpdated system prompt section \"�\":\n\nreplacement",
+          "current": "body\n\nfirst\n\nlast\n\nreplacement",
+          "state": "body\n\nfirst\n\nlast\n\nreplacement",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "a\ud800b\udfffz": "last",
+              "�": "replacement"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"a\ud800b\udfffz\":\n\nlast/edited\n\nUpdated system prompt section \"�\":\n\nreplacement/edited",
+          "current": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "state": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "a\ud800b\udfffz": "last/edited",
+              "�": "replacement/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "embedded/section_value",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "a\ud800b\udfffz"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\na\ud800b\udfffz",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\na\ud800b\udfffz",
+          "current": "body\n\nfirst\n\na\ud800b\udfffz",
+          "state": "body\n\nfirst\n\na\ud800b\udfffz",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "a\ud800b\udfffz"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\na\ud800b\udfffz/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\na\ud800b\udfffz/edited",
+          "current": "body/edited\n\nfirst/edited\n\na\ud800b\udfffz/edited",
+          "state": "body/edited\n\nfirst/edited\n\na\ud800b\udfffz/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "a\ud800b\udfffz/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "replacement/content",
+      "input": {
+        "role": "system",
+        "content": "�",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "�",
+          "system": "�\n\nfirst\n\nlast",
+          "update": "�\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast",
+          "current": "�\n\nfirst\n\nlast",
+          "state": "�\n\nfirst\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "�",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "�/edited",
+          "system": "�/edited\n\nfirst/edited\n\nlast/edited",
+          "update": "�/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast/edited",
+          "current": "�/edited\n\nfirst/edited\n\nlast/edited",
+          "state": "�/edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "�/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "replacement/section_name",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "�": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nlast",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"�\":\n\nlast",
+          "current": "body\n\nfirst\n\nlast",
+          "state": "body\n\nfirst\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "�": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nlast/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"�\":\n\nlast/edited",
+          "current": "body/edited\n\nfirst/edited\n\nlast/edited",
+          "state": "body/edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "�": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "replacement/section_value",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "�"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\n�",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n�",
+          "current": "body\n\nfirst\n\n�",
+          "state": "body\n\nfirst\n\n�",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "�"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\n�/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n�/edited",
+          "current": "body/edited\n\nfirst/edited\n\n�/edited",
+          "state": "body/edited\n\nfirst/edited\n\n�/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "�/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "nul/content",
+      "input": {
+        "role": "system",
+        "content": "a\u0000b",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "a\u0000b",
+          "system": "a\u0000b\n\nfirst\n\nlast",
+          "update": "a\u0000b\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast",
+          "current": "a\u0000b\n\nfirst\n\nlast",
+          "state": "a\u0000b\n\nfirst\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "a\u0000b",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "a\u0000b/edited",
+          "system": "a\u0000b/edited\n\nfirst/edited\n\nlast/edited",
+          "update": "a\u0000b/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast/edited",
+          "current": "a\u0000b/edited\n\nfirst/edited\n\nlast/edited",
+          "state": "a\u0000b/edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "a\u0000b/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "nul/section_name",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "a\u0000b": "last",
+          "�": "replacement"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nlast\n\nreplacement",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"a\u0000b\":\n\nlast\n\nUpdated system prompt section \"�\":\n\nreplacement",
+          "current": "body\n\nfirst\n\nlast\n\nreplacement",
+          "state": "body\n\nfirst\n\nlast\n\nreplacement",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "a\u0000b": "last",
+              "�": "replacement"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"a\u0000b\":\n\nlast/edited\n\nUpdated system prompt section \"�\":\n\nreplacement/edited",
+          "current": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "state": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "a\u0000b": "last/edited",
+              "�": "replacement/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "nul/section_value",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "a\u0000b"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\na\u0000b",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\na\u0000b",
+          "current": "body\n\nfirst\n\na\u0000b",
+          "state": "body\n\nfirst\n\na\u0000b",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "a\u0000b"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\na\u0000b/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\na\u0000b/edited",
+          "current": "body/edited\n\nfirst/edited\n\na\u0000b/edited",
+          "state": "body/edited\n\nfirst/edited\n\na\u0000b/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "a\u0000b/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "html/content",
+      "input": {
+        "role": "system",
+        "content": "<x>&",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "<x>&",
+          "system": "<x>&\n\nfirst\n\nlast",
+          "update": "<x>&\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast",
+          "current": "<x>&\n\nfirst\n\nlast",
+          "state": "<x>&\n\nfirst\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "<x>&",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "<x>&/edited",
+          "system": "<x>&/edited\n\nfirst/edited\n\nlast/edited",
+          "update": "<x>&/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast/edited",
+          "current": "<x>&/edited\n\nfirst/edited\n\nlast/edited",
+          "state": "<x>&/edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "<x>&/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "html/section_name",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "<x>&": "last",
+          "�": "replacement"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nlast\n\nreplacement",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"<x>&\":\n\nlast\n\nUpdated system prompt section \"�\":\n\nreplacement",
+          "current": "body\n\nfirst\n\nlast\n\nreplacement",
+          "state": "body\n\nfirst\n\nlast\n\nreplacement",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "<x>&": "last",
+              "�": "replacement"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"<x>&\":\n\nlast/edited\n\nUpdated system prompt section \"�\":\n\nreplacement/edited",
+          "current": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "state": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "<x>&": "last/edited",
+              "�": "replacement/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "html/section_value",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "<x>&"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\n<x>&",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n<x>&",
+          "current": "body\n\nfirst\n\n<x>&",
+          "state": "body\n\nfirst\n\n<x>&",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "<x>&"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\n<x>&/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n<x>&/edited",
+          "current": "body/edited\n\nfirst/edited\n\n<x>&/edited",
+          "state": "body/edited\n\nfirst/edited\n\n<x>&/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "<x>&/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "line_separators/content",
+      "input": {
+        "role": "system",
+        "content": "  ",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "  ",
+          "system": "  \n\nfirst\n\nlast",
+          "update": "  \n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast",
+          "current": "  \n\nfirst\n\nlast",
+          "state": "  \n\nfirst\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "  ",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "  /edited",
+          "system": "  /edited\n\nfirst/edited\n\nlast/edited",
+          "update": "  /edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast/edited",
+          "current": "  /edited\n\nfirst/edited\n\nlast/edited",
+          "state": "  /edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "  /edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "line_separators/section_name",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "  ": "last",
+          "�": "replacement"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nlast\n\nreplacement",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"  \":\n\nlast\n\nUpdated system prompt section \"�\":\n\nreplacement",
+          "current": "body\n\nfirst\n\nlast\n\nreplacement",
+          "state": "body\n\nfirst\n\nlast\n\nreplacement",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "  ": "last",
+              "�": "replacement"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"  \":\n\nlast/edited\n\nUpdated system prompt section \"�\":\n\nreplacement/edited",
+          "current": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "state": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "  ": "last/edited",
+              "�": "replacement/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "line_separators/section_value",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "  "
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\n  ",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n  ",
+          "current": "body\n\nfirst\n\n  ",
+          "state": "body\n\nfirst\n\n  ",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "  "
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\n  /edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n  /edited",
+          "current": "body/edited\n\nfirst/edited\n\n  /edited",
+          "state": "body/edited\n\nfirst/edited\n\n  /edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "  /edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "escapes/content",
+      "input": {
+        "role": "system",
+        "content": "\"\\\n\t",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "last"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "\"\\\n\t",
+          "system": "\"\\\n\t\n\nfirst\n\nlast",
+          "update": "\"\\\n\t\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast",
+          "current": "\"\\\n\t\n\nfirst\n\nlast",
+          "state": "\"\\\n\t\n\nfirst\n\nlast",
+          "wire": {
+            "role": "system",
+            "content": "\"\\\n\t",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "last"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "\"\\\n\t/edited",
+          "system": "\"\\\n\t/edited\n\nfirst/edited\n\nlast/edited",
+          "update": "\"\\\n\t/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\nlast/edited",
+          "current": "\"\\\n\t/edited\n\nfirst/edited\n\nlast/edited",
+          "state": "\"\\\n\t/edited\n\nfirst/edited\n\nlast/edited",
+          "wire": {
+            "role": "system",
+            "content": "\"\\\n\t/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "last/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "escapes/section_name",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "\"\\\n\t": "last",
+          "�": "replacement"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\nlast\n\nreplacement",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"\"\\\n\t\":\n\nlast\n\nUpdated system prompt section \"�\":\n\nreplacement",
+          "current": "body\n\nfirst\n\nlast\n\nreplacement",
+          "state": "body\n\nfirst\n\nlast\n\nreplacement",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "\"\\\n\t": "last",
+              "�": "replacement"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"\"\\\n\t\":\n\nlast/edited\n\nUpdated system prompt section \"�\":\n\nreplacement/edited",
+          "current": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "state": "body/edited\n\nfirst/edited\n\nlast/edited\n\nreplacement/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "\"\\\n\t": "last/edited",
+              "�": "replacement/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "escapes/section_value",
+      "input": {
+        "role": "system",
+        "content": "body",
+        "sections": {
+          "first": "first",
+          "removed": null,
+          "last": "\"\\\n\t"
+        },
+        "timestamp": 1
+      },
+      "expected": {
+        "before": {
+          "content": "body",
+          "system": "body\n\nfirst\n\n\"\\\n\t",
+          "update": "body\n\nUpdated system prompt section \"first\":\n\nfirst\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n\"\\\n\t",
+          "current": "body\n\nfirst\n\n\"\\\n\t",
+          "state": "body\n\nfirst\n\n\"\\\n\t",
+          "wire": {
+            "role": "system",
+            "content": "body",
+            "sections": {
+              "first": "first",
+              "removed": null,
+              "last": "\"\\\n\t"
+            },
+            "timestamp": 1
+          }
+        },
+        "after": {
+          "content": "body/edited",
+          "system": "body/edited\n\nfirst/edited\n\n\"\\\n\t/edited",
+          "update": "body/edited\n\nUpdated system prompt section \"first\":\n\nfirst/edited\n\nRemoved system prompt section \"removed\".\n\nUpdated system prompt section \"last\":\n\n\"\\\n\t/edited",
+          "current": "body/edited\n\nfirst/edited\n\n\"\\\n\t/edited",
+          "state": "body/edited\n\nfirst/edited\n\n\"\\\n\t/edited",
+          "wire": {
+            "role": "system",
+            "content": "body/edited",
+            "sections": {
+              "first": "first/edited",
+              "removed": null,
+              "last": "\"\\\n\t/edited"
+            },
+            "timestamp": 1
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,601 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "name": "response.completed",
+        "steps": [
+          {
+            "kind": "message",
+            "data": "{\"type\":\"response.created\"}",
+            "binary": false
+          },
+          {
+            "kind": "message",
+            "data": "{\"type\":\"response.completed\"}",
+            "binary": false
+          },
+          {
+            "kind": "close",
+            "data": {
+              "code": 1006
+            }
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "response.created"
+          },
+          {
+            "type": "response.completed"
+          }
+        ],
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "response.done",
+        "steps": [
+          {
+            "kind": "message",
+            "data": "{\"type\":\"response.created\"}",
+            "binary": false
+          },
+          {
+            "kind": "message",
+            "data": "{\"type\":\"response.done\"}",
+            "binary": false
+          },
+          {
+            "kind": "close",
+            "data": {
+              "code": 1006
+            }
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "response.created"
+          },
+          {
+            "type": "response.done"
+          }
+        ],
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "response.incomplete",
+        "steps": [
+          {
+            "kind": "message",
+            "data": "{\"type\":\"response.created\"}",
+            "binary": false
+          },
+          {
+            "kind": "message",
+            "data": "{\"type\":\"response.incomplete\"}",
+            "binary": false
+          },
+          {
+            "kind": "close",
+            "data": {
+              "code": 1006
+            }
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "response.created"
+          },
+          {
+            "type": "response.incomplete"
+          }
+        ],
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "early close",
+        "steps": [
+          {
+            "kind": "message",
+            "data": "{\"type\":\"response.created\"}",
+            "binary": false
+          },
+          {
+            "kind": "close",
+            "data": {
+              "code": 1006,
+              "reason": "lost",
+              "wasClean": false
+            }
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "response.created"
+          }
+        ],
+        "error": {
+          "message": "WebSocket closed 1006 lost",
+          "code": 1006,
+          "reason": "lost",
+          "wasClean": false
+        },
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "close metadata 0",
+        "steps": [
+          {
+            "kind": "close",
+            "data": {}
+          }
+        ]
+      },
+      "expected": {
+        "events": [],
+        "error": {
+          "message": "WebSocket closed"
+        },
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "close metadata 1",
+        "steps": [
+          {
+            "kind": "close",
+            "data": null
+          }
+        ]
+      },
+      "expected": {
+        "events": [],
+        "error": {
+          "message": "WebSocket closed"
+        },
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "close metadata 2",
+        "steps": [
+          {
+            "kind": "close",
+            "data": {
+              "code": 1009
+            }
+          }
+        ]
+      },
+      "expected": {
+        "events": [],
+        "error": {
+          "message": "WebSocket closed 1009 message too big",
+          "code": 1009
+        },
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "close metadata 3",
+        "steps": [
+          {
+            "kind": "close",
+            "data": {
+              "code": 1009,
+              "reason": "large",
+              "wasClean": true
+            }
+          }
+        ]
+      },
+      "expected": {
+        "events": [],
+        "error": {
+          "message": "WebSocket closed 1009 large",
+          "code": 1009,
+          "reason": "large",
+          "wasClean": true
+        },
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "close metadata 4",
+        "steps": [
+          {
+            "kind": "close",
+            "data": {
+              "code": "bad",
+              "reason": 4,
+              "wasClean": "yes"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "events": [],
+        "error": {
+          "message": "WebSocket closed"
+        },
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "close metadata 5",
+        "steps": [
+          {
+            "kind": "close",
+            "data": {
+              "code": 1000,
+              "reason": "  "
+            }
+          }
+        ]
+      },
+      "expected": {
+        "events": [],
+        "error": {
+          "message": "WebSocket closed 1000",
+          "code": 1000,
+          "reason": "  "
+        },
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "error 0",
+        "steps": [
+          {
+            "kind": "error",
+            "data": {}
+          },
+          {
+            "kind": "close",
+            "data": {
+              "code": 1006
+            }
+          }
+        ]
+      },
+      "expected": {
+        "events": [],
+        "error": {
+          "message": "WebSocket error"
+        },
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "error 1",
+        "steps": [
+          {
+            "kind": "error",
+            "data": null
+          },
+          {
+            "kind": "close",
+            "data": {
+              "code": 1006
+            }
+          }
+        ]
+      },
+      "expected": {
+        "events": [],
+        "error": {
+          "message": "WebSocket error"
+        },
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "error 2",
+        "steps": [
+          {
+            "kind": "error",
+            "data": {
+              "message": "outer",
+              "error": {
+                "message": "inner"
+              }
+            }
+          },
+          {
+            "kind": "close",
+            "data": {
+              "code": 1006
+            }
+          }
+        ]
+      },
+      "expected": {
+        "events": [],
+        "error": {
+          "message": "outer"
+        },
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "error 3",
+        "steps": [
+          {
+            "kind": "error",
+            "data": {
+              "message": "",
+              "error": {
+                "message": "inner"
+              }
+            }
+          },
+          {
+            "kind": "close",
+            "data": {
+              "code": 1006
+            }
+          }
+        ]
+      },
+      "expected": {
+        "events": [],
+        "error": {
+          "message": "inner"
+        },
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "error 4",
+        "steps": [
+          {
+            "kind": "error",
+            "data": {
+              "error": {
+                "message": 4
+              }
+            }
+          },
+          {
+            "kind": "close",
+            "data": {
+              "code": 1006
+            }
+          }
+        ]
+      },
+      "expected": {
+        "events": [],
+        "error": {
+          "message": "WebSocket error"
+        },
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "binary unicode",
+        "steps": [
+          {
+            "kind": "message",
+            "data": "{\"type\":\"delta\",\"text\":\"Chào 🌱\"}",
+            "binary": true
+          },
+          {
+            "kind": "message",
+            "data": "{\"type\":\"response.done\"}",
+            "binary": true
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "delta",
+            "text": "Chào 🌱"
+          },
+          {
+            "type": "response.done"
+          }
+        ],
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "binary BOM",
+        "steps": [
+          {
+            "kind": "message",
+            "data": "﻿{\"type\":\"response.done\"}",
+            "binary": true
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "response.done"
+          }
+        ],
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "empty ignored",
+        "steps": [
+          {
+            "kind": "message",
+            "data": ""
+          },
+          {
+            "kind": "message",
+            "data": "{\"type\":\"response.done\"}",
+            "binary": false
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "response.done"
+          }
+        ],
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "primitive permitted",
+        "steps": [
+          {
+            "kind": "message",
+            "data": "1",
+            "binary": false
+          },
+          {
+            "kind": "message",
+            "data": "\"x\"",
+            "binary": false
+          },
+          {
+            "kind": "message",
+            "data": "[]",
+            "binary": false
+          },
+          {
+            "kind": "message",
+            "data": "{\"type\":\"response.done\"}",
+            "binary": false
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          1,
+          "x",
+          [],
+          {
+            "type": "response.done"
+          }
+        ],
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "failed event is not terminal",
+        "steps": [
+          {
+            "kind": "message",
+            "data": "{\"type\":\"response.failed\"}",
+            "binary": false
+          },
+          {
+            "kind": "close",
+            "data": {
+              "code": 1000
+            }
+          }
+        ]
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "response.failed"
+          }
+        ],
+        "error": {
+          "message": "WebSocket closed 1000",
+          "code": 1000
+        },
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "aborted",
+        "steps": [
+          {
+            "kind": "abort"
+          }
+        ]
+      },
+      "expected": {
+        "events": [],
+        "error": {
+          "message": "Request was aborted"
+        },
+        "closes": [],
+        "listeners": 0
+      }
+    },
+    {
+      "input": {
+        "name": "idle timeout",
+        "steps": [],
+        "idle": 1
+      },
+      "expected": {
+        "events": [],
+        "error": {
+          "message": "WebSocket idle timeout after 1ms"
+        },
+        "closes": [
+          {
+            "code": 1000,
+            "reason": "idle_timeout"
+          }
+        ],
+        "listeners": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,679 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "now": 1700000000000,
+  "retry": [
+    {
+      "status": 400,
+      "text": "ordinary error",
+      "expected": false
+    },
+    {
+      "status": 400,
+      "text": "overloaded",
+      "expected": true
+    },
+    {
+      "status": 400,
+      "text": "billing",
+      "expected": false
+    },
+    {
+      "status": 400,
+      "text": "rate limit",
+      "expected": true
+    },
+    {
+      "status": 400,
+      "text": "connection refused",
+      "expected": true
+    },
+    {
+      "status": 401,
+      "text": "ordinary error",
+      "expected": false
+    },
+    {
+      "status": 401,
+      "text": "overloaded",
+      "expected": true
+    },
+    {
+      "status": 401,
+      "text": "billing",
+      "expected": false
+    },
+    {
+      "status": 401,
+      "text": "rate limit",
+      "expected": true
+    },
+    {
+      "status": 401,
+      "text": "connection refused",
+      "expected": true
+    },
+    {
+      "status": 403,
+      "text": "ordinary error",
+      "expected": false
+    },
+    {
+      "status": 403,
+      "text": "overloaded",
+      "expected": true
+    },
+    {
+      "status": 403,
+      "text": "billing",
+      "expected": false
+    },
+    {
+      "status": 403,
+      "text": "rate limit",
+      "expected": true
+    },
+    {
+      "status": 403,
+      "text": "connection refused",
+      "expected": true
+    },
+    {
+      "status": 429,
+      "text": "ordinary error",
+      "expected": true
+    },
+    {
+      "status": 429,
+      "text": "overloaded",
+      "expected": true
+    },
+    {
+      "status": 429,
+      "text": "billing",
+      "expected": false
+    },
+    {
+      "status": 429,
+      "text": "rate limit",
+      "expected": true
+    },
+    {
+      "status": 429,
+      "text": "connection refused",
+      "expected": true
+    },
+    {
+      "status": 500,
+      "text": "ordinary error",
+      "expected": true
+    },
+    {
+      "status": 500,
+      "text": "overloaded",
+      "expected": true
+    },
+    {
+      "status": 500,
+      "text": "billing",
+      "expected": true
+    },
+    {
+      "status": 500,
+      "text": "rate limit",
+      "expected": true
+    },
+    {
+      "status": 500,
+      "text": "connection refused",
+      "expected": true
+    },
+    {
+      "status": 501,
+      "text": "ordinary error",
+      "expected": false
+    },
+    {
+      "status": 501,
+      "text": "overloaded",
+      "expected": true
+    },
+    {
+      "status": 501,
+      "text": "billing",
+      "expected": false
+    },
+    {
+      "status": 501,
+      "text": "rate limit",
+      "expected": true
+    },
+    {
+      "status": 501,
+      "text": "connection refused",
+      "expected": true
+    },
+    {
+      "status": 502,
+      "text": "ordinary error",
+      "expected": true
+    },
+    {
+      "status": 502,
+      "text": "overloaded",
+      "expected": true
+    },
+    {
+      "status": 502,
+      "text": "billing",
+      "expected": true
+    },
+    {
+      "status": 502,
+      "text": "rate limit",
+      "expected": true
+    },
+    {
+      "status": 502,
+      "text": "connection refused",
+      "expected": true
+    },
+    {
+      "status": 503,
+      "text": "ordinary error",
+      "expected": true
+    },
+    {
+      "status": 503,
+      "text": "overloaded",
+      "expected": true
+    },
+    {
+      "status": 503,
+      "text": "billing",
+      "expected": true
+    },
+    {
+      "status": 503,
+      "text": "rate limit",
+      "expected": true
+    },
+    {
+      "status": 503,
+      "text": "connection refused",
+      "expected": true
+    },
+    {
+      "status": 504,
+      "text": "ordinary error",
+      "expected": true
+    },
+    {
+      "status": 504,
+      "text": "overloaded",
+      "expected": true
+    },
+    {
+      "status": 504,
+      "text": "billing",
+      "expected": true
+    },
+    {
+      "status": 504,
+      "text": "rate limit",
+      "expected": true
+    },
+    {
+      "status": 504,
+      "text": "connection refused",
+      "expected": true
+    },
+    {
+      "status": 429,
+      "text": "GoUsageLimitError",
+      "expected": false
+    },
+    {
+      "status": 429,
+      "text": "FreeUsageLimitError",
+      "expected": false
+    },
+    {
+      "status": 429,
+      "text": "Monthly usage limit reached",
+      "expected": false
+    },
+    {
+      "status": 429,
+      "text": "available balance",
+      "expected": false
+    },
+    {
+      "status": 429,
+      "text": "insufficient_quota",
+      "expected": false
+    },
+    {
+      "status": 429,
+      "text": "out of budget",
+      "expected": false
+    },
+    {
+      "status": 429,
+      "text": "quota exceeded",
+      "expected": false
+    },
+    {
+      "status": 429,
+      "text": "BILLING",
+      "expected": false
+    },
+    {
+      "status": 429,
+      "text": "service-unavailable",
+      "expected": true
+    },
+    {
+      "status": 429,
+      "text": "upstream_connect",
+      "expected": true
+    },
+    {
+      "status": 429,
+      "text": "rate\nlimit",
+      "expected": true
+    }
+  ],
+  "delays": [
+    {
+      "headers": {},
+      "expected": null
+    },
+    {
+      "headers": {
+        "retry-after-ms": "",
+        "retry-after": "2"
+      },
+      "expected": 0
+    },
+    {
+      "headers": {
+        "retry-after-ms": "0",
+        "retry-after": "2"
+      },
+      "expected": 0
+    },
+    {
+      "headers": {
+        "retry-after-ms": "-1",
+        "retry-after": "2"
+      },
+      "expected": 0
+    },
+    {
+      "headers": {
+        "retry-after-ms": "0.25",
+        "retry-after": "2"
+      },
+      "expected": 0.25
+    },
+    {
+      "headers": {
+        "retry-after-ms": "0x10",
+        "retry-after": "2"
+      },
+      "expected": 16
+    },
+    {
+      "headers": {
+        "retry-after-ms": "Infinity",
+        "retry-after": "2"
+      },
+      "expected": 2000
+    },
+    {
+      "headers": {
+        "retry-after-ms": "invalid",
+        "retry-after": "2"
+      },
+      "expected": 2000
+    },
+    {
+      "headers": {
+        "retry-after": ""
+      },
+      "expected": null
+    },
+    {
+      "headers": {
+        "retry-after": "0"
+      },
+      "expected": 0
+    },
+    {
+      "headers": {
+        "retry-after": "-1"
+      },
+      "expected": 0
+    },
+    {
+      "headers": {
+        "retry-after": "1.5"
+      },
+      "expected": 1500
+    },
+    {
+      "headers": {
+        "retry-after": "0x10"
+      },
+      "expected": 16000
+    },
+    {
+      "headers": {
+        "retry-after": "Wed, 15 Nov 2023 00:13:20 GMT"
+      },
+      "expected": 7200000
+    },
+    {
+      "headers": {
+        "retry-after": "Tue, 14 Nov 2023 20:13:20 GMT"
+      },
+      "expected": 0
+    },
+    {
+      "headers": {
+        "retry-after": "invalid"
+      },
+      "expected": null
+    }
+  ],
+  "limits": [
+    {
+      "delay": 1000,
+      "error": null
+    },
+    {
+      "delay": 1001,
+      "error": null
+    },
+    {
+      "delay": 61001,
+      "error": "Server requested 62s retry delay (max: 60s)"
+    },
+    {
+      "delay": 1000,
+      "limit": null,
+      "error": null
+    },
+    {
+      "delay": 1001,
+      "limit": null,
+      "error": null
+    },
+    {
+      "delay": 61001,
+      "limit": null,
+      "error": "Server requested 62s retry delay (max: 60s)"
+    },
+    {
+      "delay": 1000,
+      "limit": 0,
+      "error": null
+    },
+    {
+      "delay": 1001,
+      "limit": 0,
+      "error": null
+    },
+    {
+      "delay": 61001,
+      "limit": 0,
+      "error": null
+    },
+    {
+      "delay": 1000,
+      "limit": -1,
+      "error": null
+    },
+    {
+      "delay": 1001,
+      "limit": -1,
+      "error": null
+    },
+    {
+      "delay": 61001,
+      "limit": -1,
+      "error": null
+    },
+    {
+      "delay": 1000,
+      "limit": 1000,
+      "error": null
+    },
+    {
+      "delay": 1001,
+      "limit": 1000,
+      "error": "Server requested 2s retry delay (max: 1s)"
+    },
+    {
+      "delay": 61001,
+      "limit": 1000,
+      "error": "Server requested 62s retry delay (max: 1s)"
+    },
+    {
+      "delay": 1000,
+      "limit": 1001,
+      "error": null
+    },
+    {
+      "delay": 1001,
+      "limit": 1001,
+      "error": null
+    },
+    {
+      "delay": 61001,
+      "limit": 1001,
+      "error": "Server requested 62s retry delay (max: 2s)"
+    },
+    {
+      "delay": 1000,
+      "limit": 60000,
+      "error": null
+    },
+    {
+      "delay": 1001,
+      "limit": 60000,
+      "error": null
+    },
+    {
+      "delay": 61001,
+      "limit": 60000,
+      "error": "Server requested 62s retry delay (max: 60s)"
+    }
+  ],
+  "errors": [
+    {
+      "input": {
+        "raw": "",
+        "status": 500,
+        "statusText": ""
+      },
+      "expected": {
+        "message": "Request failed"
+      }
+    },
+    {
+      "input": {
+        "raw": "",
+        "status": 500,
+        "statusText": "Server Error"
+      },
+      "expected": {
+        "message": "Server Error"
+      }
+    },
+    {
+      "input": {
+        "raw": "unparsed",
+        "status": 502
+      },
+      "expected": {
+        "message": "unparsed"
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{}}",
+        "status": 400
+      },
+      "expected": {
+        "message": "{\"error\":{}}"
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{}}",
+        "status": 429
+      },
+      "expected": {
+        "message": "You have hit your ChatGPT usage limit.",
+        "friendlyMessage": "You have hit your ChatGPT usage limit."
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{\"message\":\"raw error\"}}",
+        "status": 400
+      },
+      "expected": {
+        "message": "raw error"
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{\"message\":\"raw error\"}}",
+        "status": 429
+      },
+      "expected": {
+        "message": "raw error",
+        "friendlyMessage": "You have hit your ChatGPT usage limit."
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{\"code\":\"usage_limit_reached\",\"message\":\"raw quota\",\"plan_type\":\"PLUS\",\"resets_at\":1700000090}}",
+        "status": 400
+      },
+      "expected": {
+        "message": "raw quota",
+        "friendlyMessage": "You have hit your ChatGPT usage limit (plus plan). Try again in ~2 min."
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{\"code\":\"usage_limit_reached\",\"message\":\"raw quota\",\"plan_type\":\"PLUS\",\"resets_at\":1700000090}}",
+        "status": 429
+      },
+      "expected": {
+        "message": "raw quota",
+        "friendlyMessage": "You have hit your ChatGPT usage limit (plus plan). Try again in ~2 min."
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{\"type\":\"usage_not_included\",\"plan_type\":\"PRO\",\"resets_at\":1700000029}}",
+        "status": 400
+      },
+      "expected": {
+        "message": "You have hit your ChatGPT usage limit (pro plan). Try again in ~0 min.",
+        "friendlyMessage": "You have hit your ChatGPT usage limit (pro plan). Try again in ~0 min."
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{\"type\":\"usage_not_included\",\"plan_type\":\"PRO\",\"resets_at\":1700000029}}",
+        "status": 429
+      },
+      "expected": {
+        "message": "You have hit your ChatGPT usage limit (pro plan). Try again in ~0 min.",
+        "friendlyMessage": "You have hit your ChatGPT usage limit (pro plan). Try again in ~0 min."
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{\"code\":\"rate_limit_exceeded\",\"resets_at\":1699999970}}",
+        "status": 400
+      },
+      "expected": {
+        "message": "You have hit your ChatGPT usage limit. Try again in ~0 min.",
+        "friendlyMessage": "You have hit your ChatGPT usage limit. Try again in ~0 min."
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{\"code\":\"rate_limit_exceeded\",\"resets_at\":1699999970}}",
+        "status": 429
+      },
+      "expected": {
+        "message": "You have hit your ChatGPT usage limit. Try again in ~0 min.",
+        "friendlyMessage": "You have hit your ChatGPT usage limit. Try again in ~0 min."
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{\"code\":\"other\",\"plan_type\":\"TEAM\"}}",
+        "status": 400
+      },
+      "expected": {
+        "message": "{\"error\":{\"code\":\"other\",\"plan_type\":\"TEAM\"}}"
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{\"code\":\"other\",\"plan_type\":\"TEAM\"}}",
+        "status": 429
+      },
+      "expected": {
+        "message": "You have hit your ChatGPT usage limit (team plan).",
+        "friendlyMessage": "You have hit your ChatGPT usage limit (team plan)."
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{\"code\":\"usage_limit_reached\",\"plan_type\":42}}",
+        "status": 400
+      },
+      "expected": {
+        "message": "{\"error\":{\"code\":\"usage_limit_reached\",\"plan_type\":42}}"
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{\"code\":\"usage_limit_reached\",\"plan_type\":42}}",
+        "status": 429
+      },
+      "expected": {
+        "message": "{\"error\":{\"code\":\"usage_limit_reached\",\"plan_type\":42}}"
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{\"code\":\"usage_limit_reached\",\"resets_at\":\"invalid\"}}",
+        "status": 400
+      },
+      "expected": {
+        "message": "You have hit your ChatGPT usage limit. Try again in ~NaN min.",
+        "friendlyMessage": "You have hit your ChatGPT usage limit. Try again in ~NaN min."
+      }
+    },
+    {
+      "input": {
+        "raw": "{\"error\":{\"code\":\"usage_limit_reached\",\"resets_at\":\"invalid\"}}",
+        "status": 429
+      },
+      "expected": {
+        "message": "You have hit your ChatGPT usage limit. Try again in ~NaN min.",
+        "friendlyMessage": "You have hit your ChatGPT usage limit. Try again in ~NaN min."
+      }
+    }
+  ]
+}

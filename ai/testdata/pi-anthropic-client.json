@@ -1,0 +1,1210 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "model": {
+    "id": "test",
+    "api": "anthropic-messages",
+    "provider": "anthropic",
+    "baseUrl": "https://unused.test",
+    "reasoning": true,
+    "input": [
+      "text"
+    ],
+    "maxTokens": 8192,
+    "cost": {
+      "input": 0,
+      "output": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    }
+  },
+  "success": "event: message_delta\ndata: {\"type\":\"message_delta\",\"delta\":{\"stop_reason\":\"end_turn\"}}\n\n",
+  "cases": [
+    {
+      "input": {
+        "name": "custom client without credentials"
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request",
+          "response",
+          "event"
+        ],
+        "events": [
+          "start",
+          "done"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "OAuth key does not change identity",
+        "options": {
+          "apiKey": "sk-ant-oat-fixture"
+        },
+        "context": {
+          "messages": [],
+          "tools": [
+            {
+              "name": "read",
+              "description": "read",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true,
+              "tools": [
+                {
+                  "name": "read",
+                  "description": "read",
+                  "eager_input_streaming": true,
+                  "input_schema": {
+                    "type": "object",
+                    "properties": {},
+                    "required": []
+                  },
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request",
+          "response",
+          "event"
+        ],
+        "events": [
+          "start",
+          "done"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "invalid builtin headers ignored",
+        "model": {
+          "headers": {
+            "bad header": "value"
+          }
+        }
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request",
+          "response",
+          "event"
+        ],
+        "events": [
+          "start",
+          "done"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "fractional timeout forwarded",
+        "options": {
+          "timeoutMs": 1.5
+        }
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "timeout": 1.5,
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request",
+          "response",
+          "event"
+        ],
+        "events": [
+          "start",
+          "done"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "negative timeout forwarded",
+        "options": {
+          "timeoutMs": -1
+        }
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "timeout": -1,
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request",
+          "response",
+          "event"
+        ],
+        "events": [
+          "start",
+          "done"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "null timeout forwarded",
+        "options": {
+          "timeoutMs": null
+        }
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "timeout": null,
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request",
+          "response",
+          "event"
+        ],
+        "events": [
+          "start",
+          "done"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "payload replacement stream forced",
+        "replacement": {
+          "model": "other",
+          "stream": false,
+          "betas": [
+            "custom"
+          ],
+          "user_profile_id": "profile"
+        }
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "other",
+              "stream": true,
+              "betas": [
+                "custom"
+              ],
+              "user_profile_id": "profile"
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request",
+          "response",
+          "event"
+        ],
+        "events": [
+          "start",
+          "done"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "payload null replacement",
+        "replacement": null
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "stream": true
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request",
+          "response",
+          "event"
+        ],
+        "events": [
+          "start",
+          "done"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "SDK output format transform owned by client",
+        "replacement": {
+          "output_format": {
+            "type": "json_schema"
+          },
+          "output_config": {
+            "format": {
+              "type": "json_schema"
+            }
+          }
+        }
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "output_format": {
+                "type": "json_schema"
+              },
+              "output_config": {
+                "format": {
+                  "type": "json_schema"
+                }
+              },
+              "stream": true
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request",
+          "response",
+          "event"
+        ],
+        "events": [
+          "start",
+          "done"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "payload callback fails",
+        "fail": "payload"
+      },
+      "expected": {
+        "calls": [],
+        "phases": [
+          "payload"
+        ],
+        "events": [
+          "error"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "payload failed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "response callback fails",
+        "fail": "response"
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request",
+          "response"
+        ],
+        "events": [
+          "error"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "response failed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "event callback fails",
+        "fail": "event"
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request",
+          "response",
+          "event"
+        ],
+        "events": [
+          "start",
+          "error"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "event failed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "client ordinary error",
+        "failures": [
+          {
+            "message": "client failed"
+          }
+        ]
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request"
+        ],
+        "events": [
+          "error"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "client failed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "ordinary error not retried",
+        "options": {
+          "maxRetries": 2
+        },
+        "failures": [
+          {
+            "message": "ordinary failed"
+          }
+        ]
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request"
+        ],
+        "events": [
+          "error"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "ordinary failed"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "provider error retried",
+        "options": {
+          "maxRetries": 2
+        },
+        "failures": [
+          {
+            "message": "429 wait",
+            "status": 429,
+            "headers": {
+              "retry-after-ms": "0"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          },
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request",
+          "request",
+          "response",
+          "event"
+        ],
+        "events": [
+          "start",
+          "done"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "provider retry directive denied",
+        "options": {
+          "maxRetries": 2
+        },
+        "failures": [
+          {
+            "message": "500 refused",
+            "status": 500,
+            "headers": {
+              "x-should-retry": "false"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request"
+        ],
+        "events": [
+          "error"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "500 refused"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "provider retry delay capped",
+        "options": {
+          "maxRetries": 2,
+          "maxRetryDelayMs": 50
+        },
+        "failures": [
+          {
+            "message": "429 wait",
+            "status": 429,
+            "headers": {
+              "retry-after-ms": "100"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request"
+        ],
+        "events": [
+          "error"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "Server requested 1s retry delay (max: 1s). 429 wait"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "returned status is owned by client",
+        "status": 400
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request",
+          "response",
+          "event"
+        ],
+        "events": [
+          "start",
+          "done"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 100,
+          "rawStopReason": "end_turn"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "no body",
+        "status": 204
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request",
+          "response"
+        ],
+        "events": [
+          "start",
+          "error"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "Attempted to iterate over an Anthropic response with no body"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "empty body missing stop",
+        "body": ""
+      },
+      "expected": {
+        "calls": [
+          {
+            "params": {
+              "model": "test",
+              "messages": [],
+              "max_tokens": 8192,
+              "stream": true
+            },
+            "options": {
+              "maxRetries": 0
+            }
+          }
+        ],
+        "phases": [
+          "payload",
+          "request",
+          "response"
+        ],
+        "events": [
+          "start",
+          "error"
+        ],
+        "result": {
+          "role": "assistant",
+          "content": [],
+          "api": "anthropic-messages",
+          "provider": "anthropic",
+          "model": "test",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "error",
+          "timestamp": 100,
+          "errorMessage": "Anthropic stream ended without a stop reason"
+        }
+      }
+    }
+  ]
+}

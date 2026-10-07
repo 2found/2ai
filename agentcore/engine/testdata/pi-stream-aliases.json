@@ -1,0 +1,2721 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "mode": "loop",
+        "shape": "single"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "assistantMessageEvent": {
+              "type": "toolcall_end",
+              "contentIndex": 0,
+              "toolCall": {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              },
+              "partial": {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                }
+              }
+            },
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            },
+            "toolResults": []
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "user",
+                "content": "go",
+                "timestamp": 0
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "thinkingLevel": "off"
+              }
+            ]
+          }
+        ],
+        "aliases": [
+          {
+            "type": "message_start",
+            "blocks": [
+              0
+            ]
+          },
+          {
+            "type": "message_update",
+            "blocks": [
+              0
+            ],
+            "samePartial": false,
+            "toolCallMatches": [
+              true
+            ]
+          },
+          {
+            "type": "message_end",
+            "blocks": [
+              0
+            ]
+          },
+          {
+            "type": "turn_end",
+            "blocks": [
+              0
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "go",
+            "timestamp": 0
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "error",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "thinkingLevel": "off"
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "loop",
+        "shape": "repeated"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "assistantMessageEvent": {
+              "type": "toolcall_end",
+              "contentIndex": 0,
+              "toolCall": {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              },
+              "partial": {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  },
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                }
+              }
+            },
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            },
+            "toolResults": []
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "user",
+                "content": "go",
+                "timestamp": 0
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  },
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "thinkingLevel": "off"
+              }
+            ]
+          }
+        ],
+        "aliases": [
+          {
+            "type": "message_start",
+            "blocks": [
+              0,
+              0
+            ]
+          },
+          {
+            "type": "message_update",
+            "blocks": [
+              0,
+              0
+            ],
+            "samePartial": false,
+            "toolCallMatches": [
+              true,
+              true
+            ]
+          },
+          {
+            "type": "message_end",
+            "blocks": [
+              0,
+              0
+            ]
+          },
+          {
+            "type": "turn_end",
+            "blocks": [
+              0,
+              0
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "go",
+            "timestamp": 0
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "error",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "thinkingLevel": "off"
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "loop",
+        "shape": "distinct"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "assistantMessageEvent": {
+              "type": "toolcall_end",
+              "contentIndex": 0,
+              "toolCall": {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              },
+              "partial": {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  },
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                }
+              }
+            },
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            },
+            "toolResults": []
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "user",
+                "content": "go",
+                "timestamp": 0
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  },
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "thinkingLevel": "off"
+              }
+            ]
+          }
+        ],
+        "aliases": [
+          {
+            "type": "message_start",
+            "blocks": [
+              0,
+              1
+            ]
+          },
+          {
+            "type": "message_update",
+            "blocks": [
+              0,
+              1
+            ],
+            "samePartial": false,
+            "toolCallMatches": [
+              true,
+              false
+            ]
+          },
+          {
+            "type": "message_end",
+            "blocks": [
+              0,
+              1
+            ]
+          },
+          {
+            "type": "turn_end",
+            "blocks": [
+              0,
+              1
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "go",
+            "timestamp": 0
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "error",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "thinkingLevel": "off"
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "loop",
+        "shape": "detached"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "assistantMessageEvent": {
+              "type": "toolcall_end",
+              "contentIndex": 0,
+              "toolCall": {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              },
+              "partial": {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                }
+              }
+            },
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            },
+            "toolResults": []
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "user",
+                "content": "go",
+                "timestamp": 0
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "thinkingLevel": "off"
+              }
+            ]
+          }
+        ],
+        "aliases": [
+          {
+            "type": "message_start",
+            "blocks": [
+              0
+            ]
+          },
+          {
+            "type": "message_update",
+            "blocks": [
+              0
+            ],
+            "samePartial": false,
+            "toolCallMatches": [
+              false
+            ]
+          },
+          {
+            "type": "message_end",
+            "blocks": [
+              0
+            ]
+          },
+          {
+            "type": "turn_end",
+            "blocks": [
+              0
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "go",
+            "timestamp": 0
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "error",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "thinkingLevel": "off"
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "shape": "single"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "assistantMessageEvent": {
+              "type": "toolcall_end",
+              "contentIndex": 0,
+              "toolCall": {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              },
+              "partial": {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                }
+              }
+            },
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            },
+            "toolResults": []
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "user",
+                "content": "go",
+                "timestamp": 0
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "thinkingLevel": "off"
+              }
+            ]
+          }
+        ],
+        "aliases": [
+          {
+            "type": "message_start",
+            "blocks": [
+              0
+            ]
+          },
+          {
+            "type": "message_update",
+            "blocks": [
+              0
+            ],
+            "samePartial": false,
+            "toolCallMatches": [
+              true
+            ]
+          },
+          {
+            "type": "message_end",
+            "blocks": [
+              0
+            ]
+          },
+          {
+            "type": "turn_end",
+            "blocks": [
+              0
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "go",
+            "timestamp": 0
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "error",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "thinkingLevel": "off"
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "shape": "repeated"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "assistantMessageEvent": {
+              "type": "toolcall_end",
+              "contentIndex": 0,
+              "toolCall": {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              },
+              "partial": {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  },
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                }
+              }
+            },
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            },
+            "toolResults": []
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "user",
+                "content": "go",
+                "timestamp": 0
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  },
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "thinkingLevel": "off"
+              }
+            ]
+          }
+        ],
+        "aliases": [
+          {
+            "type": "message_start",
+            "blocks": [
+              0,
+              0
+            ]
+          },
+          {
+            "type": "message_update",
+            "blocks": [
+              0,
+              0
+            ],
+            "samePartial": false,
+            "toolCallMatches": [
+              true,
+              true
+            ]
+          },
+          {
+            "type": "message_end",
+            "blocks": [
+              0,
+              0
+            ]
+          },
+          {
+            "type": "turn_end",
+            "blocks": [
+              0,
+              0
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "go",
+            "timestamp": 0
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "error",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "thinkingLevel": "off"
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "shape": "distinct"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "assistantMessageEvent": {
+              "type": "toolcall_end",
+              "contentIndex": 0,
+              "toolCall": {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              },
+              "partial": {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  },
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                }
+              }
+            },
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                },
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            },
+            "toolResults": []
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "user",
+                "content": "go",
+                "timestamp": 0
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  },
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "thinkingLevel": "off"
+              }
+            ]
+          }
+        ],
+        "aliases": [
+          {
+            "type": "message_start",
+            "blocks": [
+              0,
+              1
+            ]
+          },
+          {
+            "type": "message_update",
+            "blocks": [
+              0,
+              1
+            ],
+            "samePartial": false,
+            "toolCallMatches": [
+              true,
+              false
+            ]
+          },
+          {
+            "type": "message_end",
+            "blocks": [
+              0,
+              1
+            ]
+          },
+          {
+            "type": "turn_end",
+            "blocks": [
+              0,
+              1
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "go",
+            "timestamp": 0
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              },
+              {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "error",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "thinkingLevel": "off"
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "mode": "agent",
+        "shape": "detached"
+      },
+      "expected": {
+        "events": [
+          {
+            "type": "agent_start"
+          },
+          {
+            "type": "turn_start"
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "user",
+              "content": "go",
+              "timestamp": 0
+            }
+          },
+          {
+            "type": "message_start",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_update",
+            "assistantMessageEvent": {
+              "type": "toolcall_end",
+              "contentIndex": 0,
+              "toolCall": {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              },
+              "partial": {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                }
+              }
+            },
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              }
+            }
+          },
+          {
+            "type": "message_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            }
+          },
+          {
+            "type": "turn_end",
+            "message": {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "toolCall",
+                  "id": "call",
+                  "name": "echo",
+                  "arguments": {}
+                }
+              ],
+              "timestamp": 1,
+              "api": "test",
+              "provider": "test",
+              "model": "test",
+              "stopReason": "error",
+              "usage": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "totalTokens": 0,
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 0
+                }
+              },
+              "thinkingLevel": "off"
+            },
+            "toolResults": []
+          },
+          {
+            "type": "agent_end",
+            "messages": [
+              {
+                "role": "user",
+                "content": "go",
+                "timestamp": 0
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "toolCall",
+                    "id": "call",
+                    "name": "echo",
+                    "arguments": {}
+                  }
+                ],
+                "timestamp": 1,
+                "api": "test",
+                "provider": "test",
+                "model": "test",
+                "stopReason": "error",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "thinkingLevel": "off"
+              }
+            ]
+          }
+        ],
+        "aliases": [
+          {
+            "type": "message_start",
+            "blocks": [
+              0
+            ]
+          },
+          {
+            "type": "message_update",
+            "blocks": [
+              0
+            ],
+            "samePartial": false,
+            "toolCallMatches": [
+              false
+            ]
+          },
+          {
+            "type": "message_end",
+            "blocks": [
+              0
+            ]
+          },
+          {
+            "type": "turn_end",
+            "blocks": [
+              0
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "go",
+            "timestamp": 0
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "toolCall",
+                "id": "call",
+                "name": "echo",
+                "arguments": {}
+              }
+            ],
+            "timestamp": 1,
+            "api": "test",
+            "provider": "test",
+            "model": "test",
+            "stopReason": "error",
+            "usage": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            "thinkingLevel": "off"
+          }
+        ]
+      }
+    }
+  ]
+}

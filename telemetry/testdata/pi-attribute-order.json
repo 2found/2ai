@@ -1,0 +1,645 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "raw": "{\"z\":0,\"a\":1,\"m\":2}",
+      "phase": "plain",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"z\":0,\"a\":1,\"m\":2}",
+      "phase": "merge",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":3,\"m\":2,\"y\":1,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":3,\"m\":2,\"y\":1,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"z\":0,\"a\":1,\"m\":2}",
+      "phase": "undefined",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":3,\"m\":2,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":3,\"m\":2,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"z\":0,\"a\":1,\"m\":2}",
+      "phase": "input",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"z\":0,\"a\":1,\"m\":2}",
+      "phase": "snapshot",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"a\":1,\"m\":2,\"z\":0,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"z\":0,\"a\":1,\"m\":2}",
+      "phase": "nested",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"z\":0,\"a\":1,\"m\":2}",
+      "phase": "reinsert",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"z\":0,\"a\":1,\"m\":2}",
+      "phase": "reader",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2,\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2,\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"a\":1,\"m\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"b\":1,\"a\":2,\"b\":3,\"c\":4}",
+      "phase": "plain",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"b\":1,\"a\":2,\"b\":3,\"c\":4}",
+      "phase": "merge",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":2,\"a\":3,\"c\":4,\"y\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":2,\"a\":3,\"c\":4,\"y\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"b\":1,\"a\":2,\"b\":3,\"c\":4}",
+      "phase": "undefined",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":2,\"a\":3,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":2,\"a\":3,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"b\":1,\"a\":2,\"b\":3,\"c\":4}",
+      "phase": "input",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"b\":1,\"a\":2,\"b\":3,\"c\":4}",
+      "phase": "snapshot",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"a\":2,\"c\":4,\"b\":3,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"b\":1,\"a\":2,\"b\":3,\"c\":4}",
+      "phase": "nested",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"b\":1,\"a\":2,\"b\":3,\"c\":4}",
+      "phase": "reinsert",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"b\":1,\"a\":2,\"b\":3,\"c\":4}",
+      "phase": "reader",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4,\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4,\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"b\":3,\"a\":2,\"c\":4}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"10\":10,\"2\":2,\"01\":1,\"z\":0,\"4294967294\":4,\"4294967295\":5,\"0\":0}",
+      "phase": "plain",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"10\":10,\"2\":2,\"01\":1,\"z\":0,\"4294967294\":4,\"4294967295\":5,\"0\":0}",
+      "phase": "merge",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5,\"y\":1,\"b\":2,\"a\":3},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5,\"y\":1,\"b\":2,\"a\":3},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"10\":10,\"2\":2,\"01\":1,\"z\":0,\"4294967294\":4,\"4294967295\":5,\"0\":0}",
+      "phase": "undefined",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5,\"b\":2,\"a\":3},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5,\"b\":2,\"a\":3},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"10\":10,\"2\":2,\"01\":1,\"z\":0,\"4294967294\":4,\"4294967295\":5,\"0\":0}",
+      "phase": "input",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"10\":10,\"2\":2,\"01\":1,\"z\":0,\"4294967294\":4,\"4294967295\":5,\"0\":0}",
+      "phase": "snapshot",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"10\":10,\"2\":2,\"01\":1,\"z\":0,\"4294967294\":4,\"4294967295\":5,\"0\":0}",
+      "phase": "nested",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"10\":10,\"2\":2,\"01\":1,\"z\":0,\"4294967294\":4,\"4294967295\":5,\"0\":0}",
+      "phase": "reinsert",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"10\":10,\"2\":2,\"01\":1,\"z\":0,\"4294967294\":4,\"4294967295\":5,\"0\":0}",
+      "phase": "reader",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5,\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5,\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"0\":0,\"2\":2,\"10\":10,\"4294967294\":4,\"01\":1,\"z\":0,\"4294967295\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}",
+      "phase": "plain",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}",
+      "phase": "merge",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":3,\"y\":1,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":3,\"y\":1,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}",
+      "phase": "undefined",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":3,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":3,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}",
+      "phase": "input",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}",
+      "phase": "snapshot",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1,\"z\":0,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}",
+      "phase": "nested",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"a\":2,\"m\":3,\"z\":1,\"late\":9},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"a\":2,\"m\":3,\"z\":1,\"late\":9},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"a\":2,\"m\":3,\"z\":1,\"late\":9},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"a\":2,\"m\":3,\"z\":1,\"late\":9},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"a\":2,\"m\":3,\"z\":1,\"late\":9},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"a\":2,\"m\":3,\"z\":1,\"late\":9},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}",
+      "phase": "reinsert",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}",
+      "phase": "reader",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1,\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1,\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"z\":0,\"value\":{\"z\":1,\"a\":2,\"m\":3},\"a\":1}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}",
+      "phase": "plain",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}",
+      "phase": "merge",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":3,\"y\":1,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":3,\"y\":1,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}",
+      "phase": "undefined",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":3,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":3,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}",
+      "phase": "input",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}",
+      "phase": "snapshot",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"z\":1,\"a\":2,\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}",
+      "phase": "nested",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"a\":2,\"z\":1,\"late\":9},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"a\":2,\"z\":1,\"late\":9},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"a\":2,\"z\":1,\"late\":9},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"a\":2,\"z\":1,\"late\":9},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"a\":2,\"z\":1,\"late\":9},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"a\":2,\"z\":1,\"late\":9},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}",
+      "phase": "reinsert",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}",
+      "phase": "reader",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2,\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2,\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"value\":[{\"z\":1,\"a\":2},[3,2,1]],\"z\":1,\"a\":2}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"__proto__\":{\"z\":1},\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}",
+      "phase": "plain",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"__proto__\":{\"z\":1},\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}",
+      "phase": "merge",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":3,\"y\":1,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":3,\"y\":1,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"__proto__\":{\"z\":1},\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}",
+      "phase": "undefined",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":3,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":3,\"b\":2},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"__proto__\":{\"z\":1},\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}",
+      "phase": "input",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"__proto__\":{\"z\":1},\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}",
+      "phase": "snapshot",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"toString\":3,\"z\":4,\"a\":5,\"constructor\":2,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"__proto__\":{\"z\":1},\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}",
+      "phase": "nested",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"__proto__\":{\"z\":1},\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}",
+      "phase": "reinsert",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"__proto__\":{\"z\":1},\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}",
+      "phase": "reader",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5,\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5,\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"constructor\":2,\"toString\":3,\"z\":4,\"a\":5}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "null",
+      "phase": "plain",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "null",
+      "phase": "merge",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"y\":1,\"b\":2,\"a\":3},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"y\":1,\"b\":2,\"a\":3},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "null",
+      "phase": "undefined",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":2,\"a\":3},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"b\":2,\"a\":3},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "null",
+      "phase": "input",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "null",
+      "phase": "snapshot",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "null",
+      "phase": "nested",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "null",
+      "phase": "reinsert",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "null",
+      "phase": "reader",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}",
+      "phase": "plain",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}",
+      "phase": "merge",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2},\"y\":1,\"b\":2,\"a\":3},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2},\"y\":1,\"b\":2,\"a\":3},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}",
+      "phase": "undefined",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2},\"b\":2,\"a\":3},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2},\"b\":2,\"a\":3},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}",
+      "phase": "input",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}",
+      "phase": "snapshot",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2},\"\\ud801\":1,\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}",
+      "phase": "nested",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud800\":2,\"\\ud801\":1,\"late\":9}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud800\":2,\"\\ud801\":1,\"late\":9}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud800\":2,\"\\ud801\":1,\"late\":9}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud800\":2,\"\\ud801\":1,\"late\":9}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud800\":2,\"\\ud801\":1,\"late\":9}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud800\":2,\"\\ud801\":1,\"late\":9}}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}",
+      "phase": "reinsert",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2},\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2},\"late\":9},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    },
+    {
+      "raw": "{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}",
+      "phase": "reader",
+      "expected": {
+        "before": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "after": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2},\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "retained": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":false}]",
+        "settled": "[{\"id\":1,\"parentId\":null,\"name\":\"order\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2},\"outer\":{\"y\":1,\"b\":2,\"a\":3}},\"events\":[{\"name\":\"initial\",\"attributes\":{\"\\ud801\":1,\"\\ud800\":2,\"z\":3,\"value\":{\"\\ud801\":1,\"\\ud800\":2}}}],\"status\":{\"status\":\"ok\"},\"settled\":true,\"endSequence\":1}]"
+      }
+    }
+  ]
+}

@@ -1,0 +1,900 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "name": "status connection directive none",
+        "headers": {}
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status connection directive true",
+        "headers": {
+          "x-should-retry": "true"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status connection directive false",
+        "headers": {
+          "x-should-retry": "false"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 200 directive none",
+        "status": 200,
+        "headers": {}
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 200 directive true",
+        "status": 200,
+        "headers": {
+          "x-should-retry": "true"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 200 directive false",
+        "status": 200,
+        "headers": {
+          "x-should-retry": "false"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 400 directive none",
+        "status": 400,
+        "headers": {}
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 400 directive true",
+        "status": 400,
+        "headers": {
+          "x-should-retry": "true"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 400 directive false",
+        "status": 400,
+        "headers": {
+          "x-should-retry": "false"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 401 directive none",
+        "status": 401,
+        "headers": {}
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 401 directive true",
+        "status": 401,
+        "headers": {
+          "x-should-retry": "true"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 401 directive false",
+        "status": 401,
+        "headers": {
+          "x-should-retry": "false"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 403 directive none",
+        "status": 403,
+        "headers": {}
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 403 directive true",
+        "status": 403,
+        "headers": {
+          "x-should-retry": "true"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 403 directive false",
+        "status": 403,
+        "headers": {
+          "x-should-retry": "false"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 408 directive none",
+        "status": 408,
+        "headers": {}
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 408 directive true",
+        "status": 408,
+        "headers": {
+          "x-should-retry": "true"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 408 directive false",
+        "status": 408,
+        "headers": {
+          "x-should-retry": "false"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 409 directive none",
+        "status": 409,
+        "headers": {}
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 409 directive true",
+        "status": 409,
+        "headers": {
+          "x-should-retry": "true"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 409 directive false",
+        "status": 409,
+        "headers": {
+          "x-should-retry": "false"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 422 directive none",
+        "status": 422,
+        "headers": {}
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 422 directive true",
+        "status": 422,
+        "headers": {
+          "x-should-retry": "true"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 422 directive false",
+        "status": 422,
+        "headers": {
+          "x-should-retry": "false"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 429 directive none",
+        "status": 429,
+        "headers": {}
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 429 directive true",
+        "status": 429,
+        "headers": {
+          "x-should-retry": "true"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 429 directive false",
+        "status": 429,
+        "headers": {
+          "x-should-retry": "false"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 500 directive none",
+        "status": 500,
+        "headers": {}
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 500 directive true",
+        "status": 500,
+        "headers": {
+          "x-should-retry": "true"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 500 directive false",
+        "status": 500,
+        "headers": {
+          "x-should-retry": "false"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 503 directive none",
+        "status": 503,
+        "headers": {}
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 503 directive true",
+        "status": 503,
+        "headers": {
+          "x-should-retry": "true"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "status 503 directive false",
+        "status": 503,
+        "headers": {
+          "x-should-retry": "false"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": false,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "backoff 0",
+        "index": 0
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "backoff 1",
+        "index": 1
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 875,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "backoff 2",
+        "index": 2
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 1750,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "backoff 3",
+        "index": 3
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 3500,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "backoff 4",
+        "index": 4
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 7000,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "backoff 5",
+        "index": 5
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 7000,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "backoff 10",
+        "index": 10
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 7000,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "millis 0",
+        "headers": {
+          "retry-after-ms": "0"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 0,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "millis -10",
+        "headers": {
+          "retry-after-ms": "-10"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 0,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "millis 10.75",
+        "headers": {
+          "retry-after-ms": "10.75"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 10,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "millis 12junk",
+        "headers": {
+          "retry-after-ms": "12junk"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 12,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "millis 1e2ms",
+        "headers": {
+          "retry-after-ms": "1e2ms"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 100,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "millis NaN",
+        "headers": {
+          "retry-after-ms": "NaN"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "millis Infinity",
+        "headers": {
+          "retry-after-ms": "Infinity"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "millis .5",
+        "headers": {
+          "retry-after-ms": ".5"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 0,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "millis +12",
+        "headers": {
+          "retry-after-ms": "+12"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 12,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "retry after 0",
+        "headers": {
+          "retry-after": "0"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 0,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "retry after -10",
+        "headers": {
+          "retry-after": "-10"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 0,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "retry after 0.0159",
+        "headers": {
+          "retry-after": "0.0159"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 15,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "retry after 3seconds",
+        "headers": {
+          "retry-after": "3seconds"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 3000,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "retry after Thu, 01 Jan 1970 00:00:02 GMT",
+        "headers": {
+          "retry-after": "Thu, 01 Jan 1970 00:00:02 GMT"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 1000,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "retry after Wed, 31 Dec 1969 23:59:59 GMT",
+        "headers": {
+          "retry-after": "Wed, 31 Dec 1969 23:59:59 GMT"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 0,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "retry after invalid",
+        "headers": {
+          "retry-after": "invalid"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 437,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "millis wins",
+        "headers": {
+          "retry-after-ms": "5",
+          "retry-after": "10"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 5,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "invalid millis falls back",
+        "headers": {
+          "retry-after-ms": "NaN",
+          "retry-after": ".125"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 125,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "default delay cap",
+        "headers": {
+          "retry-after-ms": "60001"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": null,
+        "error": "Server requested 61s retry delay (max: 60s). provider failure"
+      }
+    },
+    {
+      "input": {
+        "name": "explicit delay cap",
+        "maxDelay": 100,
+        "headers": {
+          "retry-after-ms": "101"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": null,
+        "error": "Server requested 1s retry delay (max: 1s). provider failure"
+      }
+    },
+    {
+      "input": {
+        "name": "equal delay cap",
+        "maxDelay": 100,
+        "headers": {
+          "retry-after-ms": "100"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 100,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "disable cap zero",
+        "maxDelay": 0,
+        "headers": {
+          "retry-after-ms": "90000"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 90000,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "disable cap negative",
+        "maxDelay": -1,
+        "headers": {
+          "retry-after-ms": "90000"
+        }
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 90000,
+        "error": null
+      }
+    },
+    {
+      "input": {
+        "name": "backoff not capped",
+        "maxDelay": 1,
+        "index": 10
+      },
+      "expected": {
+        "provider": true,
+        "retryable": true,
+        "delay": 7000,
+        "error": null
+      }
+    }
+  ]
+}

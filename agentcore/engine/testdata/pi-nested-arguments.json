@@ -1,0 +1,5225 @@
+{
+  "upstreamCommit": "eeac84ca92498ac18b6832754d01aef1d3c5f654",
+  "cases": [
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "before_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "changed"
+            },
+            "added": true
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "after": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "replacement"
+            }
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "executed": {
+          "child": {
+            "value": "replacement"
+          }
+        },
+        "after": {
+          "child": {
+            "value": "replacement"
+          }
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": false,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "execute_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "changed"
+            },
+            "added": true
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "after": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "execute_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "replacement"
+            }
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "executed": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "after": {
+          "child": {
+            "value": "replacement"
+          }
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "update_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "changed"
+            },
+            "added": true
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "after": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "after_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "changed"
+            },
+            "added": true
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "after": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "after_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "replacement"
+            }
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "executed": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "after": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "settled_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "changed"
+            },
+            "added": true
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "after": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "object",
+        "phase": "replace_then_update"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "replacement"
+            }
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "replacement"
+          }
+        },
+        "after": {
+          "child": {
+            "value": "replacement"
+          }
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": false,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "before_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "changed"
+            },
+            {
+              "value": "appended"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "after": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "replacement"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "original"
+          }
+        ],
+        "executed": [
+          {
+            "value": "replacement"
+          }
+        ],
+        "after": [
+          {
+            "value": "replacement"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": false,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "execute_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "changed"
+            },
+            {
+              "value": "appended"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "after": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "execute_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "replacement"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "original"
+          }
+        ],
+        "executed": [
+          {
+            "value": "original"
+          }
+        ],
+        "after": [
+          {
+            "value": "replacement"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "update_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "changed"
+            },
+            {
+              "value": "appended"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "after": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "after_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "changed"
+            },
+            {
+              "value": "appended"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "after": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "after_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "replacement"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "original"
+          }
+        ],
+        "executed": [
+          {
+            "value": "original"
+          }
+        ],
+        "after": [
+          {
+            "value": "original"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "settled_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "changed"
+            },
+            {
+              "value": "appended"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "after": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "programmatic",
+        "shape": "array",
+        "phase": "replace_then_update"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "replacement"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "replacement"
+          }
+        ],
+        "after": [
+          {
+            "value": "replacement"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": false,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "before_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "changed"
+            },
+            "added": true
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "after": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "replacement"
+            }
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "executed": {
+          "child": {
+            "value": "replacement"
+          }
+        },
+        "after": {
+          "child": {
+            "value": "replacement"
+          }
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": false,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "execute_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "changed"
+            },
+            "added": true
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "after": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "execute_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "replacement"
+            }
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "executed": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "after": {
+          "child": {
+            "value": "replacement"
+          }
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "update_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "changed"
+            },
+            "added": true
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "after": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "after_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "changed"
+            },
+            "added": true
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "after": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "after_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "replacement"
+            }
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "executed": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "after": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "settled_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "changed"
+            },
+            "added": true
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "after": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "object",
+        "phase": "replace_then_update"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "replacement"
+            }
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "replacement"
+          }
+        },
+        "after": {
+          "child": {
+            "value": "replacement"
+          }
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": false,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "before_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "changed"
+            },
+            {
+              "value": "appended"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "after": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "replacement"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "original"
+          }
+        ],
+        "executed": [
+          {
+            "value": "replacement"
+          }
+        ],
+        "after": [
+          {
+            "value": "replacement"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": false,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "execute_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "changed"
+            },
+            {
+              "value": "appended"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "after": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "execute_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "replacement"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "original"
+          }
+        ],
+        "executed": [
+          {
+            "value": "original"
+          }
+        ],
+        "after": [
+          {
+            "value": "replacement"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "update_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "changed"
+            },
+            {
+              "value": "appended"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "after": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "after_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "changed"
+            },
+            {
+              "value": "appended"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "after": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "after_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "replacement"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "original"
+          }
+        ],
+        "executed": [
+          {
+            "value": "original"
+          }
+        ],
+        "after": [
+          {
+            "value": "original"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "settled_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "changed"
+            },
+            {
+              "value": "appended"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "after": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "sequential",
+        "shape": "array",
+        "phase": "replace_then_update"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "replacement"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "replacement"
+          }
+        ],
+        "after": [
+          {
+            "value": "replacement"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": false,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "before_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "changed"
+            },
+            "added": true
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "after": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "replacement"
+            }
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "executed": {
+          "child": {
+            "value": "replacement"
+          }
+        },
+        "after": {
+          "child": {
+            "value": "replacement"
+          }
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": false,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "execute_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "changed"
+            },
+            "added": true
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "after": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "execute_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "replacement"
+            }
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "executed": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "after": {
+          "child": {
+            "value": "replacement"
+          }
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "update_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "changed"
+            },
+            "added": true
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "after": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "after_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "changed"
+                },
+                "added": true
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "changed"
+            },
+            "added": true
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "after": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "after_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "replacement"
+            }
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "executed": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "after": {
+          "child": {
+            "value": "original"
+          }
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "settled_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "original"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "changed"
+            },
+            "added": true
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "after": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "object",
+        "phase": "replace_then_update"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "original"
+              }
+            }
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": {
+                "child": {
+                  "value": "replacement"
+                }
+              }
+            },
+            "retained": {
+              "child": {
+                "value": "changed"
+              },
+              "added": true
+            }
+          }
+        ],
+        "selected": {
+          "branch": {
+            "child": {
+              "value": "replacement"
+            }
+          }
+        },
+        "retained": {
+          "child": {
+            "value": "changed"
+          },
+          "added": true
+        },
+        "executed": {
+          "child": {
+            "value": "replacement"
+          }
+        },
+        "after": {
+          "child": {
+            "value": "replacement"
+          }
+        },
+        "raw": {
+          "branch": {
+            "child": {
+              "value": "original"
+            }
+          }
+        },
+        "sameExecute": false,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "before_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "changed"
+            },
+            {
+              "value": "appended"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "after": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "before_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "replacement"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "original"
+          }
+        ],
+        "executed": [
+          {
+            "value": "replacement"
+          }
+        ],
+        "after": [
+          {
+            "value": "replacement"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": false,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "execute_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "changed"
+            },
+            {
+              "value": "appended"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "after": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "execute_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "replacement"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "original"
+          }
+        ],
+        "executed": [
+          {
+            "value": "original"
+          }
+        ],
+        "after": [
+          {
+            "value": "replacement"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "update_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "changed"
+            },
+            {
+              "value": "appended"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "after": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "after_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "changed"
+                },
+                {
+                  "value": "appended"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "changed"
+            },
+            {
+              "value": "appended"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "after": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "after_replace"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "replacement"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "original"
+          }
+        ],
+        "executed": [
+          {
+            "value": "original"
+          }
+        ],
+        "after": [
+          {
+            "value": "original"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": false
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "settled_edit"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "original"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "changed"
+            },
+            {
+              "value": "appended"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "after": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": true,
+        "sameAfter": true,
+        "stillAttached": true
+      }
+    },
+    {
+      "input": {
+        "mode": "parallel",
+        "shape": "array",
+        "phase": "replace_then_update"
+      },
+      "expected": {
+        "snapshots": [
+          {
+            "stage": "before",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "original"
+              }
+            ]
+          },
+          {
+            "stage": "execute",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          },
+          {
+            "stage": "after",
+            "args": {
+              "branch": [
+                {
+                  "value": "replacement"
+                }
+              ]
+            },
+            "retained": [
+              {
+                "value": "changed"
+              },
+              {
+                "value": "appended"
+              }
+            ]
+          }
+        ],
+        "selected": {
+          "branch": [
+            {
+              "value": "replacement"
+            }
+          ]
+        },
+        "retained": [
+          {
+            "value": "changed"
+          },
+          {
+            "value": "appended"
+          }
+        ],
+        "executed": [
+          {
+            "value": "replacement"
+          }
+        ],
+        "after": [
+          {
+            "value": "replacement"
+          }
+        ],
+        "raw": {
+          "branch": [
+            {
+              "value": "original"
+            }
+          ]
+        },
+        "sameExecute": false,
+        "sameAfter": false,
+        "stillAttached": false
+      }
+    }
+  ]
+}
