@@ -19,6 +19,14 @@ type NativeProviderFailure struct {
 	mu          sync.Mutex
 	failure     error
 	hostFailure bool
+	kind        string
+}
+
+// Kind is a bounded structural diagnostic; it contains no error text.
+func (c *NativeProviderFailure) Kind() string {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.kind
 }
 
 func (c *NativeProviderFailure) HostFailure() bool {
@@ -74,6 +82,7 @@ func recordNativeFailure(ctx context.Context, provider string, cause error, call
 	capture.mu.Lock()
 	capture.failure = failure
 	capture.hostFailure = cause != nil && callbackFailure
+	capture.kind = nativeFailureKind(cause, callbackFailure)
 	capture.mu.Unlock()
 }
 

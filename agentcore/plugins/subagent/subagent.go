@@ -324,7 +324,9 @@ func (t *subagentTool) RunStreaming(ctx context.Context, args string, emit func(
 		values := context.WithoutCancel(ctx)
 		receipt, err := agentcore.LaunchBackground(ctx, ToolSpawnSubagent, task, func(runCtx context.Context) (string, error) {
 			childCtx := agentcore.WithDelegationDepth(asyncContext{Context: runCtx, values: values}, depth+1)
-			return t.execute(childCtx, in, task, schema, nil)
+			return t.execute(childCtx, in, task, schema, func(note string) {
+				agentcore.ReportProgress(childCtx, note)
+			})
 		})
 		if err != nil {
 			return "", err

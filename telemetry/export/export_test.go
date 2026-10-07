@@ -30,6 +30,13 @@ func TestBatchKeepsParentageAndCallbackFailure(t *testing.T) {
 	if len(child.Events) != 1 || batches[0].Duration < 0 {
 		t.Fatal("missing attempt/timing")
 	}
+	if len(batches[0].SpanTimings) != 2 {
+		t.Fatal("missing individual span timings")
+	}
+	rootTiming, childTiming := batches[0].SpanTimings[0], batches[0].SpanTimings[1]
+	if rootTiming.SpanID != root.ID || childTiming.SpanID != child.ID || rootTiming.StartedAt.IsZero() || childTiming.StartedAt.Before(rootTiming.StartedAt) || rootTiming.Duration < childTiming.Duration || childTiming.Duration < 0 {
+		t.Fatalf("timing lost hierarchy: %+v", batches[0].SpanTimings)
+	}
 }
 
 func TestCallbackPanicSurvivesSinkPanic(t *testing.T) {
@@ -39,6 +46,9 @@ func TestCallbackPanicSurvivesSinkPanic(t *testing.T) {
 		delivered = true
 		if !batch.Spans[0].Settled {
 			t.Error("exported before settlement")
+		}
+		if len(batch.SpanTimings) != 1 || batch.SpanTimings[0].StartedAt.IsZero() {
+			t.Error("panic lost completed timing")
 		}
 		panic("sink panic")
 	})

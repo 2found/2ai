@@ -50,3 +50,54 @@ func TestNativeCompactionRecoversRejectedRequestWithoutRepeatingTools(t *testing
 		})
 	}
 }
+
+func TestNativeCompactionProgressDoesNotClaimWholeSuccess(t *testing.T) {
+	for _, fails := range []bool{false, true} {
+		t.Run(map[bool]string{false: "success", true: "summary failure"}[fails], func(t *testing.T) {
+			calls, summaries, effects := 0, 0, 0
+			p := &ai.FallbackProvider{Candidates: []ai.FallbackCandidate{{Model: json.RawMessage(`{"id":"test","contextWindow":8192}`), Stream: func(ctx context.Context, _ json.RawMessage, view ai.TranscriptContext, _ map[string]any) (*ai.AssistantMessageEventStream, error) {
+				if strings.HasPrefix(ai.GetCurrentSystemPrompt(view.Messages()), "Summarize the conversation") {
+					summaries++
+					if fails {
+						return nil, &agentcore.ProviderError{Status: 400, Message: "SECRET_PROVIDER_ERROR"}
+					}
+					return nativeReply(ctx, &ai.Message{Role: "assistant", StopReason: "stop", Content: ai.BlockContent(ai.ContentBlock{Type: "text", Text: "Goal: answer. Done: read evidence. Next: finish."})})
+				}
+				calls++
+				if calls == 1 {
+					return nativeReply(ctx, &ai.Message{Role: "assistant", StopReason: "toolUse", Content: ai.BlockContent(ai.ContentBlock{Type: "toolCall", ID: "read", Name: "read", Arguments: json.RawMessage(`{}`)})})
+				}
+				if calls == 2 {
+					return nil, &agentcore.ProviderError{Status: 400, Message: "context_length_exceeded"}
+				}
+				return nativeReply(ctx, &ai.Message{Role: "assistant", StopReason: "stop", Content: ai.BlockContent(ai.ContentBlock{Type: "text", Text: "finished"})})
+			}}}}
+			retry := agentcore.RetryPolicy{MaxAttempts: 1}
+			a, err := agentcore.New(agentcore.Config{NativeProvider: p, Model: "test", Retry: &retry, Tools: agentcore.NewToolSet(nativeReadTool{&effects}), Policy: agentcore.NewAllowList("read")})
+			if err != nil {
+				t.Fatal(err)
+			}
+			var notes []string
+			_, _ = a.RunNative(context.Background(), agentcore.NativeRun{Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: "Inspect evidence"}}, Sink: func(ev agentcore.StreamEvent) {
+				if ev.Type == agentcore.StreamProgress {
+					notes = append(notes, ev.Note)
+				}
+			}})
+			starts, settlements := 0, 0
+			for _, note := range notes {
+				if note == "Compacting context" {
+					starts++
+				}
+				if note == "Context summary chunk settled; compaction may continue" {
+					settlements++
+				}
+				if strings.Contains(note, "compaction finished") || strings.Contains(note, "SECRET") {
+					t.Fatalf("false success or private data: %q", note)
+				}
+			}
+			if summaries != 1 || starts != summaries || settlements != summaries || effects != 1 {
+				t.Fatalf("summaries=%d starts=%d settlements=%d effects=%d", summaries, starts, settlements, effects)
+			}
+		})
+	}
+}

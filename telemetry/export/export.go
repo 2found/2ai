@@ -10,9 +10,10 @@ import (
 )
 
 type Batch struct {
-	StartedAt time.Time                `json:"started_at"`
-	Duration  time.Duration            `json:"duration_ns"`
-	Spans     []telemetry.RecordedSpan `json:"spans"`
+	StartedAt   time.Time                `json:"started_at"`
+	Duration    time.Duration            `json:"duration_ns"`
+	Spans       []telemetry.RecordedSpan `json:"spans"`
+	SpanTimings []telemetry.SpanTiming   `json:"span_timings,omitempty"`
 }
 
 // New records one isolated batch per root callback. Child spans share its
@@ -28,7 +29,7 @@ func New(sink func(Batch)) telemetry.Context {
 		defer func() {
 			func() {
 				defer func() { _ = recover() }()
-				sink(Batch{StartedAt: started, Duration: time.Since(started), Spans: recorder.GetSpans()})
+				sink(Batch{StartedAt: started, Duration: time.Since(started), Spans: recorder.GetSpans(), SpanTimings: recorder.GetSpanTimings()})
 			}()
 		}()
 		return recorder.StartSpan(options, callback)

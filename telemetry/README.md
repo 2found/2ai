@@ -21,6 +21,18 @@ answer, err := telemetry.StartSpan(recorder.Context,
 spans := recorder.GetSpans()
 ```
 
+`GetSpanTimings()` returns detached timing records for settled spans, keyed by
+`SpanID`, in start order. `StartedAt` is wall-clock time and `Duration` uses Go's
+monotonic clock. Active/no-op spans have no completed timing. Timing is separate
+from `GetSpans()` so Pi-compatible recorded JSON remains unchanged.
+`telemetry/export.Batch.SpanTimings` includes these per-span records; its
+`Duration` still measures the entire batch and must not be used as child latency.
+Native AI attempt events also expose bounded structural `ai.failure_kind` and
+boolean `ai.output_committed`, without parsing or publishing provider error text.
+These diagnostics do not change retries; committed output still fences replay.
+Native AI attempt events also expose numeric `ai.attempt` and `ai.duration_ms`
+attributes without requiring hosts to parse the private `llm.trace` body.
+
 `Attributes` is an ordered object, constructed with `NewAttributes(Property{...},
 ...)`; use `Get`, `Lookup`, `Set`, `Delete`, `Len` and `Entries` instead of map
 indexing. Its zero value is empty. Copies share the input object, while recorder

@@ -40,6 +40,27 @@ func TestNativeTelemetryIncludesFailedFallbackAndPreservesCheckpoint(t *testing.
 	}
 	var records []llm.TraceRecord
 	backend := export.New(func(batch export.Batch) {
+		if len(batch.SpanTimings) != len(batch.Spans) {
+			t.Error("settled native spans lost individual timings")
+		}
+		for _, span := range batch.Spans {
+			for _, event := range span.Events {
+				if event.Name == "agentray.ai.attempt" {
+					if ms, ok := event.Attributes.Get("ai.duration_ms").(int64); !ok || ms < 0 {
+						t.Error("attempt lacks numeric latency without private trace parsing")
+					}
+					if number, ok := event.Attributes.Get("ai.attempt").(int); !ok || number < 1 {
+						t.Error("attempt lacks numeric identity")
+					}
+					if kind, ok := event.Attributes.Get("ai.failure_kind").(string); !ok || (kind != "none" && kind != "unknown") {
+						t.Error("attempt lacks bounded failure diagnostic")
+					}
+					if _, ok := event.Attributes.Get("ai.output_committed").(bool); !ok {
+						t.Error("attempt lacks replay fence diagnostic")
+					}
+				}
+			}
+		}
 		llm.RecordBatch(batch, llm.SinkFunc(func(record llm.TraceRecord) {
 			records = append(records, record)
 			if len(record.Messages) > 0 {

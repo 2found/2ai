@@ -30,16 +30,26 @@ func (t *AttemptTrace) Finish(attempt FallbackAttempt) {
 	if t.started.IsZero() {
 		return // host preparation failed before provider admission
 	}
+	durationMS := time.Since(t.started).Milliseconds()
 	trace := map[string]any{
 		"model": t.model, "context": t.view, "response": attempt.Outcome.Message(),
-		"startedAtMs": t.started.UnixMilli(), "durationMs": time.Since(t.started).Milliseconds(),
+		"startedAtMs": t.started.UnixMilli(), "durationMs": durationMS,
 		"attempt": map[string]any{"number": attempt.Number},
 	}
 	if attempt.Failure != nil {
 		trace["error"] = map[string]any{"name": "Error", "message": attempt.Failure.Error()}
 	}
-	if raw, err := json.Marshal(trace); err == nil {
-		t.span.AddEvent("agentray.ai.attempt", telemetry.NewAttributes(telemetry.Property{Name: "llm.trace", Value: string(raw)}))
+	properties := []telemetry.Property{
+		{Name: "ai.attempt", Value: attempt.Number},
+		{Name: "ai.duration_ms", Value: durationMS},
+		{Name: "ai.failure_kind", Value: boundedFailureKind(attempt.FailureKind)},
+		{Name: "ai.output_committed", Value: attempt.Outcome.Committed},
 	}
+	// Detached native payloads may be malformed. Their serialization must never
+	// suppress bounded operational attempt/failure metadata.
+	if raw, err := json.Marshal(trace); err == nil {
+		properties = append(properties, telemetry.Property{Name: "llm.trace", Value: string(raw)})
+	}
+	t.span.AddEvent("agentray.ai.attempt", telemetry.NewAttributes(properties...))
 	t.started = time.Time{}
 }

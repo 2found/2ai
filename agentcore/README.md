@@ -70,6 +70,12 @@ emit append observations. This keeps advisor and other existing `RunObserver`
 plugins informed without giving them control over native history. Integration
 tests exercise memory, todo, advisor and compaction through the native engine.
 
+Native context summary progress reports each chunk's settlement, including a
+failed chunk. It does not claim that the entire compaction succeeded or that the
+next model request is ready. Chunk and model-request spans have individual
+timings in `telemetry/export.Batch.SpanTimings`. Async subagent display progress
+uses the run-owned observer in `background.go`, fenced on native run teardown.
+
 The existing kernel is one flat package. The native Go replacement lives in
 [`engine/`](engine/); the other subdirectories are ejectable
 [`plugins/`](plugins/) and black-box [`integration/`](integration/) tests.
@@ -160,7 +166,7 @@ cannot give one belongs in a plugin, or belongs nowhere.
 | [`turn.go`](turn.go) | **loop** — one turn against the model: capability shaping (including copy-on-write request-wide image budgets), `ProviderError` classification, same-rung retry, then escalation down the ladder, plus the streaming path. Retry lives with the loop, not in a provider, so failure behaviour cannot differ per vendor. That includes reading usage off the stream: a delta's `Usage` is a running total that may arrive at any point (Anthropic states input tokens before the first output token; OpenAI sends a usage-only chunk *after* the terminal one), so the turn keeps the newest non-zero value of each field rather than whatever rode `Done`. Getting it wrong is silent — the answer is still correct and only the number the budget gate meters on is zero. |
 | [`tooldispatch.go`](tooldispatch.go) | **loop** — one tool call end to end: lookup → prepare → validate → gate → execute → bound → trace. The trust boundary, applied in exactly one place so it is unskippable rather than usually-called. Also the two context stamps a call carries: the idempotency key derived from `(sessionID, toolCallID)` — stable across crash-resume because both already survive in the log — and the provider-assigned tool-call id a spawn tool derives the child's deterministic session from. |
 | [`result.go`](result.go) | **contract** — `RunResult`, `StreamEvent` and the event vocabulary, `ResultCard`. The loop's output side, which consumers render and plugins observe. (`ToolTrace` sits with the code that fills it, in `tooldispatch.go`.) |
-| [`background.go`](background.go) | **contract** — run-owned background launcher shared by independent plugins; no scheduler or task policy in core. |
+| [`background.go`](background.go) | **contract** — run-owned background launcher and progress observer shared by independent plugins; no scheduler or task policy in core. |
 | [`extension.go`](extension.go) | **contract** — every extension point (`ToolInterceptor`, `StepInterceptor`, `StopInterceptor`, `RunObserver`, `ToolContributor`, …) and the `extensionSet` the loop dispatches through. The file that forbids naming a plugin. |
 | [`run_lifecycle.go`](run_lifecycle.go) | **contract + dispatch** — optional settled-boundary controls, host command handlers and finalization before native checkpoints; no capability-specific state. |
 | [`hooks.go`](hooks.go) | **contract** — the lifecycle hook types and their dispatch, including the `BeforeToolCall` shape the permission gate is built from. |

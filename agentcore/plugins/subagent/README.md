@@ -151,6 +151,15 @@ original native checkpoint.
 
 ## Native execution
 
+Async children publish tool-name and lifecycle progress through the run-owned
+`agentcore.WithRunProgress` observer, automatically bound by `RunNative`.
+They never retain the spawn tool's streaming callback after it returns. Native
+delivery is serialized and fenced when the run ends; cancelled jobs suppress
+further notes. Synchronous children still use the spawn tool's emitter. These
+notes are display activity, not partial answers or child transcript content.
+Other native session hosts may bind the same run-owned observer while preserving
+their own cancellation, serialization and end-of-run fence.
+
 `Plugin.RunFork` is an optional consumer hook for self-delegation. The plugin
 still creates the child with `Agent.Fork`, applies its depth and spawn limits,
 validates output, and folds usage into the parent. Without the hook, ephemeral

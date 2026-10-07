@@ -12,9 +12,10 @@ import (
 // attempts whose terminal event is withheld from the logical request. Observers
 // can account for usage without inserting failed messages into the transcript.
 type FallbackAttempt struct {
-	Number  int
-	Outcome AttemptOutcome
-	Failure error
+	Number      int
+	Outcome     AttemptOutcome
+	Failure     error
+	FailureKind string
 }
 
 type nativeRungAttempts struct {
@@ -70,8 +71,12 @@ func (r nativeRungAttempts) run(ctx context.Context, out *AssistantMessageEventS
 				err = failure
 			}
 		}
+		kind := capture.Kind()
+		if kind == "" || kind == "none" {
+			kind = nativeFailureKind(failure, capture.HostFailure())
+		}
 		if r.observe != nil {
-			if observeErr := r.observe(context.WithoutCancel(ctx), FallbackAttempt{Number: number, Outcome: last, Failure: failure}); observeErr != nil {
+			if observeErr := r.observe(context.WithoutCancel(ctx), FallbackAttempt{Number: number, Outcome: last, Failure: failure, FailureKind: kind}); observeErr != nil {
 				return last, observeErr
 			}
 		}

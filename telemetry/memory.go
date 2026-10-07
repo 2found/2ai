@@ -1,6 +1,17 @@
 package telemetry
 
-import "sync"
+import (
+	"sync"
+	"time"
+)
+
+// SpanTiming is a detached timing for a settled span. It is kept separately
+// from RecordedSpan so Pi-compatible records retain their original JSON shape.
+type SpanTiming struct {
+	SpanID    int           `json:"span_id"`
+	StartedAt time.Time     `json:"started_at"`
+	Duration  time.Duration `json:"duration_ns"`
+}
 
 type RecordedEvent struct {
 	Name       string     `json:"name"`
@@ -21,6 +32,8 @@ type RecordedSpan struct {
 type mutableSpan struct {
 	RecordedSpan
 	explicitStatus bool
+	startedAt      time.Time
+	duration       time.Duration
 }
 
 type memoryState struct {
@@ -55,7 +68,7 @@ func (c Context) admit(options SpanOptions) *Span {
 	recorded := &mutableSpan{RecordedSpan: RecordedSpan{
 		ID: len(c.state.spans) + 1, Name: options.Name, Attributes: attributes,
 		Events: []RecordedEvent{}, Status: SpanStatus{Status: "ok"},
-	}}
+	}, startedAt: time.Now()}
 	if c.parent != nil {
 		parentID := c.parent.ID
 		recorded.ParentID = &parentID
@@ -179,6 +192,7 @@ func (s *Span) settle(failed bool, failure any) {
 		s.context.parent.Status = status
 	}
 	s.context.parent.Settled = true
+	s.context.parent.duration = time.Since(s.context.parent.startedAt)
 	sequence := s.context.state.nextEndSequence
 	s.context.state.nextEndSequence++
 	s.context.parent.EndSequence = &sequence
@@ -209,6 +223,24 @@ func (m *InMemory) GetSpans() []RecordedSpan {
 		spans = append(spans, copy)
 	}
 	return spans
+}
+
+// GetSpanTimings returns settled span timings in start order. Active and no-op
+// spans have no completed timing. Durations use Go's monotonic clock and each
+// snapshot is independent of future recording.
+func (m *InMemory) GetSpanTimings() []SpanTiming {
+	if m == nil || m.state == nil {
+		return []SpanTiming{}
+	}
+	m.state.mu.Lock()
+	defer m.state.mu.Unlock()
+	timings := make([]SpanTiming, 0, len(m.state.spans))
+	for _, span := range m.state.spans {
+		if span.Settled {
+			timings = append(timings, SpanTiming{SpanID: span.ID, StartedAt: span.startedAt, Duration: span.duration})
+		}
+	}
+	return timings
 }
 
 func copyInt(value *int) *int {

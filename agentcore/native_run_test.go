@@ -4,16 +4,87 @@ import (
 	"context"
 	"encoding/json"
 	"strings"
+	"sync/atomic"
 	"testing"
+	"time"
 
 	"github.com/2found/2ai/agentcore"
 	"github.com/2found/2ai/agentcore/plugins/goal"
+	"github.com/2found/2ai/agentcore/plugins/jobs"
 	"github.com/2found/2ai/agentcore/plugins/preset"
 	"github.com/2found/2ai/agentcore/plugins/subagent"
 	"github.com/2found/2ai/agentcore/plugins/todo"
 	"github.com/2found/2ai/ai"
 	"github.com/2found/2ai/telemetry"
 )
+
+func TestNativeSubagentProgressUsesRunLifetime(t *testing.T) {
+	for _, async := range []bool{false, true} {
+		t.Run(map[bool]string{false: "sync", true: "async"}[async], func(t *testing.T) {
+			var parentCalls, childCalls atomic.Int32
+			captured := make(chan context.Context, 1)
+			provider := &ai.FallbackProvider{Candidates: []ai.FallbackCandidate{{Model: json.RawMessage(`{"id":"test"}`), Stream: func(ctx context.Context, model json.RawMessage, view ai.TranscriptContext, opts map[string]any) (*ai.AssistantMessageEventStream, error) {
+				message := ai.Message{Role: "assistant", StopReason: "stop", Content: ai.BlockContent(ai.ContentBlock{Type: "text", Text: "parent answer"})}
+				if agentcore.DelegationDepth(ctx) > 0 {
+					if childCalls.Add(1) == 1 {
+						message.StopReason = "toolUse"
+						message.Content = ai.BlockContent(ai.ContentBlock{Type: "toolCall", ID: "child-read", Name: "read", Arguments: json.RawMessage(`{}`)})
+					} else {
+						message.Content = ai.BlockContent(ai.ContentBlock{Type: "text", Text: "SECRET_CHILD_ANSWER"})
+					}
+				} else if parentCalls.Add(1) == 1 {
+					message.StopReason = "toolUse"
+					args, _ := json.Marshal(map[string]any{"task": "read evidence", "async": async})
+					message.Content = ai.BlockContent(ai.ContentBlock{Type: "toolCall", ID: "spawn", Name: "spawn_subagent", Arguments: args})
+				}
+				return ai.ScriptedStream(message)(ctx, model, view, opts)
+			}}}}
+			a, err := agentcore.New(agentcore.Config{NativeProvider: provider, Model: "test", Policy: agentcore.NewAllowList("read", "spawn_subagent"), Extensions: []agentcore.ExtensionFactory{subagent.Plugin{AllowAsync: true}, jobs.Plugin{}}, Tools: agentcore.NewToolSet(agentcore.StringTool{ToolName: "read", Properties: agentcore.StringProperties(), Required: []string{}, Execute: func(ctx context.Context, _ map[string]string) (string, error) {
+				captured <- ctx
+				if ctx.Err() != nil {
+					t.Errorf("child tool context already cancelled: %v", ctx.Err())
+				}
+				agentcore.ReportProgress(ctx, "reading evidence")
+				return "SECRET_TOOL_RESULT", nil
+			}})})
+			if err != nil {
+				t.Fatal(err)
+			}
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+			var notes []string
+			result, err := a.RunNative(ctx, agentcore.NativeRun{Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: "delegate"}}, Sink: func(ev agentcore.StreamEvent) {
+				if ev.Type == agentcore.StreamProgress || ev.Type == agentcore.StreamToolExecUpdate {
+					notes = append(notes, ev.Note)
+				}
+			}})
+			if err != nil || result.Final != "parent answer" || childCalls.Load() != 2 {
+				t.Fatalf("run: %v final=%q child=%d", err, result.Final, childCalls.Load())
+			}
+			joined := strings.Join(notes, "\n")
+			if strings.Count(joined, "[sub-agent] running read") != 1 || !strings.Contains(joined, "[sub-agent] reading evidence") || strings.Contains(joined, "SECRET") {
+				t.Fatalf("lost, duplicated or private progress: %q", joined)
+			}
+			n := len(notes)
+			agentcore.ReportProgress(context.WithoutCancel(<-captured), "late private progress")
+			if len(notes) != n {
+				t.Fatal("progress emitted after run returned")
+			}
+		})
+	}
+}
+
+func TestRunProgressIgnoresCancelledAndUnboundObservers(t *testing.T) {
+	var notes []string
+	ctx, cancel := context.WithCancel(agentcore.WithRunProgress(context.Background(), func(note string) { notes = append(notes, note) }))
+	agentcore.ReportProgress(ctx, "active")
+	cancel()
+	agentcore.ReportProgress(ctx, "cancelled")
+	agentcore.ReportProgress(context.Background(), "unbound")
+	if len(notes) != 1 || notes[0] != "active" {
+		t.Fatalf("observer outlived cancellation: %v", notes)
+	}
+}
 
 type nativeReadTool struct{ calls *int }
 

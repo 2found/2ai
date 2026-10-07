@@ -140,6 +140,22 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 		// user message, matching the native session host's question protocol.
 		answerQuestion = true
 	}
+	var sinkMu sync.Mutex
+	progressOpen := true
+	emit := func(event StreamEvent) {
+		sinkMu.Lock()
+		defer sinkMu.Unlock()
+		if progressOpen && input.Sink != nil {
+			input.Sink(event)
+		}
+	}
+	ctx = WithRunProgress(ctx, func(note string) { emit(StreamEvent{Type: StreamProgress, Note: note}) })
+	defer func() {
+		sinkMu.Lock()
+		progressOpen = false
+		sinkMu.Unlock()
+	}()
+
 	h, err := a.openPiTools(ctx, false, goal)
 	if err != nil {
 		return result, err
@@ -197,14 +213,6 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 	if err := h.ObservePiMessages(ctx, PhaseExternalInput, 0, external); err != nil {
 		return result, err
 	}
-	var sinkMu sync.Mutex
-	emit := func(event StreamEvent) {
-		sinkMu.Lock()
-		defer sinkMu.Unlock()
-		if input.Sink != nil {
-			input.Sink(event)
-		}
-	}
 	tools, err := h.nativeTools(ctx, input.Telemetry, emit)
 	if err != nil {
 		return result, err
@@ -242,7 +250,7 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 		policy.Summarize = func(ctx context.Context, prefix json.RawMessage, _ string) (string, Usage, error) {
 			emit(StreamEvent{Type: StreamProgress, Note: "Compacting context"})
 			defer func() {
-				emit(StreamEvent{Type: StreamProgress, Note: "Context compaction finished; preparing model request"})
+				emit(StreamEvent{Type: StreamProgress, Note: "Context summary chunk settled; compaction may continue"})
 			}()
 			var usage Usage
 			out := ai.NewAssistantMessageEventStream()
