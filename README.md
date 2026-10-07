@@ -86,7 +86,9 @@ go run ./examples/scripted
 ```
 
 Ordinary checks use recorded fixtures, scripted providers and local HTTP
-servers. Live provider and Docker tests skip unless their prerequisites are
+servers. Install Node.js 22.15+ and Python 3 to exercise the optional sandbox
+eval tests; the Go library itself has no JavaScript runtime dependency.
+Live provider and Docker tests skip unless their prerequisites are
 explicitly supplied. The suite covers failure, cancellation, permissions,
 retry accounting and concurrency. No sibling checkout or local `replace` is
 required. For coordinated development, use an uncommitted Go workspace.

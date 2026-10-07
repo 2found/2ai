@@ -86,6 +86,8 @@ go run ./examples/scripted
 ```
 
 Kiểm tra thông thường dùng fixture ghi sẵn, provider giả lập và HTTP server local.
+Cài Node.js 22.15+ và Python 3 để chạy test eval tùy chọn của sandbox;
+bản thân thư viện Go không phụ thuộc JavaScript runtime.
 Test gọi provider thật hoặc Docker được bỏ qua khi chưa cung cấp điều kiện chạy
 rõ ràng. Suite kiểm tra lỗi, cancellation, quyền, usage khi retry và concurrency.
 Không cần checkout repo bên cạnh hay `replace` local. Khi sửa nhiều repo cùng

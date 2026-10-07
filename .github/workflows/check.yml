@@ -10,7 +10,10 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
       - run: go mod download
-      - run: go test -race ./...
+      - run: go test -race -p 2 ./...
       - run: go vet ./...
       - run: go run ./examples/scripted
