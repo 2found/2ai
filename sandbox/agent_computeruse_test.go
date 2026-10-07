@@ -73,6 +73,13 @@ func newWorkspaceDir(t *testing.T) *Workspace {
 	if err != nil {
 		t.Fatalf("NewWorkspace: %v", err)
 	}
+	// Container root has all capabilities dropped, including DAC override.
+	// On Linux it cannot traverse/write a 0700 host-user fixture directory.
+	// This disposable, secret-free artifact fixture explicitly grants access;
+	// production workspace permissions remain host-owned.
+	if err := os.Chmod(ws.Root(), 0o777); err != nil {
+		t.Fatalf("grant container access to artifact fixture: %v", err)
+	}
 	return ws
 }
 
