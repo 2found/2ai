@@ -441,3 +441,103 @@ func TestSafeWireUsageObjectPresenceIsNotObservedZero(t *testing.T) {
 		t.Fatal("malformed cache observation trusted")
 	}
 }
+
+func TestSafeAttemptAfterEndErrorDoesNotRepeatHostHook(t *testing.T) {
+	o, ctx := safeAIContext(t)
+	sentinel := errors.New("host end failure")
+	calls := 0
+	s := NewAssistantMessageEventStreamWithHooks(AssistantStreamHooks{AfterEnd: func(context.Context) error {
+		calls++
+		return sentinel
+	}})
+	s.Push(AssistantMessageEvent{Type: "done", Message: &Message{Role: "assistant", StopReason: "stop"}})
+	s.End()
+	_, err := (FallbackProvider{}).Run(ctx, NewAssistantMessageEventStream(), FallbackRequest{Candidates: 1, Open: func(context.Context, int, int) (*AssistantMessageEventStream, error) { return s, nil }})
+	if err != sentinel || calls != 1 || len(safeAttempts(o)) != 1 {
+		t.Fatalf("end hook repeated or failure lost: calls=%d err=%v", calls, err)
+	}
+}
+
+func TestSafeAnthropicDeltaRejectsInvalidCacheAllocation(t *testing.T) {
+	for _, value := range []string{`"malformed"`, `null`, `-1`} {
+		t.Run(value, func(t *testing.T) {
+			var model completionsModel
+			if err := json.Unmarshal([]byte(`{"cost":{"input":1,"output":1,"cacheRead":1,"cacheWrite":1}}`), &model); err != nil {
+				t.Fatal(err)
+			}
+			acc := newAnthropicAccumulator(model, false, nil, nil, NewAssistantMessageEventStream(), func() int64 { return 0 })
+			if err := acc.chunk(json.RawMessage(`{"type":"message_start","message":{"usage":{"input_tokens":3,"output_tokens":0,"cache_creation_input_tokens":2}}}`)); err != nil {
+				t.Fatal(err)
+			}
+			if err := acc.chunk(json.RawMessage(`{"type":"message_delta","usage":{"output_tokens":1,"cache_creation":{"ephemeral_1h_input_tokens":` + value + `}}}`)); err != nil {
+				t.Fatal(err)
+			}
+			a := telemetry.NormalizeSafeAccounting(safeNativeAccounting(acc.output))
+			if a.UsageObserved || a.Complete || a.UsageSource != "invalid" || a.KnownCostUSD != nil {
+				t.Fatalf("invalid cache allocation trusted: %+v", a)
+			}
+		})
+	}
+}
+
+func TestSafeRecoveryReceivesStructuralFailureKind(t *testing.T) {
+	_, ctx := safeAIContext(t)
+	cause := &protocol.ProviderError{Status: 503}
+	observed, recovered := "", ""
+	_, err := (FallbackProvider{Retry: protocol.RetryPolicy{MaxAttempts: 1}}).Run(ctx, NewAssistantMessageEventStream(), FallbackRequest{
+		Candidates: 1,
+		Open:       func(context.Context, int, int) (*AssistantMessageEventStream, error) { return nil, cause },
+		Observe:    func(_ context.Context, _ int, a FallbackAttempt) error { observed = a.FailureKind; return nil },
+		Recover: func(_ context.Context, _ int, a FallbackAttempt) (bool, error) {
+			recovered = a.FailureKind
+			return false, nil
+		},
+	})
+	if err != cause || observed != "provider_unavailable" || recovered != observed {
+		t.Fatalf("recovery failure metadata differs: observed=%q recovered=%q err=%v", observed, recovered, err)
+	}
+}
+
+func TestSafeNestedFallbackStillCountsOnlyDelegatedProducer(t *testing.T) {
+	o, ctx := safeAIContext(t)
+	message := &Message{Role: "assistant", StopReason: "stop", Usage: explicitUsage(3, 0, 0, 0, 0, false)}
+	inner := FallbackProvider{Candidates: []FallbackCandidate{{Stream: func(ctx context.Context, _ json.RawMessage, _ TranscriptContext, _ map[string]any) (*AssistantMessageEventStream, error) {
+		return attemptFixture(AssistantMessageEvent{Type: "done", Message: message})(ctx)
+	}}}}
+	_, err := (FallbackProvider{}).Run(ctx, NewAssistantMessageEventStream(), FallbackRequest{Candidates: 1, Open: func(ctx context.Context, _, _ int) (*AssistantMessageEventStream, error) {
+		return inner.Stream(ctx, nil, NormalizeContext(Context{}), nil)
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	r := safeAttempts(o)
+	if len(r) != 1 || r[0].Accounting.Tokens.Input != 3 {
+		t.Fatalf("nested wrapper double counted producer: %+v", r)
+	}
+}
+
+func TestSafeDevinUsageDecodeValidity(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		raw      []byte
+		observed bool
+	}{
+		{"malformed", []byte{0x3a, 0x01, 0x10}, false},
+		{"counter-wire-type", []byte{0x3a, 0x02, 0x12, 0x00}, false},
+		{"usage-wire-type", []byte{0x38, 0x00}, false},
+		{"explicit-zero", []byte{0x3a, 0x00}, true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			delta, err := devinDecodeChatResponse(tc.raw)
+			if err != nil {
+				t.Fatal(err)
+			}
+			acc := newDevinAccumulator(completionsModel{}, "", NewAssistantMessageEventStream(), 0)
+			acc.chunk(delta)
+			a := telemetry.NormalizeSafeAccounting(safeNativeAccounting(acc.output))
+			if a.UsageObserved != tc.observed || !tc.observed && (a.Tokens != nil || a.UsageSource != "invalid") {
+				t.Fatalf("decoded usage trust: %+v", a)
+			}
+		})
+	}
+}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -105,4 +106,100 @@ func TestNativeTelemetryIncludesFailedFallbackAndPreservesCheckpoint(t *testing.
 		}
 	}
 	t.Logf("AC-TELEMETRY native actual JSON: %s", raw)
+}
+
+func TestSafeProactiveCompactionRetainsMainAttempts(t *testing.T) {
+	safe, err := telemetry.NewSafeObserver(telemetry.SafeObserverOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	ctx, err := telemetry.WithSafeObserver(context.Background(), safe, telemetry.SafeExecution{ExecutionID: "proactive-compaction"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	calls, summaries, effects := 0, 0, 0
+	stream := func(ctx context.Context, model json.RawMessage, view ai.TranscriptContext, options map[string]any) (*ai.AssistantMessageEventStream, error) {
+		message := ai.Message{Role: "assistant", StopReason: "stop", Content: ai.BlockContent(ai.ContentBlock{Type: "text", Text: "finished"}), Usage: &ai.Usage{Input: 10, Observation: ai.UsageObservation{UsageObserved: true, UsageSource: "explicit"}}}
+		if strings.Contains(ai.GetCurrentSystemPrompt(view.Messages()), "Summarize the conversation") {
+			summaries++
+			message.Content = ai.BlockContent(ai.ContentBlock{Type: "text", Text: "Continue the task; earlier work is verified."})
+		} else {
+			calls++
+			if calls <= 20 {
+				message.StopReason = "toolUse"
+				message.Content = ai.BlockContent(ai.ContentBlock{Type: "toolCall", ID: fmt.Sprintf("work-%d", calls), Name: "work", Arguments: json.RawMessage(`{}`)})
+			}
+		}
+		return ai.ScriptedStream(message)(ctx, model, view, options)
+	}
+	limits := agentcore.DefaultLimits()
+	limits.MaxTurns, limits.MaxToolCalls, limits.MaxContextTokens = 30, 30, 4000
+	compact := agentcore.DefaultCompactionSettings()
+	compact.KeepRecentTokens = 1500
+	a, err := agentcore.New(agentcore.Config{Model: "fixture", NativeProvider: &ai.FallbackProvider{Candidates: []ai.FallbackCandidate{{Model: json.RawMessage(`{"id":"fixture"}`), Stream: stream}}}, Limits: &limits, Compaction: &compact,
+		Tools: agentcore.NewToolSet(agentcore.StringTool{ToolName: "work", Properties: agentcore.StringProperties(), Required: []string{}, Execute: func(context.Context, map[string]string) (string, error) {
+			effects++
+			return strings.Repeat("x", 900), nil
+		}}), Policy: agentcore.NewAllowList("work")})
+	if err != nil {
+		t.Fatal(err)
+	}
+	result, err := a.RunNative(ctx, agentcore.NativeRun{Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: "Complete the task."}}})
+	if err != nil || calls != 21 || effects != 20 || summaries == 0 {
+		t.Fatalf("compaction trigger: calls=%d summaries=%d effects=%d err=%v", calls, summaries, effects, err)
+	}
+	main, compactAttempts, input := 0, 0, 0.0
+	for _, r := range safe.Drain(256) {
+		if r.Kind != "attempt_settled" {
+			continue
+		}
+		input += r.Accounting.Tokens.Input
+		if r.Category == telemetry.CategoryMain {
+			main++
+		}
+		if r.Category == telemetry.CategoryCompaction {
+			compactAttempts++
+		}
+	}
+	if main != calls || compactAttempts != summaries || input != float64(result.Usage.InputTokens) {
+		t.Fatalf("proactive compaction lost attempts: main=%d/%d compact=%d/%d input=%g/%d", main, calls, compactAttempts, summaries, input, result.Usage.InputTokens)
+	}
+}
+
+func TestSafeTerminalNativeSpansReportFailure(t *testing.T) {
+	for _, tc := range []struct{ reason, status, kind string }{
+		{"aborted", "cancelled", "request_cancelled"},
+		{"error", "failed", "unknown"},
+	} {
+		t.Run(tc.reason, func(t *testing.T) {
+			safe, err := telemetry.NewSafeObserver(telemetry.SafeObserverOptions{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			ctx, err := telemetry.WithSafeObserver(context.Background(), safe, telemetry.SafeExecution{ExecutionID: "terminal-native"})
+			if err != nil {
+				t.Fatal(err)
+			}
+			a, err := agentcore.New(agentcore.Config{Model: "fixture", NativeProvider: &ai.FallbackProvider{Candidates: []ai.FallbackCandidate{{Model: json.RawMessage(`{"id":"fixture"}`), Stream: ai.ScriptedStream(ai.Message{Role: "assistant", StopReason: tc.reason})}}}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			result, err := a.RunNative(ctx, agentcore.NativeRun{Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: "run"}}})
+			if err != nil || result.StopReason != tc.reason {
+				t.Fatalf("terminal result changed: %+v %v", result, err)
+			}
+			spans := 0
+			for _, r := range safe.Drain(256) {
+				if r.Kind == "span_settled" && (r.SpanKind == "model" || r.SpanKind == "agent") {
+					spans++
+					if r.Status != tc.status || r.FailureKind != tc.kind {
+						t.Errorf("terminal span outcome: %+v", r)
+					}
+				}
+			}
+			if spans != 2 {
+				t.Fatalf("missing terminal spans: %d", spans)
+			}
+		})
+	}
 }

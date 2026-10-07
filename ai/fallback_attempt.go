@@ -68,7 +68,9 @@ func relayNativeAttempt(ctx context.Context, out *AssistantMessageEventStream, o
 		readCtx := context.WithoutCancel(ctx)
 		_ = source.WaitForEnd(readCtx)
 		for {
-			event, ok, readErr := source.Next(readCtx)
+			// Cleanup drains producer events only; a failed authoritative
+			// AfterEnd hook must not run a second time.
+			event, ok, readErr := source.EventStream.Next(readCtx)
 			if readErr != nil || !ok {
 				break
 			}

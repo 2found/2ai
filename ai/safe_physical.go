@@ -11,6 +11,7 @@ type safePhysicalKey struct{}
 type safePhysicalObservation struct {
 	call      telemetry.SafeCall
 	labels    telemetry.SafeLabels
+	scope     telemetry.SafeOrigin
 	delegated atomic.Bool
 }
 

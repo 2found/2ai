@@ -51,9 +51,11 @@ func (r nativeRungAttempts) run(ctx context.Context, out *AssistantMessageEventS
 		}
 		attemptCtx, capture := WithNativeProviderFailure(ctx)
 		var safeAttempt *telemetry.SafeAttempt
-		physical := &safePhysicalObservation{call: r.safeCall, labels: r.safeLabels}
+		physical := &safePhysicalObservation{call: r.safeCall, labels: r.safeLabels, scope: telemetry.CaptureSafeOrigin(ctx)}
 		last, err = relayNativeAttempt(attemptCtx, out, func(ctx context.Context) (*AssistantMessageEventStream, error) {
-			if parent, _ := ctx.Value(safePhysicalKey{}).(*safePhysicalObservation); parent != nil {
+			// Only nested composition in the same observation scope replaces
+			// this producer. Auxiliary preparation has its own span/call.
+			if parent, _ := ctx.Value(safePhysicalKey{}).(*safePhysicalObservation); parent != nil && parent.scope == physical.scope {
 				parent.delegated.Store(true)
 			}
 			safeAttempt = r.safeCall.StartAttempt(number, r.safeLabels)
@@ -124,7 +126,7 @@ func (r nativeRungAttempts) run(ctx context.Context, out *AssistantMessageEventS
 			return last, nil
 		}
 		if r.recover != nil && !recovered && failure != nil {
-			ok, recoverErr := r.recover(ctx, FallbackAttempt{Number: number, Outcome: last, Failure: failure})
+			ok, recoverErr := r.recover(ctx, FallbackAttempt{Number: number, Outcome: last, Failure: failure, FailureKind: kind})
 			if recoverErr != nil {
 				return last, recoverErr
 			}

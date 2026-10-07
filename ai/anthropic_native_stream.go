@@ -287,6 +287,7 @@ func (a *anthropicAccumulator) chunk(raw json.RawMessage) error {
 					}
 				}
 				cache, _ := samplingObject(usage["cache_creation"])
+				observeOptionalWireUsage(a.output.Usage, cache, "ephemeral_1h_input_tokens", "ephemeral_5m_input_tokens")
 				if samplingNonNull(cache["ephemeral_1h_input_tokens"]) {
 					value := anthropicNumber(cache["ephemeral_1h_input_tokens"])
 					a.output.Usage.CacheWrite1h = &value

@@ -69,8 +69,18 @@ func (a *Agent) RunNative(ctx context.Context, input NativeRun) (RunResult, erro
 	return telemetry.StartSpan(input.Telemetry, telemetry.SpanOptions{Name: "agentray.agent.run"}, func(span *telemetry.Span) (RunResult, error) {
 		input.Telemetry = span.Context()
 		result, err := a.runNative(telemetry.WithContext(ctx, span.Context()), input)
-		if err == nil && result.StopReason != "" && result.StopReason != "stop" && result.StopReason != "end_turn" {
-			span.SetSafeOutcome("stopped", "none")
+		if err == nil {
+			if result.StopReason == "aborted" {
+				kind := "request_cancelled"
+				if ctx.Err() == context.DeadlineExceeded {
+					kind = "request_timeout"
+				}
+				span.SetSafeOutcome("cancelled", kind)
+			} else if result.StopReason == "error" {
+				span.SetSafeOutcome("failed", "unknown")
+			} else if result.StopReason != "" && result.StopReason != "stop" && result.StopReason != "end_turn" {
+				span.SetSafeOutcome("stopped", "none")
+			}
 		}
 		span.SetAttributes(telemetry.NewAttributes(
 			telemetry.Property{Name: "agent.stop_reason", Value: result.StopReason},
@@ -502,6 +512,13 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 				})
 				if message := outcome.Message(); message != nil && (message.StopReason == "error" || message.StopReason == "aborted") {
 					span.SetStatus(telemetry.SpanStatus{Status: "error"})
+					if message.StopReason == "aborted" {
+						kind := "request_cancelled"
+						if ctx.Err() == context.DeadlineExceeded {
+							kind = "request_timeout"
+						}
+						span.SetSafeOutcome("cancelled", kind)
+					}
 				}
 				return outcome, failure
 			})
