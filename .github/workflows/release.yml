@@ -40,23 +40,13 @@ jobs:
           RELEASE_REF_TYPE: ${{ github.event_name == 'workflow_dispatch' && 'tag' || github.ref_type }}
           RELEASE_REF_NAME: ${{ inputs.tag || github.ref_name }}
           GH_TOKEN: ${{ github.token }}
+  # Check owns PR/other refs; this call is the only check run on main.
+  # Verify ordinary main pushes too, even when the version is unchanged.
   verify:
     needs: plan
-    if: needs.plan.outputs.release == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.plan.outputs.commit }}
-      - uses: actions/setup-go@v5
-        with:
-          go-version-file: go.mod
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: go test -race -p 2 ./...
-      - run: go vet ./...
-      - run: go run ./examples/scripted
+    uses: ./.github/workflows/check.yml
+    with:
+      ref: ${{ needs.plan.outputs.commit }}
   tag:
     needs: [plan, verify]
     if: needs.plan.outputs.release == 'true'

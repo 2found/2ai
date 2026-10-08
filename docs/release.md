@@ -34,3 +34,8 @@ The 2found website consumes published release catalogs hourly. Optional secret
 `WEBSITE_DISPATCH_TOKEN`, scoped only to dispatch `2found/2found.dev`, triggers an
 immediate refresh. A notification failure does not undo the product release;
 the scheduled consumer repairs missed refreshes. Never store that token in source.
+
+Main checks and release share one workflow run. The release workflow calls the
+reusable check workflow once for the exact commit, including unchanged versions.
+PR checks remain read-only. Only a new source version creates a tag and starts
+distribution; bot-created tags do not launch a second workflow.
