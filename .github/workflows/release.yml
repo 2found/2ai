@@ -1,0 +1,129 @@
+name: Release
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing version tag to resume (for example v0.1.0)
+        required: true
+        type: string
+# GITHUB_TOKEN-created tags do not trigger workflows. Distribution is a
+# dependent job in THIS run; a human tag uses exactly the same pipeline.
+concurrency:
+  group: release
+  cancel-in-progress: false
+permissions:
+  contents: read
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.plan.outputs.version }}
+      tag: ${{ steps.plan.outputs.tag }}
+      commit: ${{ steps.plan.outputs.commit }}
+      release: ${{ steps.plan.outputs.release }}
+      createTag: ${{ steps.plan.outputs.createTag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --test scripts/release-plan.test.mjs scripts/release-assets.test.mjs
+      - id: plan
+        run: node scripts/release-plan.mjs
+        env:
+          RELEASE_REF_TYPE: ${{ github.event_name == 'workflow_dispatch' && 'tag' || github.ref_type }}
+          RELEASE_REF_NAME: ${{ inputs.tag || github.ref_name }}
+          GH_TOKEN: ${{ github.token }}
+  verify:
+    needs: plan
+    if: needs.plan.outputs.release == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.plan.outputs.commit }}
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: go test -race -p 2 ./...
+      - run: go vet ./...
+      - run: go run ./examples/scripted
+  tag:
+    needs: [plan, verify]
+    if: needs.plan.outputs.release == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.plan.outputs.commit }}
+          fetch-depth: 0
+      - name: Create immutable release tag after verification
+        if: needs.plan.outputs.createTag == 'true'
+        env:
+          RELEASE_TAG: ${{ needs.plan.outputs.tag }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git tag -a "$RELEASE_TAG" -m "$RELEASE_TAG"
+          git push origin "$RELEASE_TAG"
+  distribute:
+    needs: [plan, tag]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      VERSION: ${{ needs.plan.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.plan.outputs.tag }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Generate versioned documentation and download index
+        run: node scripts/release-assets.mjs "$VERSION" dist
+      - name: Stage GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # release-plan has already rejected published versions. Only drafts
+          # can be resumed; never overwrite assets on a published release.
+          if gh release view "v$VERSION" --json isDraft > release-state.json 2> release-error.txt; then
+            test "$(jq -r .isDraft release-state.json)" = true
+          elif grep -q 'release not found' release-error.txt; then
+            gh release create "v$VERSION" --verify-tag --draft --generate-notes --title "v$VERSION"
+          else
+            cat release-error.txt >&2
+            exit 1
+          fi
+          gh api --method POST "repos/$GITHUB_REPOSITORY/releases/generate-notes" -f tag_name="v$VERSION" --jq .body > dist/NOTES.md
+          cat dist/DOWNLOADS.md >> dist/NOTES.md
+          gh release edit "v$VERSION" --notes-file dist/NOTES.md
+          gh release upload "v$VERSION" dist/*.tar.gz dist/release.json dist/DOWNLOADS.md dist/checksums.txt --clobber
+      - name: Publish complete release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release edit "v$VERSION" --draft=false --latest
+      - name: Notify website release consumer
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.WEBSITE_DISPATCH_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo 'Website consumes published releases hourly; configure WEBSITE_DISPATCH_TOKEN for immediate refresh.'
+            exit 0
+          fi
+          gh api --method POST repos/2found/2found.dev/dispatches -f event_type=release-published

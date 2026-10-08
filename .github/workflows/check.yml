@@ -13,6 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: node --test scripts/release-plan.test.mjs scripts/release-assets.test.mjs
       - run: go mod download
       - run: go test -race -p 2 ./...
       - run: go vet ./...

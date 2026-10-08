@@ -93,6 +93,13 @@ rõ ràng. Suite kiểm tra lỗi, cancellation, quyền, usage khi retry và co
 Không cần checkout repo bên cạnh hay `replace` local. Khi sửa nhiều repo cùng
 lúc, dùng Go workspace không commit.
 
+## Phát hành theo phiên bản
+
+Push `VERSION` mới lên `main` chỉ phát hành sau khi CI đạt. Mỗi tag cung cấp
+source Go module, tài liệu cùng phiên bản và danh sách tải có checksum.
+[Quy tắc release](docs/release.md) · [Release và tải về](https://github.com/2found/2ai/releases).
+Pin tag `v<version>` đã phát hành khi sử dụng; `@main` ở trên dành cho phát triển.
+
 ## Dành cho coding agent
 
 Đọc [AGENTS.md](AGENTS.md) trước để biết ranh giới sở hữu, lệnh kiểm tra và

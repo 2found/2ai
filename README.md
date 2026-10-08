@@ -77,6 +77,13 @@ OpenAI-compatible endpoints, including Gemini. Support varies by provider;
 [AI documentation](ai/README.md) is the contract, not a promise of support for
 every model in a provider catalog.
 
+## Versioned releases
+
+A new `VERSION` pushed to `main` releases only after CI passes. Each tag publishes
+Go-module source, matching documentation and a checksummed download index.
+[Release policy](docs/release.md) · [Releases and downloads](https://github.com/2found/2ai/releases).
+Pin a published `v<version>` in consumers; `@main` above remains a development path.
+
 ## Develop and verify
 
 ```sh
