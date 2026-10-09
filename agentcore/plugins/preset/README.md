@@ -66,3 +66,7 @@ validates checkpoints and effect receipts directly.
 `AdvisorOptions` (cadence/caps for `NativeAdvisor`), and `ConsolidateMemory` (native
 rollout distillation when the configured store implements the optional durable
 consolidation contract). Zero values preserve the earlier composition behavior.
+Use `MemoryWorker` to defer distillation and `OnMemoryConsolidationError` to
+observe staging/background failures. The callback does not fail a completed
+primary answer. Hosts should redact or classify errors before logging them;
+raw provider/storage errors can contain private content.

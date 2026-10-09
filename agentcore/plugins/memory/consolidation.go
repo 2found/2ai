@@ -16,9 +16,10 @@ import (
 // Rollout is bounded evidence from a completed run. ID is a content digest,
 // making retries idempotent even if publication and consolidation are retried.
 type Rollout struct {
-	ID       string              `json:"id"`
-	Messages []agentcore.Message `json:"messages"`
-	Final    string              `json:"final"`
+	ID       string                 `json:"id"`
+	Source   agentcore.MemorySource `json:"source,omitempty"`
+	Messages []agentcore.Message    `json:"messages"`
+	Final    string                 `json:"final"`
 }
 
 // Change replaces/merges live entries, or retracts them when Entry is nil.
@@ -58,7 +59,7 @@ func (c *curation) FinalizeRun(ctx context.Context, result agentcore.RunResult, 
 	if err != nil {
 		return err
 	}
-	r := Rollout{ID: id, Final: agentcore.TruncateMiddle(result.Final, 8000)}
+	r := Rollout{ID: id, Final: agentcore.TruncateMiddle(RedactSecrets(result.Final), 8000)}
 	budget := 32000
 	for i := len(result.Messages) - 1; i >= 0 && len(r.Messages) < 32 && budget > 0; i-- {
 		m := result.Messages[i]
@@ -71,7 +72,7 @@ func (c *curation) FinalizeRun(ctx context.Context, result agentcore.RunResult, 
 		for _, call := range m.ToolCalls[:min(8, len(m.ToolCalls))] {
 			parts = append(parts, "\nTool call "+agentcore.TruncateBytes(call.Name, 64)+": "+agentcore.TruncateMiddle(call.Arguments, 1024))
 		}
-		content := strings.Join(parts, "")
+		content := RedactSecrets(strings.Join(parts, ""))
 		m = agentcore.Message{Role: m.Role, Name: agentcore.TruncateBytes(m.Name, 64), ToolCallID: agentcore.TruncateBytes(m.ToolCallID, 128), Content: agentcore.TruncateMiddle(content, min(budget, 4000))}
 		if m.Content == "" {
 			continue
@@ -134,7 +135,14 @@ func (c *curation) consolidate(ctx context.Context) (processed int, err error) {
 	if len(pending) > 1 {
 		ctx = telemetry.WithoutSafeOrigin(ctx)
 	}
-	memories, err := c.store.Recall(ctx, c.scopeID, "", 32)
+	var memories []agentcore.MemoryEntry
+	if source, ok := c.store.(interface {
+		ConsolidationMemories(context.Context, string, []Rollout, int) ([]agentcore.MemoryEntry, error)
+	}); ok {
+		memories, err = source.ConsolidationMemories(ctx, c.scopeID, pending, 32)
+	} else {
+		memories, err = c.store.Recall(ctx, c.scopeID, "", 32)
+	}
 	if err != nil {
 		return 0, err
 	}
@@ -195,7 +203,7 @@ func ValidateConsolidation(scope string, in Consolidation, changes []Change) err
 			if e.ScopeID != "" && e.ScopeID != scope {
 				return fmt.Errorf("memory: scope widening")
 			}
-			if strings.TrimSpace(e.Content) == "" || len(e.Content) > 8192 || len(e.Tags) > 32 || len(strings.Join(e.Tags, " ")) > 2048 || e.Confidence < 0 || e.Confidence > 1 {
+			if (e.Kind != "" && !agentcore.ValidMemoryKind(e.Kind)) || len(e.Key) > 128 || strings.TrimSpace(e.Content) == "" || len(e.Content) > 8192 || len(e.Tags) > 32 || len(strings.Join(e.Tags, " ")) > 2048 || e.Confidence < 0 || e.Confidence > 1 {
 				return fmt.Errorf("memory: invalid lesson")
 			}
 		}

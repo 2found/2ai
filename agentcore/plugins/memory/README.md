@@ -43,64 +43,46 @@ This bounds what recall costs, not what it is worth: a store that returns
 generously is now truncated rather than trusted, so a store that returns badly
 still wastes the whole budget on the wrong facts.
 
-## Ranking and forgetting
+## Store ownership and lifecycle
 
-The contract (`Recall`/`Remember`) is unchanged and still says nothing about
-either — both live in the store. What the shipped store does:
+The foundation supplies interfaces and tools, not a durable database or ranking
+policy. The host implements `MemoryStore` and owns identity, retrieval indexes,
+capacity, expiry and retention. There is no built-in vector store or guaranteed
+semantic duplicate/contradiction detector.
 
-- **Relevance floor.** A candidate below `recallCosineFloor` is dropped rather
-  than ranked low, because a memory the query is orthogonal to is not a weak
-  answer, it is not an answer. Dropping every candidate falls back to keyword
-  recall, which is the always-available floor.
-- **`Confidence` is read.** It was persisted from the start (0.7 when the model
-  chose to remember, 0.6 when the reflection pass inferred) and read by nothing;
-  it is now a bounded rank multiplier that settles rows the vector cannot
-  separate.
-- **Recency of last confirmation** contributes at most 30% of the score, so it
-  can never promote a loosely-related memory over a materially relevant one.
-- **Fold-in on write.** A re-derived memory folds into the row it repeats
-  (`seen_count`/`last_seen_at`) instead of appending a paraphrase, so the store
-  does not fill with one fact restated N times.
-- **Soft supersede.** A retracted memory keeps its row and is filtered out of
-  every recall path, so the history of having held the belief survives the
-  retraction.
+`MemoryEntry` separates kind (fact, preference, procedure, learning, episode,
+context, outcome) from ownership and lifetime. Optional metadata includes a fact
+key, expiry, last confirmation, observation count and host-assigned conversation /
+run / rollout sources. A source proves where evidence came from, not that its
+content is true. Model-authored classifications remain inferred evidence.
 
-## Model-facing curation
+## Model-facing tools
 
-The plugin also contributes two gated tools when a store is installed
-(`BeginRun` declines without one, so they never appear on a memoryless run):
+All tools remain behind the normal permission gate. A nil store disables them.
 
-- **`learn`** files a reusable lesson as a `learning` entry — the in-run half
-  of what the reflection pass does after the run. It needs only `Remember`,
-  so a store that cannot revise entries still gets it.
-- **`memory_edit`** revises one entry by id: `update` rewrites the content
-  (old row kept, superseded by the new one), `forget`/`invalidate` retract it.
-  It is offered only when the store implements `agentcore.MemoryCurator`.
+- `learn` persists a learning through the original `Remember` seam. Stores
+  implementing optional `ScopedMemory` also advertise host-approved target aliases,
+  typed entries, keys, TTL and explicit replacement IDs. The model never supplies
+  a tenant/user identifier. Read permission does not imply write permission.
+- `memory_recall` retrieves 1–20 previews (default 8), with a query of at most
+  2000 bytes and content previews of at most 2000 bytes. Results must belong to
+  the current scope or a host-declared readable target. Optional `MemoryReader`
+  enables `id` instead of `query` for a complete entry before curation.
+- `memory_edit` requires `MemoryCurator`: update content, or soft-retract with
+  forget/invalidate. Optional `MemoryEraser` adds explicit erase of retained memory
+  revisions. Conversation transcripts have a separate host retention policy.
 
-Both pin the run's own scope (`RunInfo.ScopeID`) — a model can never name
-another scope, and the store refuses an id outside it — and both stay behind
-the permission gate like any other tool (no `SelfGated`: they write durable
-state). Retraction is always soft; there is no hard delete on the seam.
+Credential-pattern redaction runs before explicit retention and staged evidence.
+It handles common token formats, authorization headers, credential assignments,
+private keys and credentials embedded in URLs. It is a defense in depth filter,
+not general PII recognition or a guarantee against every secret representation.
+Hosts must also sanitize their persistence boundary and enforce every read/write
+capability, including edits by ID. Shared publication guidance in tool descriptions
+is not an approval workflow; the host remains the authority.
 
-## Known limitations and deferred work
-
-- **No contradiction resolution.** Nothing detects that two live memories
-  disagree; supersede is a seam the store exposes and the model can invoke
-  through `memory_edit`, not a judgement anything makes on its own.
-- **No consolidation or decay of stored rows.** Old memory loses rank, never
-  resolution: nothing summarizes, tiers, or evicts, and a scope's row count only
-  grows (more slowly now that repeats fold).
-- **The budget is byte-denominated, not token-denominated,** and is a fixed
-  constant rather than a share of `MaxContextTokens`.
-
-## Explicit recall
-
-The run extension contributes `memory_recall` alongside `learn` and optional
-`memory_edit`. The host must permit it. It calls the supplied store with the
-run's scope, a query of at most 2000 bytes, and 1–20 results (default 8).
-Entries include IDs for curation and content capped at 2000 bytes; results from
-a different scope are discarded. The store owns indexed relevance ranking.
-Recall is read-only and does not receive the bookkeeping-turn refund.
+Recall is assembled once per run and bounded in bytes, not tokens. Lifetime and
+ranking depend on the host; merely implementing `MemoryStore` does not add TTL,
+deduplication or erasure semantics to an existing store.
 
 ## Rollout consolidation
 
@@ -117,7 +99,9 @@ Evidence still keeps at most 32 messages within 32 KB plus an 8 KB final answer;
 tool-call annotations are joined once before truncation. This bounds staging
 scratch space by the largest message rather than the total transcript.
 
-Errors retain pending evidence and never fail the primary answer. The deferred
+Consolidation errors retain already-staged evidence and never fail the primary
+answer. A staging failure has no durability guarantee; hosts must observe
+`OnConsolidationError` rather than infer memory retention from reply success. The deferred
 worker retries a deadline failure once; synchronous callers and other failures
 wait for a later successful run. `OnConsolidationError` reports secondary failures to hosts.
 Children, parked, failed and aborted runs do not consolidate. This is independent
@@ -150,8 +134,11 @@ run. Provider retries/fallback retain the host's existing bounded policy; the
 worker does not add another retry loop for provider/auth/validation failures.
 Shutdown cancels and joins all active passes before returning.
 
-Queue overflow and shutdown retain durable evidence. The worker does not discover
-stored scopes on startup; a successful run re-admits that scope. Background usage
+Queue overflow and shutdown retain durable evidence. The host can page its durable
+pending index at startup and call `Recover(ctx, plugin, scope)` after rechecking
+current authority and provider policy. Recovery waits for capacity notifications
+without polling or replaying a primary run. The worker itself does not enumerate
+host storage; a later successful run also re-admits pending work. Background usage
 has independent safe telemetry and never mutates a completed agent's usage or
 goal budget. Continuations do not guess a single originating run. With no worker,
 AgentCore retains the synchronous single-batch contract for existing consumers.

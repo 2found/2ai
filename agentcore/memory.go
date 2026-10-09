@@ -2,23 +2,27 @@ package agentcore
 
 import (
 	"context"
-	"github.com/2found/2ai/ai/protocol"
 	"math"
 	"time"
+
+	"github.com/2found/2ai/ai/protocol"
 )
 
 // MemoryKind classifies a long-term memory entry.
 type MemoryKind string
 
 const (
-	MemoryFact     MemoryKind = "fact"
-	MemoryLearning MemoryKind = "learning"
-	MemoryOutcome  MemoryKind = "outcome"
+	MemoryFact       MemoryKind = "fact"
+	MemoryLearning   MemoryKind = "learning"
+	MemoryOutcome    MemoryKind = "outcome"
+	MemoryPreference MemoryKind = "preference"
+	MemoryProcedure  MemoryKind = "procedure"
+	MemoryEpisode    MemoryKind = "episode"
+	MemoryContext    MemoryKind = "context"
 )
 
 // MemoryEntry is one durable, distilled fact the agent carries across runs.
-// Recalled into the Perceive step by tag/keyword match (v1) and injected after
-// AGENTS.md. PII is redacted before persistence (§7).
+// The host owns indexed retrieval, identity, retention and sanitization policy.
 type MemoryEntry struct {
 	ID         string     `json:"id"`
 	ScopeID    string     `json:"scope_id"`
@@ -28,6 +32,67 @@ type MemoryEntry struct {
 	Confidence float64    `json:"confidence"`
 	SourceRun  string     `json:"source_run_id"`
 	CreatedAt  time.Time  `json:"created_at"`
+	// Key identifies an explicit fact slot; only an authorized replacement may
+	// change its value. An empty key never implies semantic equivalence.
+	Key         string         `json:"key,omitempty"`
+	ExpiresAt   *time.Time     `json:"expires_at,omitempty"`
+	ConfirmedAt time.Time      `json:"confirmed_at,omitempty"`
+	SeenCount   uint64         `json:"seen_count,omitempty"`
+	Evidence    string         `json:"evidence,omitempty"` // stated, inferred, tool, or unknown
+	Sources     []MemorySource `json:"sources,omitempty"`
+}
+
+// MemorySource is host-owned provenance, not a claim authored by the model.
+type MemorySource struct {
+	Conversation string `json:"conversation,omitempty"`
+	Run          string `json:"run,omitempty"`
+	Rollout      string `json:"rollout,omitempty"`
+}
+
+// MemoryTarget is a host-authorized alias. It is not a tenant ID supplied by
+// a model. The store enforces Writable on every mutation, including curation.
+type MemoryTarget struct {
+	Name        string `json:"name"`
+	ScopeID     string `json:"-"`
+	Description string `json:"description"`
+	Writable    bool   `json:"writable"`
+}
+
+type MemoryRetention struct {
+	Target     string     `json:"target,omitempty"`
+	Kind       MemoryKind `json:"kind,omitempty"`
+	Content    string     `json:"content"`
+	Tags       []string   `json:"tags,omitempty"`
+	Key        string     `json:"key,omitempty"`
+	TTLSeconds int64      `json:"ttl_seconds,omitempty"`
+	// ReplaceID is required to change an existing keyed fact, so a model cannot
+	// silently overwrite a contradiction without reading the old evidence.
+	ReplaceID string `json:"replace_id,omitempty"`
+}
+
+// ScopedMemory is optional; existing single-scope stores remain compatible.
+type ScopedMemory interface {
+	MemoryTargets(context.Context, string) ([]MemoryTarget, error)
+	Retain(context.Context, string, MemoryRetention) (MemoryEntry, error)
+}
+
+// MemoryReader supplies full entries for safe curation after clipped recall.
+type MemoryReader interface {
+	ReadMemory(context.Context, string, string) (MemoryEntry, error)
+}
+
+// MemoryEraser removes a memory's retained revisions as well as its live row.
+// Conversation transcripts have a separate host-owned retention policy.
+type MemoryEraser interface {
+	EraseMemory(context.Context, string, string) error
+}
+
+func ValidMemoryKind(kind MemoryKind) bool {
+	switch kind {
+	case MemoryFact, MemoryLearning, MemoryOutcome, MemoryPreference, MemoryProcedure, MemoryEpisode, MemoryContext:
+		return true
+	}
+	return false
 }
 
 // Session is a working-memory thread: the message history of one run, persisted
@@ -47,7 +112,7 @@ type Session struct {
 type MemoryStore interface {
 	// Recall returns long-term entries relevant to the query for a scope.
 	Recall(ctx context.Context, scopeID, query string, limit int) ([]MemoryEntry, error)
-	// Remember persists a long-term entry (PII already redacted by the caller).
+	// Remember persists an entry under the host's authorization and sanitization policy.
 	Remember(ctx context.Context, entry MemoryEntry) error
 }
 

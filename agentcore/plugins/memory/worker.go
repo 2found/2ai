@@ -35,6 +35,7 @@ type ConsolidationWorker struct {
 	mu                    sync.Mutex
 	queued                map[string]*consolidationTask
 	wake                  chan struct{}
+	changed               chan struct{}
 	capacity, parallelism int
 	sequence              uint64
 	closed                bool
@@ -45,7 +46,7 @@ type ConsolidationWorker struct {
 
 func NewConsolidationWorker(capacity int) *ConsolidationWorker {
 	capacity = max(1, capacity)
-	return &ConsolidationWorker{capacity: capacity, parallelism: min(4, capacity), queued: map[string]*consolidationTask{}, wake: make(chan struct{}, 1), coalesceDelay: 200 * time.Millisecond, retryDelay: 5 * time.Second, passTimeout: consolidationPassTimeout}
+	return &ConsolidationWorker{capacity: capacity, parallelism: min(4, capacity), queued: map[string]*consolidationTask{}, changed: make(chan struct{}), wake: make(chan struct{}, 1), coalesceDelay: 200 * time.Millisecond, retryDelay: 5 * time.Second, passTimeout: consolidationPassTimeout}
 }
 func (w *ConsolidationWorker) submit(c *curation) bool {
 	return w.submitOrigin(c, telemetry.SafeOrigin{})
@@ -84,6 +85,7 @@ func (w *ConsolidationWorker) Run(ctx context.Context) {
 		timer.Stop()
 		w.mu.Lock()
 		w.closed = true
+		w.signalSpaceLocked()
 		clear(w.queued)
 		w.mu.Unlock()
 		// Each active pass can always deliver its one result into the bounded
@@ -161,6 +163,7 @@ func (w *ConsolidationWorker) Run(ctx context.Context) {
 				task.due = time.Now().Add(delay)
 			} else {
 				delete(w.queued, task.scopeID)
+				w.signalSpaceLocked()
 			}
 			w.mu.Unlock()
 		}

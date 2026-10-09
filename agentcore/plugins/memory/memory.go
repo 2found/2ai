@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/2found/2ai/agentcore"
 	"github.com/2found/2ai/ai"
@@ -101,8 +102,8 @@ const ToolLearn = "learn"
 // learnTool persists a reusable lesson as a memory entry. It is the
 // model-facing half of what the reflection pass does after a run: the pass
 // infers lessons from the trace, this tool lets the agent file one the moment
-// it is learned. Kind is pinned to learning — a fact or outcome goes through
-// the consumer's own write path (the `remember` operation), not this tool.
+// it is learned. Optional ScopedMemory adds typed retention and host targets;
+// the original MemoryStore seam continues to record a learning.
 type learnTool struct {
 	store   agentcore.MemoryStore
 	scopeID string
@@ -115,7 +116,7 @@ func (t *learnTool) Name() string { return ToolLearn }
 func (t *learnTool) Bookkeeping() bool { return true }
 
 func (t *learnTool) Schema() agentcore.ToolSchema {
-	return agentcore.ToolSchema{
+	schema := agentcore.ToolSchema{
 		Name:   ToolLearn,
 		Strict: agentcore.ToolStrictEnabled,
 		Description: "Save a reusable lesson to long-term memory for future runs — a pitfall, a workaround, " +
@@ -137,12 +138,36 @@ func (t *learnTool) Schema() agentcore.ToolSchema {
 			"required": []string{"lesson"},
 		},
 	}
+	if scoped, ok := t.store.(agentcore.ScopedMemory); ok {
+		if targets, err := scoped.MemoryTargets(context.Background(), t.scopeID); err == nil {
+			schema.Description = "Retain useful facts, preferences, procedures or temporary context. Choose kind and lifetime accurately; temporary context must expire. Read a full existing entry before replacing it."
+			names := []string{}
+			for _, target := range targets {
+				if target.Writable {
+					names = append(names, target.Name)
+					schema.Description += " Target " + target.Name + ": " + target.Description + "."
+				}
+			}
+			props := schema.Parameters["properties"].(map[string]any)
+			props["target"] = map[string]any{"type": "string", "enum": names, "description": "Host-authorized destination; default current. Shared targets require an explicit user request. Never promote private evidence to a broader audience."}
+			props["kind"] = map[string]any{"type": "string", "enum": []string{"fact", "preference", "procedure", "learning", "episode", "context", "outcome"}}
+			props["key"] = map[string]any{"type": "string", "maxLength": 128, "description": "Optional stable fact slot, e.g. staging.endpoint. Read and explicitly replace an existing value; do not invent keys to evade a conflict."}
+			props["ttl_seconds"] = map[string]any{"type": "integer", "minimum": 0, "maximum": 31536000, "description": "Validity duration. Zero uses host defaults; temporary context must expire."}
+			props["replace_id"] = map[string]any{"type": "string", "description": "ID of the full memory you read and intend to replace."}
+		}
+	}
+	return schema
 }
 
 func (t *learnTool) Run(ctx context.Context, args string) (string, error) {
 	var in struct {
-		Lesson string   `json:"lesson"`
-		Tags   []string `json:"tags"`
+		Lesson     string               `json:"lesson"`
+		Tags       []string             `json:"tags"`
+		Target     string               `json:"target"`
+		Kind       agentcore.MemoryKind `json:"kind"`
+		Key        string               `json:"key"`
+		TTLSeconds int64                `json:"ttl_seconds"`
+		ReplaceID  string               `json:"replace_id"`
 	}
 	if err := json.Unmarshal([]byte(args), &in); err != nil {
 		return "", fmt.Errorf("invalid arguments: %w", err)
@@ -150,11 +175,31 @@ func (t *learnTool) Run(ctx context.Context, args string) (string, error) {
 	if strings.TrimSpace(in.Lesson) == "" {
 		return "", errors.New("learn: lesson is required")
 	}
+	for i := range in.Tags {
+		in.Tags[i] = RedactSecrets(in.Tags[i])
+	}
+	if in.Kind == "" {
+		in.Kind = agentcore.MemoryLearning
+	}
+	if !agentcore.ValidMemoryKind(in.Kind) || in.TTLSeconds < 0 || in.TTLSeconds > int64((365*24*time.Hour)/time.Second) {
+		return "", errors.New("learn: invalid kind or lifetime")
+	}
+	if scoped, ok := t.store.(agentcore.ScopedMemory); ok {
+		entry, err := scoped.Retain(ctx, t.scopeID, agentcore.MemoryRetention{Target: in.Target, Kind: in.Kind, Content: RedactSecrets(in.Lesson), Tags: in.Tags, Key: in.Key, TTLSeconds: in.TTLSeconds, ReplaceID: in.ReplaceID})
+		if err != nil {
+			return "", err
+		}
+		raw, err := json.Marshal(entry)
+		return string(raw), err
+	}
+	if in.Target != "" || in.Key != "" || in.TTLSeconds != 0 || in.ReplaceID != "" || in.Kind != agentcore.MemoryLearning {
+		return "", errors.New("learn: this store does not support scoped retention")
+	}
 	// The fence: the scope comes from the run, never from the model, so an
 	// agent can only ever write into its own memory.
 	if err := t.store.Remember(ctx, agentcore.MemoryEntry{
 		ScopeID: t.scopeID, Kind: agentcore.MemoryLearning,
-		Content: in.Lesson, Tags: in.Tags, Confidence: 0.7,
+		Content: RedactSecrets(in.Lesson), Tags: in.Tags, Confidence: 0.7,
 	}); err != nil {
 		return "", err
 	}
@@ -168,9 +213,8 @@ const ToolMemoryEdit = "memory_edit"
 // memoryEditTool revises one stored memory by id: update rewrites its content
 // (the old row is kept, superseded by the new one), forget and invalidate both
 // retract it — forget for a memory that is no longer worth keeping, invalidate
-// for one that turned out wrong. All three are soft: the row stays in the
-// store and is filtered out of recall, so the history of having held the
-// belief survives the retraction.
+// for one that turned out wrong. Retraction preserves history; an optional
+// MemoryEraser provides explicit removal of retained memory revisions.
 type memoryEditTool struct {
 	curator agentcore.MemoryCurator
 	scopeID string
@@ -186,7 +230,7 @@ func (t *memoryEditTool) Schema() agentcore.ToolSchema {
 			"'update' replaces the memory's content (the old version is kept as history); " +
 			"'forget' retracts a memory that is no longer worth keeping; " +
 			"'invalidate' retracts one that turned out to be wrong. " +
-			"Retraction is soft — the memory stops appearing in recall but is never deleted.",
+			"Retraction preserves revision history. If available, erase removes retained memory revisions on explicit request; it does not erase conversation transcripts. Read the full memory by ID before update.",
 		Parameters: map[string]any{
 			"type": "object",
 			"properties": map[string]any{
@@ -196,7 +240,7 @@ func (t *memoryEditTool) Schema() agentcore.ToolSchema {
 				},
 				"action": map[string]any{
 					"type":        "string",
-					"enum":        []string{"update", "forget", "invalidate"},
+					"enum":        t.actions(),
 					"description": "update: replace the content; forget: retract as no longer useful; invalidate: retract as wrong.",
 				},
 				"content": map[string]any{
@@ -236,11 +280,20 @@ func (t *memoryEditTool) Run(ctx context.Context, args string) (string, error) {
 			return "", errors.New("memory_edit: content is required for update")
 		}
 		if err := t.curator.Update(ctx, t.scopeID, in.ID, agentcore.MemoryEntry{
-			ScopeID: t.scopeID, Content: in.Content, Tags: in.Tags, Confidence: 0.7,
+			ScopeID: t.scopeID, Content: RedactSecrets(in.Content), Tags: in.Tags, Confidence: 0.7,
 		}); err != nil {
 			return "", err
 		}
 		return "Memory updated.", nil
+	case "erase":
+		eraser, ok := t.curator.(agentcore.MemoryEraser)
+		if !ok {
+			return "", errors.New("memory erasure unavailable")
+		}
+		if err := eraser.EraseMemory(ctx, t.scopeID, in.ID); err != nil {
+			return "", err
+		}
+		return "Memory and its retained revisions erased. Conversation history has its own retention policy.", nil
 	case "forget", "invalidate":
 		if err := t.curator.Supersede(ctx, t.scopeID, in.ID, ""); err != nil {
 			return "", err
@@ -249,4 +302,12 @@ func (t *memoryEditTool) Run(ctx context.Context, args string) (string, error) {
 	default:
 		return "", fmt.Errorf("memory_edit: unknown action %q (want update, forget, or invalidate)", in.Action)
 	}
+}
+
+func (t *memoryEditTool) actions() []string {
+	actions := []string{"update", "forget", "invalidate"}
+	if _, ok := t.curator.(agentcore.MemoryEraser); ok {
+		actions = append(actions, "erase")
+	}
+	return actions
 }

@@ -22,6 +22,8 @@
 package preset
 
 import (
+	"context"
+
 	"github.com/2found/2ai/agentcore"
 	"github.com/2found/2ai/agentcore/plugins/advisor"
 	"github.com/2found/2ai/agentcore/plugins/ask"
@@ -121,6 +123,9 @@ type Options struct {
 	ConsolidateMemory bool
 	// MemoryWorker moves consolidation off the primary run when supplied.
 	MemoryWorker *memory.ConsolidationWorker
+	// OnMemoryConsolidationError reports staging or background failures without
+	// failing a successfully completed primary run. Hosts must keep logs private.
+	OnMemoryConsolidationError func(context.Context, error)
 	// Interactive exposes ask; the host must publish questions and resume answers.
 	Interactive bool
 	// NativeHistory enables retrieval from opaque native checkpoints.
@@ -176,7 +181,7 @@ func Full(cfg agentcore.Config, o Options) []agentcore.Plugin {
 		}
 		for i, p := range list {
 			if p.Name() == "memory" {
-				list[i] = memory.Plugin{Store: cfg.Memory, NativeProvider: provider, Worker: o.MemoryWorker}
+				list[i] = memory.Plugin{Store: cfg.Memory, NativeProvider: provider, Worker: o.MemoryWorker, OnConsolidationError: o.OnMemoryConsolidationError}
 				break
 			}
 		}
