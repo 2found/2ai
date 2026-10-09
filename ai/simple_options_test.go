@@ -11,6 +11,7 @@ import (
 
 func TestPiSimpleOptionsOracle(t *testing.T) {
 	t.Setenv("PI_CACHE_RETENTION", "")
+	updates := readPiReconUpdates(t)
 	raw, err := os.ReadFile("testdata/pi-simple-options.json")
 	if err != nil {
 		t.Fatal(err)
@@ -53,6 +54,7 @@ func TestPiSimpleOptionsOracle(t *testing.T) {
 	}
 	for _, tc := range fixture.Cases {
 		t.Run(tc.Input.Name, func(t *testing.T) {
+			expected := updates.simpleExpectation(t, "pi-simple-options", tc.Input.Name, tc.Expected)
 			model := map[string]json.RawMessage{}
 			for key, value := range fixture.Model {
 				model[key] = value
@@ -92,8 +94,8 @@ func TestPiSimpleOptionsOracle(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if !reflect.DeepEqual(decode(actual), decode(tc.Expected)) {
-				t.Fatalf("simple options mismatch\nGo: %s\nPi: %s", actual, tc.Expected)
+			if !reflect.DeepEqual(decode(actual), decode(expected)) {
+				t.Fatalf("simple options mismatch\nGo: %s\nPi: %s", actual, expected)
 			}
 			after, _ := json.Marshal(transcript)
 			if !bytes.Equal(before, after) {

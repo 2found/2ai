@@ -1,0 +1,817 @@
+{
+  "upstreamCommit": "6fb2e7815167e6b19006fc526d1a5d0f5f998787",
+  "sourceHashes": {
+    "packages/ai/src/utils/estimate.ts": "b1fb184f293167b9f270567a09bf43e296ff7dd809e26fa4bc5c1f968946eaed",
+    "packages/ai/src/utils/text.ts": "d37c1825855c7fc71669a545b5b266810242c1c7e58d57228c0c143f29c1c544",
+    "packages/ai/src/api/simple-options.ts": "f68b3e13a55a72214243b37eb85fa0532b67cfb22ac80ea3434eb5d26ae36616",
+    "packages/ai/src/api/openai-codex-responses.ts": "f9aeb73e50d12125d619dec15b83266fb13adc070746b174b234dc7e56b7567a",
+    "packages/ai/src/api/azure-openai-responses.ts": "91fefcb7ff00d3db7a91180667d913b4f767a64fcc55ce8993493291f769f600"
+  },
+  "note": "Estimates generated from unchanged upstream estimate functions using existing pi-simple-options inputs; budget caps generated from unchanged clampMaxTokensToContext using original context inputs and expected output ceilings across Completions, Anthropic, Responses and Azure simple fixtures. Azure max_output_tokens retains its minimum from the pinned upstream constant. Headers generated from unchanged upstream header functions using existing pi-codex-auth inputs; getPiUserAgent is replaced only with the stable <platform> marker. Vietnamese and code text estimates use the unchanged upstream estimateTextTokens function.",
+  "estimates": [
+    {
+      "name": "text UTF16 estimate",
+      "estimate": {
+        "tokens": 5,
+        "usageTokens": 0,
+        "trailingTokens": 5,
+        "lastUsageIndex": null
+      },
+      "messageTokens": [
+        5
+      ],
+      "maxTokens": 99
+    },
+    {
+      "name": "images estimate",
+      "estimate": {
+        "tokens": 1373,
+        "usageTokens": 0,
+        "trailingTokens": 1373,
+        "lastUsageIndex": null
+      },
+      "messageTokens": [
+        1373
+      ],
+      "maxTokens": 1
+    },
+    {
+      "name": "system sections tools",
+      "estimate": {
+        "tokens": 50,
+        "usageTokens": 0,
+        "trailingTokens": 50,
+        "lastUsageIndex": null
+      },
+      "messageTokens": [
+        48,
+        2
+      ],
+      "maxTokens": 54
+    },
+    {
+      "name": "assistant text thinking args",
+      "estimate": {
+        "tokens": 19,
+        "usageTokens": 0,
+        "trailingTokens": 19,
+        "lastUsageIndex": null
+      },
+      "messageTokens": [
+        2,
+        17
+      ],
+      "maxTokens": 85
+    },
+    {
+      "name": "tool result estimate",
+      "estimate": {
+        "tokens": 1373,
+        "usageTokens": 0,
+        "trailingTokens": 1373,
+        "lastUsageIndex": null
+      },
+      "messageTokens": [
+        1373
+      ],
+      "maxTokens": 1
+    },
+    {
+      "name": "usage total takes precedence",
+      "estimate": {
+        "tokens": 42,
+        "usageTokens": 40,
+        "trailingTokens": 2,
+        "lastUsageIndex": 1
+      },
+      "messageTokens": [
+        2,
+        2,
+        2
+      ],
+      "maxTokens": 62
+    },
+    {
+      "name": "usage fallback sum",
+      "estimate": {
+        "tokens": 22,
+        "usageTokens": 20,
+        "trailingTokens": 2,
+        "lastUsageIndex": 1
+      },
+      "messageTokens": [
+        2,
+        2,
+        2
+      ],
+      "maxTokens": 82
+    },
+    {
+      "name": "stale usage after inserted prefix",
+      "estimate": {
+        "tokens": 10,
+        "usageTokens": 0,
+        "trailingTokens": 10,
+        "lastUsageIndex": null
+      },
+      "messageTokens": [
+        4,
+        3,
+        3
+      ],
+      "maxTokens": 94
+    },
+    {
+      "name": "equal timestamp usage accepted",
+      "estimate": {
+        "tokens": 10,
+        "usageTokens": 10,
+        "trailingTokens": 0,
+        "lastUsageIndex": 1
+      },
+      "messageTokens": [
+        2,
+        2
+      ],
+      "maxTokens": 94
+    },
+    {
+      "name": "error usage ignored",
+      "estimate": {
+        "tokens": 2,
+        "usageTokens": 0,
+        "trailingTokens": 2,
+        "lastUsageIndex": null
+      },
+      "messageTokens": [
+        2
+      ],
+      "maxTokens": 102
+    },
+    {
+      "name": "aborted usage ignored",
+      "estimate": {
+        "tokens": 2,
+        "usageTokens": 0,
+        "trailingTokens": 2,
+        "lastUsageIndex": null
+      },
+      "messageTokens": [
+        2
+      ],
+      "maxTokens": 102
+    },
+    {
+      "name": "earlier usage retained after failed response",
+      "estimate": {
+        "tokens": 14,
+        "usageTokens": 10,
+        "trailingTokens": 4,
+        "lastUsageIndex": 0
+      },
+      "messageTokens": [
+        2,
+        2,
+        2
+      ],
+      "maxTokens": 90
+    },
+    {
+      "name": "latest usage wins",
+      "estimate": {
+        "tokens": 72,
+        "usageTokens": 70,
+        "trailingTokens": 2,
+        "lastUsageIndex": 2
+      },
+      "messageTokens": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "maxTokens": 32
+    },
+    {
+      "name": "tool declarations without messages",
+      "estimate": {
+        "tokens": 38,
+        "usageTokens": 0,
+        "trailingTokens": 38,
+        "lastUsageIndex": null
+      },
+      "messageTokens": [
+        38
+      ],
+      "maxTokens": 66
+    },
+    {
+      "name": "context budget caps thinking",
+      "estimate": {
+        "tokens": 10000,
+        "usageTokens": 10000,
+        "trailingTokens": 0,
+        "lastUsageIndex": 0
+      },
+      "messageTokens": [
+        2
+      ],
+      "maxTokens": 1904
+    }
+  ],
+  "headers": [
+    {
+      "name": "defaults",
+      "websocket": false,
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "user-agent": "<platform>"
+      }
+    },
+    {
+      "name": "defaults",
+      "websocket": true,
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "request",
+        "user-agent": "<platform>",
+        "x-client-request-id": "request"
+      }
+    },
+    {
+      "name": "session",
+      "websocket": false,
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "session-id": "session",
+        "user-agent": "<platform>",
+        "x-client-request-id": "session"
+      }
+    },
+    {
+      "name": "session",
+      "websocket": true,
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "session",
+        "user-agent": "<platform>",
+        "x-client-request-id": "session"
+      }
+    },
+    {
+      "name": "empty session",
+      "websocket": false,
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "user-agent": "<platform>"
+      }
+    },
+    {
+      "name": "empty session",
+      "websocket": true,
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "",
+        "user-agent": "<platform>",
+        "x-client-request-id": ""
+      }
+    },
+    {
+      "name": "model values",
+      "websocket": false,
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "session-id": "model",
+        "user-agent": "<platform>",
+        "x-custom": "value"
+      }
+    },
+    {
+      "name": "model values",
+      "websocket": true,
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "request",
+        "user-agent": "<platform>",
+        "x-client-request-id": "request",
+        "x-custom": "value"
+      }
+    },
+    {
+      "name": "override/delete",
+      "websocket": false,
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "user-agent": "<platform>",
+        "x-custom": "request"
+      }
+    },
+    {
+      "name": "override/delete",
+      "websocket": true,
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "request",
+        "user-agent": "<platform>",
+        "x-client-request-id": "request",
+        "x-custom": "request"
+      }
+    },
+    {
+      "name": "case collisions",
+      "websocket": false,
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "user-agent": "<platform>",
+        "x-custom": "two",
+        "x-other": "b"
+      }
+    },
+    {
+      "name": "case collisions",
+      "websocket": true,
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "request",
+        "user-agent": "<platform>",
+        "x-client-request-id": "request",
+        "x-custom": "two",
+        "x-other": "b"
+      }
+    },
+    {
+      "name": "auth protected",
+      "websocket": false,
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "request"
+      }
+    },
+    {
+      "name": "auth protected",
+      "websocket": true,
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "request",
+        "session-id": "request",
+        "x-client-request-id": "request"
+      }
+    },
+    {
+      "name": "model null is literal",
+      "websocket": false,
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "user-agent": "<platform>",
+        "x-custom": "null"
+      }
+    },
+    {
+      "name": "model null is literal",
+      "websocket": true,
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "request",
+        "user-agent": "<platform>",
+        "x-client-request-id": "request",
+        "x-custom": "null"
+      }
+    },
+    {
+      "name": "session supersedes both",
+      "websocket": false,
+      "expected": {
+        "accept": "text/event-stream",
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "content-type": "application/json",
+        "openai-beta": "responses=experimental",
+        "originator": "pi",
+        "session-id": "bound",
+        "user-agent": "<platform>",
+        "x-client-request-id": "bound"
+      }
+    },
+    {
+      "name": "session supersedes both",
+      "websocket": true,
+      "expected": {
+        "authorization": "Bearer token",
+        "chatgpt-account-id": "account",
+        "openai-beta": "responses_websockets=2026-02-06",
+        "originator": "pi",
+        "session-id": "bound",
+        "user-agent": "<platform>",
+        "x-client-request-id": "bound"
+      }
+    }
+  ],
+  "texts": [
+    {
+      "text": "",
+      "tokens": 0
+    },
+    {
+      "text": "Đọc truyện kiếm hiệp: Nguyễn trở về quê nhà.",
+      "tokens": 13
+    },
+    {
+      "text": "Tiếng Việt và 😀😀",
+      "tokens": 7
+    },
+    {
+      "text": "func main() {\n\tfmt.Println(\"hello\")\n}",
+      "tokens": 11
+    }
+  ],
+  "caps": [
+    {
+      "fixture": "pi-simple-options",
+      "name": "text UTF16 estimate",
+      "maxTokens": 99
+    },
+    {
+      "fixture": "pi-simple-options",
+      "name": "images estimate",
+      "maxTokens": 1
+    },
+    {
+      "fixture": "pi-simple-options",
+      "name": "system sections tools",
+      "maxTokens": 54
+    },
+    {
+      "fixture": "pi-simple-options",
+      "name": "assistant text thinking args",
+      "maxTokens": 85
+    },
+    {
+      "fixture": "pi-simple-options",
+      "name": "tool result estimate",
+      "maxTokens": 1
+    },
+    {
+      "fixture": "pi-simple-options",
+      "name": "usage total takes precedence",
+      "maxTokens": 62
+    },
+    {
+      "fixture": "pi-simple-options",
+      "name": "usage fallback sum",
+      "maxTokens": 82
+    },
+    {
+      "fixture": "pi-simple-options",
+      "name": "stale usage after inserted prefix",
+      "maxTokens": 94
+    },
+    {
+      "fixture": "pi-simple-options",
+      "name": "equal timestamp usage accepted",
+      "maxTokens": 94
+    },
+    {
+      "fixture": "pi-simple-options",
+      "name": "error usage ignored",
+      "maxTokens": 102
+    },
+    {
+      "fixture": "pi-simple-options",
+      "name": "aborted usage ignored",
+      "maxTokens": 102
+    },
+    {
+      "fixture": "pi-simple-options",
+      "name": "earlier usage retained after failed response",
+      "maxTokens": 90
+    },
+    {
+      "fixture": "pi-simple-options",
+      "name": "latest usage wins",
+      "maxTokens": 32
+    },
+    {
+      "fixture": "pi-simple-options",
+      "name": "tool declarations without messages",
+      "maxTokens": 66
+    },
+    {
+      "fixture": "pi-simple-options",
+      "name": "context budget caps thinking",
+      "maxTokens": 1904
+    },
+    {
+      "fixture": "pi-anthropic-simple",
+      "name": "text UTF16 estimate",
+      "maxTokens": 99
+    },
+    {
+      "fixture": "pi-anthropic-simple",
+      "name": "images estimate",
+      "maxTokens": 1
+    },
+    {
+      "fixture": "pi-anthropic-simple",
+      "name": "system sections tools",
+      "maxTokens": 54
+    },
+    {
+      "fixture": "pi-anthropic-simple",
+      "name": "assistant text thinking args",
+      "maxTokens": 85
+    },
+    {
+      "fixture": "pi-anthropic-simple",
+      "name": "tool result estimate",
+      "maxTokens": 1
+    },
+    {
+      "fixture": "pi-anthropic-simple",
+      "name": "usage total takes precedence",
+      "maxTokens": 62
+    },
+    {
+      "fixture": "pi-anthropic-simple",
+      "name": "usage fallback sum",
+      "maxTokens": 82
+    },
+    {
+      "fixture": "pi-anthropic-simple",
+      "name": "stale usage after inserted prefix",
+      "maxTokens": 94
+    },
+    {
+      "fixture": "pi-anthropic-simple",
+      "name": "equal timestamp usage accepted",
+      "maxTokens": 94
+    },
+    {
+      "fixture": "pi-anthropic-simple",
+      "name": "error usage ignored",
+      "maxTokens": 102
+    },
+    {
+      "fixture": "pi-anthropic-simple",
+      "name": "aborted usage ignored",
+      "maxTokens": 102
+    },
+    {
+      "fixture": "pi-anthropic-simple",
+      "name": "earlier usage retained after failed response",
+      "maxTokens": 90
+    },
+    {
+      "fixture": "pi-anthropic-simple",
+      "name": "latest usage wins",
+      "maxTokens": 32
+    },
+    {
+      "fixture": "pi-anthropic-simple",
+      "name": "tool declarations without messages",
+      "maxTokens": 66
+    },
+    {
+      "fixture": "pi-anthropic-simple",
+      "name": "context budget caps thinking",
+      "maxTokens": 1904
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "text UTF16 estimate",
+      "maxTokens": 99
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "images estimate",
+      "maxTokens": 1
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "system sections tools",
+      "maxTokens": 54
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "assistant text thinking args",
+      "maxTokens": 85
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "tool result estimate",
+      "maxTokens": 1
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "usage total takes precedence",
+      "maxTokens": 62
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "usage fallback sum",
+      "maxTokens": 82
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "stale usage after inserted prefix",
+      "maxTokens": 94
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "equal timestamp usage accepted",
+      "maxTokens": 94
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "error usage ignored",
+      "maxTokens": 102
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "aborted usage ignored",
+      "maxTokens": 102
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "earlier usage retained after failed response",
+      "maxTokens": 90
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "latest usage wins",
+      "maxTokens": 32
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "tool declarations without messages",
+      "maxTokens": 66
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "context budget caps thinking",
+      "maxTokens": 1904
+    },
+    {
+      "fixture": "pi-responses-simple",
+      "name": "strict schema fails after admission",
+      "maxTokens": 61
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "text UTF16 estimate",
+      "maxTokens": 99,
+      "maxOutputTokens": 99
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "images estimate",
+      "maxTokens": 1,
+      "maxOutputTokens": 16
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "system sections tools",
+      "maxTokens": 54,
+      "maxOutputTokens": 54
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "assistant text thinking args",
+      "maxTokens": 85,
+      "maxOutputTokens": 85
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "tool result estimate",
+      "maxTokens": 1,
+      "maxOutputTokens": 16
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "usage total takes precedence",
+      "maxTokens": 62,
+      "maxOutputTokens": 62
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "usage fallback sum",
+      "maxTokens": 82,
+      "maxOutputTokens": 82
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "stale usage after inserted prefix",
+      "maxTokens": 94,
+      "maxOutputTokens": 94
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "equal timestamp usage accepted",
+      "maxTokens": 94,
+      "maxOutputTokens": 94
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "error usage ignored",
+      "maxTokens": 102,
+      "maxOutputTokens": 102
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "aborted usage ignored",
+      "maxTokens": 102,
+      "maxOutputTokens": 102
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "earlier usage retained after failed response",
+      "maxTokens": 90,
+      "maxOutputTokens": 90
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "latest usage wins",
+      "maxTokens": 32,
+      "maxOutputTokens": 32
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "tool declarations without messages",
+      "maxTokens": 66,
+      "maxOutputTokens": 66
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "context budget caps thinking",
+      "maxTokens": 1904,
+      "maxOutputTokens": 1904
+    },
+    {
+      "fixture": "pi-azure-responses-simple",
+      "name": "strict schema fails after admission",
+      "maxTokens": 61,
+      "maxOutputTokens": 61
+    }
+  ]
+}

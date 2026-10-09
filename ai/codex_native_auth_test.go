@@ -10,6 +10,7 @@ import (
 )
 
 func TestPiCodexAuthOracle(t *testing.T) {
+	updates := readPiReconUpdates(t)
 	raw, err := os.ReadFile("testdata/pi-codex-auth.json")
 	if err != nil {
 		t.Fatal(err)
@@ -67,20 +68,31 @@ func TestPiCodexAuthOracle(t *testing.T) {
 	}
 	for _, tc := range fixture.Headers {
 		t.Run(fmt.Sprintf("headers/%s/ws=%v", tc.Input.Name, tc.Input.Websocket), func(t *testing.T) {
+			var expected map[string]string
+			for _, update := range updates.Headers {
+				if update.Name == tc.Input.Name && update.Websocket == tc.Input.Websocket {
+					expected = update.Expected
+				}
+			}
+			if expected == nil {
+				t.Fatal("missing newer upstream header expectation")
+			}
 			headers, err := codexNativeHeaders(tc.Input.Initial, tc.Input.Additional, "account", "token", tc.Input.Session, tc.Input.Websocket)
 			if err != nil {
 				t.Fatal(err)
 			}
-			if !strings.HasPrefix(headers.Get("User-Agent"), "pi (") {
-				t.Fatal("lost platform header")
+			if expected["user-agent"] == "<platform>" {
+				if !strings.HasPrefix(headers.Get("User-Agent"), "pi (") {
+					t.Fatal("lost platform header")
+				}
+				headers.Set("User-Agent", "<platform>")
 			}
-			headers.Set("User-Agent", "<platform>")
 			got := map[string]string{}
 			for name, values := range headers {
 				got[strings.ToLower(name)] = strings.Join(values, ", ")
 			}
-			if !reflect.DeepEqual(got, tc.Expected) {
-				t.Fatalf("headers=%v, want %v", got, tc.Expected)
+			if !reflect.DeepEqual(got, expected) {
+				t.Fatalf("headers=%v, want %v", got, expected)
 			}
 		})
 	}

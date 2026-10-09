@@ -63,11 +63,11 @@ func codexNativeAccountID(token string) (string, error) {
 	return completionsErrorString(account), nil
 }
 
-// Initial Headers construction appends case-insensitive duplicate names.
-// Provider overrides use set/delete; protocol/auth headers are applied last.
+// Defaults precede model and caller overrides. Case-insensitive duplicates use
+// set/delete semantics; protocol/auth headers remain authoritative.
 func codexNativeHeaders(initial, additional json.RawMessage, account, token string, session *string, websocket bool) (http.Header, error) {
-	headers := http.Header{}
-	assign := func(name, value string, appendValue bool) error {
+	headers := http.Header{"Originator": {"pi"}, "User-Agent": {completionsUserAgent()}}
+	assign := func(name, value string) error {
 		if !completionsHeaderName.MatchString(name) {
 			return fmt.Errorf("Invalid header name: %q", name)
 		}
@@ -80,11 +80,7 @@ func codexNativeHeaders(initial, additional json.RawMessage, account, token stri
 				return fmt.Errorf("Header value cannot be converted to a ByteString")
 			}
 		}
-		if appendValue && len(headers.Values(name)) > 0 {
-			headers.Set(name, strings.Join(headers.Values(name), ", ")+", "+value)
-		} else {
-			headers.Set(name, value)
-		}
+		headers.Set(name, value)
 		return nil
 	}
 	for i, raw := range []json.RawMessage{initial, additional} {
@@ -95,13 +91,13 @@ func codexNativeHeaders(initial, additional json.RawMessage, account, token stri
 				headers.Del(name)
 				continue
 			}
-			if err := assign(name, completionsErrorString(value), i == 0); err != nil {
+			if err := assign(name, completionsErrorString(value)); err != nil {
 				return nil, err
 			}
 		}
 	}
-	for _, pair := range [][2]string{{"Authorization", "Bearer " + token}, {"chatgpt-account-id", account}, {"originator", "pi"}, {"User-Agent", completionsUserAgent()}} {
-		if err := assign(pair[0], pair[1], false); err != nil {
+	for _, pair := range [][2]string{{"Authorization", "Bearer " + token}, {"chatgpt-account-id", account}} {
+		if err := assign(pair[0], pair[1]); err != nil {
 			return nil, err
 		}
 	}
@@ -117,7 +113,7 @@ func codexNativeHeaders(initial, additional json.RawMessage, account, token stri
 	}
 	if session != nil && (websocket || *session != "") {
 		for _, name := range []string{"session-id", "x-client-request-id"} {
-			if err := assign(name, *session, false); err != nil {
+			if err := assign(name, *session); err != nil {
 				return nil, err
 			}
 		}

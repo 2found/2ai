@@ -77,6 +77,9 @@ func (m *Models) Refresh(ctx context.Context, options ...ModelsRefreshOptions) M
 					if err != nil || !catalogEntryTruthy(credential) {
 						return nil, err
 					}
+					if scope.Context.Err() != nil {
+						return nil, nil
+					}
 					return nil, m.runProviderRefreshPhase(provider, credential, true, settings.Force, scope)
 				})
 				settled <- err
@@ -168,16 +171,10 @@ func (m *Models) resolveRefreshCredential(ctx context.Context, provider *ModelPr
 		if ctx.Err() != nil {
 			return Undefined, nil
 		}
-		post, err := m.credentials.Modify(ctx, provider.ID, func(current any) (any, error) {
-			if !catalogStrictEqual(catalogProperty(current, "type"), "oauth") {
-				return Undefined, nil
-			}
+		post, err := refreshStoredOAuthCredential(ctx, &m.credentials, provider.ID, func(current any) (bool, error) {
 			valid, err := unexpired(current)
-			if valid || err != nil {
-				return Undefined, err
-			}
-			return oauth.Refresh(ctx, current)
-		})
+			return !valid, err
+		}, oauth.Refresh)
 		if err != nil || !catalogStrictEqual(catalogProperty(post, "type"), "oauth") {
 			return Undefined, err
 		}

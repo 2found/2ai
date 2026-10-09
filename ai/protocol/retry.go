@@ -176,6 +176,7 @@ var exhaustedLimitPattern = regexp.MustCompile(
 // pi supports, because a false positive here retries something permanent.
 var retryableMessagePattern = regexp.MustCompile(
 	`(?i)overloaded|rate.?limit|too many requests|service.?unavailable|` +
+		`server_busy|servers are currently busy|` +
 		`too many concurren|concurren(?:cy|t).{0,20}limit|` +
 		`server.?error|internal.?error|provider.?returned.?error|` +
 		`connection reset|connection refused|other side closed|fetch failed|` +
@@ -278,13 +279,18 @@ func DefaultRetryPolicy() RetryPolicy {
 
 // NextDelay applies the host's same-rung retry contract to a completed attempt
 // (numbered from one). Native stream orchestration uses the same normalization,
-// error classification, Retry-After cap and jitter as callRung.
+// error classification, Retry-After limit and jitter as callRung. A server hint
+// above MaxDelay stops same-model retry rather than retrying before it permits.
 func (rp RetryPolicy) NextDelay(failedAttempt int, failure error) (time.Duration, bool) {
 	rp = rp.Normalized()
 	if failedAttempt < 1 || failedAttempt >= rp.MaxAttempts || !IsRetryable(failure) {
 		return 0, false
 	}
-	return rp.delay(failedAttempt-1, retryAfterOf(failure)), true
+	retryAfter := retryAfterOf(failure)
+	if retryAfter > rp.MaxDelay {
+		return 0, false
+	}
+	return rp.delay(failedAttempt-1, retryAfter), true
 }
 
 // Normalized fills any zero field from the default so a partial override is safe.
@@ -307,9 +313,6 @@ func (rp RetryPolicy) Normalized() RetryPolicy {
 // exponential with equal jitter, capped at MaxDelay.
 func (rp RetryPolicy) delay(n int, retryAfter time.Duration) time.Duration {
 	if retryAfter > 0 {
-		if retryAfter > rp.MaxDelay {
-			return rp.MaxDelay
-		}
 		return retryAfter
 	}
 	d := rp.BaseDelay << n

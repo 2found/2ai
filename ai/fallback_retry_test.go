@@ -12,7 +12,7 @@ import (
 func TestNativeRungRetriesPreserveUsageAndLastPointers(t *testing.T) {
 	ctx := context.Background()
 	out := NewAssistantMessageEventStream()
-	failure := &protocol.ProviderError{Status: 429, Message: "busy", RetryAfter: time.Second}
+	failure := &protocol.ProviderError{Status: 429, Message: "busy", RetryAfter: 7 * time.Millisecond}
 	failed := &Message{Role: "assistant", StopReason: "error", Usage: &Usage{Input: 2}}
 	success := &Message{Role: "assistant", StopReason: "stop", Usage: &Usage{Input: 3}}
 	calls, commits, observed, waits := 0, 0, 0, 0
@@ -31,7 +31,7 @@ func TestNativeRungRetriesPreserveUsageAndLastPointers(t *testing.T) {
 		wait: func(_ context.Context, d time.Duration) error {
 			waits++
 			if d != 7*time.Millisecond {
-				t.Errorf("Retry-After cap lost: %v", d)
+				t.Errorf("Retry-After lost: %v", d)
 			}
 			assertAttemptEmpty(t, out)
 			return nil

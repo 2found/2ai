@@ -5,6 +5,9 @@ import (
 	"math"
 )
 
+// Pi's conservative fallback estimate; settled provider usage remains authoritative.
+const estimatedCharsPerToken = 3.5
+
 // ContextUsageEstimate follows Pi's usage-aware estimate. Usage applies only
 // when its response is at least as new as every preceding transcript message.
 type ContextUsageEstimate struct {
@@ -33,7 +36,7 @@ func estimateUTF16Length(text string) int {
 }
 
 func EstimateTextTokens(text string) float64 {
-	return math.Ceil(float64(estimateUTF16Length(text)) / 4)
+	return math.Ceil(float64(estimateUTF16Length(text)) / estimatedCharsPerToken)
 }
 
 func EstimateTextAndImageContentTokens(content MessageContent) float64 {
@@ -48,7 +51,7 @@ func EstimateTextAndImageContentTokens(content MessageContent) float64 {
 			chars += 4800
 		}
 	}
-	return math.Ceil(float64(chars) / 4)
+	return math.Ceil(float64(chars) / estimatedCharsPerToken)
 }
 
 func estimateJSONString(value any) string {
@@ -92,7 +95,7 @@ func EstimateMessageTokens(message Message) float64 {
 			chars += estimateUTF16Length(block.Name) + estimateUTF16Length(args)
 		}
 	}
-	return math.Ceil(float64(chars) / 4)
+	return math.Ceil(float64(chars) / estimatedCharsPerToken)
 }
 
 func EstimateContextTokens(messages []Message) ContextUsageEstimate {

@@ -55,7 +55,8 @@ func invokeAuth(callback func() (any, error)) (value any, err error) {
 }
 
 // raceAuthOperation stops waiting on cancellation while continuing to observe
-// the callback. A canceled waiter does not grant permission to commit storage.
+// the callback. Started OAuth refreshes still persist rotated credentials;
+// other operations retain their own cancellation and storage rules.
 func raceAuthOperation(ctx context.Context, operation func() (any, error)) (any, error) {
 	if err := context.Cause(ctx); err != nil {
 		return nil, err
@@ -154,6 +155,38 @@ func resolveAPIKey(ctx context.Context, provider *ModelProvider, authContext *Au
 	return result, nil
 }
 
+// refreshStoredOAuthCredential keeps cancellation active while waiting for the
+// credential transaction. Once its callback starts, caller cancellation must
+// not discard a refresh token the provider may already have rotated. The
+// provider refresh has an independent timeout; Modify keeps its lock through
+// persistence. Callers race the operation with cancellation to stop waiting.
+func refreshStoredOAuthCredential(ctx context.Context, credentials *CredentialPersistence, providerID string, needsRefresh func(any) (bool, error), refresh func(context.Context, any) (any, error)) (any, error) {
+	lockContext, cancelLock := context.WithCancelCause(context.WithoutCancel(ctx))
+	stopWait := context.AfterFunc(ctx, func() { cancelLock(context.Cause(ctx)) })
+	defer stopWait()
+	defer cancelLock(nil)
+	return invokeAuth(func() (any, error) {
+		return credentials.Modify(lockContext, providerID, func(current any) (any, error) {
+			stopWait()
+			if cause := context.Cause(ctx); cause != nil {
+				return nil, cause
+			}
+			if !catalogStrictEqual(catalogProperty(current, "type"), "oauth") {
+				return Undefined, nil
+			}
+			needed, err := needsRefresh(current)
+			if !needed || err != nil {
+				return Undefined, err
+			}
+			refreshContext, cancel := context.WithTimeoutCause(context.WithoutCancel(ctx), OAuthRefreshTimeout, oauthRefreshTimeoutCause)
+			// Retained provider contexts stay live until their timeout, even
+			// when the callback returns or its original caller is cancelled.
+			context.AfterFunc(refreshContext, cancel)
+			return invokeAuth(func() (any, error) { return refresh(refreshContext, current) })
+		})
+	})
+}
+
 func resolveStoredOAuth(ctx context.Context, provider *ModelProvider, credentials *CredentialPersistence, stored any, overrides AuthResolutionOverrides) (any, error) {
 	providerID, oauth := provider.ID, provider.authConfig().OAuth
 	minimum := float64(OAuthMinimumValidityMS)
@@ -178,28 +211,12 @@ func resolveStoredOAuth(ctx context.Context, provider *ModelProvider, credential
 		return nil, err
 	}
 	if soon {
-		post, err := invokeAuth(func() (any, error) {
-			return credentials.Modify(ctx, providerID, func(current any) (any, error) {
-				if !catalogStrictEqual(catalogProperty(current, "type"), "oauth") {
-					return Undefined, nil
-				}
-				soon, err := expiresSoon(current)
-				if err != nil {
-					return nil, err
-				}
-				if !soon {
-					return Undefined, nil
-				}
-				refreshContext, cancel := context.WithTimeoutCause(ctx, OAuthRefreshTimeout, oauthRefreshTimeoutCause)
-				// Pi's timeout signal remains live after refresh returns. Retained
-				// callback signals must not become aborted merely because it finished.
-				context.AfterFunc(refreshContext, cancel)
-				refreshed, err := invokeAuth(func() (any, error) { return oauth.Refresh(refreshContext, current) })
-				if err != nil {
-					return nil, NewModelsError("oauth", "OAuth refresh failed for "+providerID, err)
-				}
-				return refreshed, nil
-			})
+		post, err := refreshStoredOAuthCredential(ctx, credentials, providerID, expiresSoon, func(refreshContext context.Context, current any) (any, error) {
+			refreshed, err := invokeAuth(func() (any, error) { return oauth.Refresh(refreshContext, current) })
+			if err != nil {
+				return nil, NewModelsError("oauth", "OAuth refresh failed for "+providerID, err)
+			}
+			return refreshed, nil
 		})
 		if err != nil {
 			if _, ok := err.(*ModelsError); ok {
@@ -220,6 +237,9 @@ func resolveStoredOAuth(ctx context.Context, provider *ModelProvider, credential
 				return nil, NewModelsError("oauth", "OAuth refresh returned a token that expires too soon for "+providerID, nil)
 			}
 		}
+	}
+	if cause := context.Cause(ctx); cause != nil {
+		return nil, cause
 	}
 	auth, err := invokeAuth(func() (any, error) { return oauth.ToAuth(credential) })
 	if err != nil {

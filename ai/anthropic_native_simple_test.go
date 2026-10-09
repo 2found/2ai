@@ -15,6 +15,7 @@ import (
 
 func TestPiAnthropicSimpleOracle(t *testing.T) {
 	clearAnthropicFederationEnv(t)
+	updates := readPiReconUpdates(t)
 	raw, err := os.ReadFile("testdata/pi-anthropic-simple.json")
 	if err != nil {
 		t.Fatal(err)
@@ -39,6 +40,7 @@ func TestPiAnthropicSimpleOracle(t *testing.T) {
 	}
 	for _, tc := range fixture.Cases {
 		t.Run(tc.Input.Name, func(t *testing.T) {
+			expected := updates.simpleExpectation(t, "pi-anthropic-simple", tc.Input.Name, tc.Expected)
 			before, _ := json.Marshal(tc.Input)
 			model := map[string]json.RawMessage{}
 			for key, value := range fixture.Model {
@@ -111,8 +113,8 @@ func TestPiAnthropicSimpleOracle(t *testing.T) {
 				}
 				return value
 			}
-			if !reflect.DeepEqual(decode(actual), decode(tc.Expected)) {
-				t.Fatalf("simple mismatch\nGo: %s\nPi: %s", actual, tc.Expected)
+			if !reflect.DeepEqual(decode(actual), decode(expected)) {
+				t.Fatalf("simple mismatch\nGo: %s\nPi: %s", actual, expected)
 			}
 			after, _ := json.Marshal(tc.Input)
 			if !bytes.Equal(before, after) {

@@ -86,12 +86,12 @@ func TestPiOAuthResolutionConcurrentRefresh(t *testing.T) {
 	catalogCompare(t, trace, readAuthResolveFixture(t).Concurrent)
 }
 
-func TestPiOAuthResolutionCancellationDoesNotCommit(t *testing.T) {
+func TestOAuthResolutionCancellationPersistsRefresh(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	memory := NewInMemoryCredentialStore()
 	_, err := memory.Modify(ctx, "p", func(any) (any, error) {
-		return NewObject(Property{Name: "type", Value: "oauth"}, Property{Name: "access", Value: "old"}, Property{Name: "expires", Value: 0}), nil
+		return NewObject(Property{Name: "type", Value: "oauth"}, Property{Name: "access", Value: "old"}, Property{Name: "refresh", Value: "old-refresh"}, Property{Name: "expires", Value: 0}), nil
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -116,7 +116,10 @@ func TestPiOAuthResolutionCancellationDoesNotCommit(t *testing.T) {
 		if first {
 			<-release
 		}
-		return NewObject(Property{Name: "type", Value: "oauth"}, Property{Name: "access", Value: "rotated"}, Property{Name: "expires", Value: 900000}), nil
+		if !first {
+			return nil, errors.New("old refresh token already rotated")
+		}
+		return NewObject(Property{Name: "type", Value: "oauth"}, Property{Name: "access", Value: "rotated"}, Property{Name: "refresh", Value: "rotated-refresh"}, Property{Name: "expires", Value: 900000}), nil
 	}, ToAuth: func(credential any) (any, error) {
 		return NewObject(Property{Name: "apiKey", Value: catalogProperty(credential, "access")}), nil
 	}}}})
@@ -150,9 +153,19 @@ func TestPiOAuthResolutionCancellationDoesNotCommit(t *testing.T) {
 		t.Fatal(err)
 	}
 	mu.Lock()
-	trace["refreshCalls"], trace["signalAborted"] = refreshCalls, retained.Err() != nil
+	if refreshCalls != 1 || retained.Err() != nil {
+		t.Errorf("started refresh repeated or cancelled: calls=%d err=%v", refreshCalls, retained.Err())
+	}
 	mu.Unlock()
-	catalogCompare(t, trace, readAuthResolveFixture(t).Cancelled)
+	if catalogProperty(trace["stored"], "refresh") != "rotated-refresh" {
+		t.Fatal("rotated refresh token discarded")
+	}
+	if catalogProperty(catalogProperty(trace["result"], "error"), "message") != "cancelled by caller" {
+		t.Fatal("cancelled caller did not stop waiting", trace["result"])
+	}
+	if catalogProperty(catalogProperty(trace["next"], "auth"), "apiKey") != "rotated" {
+		t.Fatal("next caller did not reuse rotated credential", trace["next"])
+	}
 }
 
 func TestPiAuthResolutionRetainsInFlightHandler(t *testing.T) {

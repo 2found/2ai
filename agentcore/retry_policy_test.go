@@ -15,12 +15,16 @@ func TestRetryPolicyNextDelaySharesLegacyContract(t *testing.T) {
 		}
 	}
 	for _, n := range []int{1, 2} {
-		if delay, ok := policy.NextDelay(n, failure); !ok || delay != policy.MaxDelay {
-			t.Fatal("Retry-After cap changed", delay, ok)
+		if delay, ok := policy.NextDelay(n, failure); ok || delay != 0 {
+			t.Fatal("over-limit Retry-After retried early", delay, ok)
 		}
 	}
-	if delay, ok := (RetryPolicy{}).NextDelay(1, failure); !ok || delay != DefaultRetryPolicy().MaxDelay {
-		t.Fatal("default policy not applied", delay, ok)
+	if delay, ok := (RetryPolicy{}).NextDelay(1, failure); ok || delay != 0 {
+		t.Fatal("default policy retried over-limit hint", delay, ok)
+	}
+	failure.RetryAfter = policy.MaxDelay
+	if delay, ok := policy.NextDelay(1, failure); !ok || delay != policy.MaxDelay {
+		t.Fatal("allowed Retry-After not honored", delay, ok)
 	}
 	if _, ok := (RetryPolicy{}).NextDelay(3, failure); ok {
 		t.Fatal("default attempt budget changed")

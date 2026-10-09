@@ -7,6 +7,31 @@ import (
 	"time"
 )
 
+func TestRetryPolicyHonorsServerWaitOrStops(t *testing.T) {
+	policy := DefaultRetryPolicy()
+	for _, hint := range []time.Duration{time.Millisecond, policy.MaxDelay, policy.MaxDelay + time.Millisecond, time.Minute} {
+		delay, retry := policy.NextDelay(1, &ProviderError{Status: 429, Message: "rate limit", RetryAfter: hint})
+		if hint > policy.MaxDelay {
+			if retry || delay != 0 {
+				t.Fatalf("hint %v retried early: %v/%v", hint, delay, retry)
+			}
+		} else if !retry || delay != hint {
+			t.Fatalf("hint %v not honored: %v/%v", hint, delay, retry)
+		}
+	}
+}
+
+func TestBusyMessagesRetryWithoutOverridingAccountLimits(t *testing.T) {
+	for _, message := range []string{"server_busy", "servers are currently busy", "SERVERS ARE CURRENTLY BUSY"} {
+		if !IsRetryable(&ProviderError{Status: 200, Message: message}) {
+			t.Fatalf("wrapped busy failure not retryable: %q", message)
+		}
+		if IsRetryable(&ProviderError{Status: 429, Message: "insufficient_quota: " + message}) {
+			t.Fatalf("busy wording overrode exhausted quota: %q", message)
+		}
+	}
+}
+
 func TestParseRetryAfter(t *testing.T) {
 	now := time.Unix(2_000_000_000, 0)
 	if got := parseRetryAfterAt("5", now); got != 5*time.Second {

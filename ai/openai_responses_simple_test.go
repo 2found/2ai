@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
@@ -17,6 +18,8 @@ func TestPiResponsesSimpleOracle(t *testing.T) {
 	testResponsesSimpleOracle(t, "testdata/pi-responses-simple.json", 103, BuildOpenAIResponsesSimpleOptions, StreamOpenAIResponsesSimple)
 }
 func testResponsesSimpleOracle(t *testing.T, fixturePath string, count int, build func(json.RawMessage, TranscriptContext, json.RawMessage) (json.RawMessage, error), streamFn func(context.Context, json.RawMessage, TranscriptContext, OpenAIResponsesStreamOptions) (*AssistantMessageEventStream, error)) {
+	updates := readPiReconUpdates(t)
+	fixtureName := strings.TrimSuffix(filepath.Base(fixturePath), ".json")
 	for _, key := range []string{"AZURE_OPENAI_BASE_URL", "AZURE_OPENAI_RESOURCE_NAME", "AZURE_OPENAI_API_VERSION", "AZURE_OPENAI_DEPLOYMENT_NAME_MAP"} {
 		t.Setenv(key, "")
 	}
@@ -46,6 +49,7 @@ func testResponsesSimpleOracle(t *testing.T, fixturePath string, count int, buil
 	}
 	for _, tc := range fixture.Cases {
 		t.Run(tc.Input.Name, func(t *testing.T) {
+			expected := updates.simpleExpectation(t, fixtureName, tc.Input.Name, tc.Expected)
 			before, _ := json.Marshal(tc.Input)
 			model := map[string]json.RawMessage{}
 			for key, value := range fixture.Model {
@@ -119,8 +123,8 @@ func testResponsesSimpleOracle(t *testing.T, fixturePath string, count int, buil
 				}
 				return value
 			}
-			if !reflect.DeepEqual(decode(actual), decode(tc.Expected)) {
-				t.Fatalf("simple mismatch\nGo: %s\nPi: %s", actual, tc.Expected)
+			if !reflect.DeepEqual(decode(actual), decode(expected)) {
+				t.Fatalf("simple mismatch\nGo: %s\nPi: %s", actual, expected)
 			}
 			after, _ := json.Marshal(tc.Input)
 			if !bytes.Equal(before, after) {

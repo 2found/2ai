@@ -11,6 +11,46 @@ import (
 	"github.com/2found/2ai/ai/protocol"
 )
 
+func TestFallbackStreamServerHintsAndBusyMessages(t *testing.T) {
+	for _, tc := range []struct {
+		name      string
+		failure   *protocol.ProviderError
+		wantCalls int
+		wantWaits int
+	}{
+		{name: "over-limit hint", failure: &protocol.ProviderError{Status: 429, Message: "rate limit", RetryAfter: time.Minute}, wantCalls: 1},
+		{name: "busy wrapper", failure: &protocol.ProviderError{Status: 200, Message: "server_busy"}, wantCalls: 2, wantWaits: 1},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var calls, waits, fallbacks int
+			final := &Message{Role: "assistant", StopReason: "stop", Content: TextContent("fallback")}
+			provider := FallbackProvider{Retry: protocol.DefaultRetryPolicy(), Wait: func(context.Context, time.Duration) error { waits++; return nil }}
+			provider.Candidates = []FallbackCandidate{
+				{Stream: func(ctx context.Context, _ json.RawMessage, _ TranscriptContext, _ map[string]any) (*AssistantMessageEventStream, error) {
+					calls++
+					if calls == 1 || tc.wantCalls == 1 {
+						return nil, tc.failure
+					}
+					return attemptFixture(AssistantMessageEvent{Type: "done", Message: final})(ctx)
+				}},
+				{Stream: func(ctx context.Context, _ json.RawMessage, _ TranscriptContext, _ map[string]any) (*AssistantMessageEventStream, error) {
+					fallbacks++
+					return attemptFixture(AssistantMessageEvent{Type: "done", Message: final})(ctx)
+				}},
+			}
+			stream, err := provider.Stream(context.Background(), nil, TranscriptContext{}, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			got, err := stream.Result(context.Background())
+			wantFallbacks := 1 - tc.wantWaits
+			if err != nil || got != final || calls != tc.wantCalls || waits != tc.wantWaits || fallbacks != wantFallbacks {
+				t.Fatal("retry/fallback policy mismatch", got, err, calls, waits, fallbacks)
+			}
+		})
+	}
+}
+
 func TestFallbackStreamUsesIndependentCandidatesAndNativeResult(t *testing.T) {
 	ctx := context.Background()
 	transcript := NormalizeContext(Context{Messages: []Message{{Role: "user", Content: BlockContent(ContentBlock{Type: "text", Text: "original"})}}})

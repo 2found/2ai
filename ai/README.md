@@ -81,3 +81,16 @@ keys out of their request bodies. `testdata/pi-thinking-sampling.json` contains
 14 outputs generated from upstream `resolveSamplingParams` and its level
 helpers, with source paths and a source-slice hash. Existing transport oracles
 remain pinned to their original revision.
+
+The 2026-10-09 recheck against Pi `6fb2e7815167e6b19006fc526d1a5d0f5f998787`
+also ports cancellation-safe OAuth refresh for request auth and model-catalog
+refresh, overridable Codex identity headers, and conservative 3.5-character
+context estimates. A cancelled caller stops waiting; a started token refresh
+still persists under the credential lock with its independent 15-second
+provider timeout. Cancellation while waiting for the lock does not start a
+refresh. Host credential stores must serialize the callback and persistence.
+`testdata/pi-recon-updates.json` records newer source hashes and supplemental
+estimate/header expectations; the original fixtures retain their provenance.
+The shared retry policy recognizes wrapped busy errors and stops same-model
+retry when a server wait exceeds `MaxDelay`, allowing fallback without retrying
+before the server's requested time.
