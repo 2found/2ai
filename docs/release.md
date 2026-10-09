@@ -39,3 +39,13 @@ Main checks and release share one workflow run. The release workflow calls the
 reusable check workflow once for the exact commit, including unchanged versions.
 PR checks remain read-only. Only a new source version creates a tag and starts
 distribution; bot-created tags do not launch a second workflow.
+
+For an explicitly requested `release-prd --local`, run the same release-script
+tests, Go race tests, vet and scripted example locally. Temporary suspension of
+the affected Release workflow is permitted for that delivery: record its
+original state before the first push, keep the guard through main/tag pushes and
+GitHub publication, and restore and verify the original state on success or
+failure. Leave unrelated workflows unchanged. Generate artifacts from the exact
+verified tag, verify uploaded bytes, then publish the complete draft. Verify a
+fresh Go-module download and recheck release identity and checksums after two
+minutes; a library release has no application deployment.
