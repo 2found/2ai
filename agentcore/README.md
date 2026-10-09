@@ -1,5 +1,14 @@
 # agentcore
 
+Native runs support the [safe producer observer](../telemetry/SAFE.md) attached
+to the execution context. Host-approved model bindings belong to AI candidates;
+`NativeRun.SafeToolLabels` binds public tool IDs. Main, compaction, advisor,
+memory and child calls preserve their categories. Detached child/deferred
+memory work uses independent safe execution IDs with known or explicitly
+unknown/coalesced origins. Parent usage is comparison-only reconciliation,
+never added again to child/attempt totals. Custom aggregate-only callbacks have
+unavailable physical-attempt coverage.
+
 The server uses the native Go engine by default. Execution lives in
 [`engine/`](engine/), provider transcripts and transports in [`ai`](../ai/),
 and recording in [`telemetry`](../telemetry/). Application composition,

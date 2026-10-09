@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/2found/2ai/agentcore"
+	"github.com/2found/2ai/telemetry"
 )
 
 // Rollout is bounded evidence from a completed run. ID is a content digest,
@@ -80,7 +81,7 @@ func (c *curation) FinalizeRun(ctx context.Context, result agentcore.RunResult, 
 		return nil
 	}
 	if c.worker != nil {
-		if !c.worker.submit(c) {
+		if !c.worker.submitOrigin(c, telemetry.CaptureSafeOrigin(ctx)) {
 			c.report(ctx, fmt.Errorf("memory consolidation worker unavailable; evidence remains pending"))
 		}
 		return nil
@@ -102,6 +103,9 @@ func (c *curation) consolidate(ctx context.Context) {
 	}
 	if len(pending) == 0 {
 		return
+	}
+	if len(pending) > 1 {
+		ctx = telemetry.WithoutSafeOrigin(ctx)
 	}
 	memories, err := c.store.Recall(ctx, c.scopeID, "", 32)
 	if err != nil {

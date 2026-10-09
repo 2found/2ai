@@ -8,6 +8,7 @@ import (
 
 	"github.com/2found/2ai/agentcore"
 	"github.com/2found/2ai/ai"
+	"github.com/2found/2ai/telemetry"
 )
 
 func TestNativeCompactionRecoversRejectedRequestWithoutRepeatingTools(t *testing.T) {
@@ -40,12 +41,37 @@ func TestNativeCompactionRecoversRejectedRequestWithoutRepeatingTools(t *testing
 			if err != nil {
 				t.Fatal(err)
 			}
-			result, err := a.RunNative(context.Background(), agentcore.NativeRun{Task: "Inspect evidence and answer", Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: "Inspect evidence and answer"}}})
+			safe, err := telemetry.NewSafeObserver(telemetry.SafeObserverOptions{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			ctx, err := telemetry.WithSafeObserver(context.Background(), safe, telemetry.SafeExecution{ExecutionID: "compaction-run"})
+			if err != nil {
+				t.Fatal(err)
+			}
+			result, err := a.RunNative(ctx, agentcore.NativeRun{Task: "Inspect evidence and answer", Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: "Inspect evidence and answer"}}})
 			if (!alwaysReject && err != nil) || (alwaysReject && err == nil) || calls != 3 || summaries != 1 || effects != 1 {
 				t.Fatalf("recovery err=%v primary=%d summaries=%d effects=%d", err, calls, summaries, effects)
 			}
 			if !alwaysReject && result.Final != "finished" {
 				t.Fatal(result.Final)
+			}
+			main, compact := 0, 0
+			for _, r := range safe.Drain(256) {
+				if r.Kind == "attempt_settled" {
+					switch r.Category {
+					case telemetry.CategoryMain:
+						main++
+					case telemetry.CategoryCompaction:
+						compact++
+					}
+					if r.SpanID == nil {
+						t.Fatal("compaction correlation missing")
+					}
+				}
+			}
+			if main != 3 || compact != 1 {
+				t.Fatalf("compaction telemetry main=%d summary=%d", main, compact)
 			}
 		})
 	}

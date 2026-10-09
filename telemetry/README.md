@@ -4,6 +4,12 @@ Native Go port of Pi's callback telemetry runtime at
 `eeac84ca92498ac18b6832754d01aef1d3c5f654`. Production code uses only the Go
 standard library. There is no subprocess, Bun, Node, or TypeScript dependency.
 
+[Safe settled producer telemetry](SAFE.md) defines the separate typed bounded
+pull observer, provenance rules and frozen C4 schema/example. The private
+recorder/export contract below is preserved. Settled wall timestamps and
+monotonic durations are also available through `InMemory.GetSpanTimings` and
+private export `Batch.SpanTimings`, without changing Pi span JSON.
+
 This module uses concrete `Context`, `Span`, and `InMemory` types. The zero
 `Context` is a no-op. `NewInMemory()` owns an isolated recorder; a span supplies
 the explicit context for its children. Callbacks run in the calling goroutine.

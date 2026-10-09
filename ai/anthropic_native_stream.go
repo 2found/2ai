@@ -120,7 +120,10 @@ func (a *anthropicAccumulator) chunk(raw json.RawMessage) error {
 				}
 			}
 			usage, _ := samplingObject(message["usage"])
+			observeWireUsage(a.output.Usage, usage, "input_tokens", "output_tokens")
+			observeOptionalWireUsage(a.output.Usage, usage, "cache_read_input_tokens", "cache_creation_input_tokens")
 			cache, _ := samplingObject(usage["cache_creation"])
+			observeOptionalWireUsage(a.output.Usage, cache, "ephemeral_1h_input_tokens", "ephemeral_5m_input_tokens")
 			a.output.Usage.Input = anthropicNumber(usage["input_tokens"])
 			a.output.Usage.Output = anthropicNumber(usage["output_tokens"])
 			a.output.Usage.CacheRead = anthropicNumber(usage["cache_read_input_tokens"])
@@ -266,6 +269,15 @@ func (a *anthropicAccumulator) chunk(raw json.RawMessage) error {
 			}
 			if samplingTruthy(event["usage"]) {
 				usage, _ := samplingObject(event["usage"])
+				for key, raw := range usage {
+					switch key {
+					case "input_tokens", "output_tokens", "cache_read_input_tokens", "cache_creation_input_tokens":
+						if !validObservedNumber(raw) {
+							a.output.Usage.Observation.UsageObserved = false
+							a.output.Usage.Observation.UsageSource = "invalid"
+						}
+					}
+				}
 				for _, field := range []struct {
 					key    string
 					target *float64
@@ -275,6 +287,7 @@ func (a *anthropicAccumulator) chunk(raw json.RawMessage) error {
 					}
 				}
 				cache, _ := samplingObject(usage["cache_creation"])
+				observeOptionalWireUsage(a.output.Usage, cache, "ephemeral_1h_input_tokens", "ephemeral_5m_input_tokens")
 				if samplingNonNull(cache["ephemeral_1h_input_tokens"]) {
 					value := anthropicNumber(cache["ephemeral_1h_input_tokens"])
 					a.output.Usage.CacheWrite1h = &value

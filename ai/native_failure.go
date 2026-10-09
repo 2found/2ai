@@ -22,18 +22,12 @@ type NativeProviderFailure struct {
 	kind        string
 }
 
-// Kind is a bounded structural diagnostic; it contains no error text.
-func (c *NativeProviderFailure) Kind() string {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	return c.kind
-}
-
 func (c *NativeProviderFailure) HostFailure() bool {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	return c.hostFailure
 }
+func (c *NativeProviderFailure) Kind() string { c.mu.Lock(); defer c.mu.Unlock(); return c.kind }
 
 func WithNativeProviderFailure(ctx context.Context) (context.Context, *NativeProviderFailure) {
 	capture := &NativeProviderFailure{}

@@ -311,7 +311,7 @@ func runAntigravityNative(ctx context.Context, model completionsModel, rawModel 
 					}
 					FinishReason string
 				}
-				UsageMetadata *struct{ PromptTokenCount, CandidatesTokenCount, CachedContentTokenCount, ThoughtsTokenCount float64 }
+				UsageMetadata *nativeAntigravityUsage
 			}
 			Error *struct {
 				Code            int
@@ -339,6 +339,11 @@ func runAntigravityNative(ctx context.Context, model completionsModel, rawModel 
 		var chunkErr error
 		stream.Synchronize(func() {
 			if usage := chunk.Response.UsageMetadata; usage != nil {
+				message.Usage.Observation = usage.observation
+				if usage.PromptTokenCount < 0 || usage.CachedContentTokenCount < 0 || usage.PromptTokenCount < usage.CachedContentTokenCount || usage.CandidatesTokenCount < 0 || usage.ThoughtsTokenCount < 0 {
+					message.Usage.Observation.UsageObserved = false
+					message.Usage.Observation.UsageSource = "invalid"
+				}
 				message.Usage.Input = max(0, usage.PromptTokenCount-usage.CachedContentTokenCount)
 				message.Usage.CacheRead = usage.CachedContentTokenCount
 				message.Usage.Output = usage.CandidatesTokenCount + usage.ThoughtsTokenCount

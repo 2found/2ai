@@ -36,6 +36,9 @@ type NativeRun struct {
 	Lifecycle  func(string)
 	Compaction *nativehost.CompactionPolicy
 	Telemetry  telemetry.Context
+	// SafeToolLabels binds host-approved public tool IDs without reading args,
+	// results or private span attributes. Unbound tools have unknown labels.
+	SafeToolLabels map[string]telemetry.SafeLabels
 }
 
 type nativeQuestion struct {
@@ -62,9 +65,23 @@ func (a *Agent) RunNative(ctx context.Context, input NativeRun) (RunResult, erro
 	if input.Telemetry.IsZero() {
 		input.Telemetry = telemetry.FromContext(ctx)
 	}
+	input.Telemetry = telemetry.SafeContext(input.Telemetry, ctx)
 	return telemetry.StartSpan(input.Telemetry, telemetry.SpanOptions{Name: "agentray.agent.run"}, func(span *telemetry.Span) (RunResult, error) {
 		input.Telemetry = span.Context()
 		result, err := a.runNative(telemetry.WithContext(ctx, span.Context()), input)
+		if err == nil || result.StopReason == "aborted" {
+			if result.StopReason == "aborted" {
+				kind := "request_cancelled"
+				if ctx.Err() == context.DeadlineExceeded {
+					kind = "request_timeout"
+				}
+				span.SetSafeOutcome("cancelled", kind)
+			} else if result.StopReason == "error" {
+				span.SetSafeOutcome("failed", "unknown")
+			} else if result.StopReason != "" && result.StopReason != "stop" && result.StopReason != "end_turn" {
+				span.SetSafeOutcome("stopped", "none")
+			}
+		}
 		span.SetAttributes(telemetry.NewAttributes(
 			telemetry.Property{Name: "agent.stop_reason", Value: result.StopReason},
 			telemetry.Property{Name: "agent.turns", Value: result.Turns},
@@ -72,6 +89,8 @@ func (a *Agent) RunNative(ctx context.Context, input NativeRun) (RunResult, erro
 			telemetry.Property{Name: "usage.output_tokens", Value: result.Usage.OutputTokens},
 			telemetry.Property{Name: "usage.cost_usd", Value: result.Usage.CostUSD},
 		))
+		cost := result.Usage.CostUSD
+		telemetry.ReconcileSafe(telemetry.WithContext(ctx, span.Context()), telemetry.SafeAccounting{Tokens: &telemetry.SafeTokens{Input: float64(result.Usage.InputTokens), Output: float64(result.Usage.OutputTokens), CacheRead: float64(result.Usage.CacheReadTokens), CacheWrite: float64(result.Usage.CacheWriteTokens)}, KnownCostUSD: &cost})
 		return result, err
 	})
 }
@@ -213,7 +232,7 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 	if err := h.ObservePiMessages(ctx, PhaseExternalInput, 0, external); err != nil {
 		return result, err
 	}
-	tools, err := h.nativeTools(ctx, input.Telemetry, emit)
+	tools, err := h.nativeTools(ctx, input.Telemetry, input.SafeToolLabels, emit)
 	if err != nil {
 		return result, err
 	}
@@ -255,6 +274,7 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 			var usage Usage
 			out := ai.NewAssistantMessageEventStream()
 			final, err := telemetry.StartSpan(input.Telemetry, telemetry.SpanOptions{Name: "agentray.ai.compaction"}, func(span *telemetry.Span) (ai.AttemptOutcome, error) {
+				ctx = telemetry.WithContext(ctx, span.Context())
 				trace := ai.NewAttemptTrace(span)
 				return provider.Run(ctx, out, ai.FallbackRequest{Start: selected, Candidates: len(provider.Candidates),
 					Open: func(ctx context.Context, index, _ int) (*ai.AssistantMessageEventStream, error) {
@@ -416,6 +436,7 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 			lastView := map[int]json.RawMessage{}
 			recoveryView := map[int]json.RawMessage{}
 			final, err := telemetry.StartSpan(input.Telemetry, telemetry.SpanOptions{Name: "agentray.ai.request"}, func(span *telemetry.Span) (ai.AttemptOutcome, error) {
+				ctx = telemetry.WithContext(ctx, span.Context())
 				trace := ai.NewAttemptTrace(span)
 				outcome, failure := provider.Run(ctx, out, ai.FallbackRequest{Start: selected, Candidates: len(provider.Candidates),
 					Open: func(ctx context.Context, index, _ int) (*ai.AssistantMessageEventStream, error) {
@@ -499,6 +520,13 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 				})
 				if message := outcome.Message(); message != nil && (message.StopReason == "error" || message.StopReason == "aborted") {
 					span.SetStatus(telemetry.SpanStatus{Status: "error"})
+					if message.StopReason == "aborted" {
+						kind := "request_cancelled"
+						if ctx.Err() == context.DeadlineExceeded {
+							kind = "request_timeout"
+						}
+						span.SetSafeOutcome("cancelled", kind)
+					}
 				}
 				return outcome, failure
 			})
@@ -804,7 +832,7 @@ func nativeSystemMessage(system string) *ai.Message {
 	return &ai.Message{Role: "system", Content: ai.TextContent(""), Sections: ai.SystemSections{{Name: "agentray", Value: &system}}, Timestamp: time.Now().UnixMilli()}
 }
 
-func (h *PiToolHost) nativeTools(ctx context.Context, parent telemetry.Context, events func(StreamEvent)) ([]*engine.Tool, error) {
+func (h *PiToolHost) nativeTools(ctx context.Context, parent telemetry.Context, safeLabels map[string]telemetry.SafeLabels, events func(StreamEvent)) ([]*engine.Tool, error) {
 	definitions, err := h.Definitions(ctx)
 	if err != nil {
 		return nil, err
@@ -834,7 +862,8 @@ func (h *PiToolHost) nativeTools(ctx context.Context, parent telemetry.Context, 
 			}
 		}
 		tool.Execute = func(ctx context.Context, id string, args any, update func(*engine.ToolResult)) (*engine.ToolResult, error) {
-			return telemetry.StartSpan(parent, telemetry.SpanOptions{Name: "agentray.tool.execute", Attributes: telemetry.NewAttributes(telemetry.Property{Name: "tool.name", Value: tool.Name})}, func(span *telemetry.Span) (*engine.ToolResult, error) {
+			return telemetry.StartSpan(parent, telemetry.SpanOptions{Name: "agentray.tool.execute", SafeLabels: safeLabels[tool.Name], Attributes: telemetry.NewAttributes(telemetry.Property{Name: "tool.name", Value: tool.Name})}, func(span *telemetry.Span) (*engine.ToolResult, error) {
+				ctx = telemetry.WithContext(ctx, span.Context())
 				encoded, err := jsonjs.MarshalValue(args)
 				if err != nil {
 					return nil, err
@@ -848,7 +877,7 @@ func (h *PiToolHost) nativeTools(ctx context.Context, parent telemetry.Context, 
 				// provider reuses a call ID in a later turn.
 				ctx = WithToolInvocationScope(ctx, newEntryID())
 				ctx = context.WithValue(ctx, nestedToolEventsKey{}, events)
-				raw, _, err := h.Execute(ctx, params, func(raw json.RawMessage) error {
+				raw, audit, err := h.Execute(ctx, params, func(raw json.RawMessage) error {
 					var result engine.ToolResult
 					if err := json.Unmarshal(raw, &result); err != nil {
 						return err
@@ -858,6 +887,9 @@ func (h *PiToolHost) nativeTools(ctx context.Context, parent telemetry.Context, 
 				})
 				if err != nil {
 					return nil, err
+				}
+				if !audit.Trace.Allowed {
+					span.SetSafeOutcome("failed", "tool_denied")
 				}
 				var result engine.ToolResult
 				if err := json.Unmarshal(raw, &result); err != nil {

@@ -21,6 +21,7 @@ func nativeOAuthPoolStream(ctx context.Context, rawModel json.RawMessage, transc
 	if ctx == nil {
 		ctx = context.Background()
 	}
+	ctx = safePhysicalPoolContext(ctx)
 	rawModel = append(json.RawMessage(nil), rawModel...)
 	var model completionsModel
 	if err := json.Unmarshal(rawModel, &model); err != nil {
@@ -67,7 +68,7 @@ func nativeOAuthPoolStream(ctx context.Context, rawModel json.RawMessage, transc
 		}
 		failure, host := capture.Failure(), capture.HostFailure()
 		parent.mu.Lock()
-		parent.failure, parent.hostFailure = failure, host
+		parent.failure, parent.hostFailure, parent.kind = failure, host, capture.Kind()
 		parent.mu.Unlock()
 	}
 	go func() {
@@ -112,14 +113,17 @@ func nativeOAuthPoolStream(ctx context.Context, rawModel json.RawMessage, transc
 			attemptOptions.Options, _ = json.Marshal(controls)
 			attemptCtx, cancel := context.WithCancel(WithAssistantStreamSynchronization(ctx, out))
 			attemptCtx, capture := WithNativeProviderFailure(attemptCtx)
+			safeAttempt := startSafePhysical(attemptCtx, state.attempts)
 			inner, err := start(attemptCtx, rawModel, transcript, attemptOptions, token)
 			if err != nil {
 				cancel()
+				finishSafePhysical(ctx, safeAttempt, AssistantMessageEvent{Type: "error"}, err, false, false)
 				fail(err)
 				return
 			}
 			if inner == nil {
 				cancel()
+				finishSafePhysical(ctx, safeAttempt, AssistantMessageEvent{Type: "error"}, errors.New("missing provider stream"), false, false)
 				fail(errors.New(label + " account stream was not created"))
 				return
 			}
@@ -136,14 +140,17 @@ func nativeOAuthPoolStream(ctx context.Context, rawModel json.RawMessage, transc
 				event, ok, readErr := inner.Next(context.WithoutCancel(ctx))
 				if readErr != nil || !ok {
 					cancel()
+					_ = inner.WaitForEnd(context.WithoutCancel(ctx))
 					if readErr == nil {
 						readErr = errors.New(label + " account stream ended without a terminal event")
 					}
+					finishSafePhysical(ctx, safeAttempt, AssistantMessageEvent{Type: "error"}, readErr, capture.HostFailure(), true)
 					fail(readErr)
 					return
 				}
 				if event.Type == "error" {
 					cancel()
+					_ = inner.WaitForEnd(context.WithoutCancel(ctx))
 					report := capture.Failure()
 					if report == nil {
 						inner.Synchronize(func() {
@@ -154,6 +161,7 @@ func nativeOAuthPoolStream(ctx context.Context, rawModel json.RawMessage, transc
 							report = errors.New(message)
 						})
 					}
+					finishSafePhysical(ctx, safeAttempt, event, report, capture.HostFailure(), true)
 					if !isOAuthConcurrencyCap(report) {
 						source.Report(ctx, token, report)
 					}
@@ -172,6 +180,8 @@ func nativeOAuthPoolStream(ctx context.Context, rawModel json.RawMessage, transc
 				}
 				if event.Type == "done" {
 					cancel()
+					_ = inner.WaitForEnd(context.WithoutCancel(ctx))
+					finishSafePhysical(ctx, safeAttempt, event, nil, false, true)
 					if ctx.Err() == nil {
 						source.Report(ctx, token, nil)
 					}

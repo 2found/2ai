@@ -15,6 +15,10 @@ func StreamCodexResponsesPooled(ctx context.Context, rawModel json.RawMessage, t
 	if source == nil {
 		return nil, errors.New("Codex account pool is required")
 	}
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	ctx = safePhysicalPoolContext(ctx)
 	rawModel = append(json.RawMessage(nil), rawModel...)
 	var model completionsModel
 	if err := json.Unmarshal(rawModel, &model); err != nil {
@@ -90,6 +94,7 @@ func StreamCodexResponsesPooled(ctx context.Context, rawModel json.RawMessage, t
 			// Forward live Pi payload pointers under one lock across all attempts.
 			inner := NewAssistantMessageEventStreamFor(WithAssistantStreamSynchronization(attemptCtx, out))
 			var cause error
+			safeAttempt := startSafePhysical(attemptCtx, state.attempts)
 			streamCodexResponsesInto(attemptCtx, rawModel, transcript, attemptOptions, false, func(err error) { cause = err }, inner)
 			buffered := []AssistantMessageEvent{}
 			committed := false
@@ -104,14 +109,17 @@ func StreamCodexResponsesPooled(ctx context.Context, rawModel json.RawMessage, t
 				event, ok, readErr := inner.Next(context.WithoutCancel(ctx))
 				if readErr != nil || !ok {
 					cancel()
+					_ = inner.WaitForEnd(context.WithoutCancel(ctx))
 					if readErr == nil {
 						readErr = errors.New("Codex account stream ended without a terminal event")
 					}
+					finishSafePhysical(ctx, safeAttempt, AssistantMessageEvent{Type: "error"}, readErr, false, true)
 					fail(readErr)
 					return
 				}
 				if event.Type == "error" {
 					cancel()
+					_ = inner.WaitForEnd(context.WithoutCancel(ctx))
 					report := codexPoolFailure(cause)
 					if report == nil {
 						inner.Synchronize(func() {
@@ -122,6 +130,7 @@ func StreamCodexResponsesPooled(ctx context.Context, rawModel json.RawMessage, t
 							report = errors.New(message)
 						})
 					}
+					finishSafePhysical(ctx, safeAttempt, event, report, codexNonTransportError(cause), true)
 					if !isOAuthConcurrencyCap(report) {
 						source.Report(ctx, token, report)
 					}
@@ -138,6 +147,8 @@ func StreamCodexResponsesPooled(ctx context.Context, rawModel json.RawMessage, t
 				}
 				if event.Type == "done" {
 					cancel()
+					_ = inner.WaitForEnd(context.WithoutCancel(ctx))
+					finishSafePhysical(ctx, safeAttempt, event, nil, false, true)
 					if ctx.Err() == nil {
 						source.Report(ctx, token, nil)
 					}

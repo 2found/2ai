@@ -57,6 +57,7 @@ type completionsCostRates struct {
 	Input, Output, CacheRead, CacheWrite float64
 }
 type completionsCost struct {
+	observed bool
 	completionsCostRates
 	Tiers []struct {
 		completionsCostRates
@@ -449,11 +450,27 @@ func (a *completionsAccumulator) parseUsage(raw json.RawMessage) *Usage {
 	usage := &Usage{Output: number(fields["completion_tokens"]), CacheRead: number(cached), CacheWrite: number(prompt["cache_write_tokens"]), Reasoning: &reasoning}
 	usage.Input = math.Max(0, number(fields["prompt_tokens"])-usage.CacheRead-usage.CacheWrite)
 	usage.TotalTokens = usage.Input + usage.Output + usage.CacheRead + usage.CacheWrite
+	observeWireUsage(usage, fields, "prompt_tokens", "completion_tokens")
+	if number(fields["prompt_tokens"]) < usage.CacheRead+usage.CacheWrite {
+		usage.Observation.UsageObserved = false
+		usage.Observation.UsageSource = "invalid"
+	}
+	for _, raw := range []json.RawMessage{cached, prompt["cache_write_tokens"]} {
+		if samplingNonNull(raw) && !validObservedNumber(raw) {
+			usage.Observation.UsageObserved = false
+			usage.Observation.UsageSource = "invalid"
+		}
+	}
 	calculateNativeUsageCost(a.model.Cost, usage)
 	return usage
 }
 
 func calculateNativeUsageCost(cost completionsCost, usage *Usage) {
+	usage.Observation.PricingObserved = cost.observed
+	usage.Observation.PricingSource = "unknown"
+	if cost.observed {
+		usage.Observation.PricingSource = "model"
+	}
 	rates := cost.completionsCostRates
 	input := usage.Input + usage.CacheRead + usage.CacheWrite
 	threshold := -1.0

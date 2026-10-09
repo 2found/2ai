@@ -411,6 +411,7 @@ func devinDecodeAssignModelResponse(b []byte) (devinModelAssignment, error) {
 }
 
 type devinModelUsageStats struct {
+	invalid          bool
 	modelUid         string
 	inputTokens      uint64
 	outputTokens     uint64
@@ -421,10 +422,13 @@ type devinModelUsageStats struct {
 func devinDecodeUsageStats(b []byte) devinModelUsageStats {
 	fields, err := pbScan(b)
 	if err != nil {
-		return devinModelUsageStats{}
+		return devinModelUsageStats{invalid: true}
 	}
 	var out devinModelUsageStats
 	for _, f := range fields {
+		if f.Number >= 2 && f.Number <= 5 && f.Wire != 0 {
+			out.invalid = true
+		}
 		switch f.Number {
 		case 9:
 			out.modelUid = string(f.Bytes)
@@ -489,6 +493,9 @@ func devinDecodeChatResponse(b []byte) (devinChatDelta, error) {
 			out.toolCalls = append(out.toolCalls, call)
 		case 7:
 			usage := devinDecodeUsageStats(f.Bytes)
+			if f.Wire != 2 {
+				usage.invalid = true
+			}
 			out.usage = &usage
 		case 14:
 			out.creditCost = int64(f.Varint)

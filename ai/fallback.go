@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/2found/2ai/ai/protocol"
+	"github.com/2found/2ai/telemetry"
 )
 
 // StreamFn is the native provider contract shared by providers and the engine.
@@ -22,8 +23,9 @@ func (e *PreparationError) Unwrap() error { return e.Cause }
 
 // FallbackCandidate binds a model to its native provider transport.
 type FallbackCandidate struct {
-	Model  json.RawMessage
-	Stream StreamFn
+	SafeLabels telemetry.SafeLabels
+	Model      json.RawMessage
+	Stream     StreamFn
 }
 
 // FallbackProvider treats retry and ordered provider fallback as one native
@@ -44,6 +46,9 @@ type FallbackProvider struct {
 // Validate fences host state after settlement, before escalation/publication.
 // BeforePublish runs once before the chosen terminal event is exposed.
 type FallbackRequest struct {
+	// SafeLabels is an optional immutable host-approved binding per candidate.
+	// An omitted entry uses the corresponding candidate's approved labels.
+	SafeLabels    []telemetry.SafeLabels
 	Start         int
 	Candidates    int
 	Open          func(context.Context, int, int) (*AssistantMessageEventStream, error)
@@ -62,6 +67,7 @@ func (p FallbackProvider) Run(ctx context.Context, out *AssistantMessageEventStr
 	if out == nil || request.Open == nil || request.Start < 0 || request.Start >= request.Candidates {
 		return AttemptOutcome{}, errors.New("fallback requires a stream, provider and active candidate")
 	}
+	safeCall := telemetry.NewSafeCall(ctx)
 	for index := request.Start; index < request.Candidates; index++ {
 		if request.Validate != nil {
 			if err := request.Validate(); err != nil {
@@ -69,7 +75,8 @@ func (p FallbackProvider) Run(ctx context.Context, out *AssistantMessageEventStr
 			}
 		}
 		attempts := nativeRungAttempts{
-			policy: p.Retry,
+			safeCall: safeCall,
+			policy:   p.Retry,
 			open: func(ctx context.Context, number int) (*AssistantMessageEventStream, error) {
 				return request.Open(ctx, index, number)
 			},
@@ -80,6 +87,11 @@ func (p FallbackProvider) Run(ctx context.Context, out *AssistantMessageEventStr
 				return nil
 			},
 			wait: p.Wait,
+		}
+		if index < len(request.SafeLabels) {
+			attempts.safeLabels = request.SafeLabels[index]
+		} else if index < len(p.Candidates) {
+			attempts.safeLabels = p.Candidates[index].SafeLabels
 		}
 		if request.Observe != nil {
 			attempts.observe = func(ctx context.Context, attempt FallbackAttempt) error { return request.Observe(ctx, index, attempt) }

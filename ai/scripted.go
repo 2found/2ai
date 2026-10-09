@@ -26,6 +26,11 @@ func ScriptedStream(messages ...Message) StreamFn {
 				mu.Unlock()
 				return nil, err
 			}
+			// Keep trusted producer evidence separately from transcript JSON. A
+			// restored checkpoint alone must never establish that evidence.
+			if message.Usage != nil && messages[next].Usage != nil {
+				message.Usage.Observation = messages[next].Usage.Observation
+			}
 			next++
 		}
 		mu.Unlock()

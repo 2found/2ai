@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/2found/2ai/ai/protocol"
+	"github.com/2found/2ai/telemetry"
 )
 
 // FallbackAttempt is delivered after producer settlement, including failed
@@ -19,9 +20,11 @@ type FallbackAttempt struct {
 }
 
 type nativeRungAttempts struct {
-	policy protocol.RetryPolicy
-	open   func(context.Context, int) (*AssistantMessageEventStream, error)
-	commit func(context.Context) error
+	safeCall   telemetry.SafeCall
+	safeLabels telemetry.SafeLabels
+	policy     protocol.RetryPolicy
+	open       func(context.Context, int) (*AssistantMessageEventStream, error)
+	commit     func(context.Context) error
 	// failure returns transport metadata observed for this completed attempt.
 	// It must not infer HTTP status/Retry-After from a formatted error message.
 	failure func(int) error
@@ -47,7 +50,17 @@ func (r nativeRungAttempts) run(ctx context.Context, out *AssistantMessageEventS
 			return last, err
 		}
 		attemptCtx, capture := WithNativeProviderFailure(ctx)
-		last, err = relayNativeAttempt(attemptCtx, out, func(ctx context.Context) (*AssistantMessageEventStream, error) { return r.open(ctx, number) }, r.commit)
+		var safeAttempt *telemetry.SafeAttempt
+		physical := &safePhysicalObservation{call: r.safeCall, labels: r.safeLabels, scope: telemetry.CaptureSafeOrigin(ctx)}
+		last, err = relayNativeAttempt(attemptCtx, out, func(ctx context.Context) (*AssistantMessageEventStream, error) {
+			// Only nested composition in the same observation scope replaces
+			// this producer. Auxiliary preparation has its own span/call.
+			if parent, _ := ctx.Value(safePhysicalKey{}).(*safePhysicalObservation); parent != nil && parent.scope.SameScope(physical.scope) {
+				parent.delegated.Store(true)
+			}
+			safeAttempt = r.safeCall.StartAttempt(number, r.safeLabels)
+			return r.open(context.WithValue(ctx, safePhysicalKey{}, physical), number)
+		}, r.commit)
 		failure := last.AdmissionError
 		var preparation *PreparationError
 		if err == nil && errors.As(failure, &preparation) {
@@ -72,13 +85,33 @@ func (r nativeRungAttempts) run(ctx context.Context, out *AssistantMessageEventS
 			}
 		}
 		kind := capture.Kind()
+		if last.failureKind != "" {
+			kind = last.failureKind
+		}
 		if kind == "" || kind == "none" {
 			kind = nativeFailureKind(failure, capture.HostFailure())
 		}
+		status := "completed"
+		if failure != nil {
+			status = "failed"
+		}
+		if last.Terminal.Reason == "aborted" || (last.Terminal.Error != nil && last.Terminal.Error.StopReason == "aborted") || ctx.Err() != nil {
+			status = "cancelled"
+			kind = nativeFailureKind(ctx.Err(), false)
+			if kind == "none" {
+				kind = "request_cancelled"
+			}
+		}
 		if r.observe != nil {
 			if observeErr := r.observe(context.WithoutCancel(ctx), FallbackAttempt{Number: number, Outcome: last, Failure: failure, FailureKind: kind}); observeErr != nil {
+				if !physical.delegated.Load() {
+					finishSafeNative(safeAttempt, "failed", "host_callback", last.Message(), last.producerAdmitted)
+				}
 				return last, observeErr
 			}
+		}
+		if !physical.delegated.Load() {
+			finishSafeNative(safeAttempt, status, kind, last.Message(), last.producerAdmitted)
 		}
 		if err != nil {
 			return last, err
@@ -93,7 +126,7 @@ func (r nativeRungAttempts) run(ctx context.Context, out *AssistantMessageEventS
 			return last, nil
 		}
 		if r.recover != nil && !recovered && failure != nil {
-			ok, recoverErr := r.recover(ctx, FallbackAttempt{Number: number, Outcome: last, Failure: failure})
+			ok, recoverErr := r.recover(ctx, FallbackAttempt{Number: number, Outcome: last, Failure: failure, FailureKind: kind})
 			if recoverErr != nil {
 				return last, recoverErr
 			}

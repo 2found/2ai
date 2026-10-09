@@ -118,6 +118,9 @@ func (s *Span) SetAttributes(attributes Attributes) {
 }
 
 func (s *Span) SetStatus(status SpanStatus) {
+	if s != nil && s.safeState != nil && status.Status != "ok" {
+		s.safeState.failed.Store(true)
+	}
 	if s != nil && s.callbacks.SetStatus != nil {
 		s.callbacks.SetStatus(status)
 		return

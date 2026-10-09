@@ -21,6 +21,7 @@ import (
 	"sync/atomic"
 
 	"github.com/2found/2ai/agentcore"
+	"github.com/2found/2ai/telemetry"
 	"github.com/santhosh-tekuri/jsonschema/v6"
 )
 
@@ -345,6 +346,7 @@ type asyncContext struct {
 func (c asyncContext) Value(key any) any { return c.values.Value(key) }
 
 func (t *subagentTool) execute(ctx context.Context, in subagentArgs, task string, schema *jsonschema.Schema, emit func(string)) (string, error) {
+	ctx = telemetry.DetachSafeExecution(ctx, telemetry.CategoryChild)
 	var err error
 
 	prompt := task

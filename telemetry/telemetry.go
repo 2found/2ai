@@ -39,6 +39,7 @@ const Undefined = jsonjs.Undefined
 type SpanOptions struct {
 	Name       string     `json:"name"`
 	Attributes Attributes `json:"attributes,omitzero"`
+	SafeLabels SafeLabels `json:"-"`
 }
 
 type ErrorDetails struct {
@@ -60,6 +61,7 @@ type SpanStatus struct {
 // Context identifies an explicit parent. Copies share the same recording scope;
 // there is no global recorder or implicit goroutine-local parent.
 type Context struct {
+	safe      *safeScope
 	state     *memoryState
 	parent    *mutableSpan
 	callbacks ContextCallbacks
@@ -106,6 +108,7 @@ type SpanCallbacks struct {
 // Span is valid as a recording parent until its callback returns. Retaining it
 // is safe: later mutations are inert, and later child callbacks still execute.
 type Span struct {
+	safeState *safeSpanState
 	context   Context
 	callbacks SpanCallbacks
 }
@@ -129,6 +132,9 @@ func (s *Span) StartSpan(options SpanOptions, callback func(*Span) error) error 
 // an error or panicking settles the span without changing the error/panic value.
 // Child work that should belong to this span must start before callback returns.
 func (c Context) StartSpan(options SpanOptions, callback func(*Span) error) (err error) {
+	if c.safe != nil {
+		return c.startSafeSpan(options, callback)
+	}
 	if c.callbacks.StartSpan != nil {
 		return c.callbacks.StartSpan(options, callback)
 	}

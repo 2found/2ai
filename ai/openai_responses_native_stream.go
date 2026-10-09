@@ -405,6 +405,17 @@ func (a *responsesAccumulator) finalizeResponse(raw json.RawMessage) error {
 		reasoning := number(output["reasoning_tokens"])
 		usage := &Usage{Output: number(fields["output_tokens"]), CacheRead: number(input["cached_tokens"]), CacheWrite: number(input["cache_write_tokens"]), Reasoning: &reasoning, TotalTokens: number(fields["total_tokens"])}
 		usage.Input = math.Max(0, number(fields["input_tokens"])-usage.CacheRead-usage.CacheWrite)
+		observeWireUsage(usage, fields, "input_tokens", "output_tokens")
+		if number(fields["input_tokens"]) < usage.CacheRead+usage.CacheWrite {
+			usage.Observation.UsageObserved = false
+			usage.Observation.UsageSource = "invalid"
+		}
+		for _, raw := range []json.RawMessage{input["cached_tokens"], input["cache_write_tokens"]} {
+			if samplingNonNull(raw) && !validObservedNumber(raw) {
+				usage.Observation.UsageObserved = false
+				usage.Observation.UsageSource = "invalid"
+			}
+		}
 		a.output.Usage = usage
 	}
 	calculateNativeUsageCost(a.model.Cost, a.output.Usage)
