@@ -75,6 +75,10 @@ func (s *EventStream[T, R]) End(result ...R) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.done = true
+	if s.head == len(s.queue) {
+		s.queue = nil
+		s.head = 0
+	}
 	if len(result) > 0 {
 		s.setResult(result[0])
 	}
@@ -93,7 +97,14 @@ func (s *EventStream[T, R]) Next(ctx context.Context) (T, bool, error) {
 		s.queue[s.head] = zero
 		s.head++
 		if s.head == len(s.queue) {
-			s.queue = nil
+			// Reuse small buffers while streaming instead of allocating for
+			// every token. Completed streams and large bursts release storage;
+			// consumed payload references have already been cleared above.
+			if !s.done && cap(s.queue) <= 32 {
+				s.queue = s.queue[:0]
+			} else {
+				s.queue = nil
+			}
 			s.head = 0
 		} else if s.head >= 1024 && s.head >= len(s.queue)/2 {
 			// Reclaim consumed prefixes even when the producer keeps the

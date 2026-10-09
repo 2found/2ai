@@ -67,6 +67,9 @@ schedules, packs and app.
   stop fallback; the host binds selection and accounting callbacks.
 - AgentCore owns one model loop. The engine stays below application policy;
   plugins extend composition without creating another runtime.
+- The native subagent plugin owns delegation guidance alongside its tool schema;
+  hosts supply authorized destinations and callbacks, and skills supply domain
+  knowledge. No separate orchestrator agent or model loop is required.
 - Hosts resolve credentials and grant tools. Installing a capability does not
   grant permission. A workspace directory does not provide OS isolation.
 - Native checkpoints and live value identity have ownership rules. Read package

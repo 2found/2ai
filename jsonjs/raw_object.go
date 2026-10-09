@@ -22,6 +22,13 @@ func (o RawObject) MarshalJSON() ([]byte, error) {
 	}
 	slices.Sort(keys)
 	var out bytes.Buffer
+	size := 2
+	for _, key := range keys {
+		size += len(key) + len(o[key]) + 4 // quotes, colon, comma
+	}
+	// Serialized transcript values dominate these objects. Reserve their
+	// known size once instead of copying the growing object at every field.
+	out.Grow(size)
 	out.WriteByte('{')
 	for i, key := range keys {
 		value, err := json.Marshal(o[key])

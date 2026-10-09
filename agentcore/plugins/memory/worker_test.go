@@ -34,7 +34,7 @@ func TestDeferredConsolidationCapacityCoalescingAndShutdown(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	if calls.Load() != 0 || len(w.queue) != 1 || reports.Load() != 1 || len(sa.pending) != 1 || len(sb.pending) != 1 {
+	if calls.Load() != 0 || len(w.queued) != 1 || reports.Load() != 1 || len(sa.pending) != 1 || len(sb.pending) != 1 {
 		t.Fatal("unbounded, duplicate or synchronous work")
 	}
 	ctx, cancel := context.WithCancel(context.Background())

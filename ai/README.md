@@ -11,6 +11,12 @@ detached slice of shared block pointers. `BlockReferences` creates a new list;
 copy `MessageContent` to retain the existing list. Live access uses the owning
 stream's synchronization; snapshots detach lists while preserving aliases.
 
+Event streams reuse small, cleared queue buffers while streaming to avoid an
+allocation per immediately consumed token. Completed streams and drained large
+bursts release their buffers; unread events remain lossless and unbounded under
+the existing FIFO contract. Hosts must consume events if they need bounded
+streaming memory: waiting only for Result intentionally does not drain them.
+
 Current integration scope:
 
 | Provider | Native path |

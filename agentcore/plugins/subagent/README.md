@@ -18,19 +18,41 @@ One tool, `spawn_subagent`, with `task` and `context` parameters — plus an
 optional `output_schema` (JSON Schema object) that turns the final answer into
 validated JSON.
 
-##### Verbatim text for this field
+### Guidance belongs to the capability
 
-```
-Delegate one self-contained task to an ephemeral sub-agent and get back only its
-final answer. The sub-agent has the same tools and permissions as you but a
-fresh, isolated context — its intermediate work never enters yours. Use it for
-exploration or noisy multi-step work whose details you don't need (research a
-question, scan data broadly, produce an artifact), NOT for quick single-tool
-lookups you can do yourself. State the task fully and self-contained: the
-sub-agent sees nothing of this conversation except what you put in task and
-context. Pass output_schema when you need the answer as structured JSON rather
-than prose.
-```
+The run extension owns the orchestration instructions in the `spawn_subagent`
+**tool schema**. Applications supply the authorized roster and execution callbacks;
+they do not need to append a second generic orchestrator system prompt.
+
+The schema tells the model to handle simple work directly, delegate bounded tasks
+when useful, supply only authorized context, collect required evidence, reconcile
+gaps and return one coherent result. Partial results and uncertain effects are
+not proof of success. Delegation does not grant authority.
+
+Additional guidance follows the actual surface:
+
+- **Self-fork:** fresh history, inherited capabilities subject to host restrictions.
+- **Named roster:** choose only a destination whose stated purpose covers the
+  task/project/resource. Missing access is a concrete blocker, not a reason to
+  probe unrelated targets. Each callback owns its target's identity, inputs,
+  history and permissions; descriptions are selection hints, never grants.
+- **Async enabled, ephemeral run:** a job receipt is not completion; collect or
+  cancel it with the run's job controls before reporting success.
+- **Durable run:** neither the async parameter nor its instructions are offered.
+- **Permission denied or depth cap:** the tool and all its guidance disappear
+  through the existing policy/depth advertisement path.
+
+This uses the existing `ToolContributor` extension; it adds no kernel hook,
+router model, orchestrator persona, system-prompt block or application concept.
+The schema is rebuilt for the current run and roster after checkpoint resume,
+so old destination hints are not accumulated in the definition. Tool guidance is
+present on native model requests alongside the advertised capability, including
+following context compaction. Selection guidance improves model behavior; only
+the host's grants and callbacks enforce resource access.
+
+Host-specific boundaries (for example original-input-only forwarding, data
+isolation and publication) belong in the consuming application. Domain workflows
+and expertise belong in its skills or definition, not this plugin.
 
 ### `output_schema` — typed final answers
 
@@ -58,10 +80,13 @@ questions keep the same delegation and receive distinct workflow IDs.
 
 #### Token effect
 
-**Replaced, and strongly net-negative.** The child's entire run — every tool
+**Fixed schema overhead plus isolated child context.** The common orchestration
+guidance is attached once to the advertised tool; named/async guidance appears
+only with those capabilities. The child's entire run — every tool
 call, every intermediate result — is replaced in the parent's context by one
-answer capped at `MaxOutputBytes` (default 48 KB). This is the only capability
-here that reliably *reduces* total context pressure.
+answer capped at `MaxOutputBytes` (default 48 KB). This reduces parent-context
+pressure for substantial child work; it does not promise fewer total model tokens
+or lower latency for small tasks.
 
 #### KV cache effect
 

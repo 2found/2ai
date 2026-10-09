@@ -39,14 +39,14 @@ func (p *jsonValueParser) decodedValue() any {
 	p.space()
 	switch p.raw[p.pos] {
 	case '"':
-		return stringFromUTF16(p.stringUnits())
+		return p.decodedString()
 	case '{':
 		p.pos++
 		object := map[string]any{}
 		var properties []Property
 		p.space()
 		for p.raw[p.pos] != '}' {
-			name := stringFromUTF16(p.stringUnits())
+			name := p.decodedString()
 			p.space()
 			p.pos++ // colon
 			value := p.decodedValue()
@@ -121,6 +121,35 @@ func stringFromUTF16(units []uint16) string {
 // escaping. Surrogate code units remain escaped; other invalid UTF-8 uses the
 // replacement character, matching the shared serialized-JSON parser.
 func QuoteString(value string) []byte {
+	if utf8.ValidString(value) {
+		out := make([]byte, 1, len(value)+2)
+		out[0] = '"'
+		const hex = "0123456789abcdef"
+		for i := 0; i < len(value); i++ {
+			c := value[i]
+			switch c {
+			case '"', '\\':
+				out = append(out, '\\', c)
+			case '\b':
+				out = append(out, '\\', 'b')
+			case '\f':
+				out = append(out, '\\', 'f')
+			case '\n':
+				out = append(out, '\\', 'n')
+			case '\r':
+				out = append(out, '\\', 'r')
+			case '\t':
+				out = append(out, '\\', 't')
+			default:
+				if c < 0x20 {
+					out = append(out, '\\', 'u', '0', '0', hex[c>>4], hex[c&15])
+				} else {
+					out = append(out, c)
+				}
+			}
+		}
+		return append(out, '"')
+	}
 	units := make([]uint16, 0, len(value))
 	for _, r := range StringCodePoints(value) {
 		if r > 0xffff {
@@ -173,12 +202,12 @@ func DecodeObjectProperties(raw []byte) ([]RawProperty, error) {
 	p.space()
 	properties := []RawProperty{}
 	for p.raw[p.pos] != '}' {
-		name := stringFromUTF16(p.stringUnits())
+		name := p.decodedString()
 		p.space()
 		p.pos++
 		p.space()
 		start := p.pos
-		p.value()
+		p.skipValue()
 		properties = append(properties, RawProperty{Name: name, Value: raw[start:p.pos]})
 		p.space()
 		if p.raw[p.pos] == '}' {
@@ -188,4 +217,47 @@ func DecodeObjectProperties(raw []byte) ([]RawProperty, error) {
 		p.space()
 	}
 	return properties, nil
+}
+
+// skipValue locates the end of a value in already validated JSON. Raw-property
+// callers need its original bytes, not a normalized copy of every descendant.
+// Keep this separate from value: numeric rounding, duplicate-key ordering and
+// UTF-16 normalization must happen only when a caller actually decodes values.
+func (p *jsonValueParser) skipValue() {
+	p.space()
+	switch p.raw[p.pos] {
+	case '"':
+		p.skipString()
+	case '{', '[':
+		depth := 0
+		for {
+			switch p.raw[p.pos] {
+			case '"':
+				p.skipString()
+				continue
+			case '{', '[':
+				depth++
+			case '}', ']':
+				depth--
+				if depth == 0 {
+					p.pos++
+					return
+				}
+			}
+			p.pos++
+		}
+	default:
+		p.literal()
+	}
+}
+
+func (p *jsonValueParser) skipString() {
+	p.pos++
+	for p.raw[p.pos] != '"' {
+		if p.raw[p.pos] == '\\' {
+			p.pos++ // The escaped quote/backslash cannot end this string.
+		}
+		p.pos++
+	}
+	p.pos++
 }

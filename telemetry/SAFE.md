@@ -26,6 +26,15 @@ _ = records
 _ = health
 ```
 
+`observer.Changes()` is an optional coalescing notification channel for one
+host collector. It wakes on intake, admission loss and Close; it owns no worker
+and never blocks producers. On wake, inspect Health and drain pending batches
+before sleeping. Signals are hints, not record counts or delivery guarantees;
+Drain does not consume the signal. The channel stays open after Close to avoid
+a closed-channel busy loop. Queue capacity and detached-record semantics are
+unchanged. Empty observers allocate pointer slots rather than full record bodies;
+draining releases the queued bodies for collection.
+
 Approval is a host promise: labels are configured public identifiers, never
 secrets, response text, arbitrary model metadata, endpoint/account names or user
 identity. The library checks syntax, not meaning. IDs must be 1–128 ASCII bytes

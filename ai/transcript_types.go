@@ -7,6 +7,7 @@ import (
 	"reflect"
 	"sort"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/2found/2ai/jsonjs"
 )
@@ -270,9 +271,15 @@ func marshalTranscriptObject(value any, extra map[string]json.RawMessage, requir
 	if err != nil {
 		return nil, err
 	}
-	var fields jsonjs.RawObject
-	if err := json.Unmarshal(data, &fields); err != nil {
+	properties, err := jsonjs.DecodeObjectProperties(data)
+	if err != nil {
 		return nil, err
+	}
+	// data is owned by this serialization and never mutated. Borrow its field
+	// slices locally instead of cloning every nested body through UnmarshalJSON.
+	fields := make(jsonjs.RawObject, len(properties))
+	for _, property := range properties {
+		fields[property.Name] = property.Value
 	}
 	// encoding/json replaces lone UTF-16 units carried as WTF-8. Restore all
 	// emitted string fields, including optional signatures and model metadata.
@@ -286,7 +293,7 @@ func marshalTranscriptObject(value any, extra map[string]json.RawMessage, requir
 		if field.Kind() == reflect.Pointer && !field.IsNil() {
 			field = field.Elem()
 		}
-		if field.Kind() == reflect.String {
+		if field.Kind() == reflect.String && !utf8.ValidString(field.String()) {
 			fields[name] = jsonjs.QuoteString(field.String())
 		}
 	}

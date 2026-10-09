@@ -137,7 +137,8 @@ type SafeHealth struct {
 // no sink. The host drains, persists, retries and deduplicates detached records.
 // Intake lifetime belongs to the host, independently of any root settlement.
 type SafeObserver struct {
-	queue                                                    chan SafeRecord
+	queue                                                    chan *SafeRecord
+	changed                                                  chan struct{}
 	maxBytes                                                 int
 	prefix                                                   string
 	sequence                                                 atomic.Uint64
@@ -160,12 +161,31 @@ func NewSafeObserver(options SafeObserverOptions) (*SafeObserver, error) {
 	if _, err := rand.Read(nonce[:]); err != nil {
 		return nil, err
 	}
-	return &SafeObserver{queue: make(chan SafeRecord, options.Capacity), maxBytes: options.RecordBytes, prefix: hex.EncodeToString(nonce[:])}, nil
+	return &SafeObserver{queue: make(chan *SafeRecord, options.Capacity), changed: make(chan struct{}, 1), maxBytes: options.RecordBytes, prefix: hex.EncodeToString(nonce[:])}, nil
+}
+
+// Changes is a coalescing doorbell for one host collector, not an event stream.
+// On wake, sample Health and drain all pending batches before sleeping. Intake
+// never waits for the collector; the channel stays open after Close so shutdown
+// cannot become a busy loop. Calling Drain does not acknowledge this doorbell.
+func (o *SafeObserver) Changes() <-chan struct{} {
+	if o == nil {
+		return nil
+	}
+	return o.changed
+}
+
+func (o *SafeObserver) signal() {
+	select {
+	case o.changed <- struct{}{}:
+	default:
+	}
 }
 func (o *SafeObserver) id() string { return o.prefix + "-" + strconv.FormatUint(o.sequence.Add(1), 10) }
 func (o *SafeObserver) admit(r SafeRecord) {
+	defer o.signal()
 	// All fields are already bounded scalars. Serialization cannot call host code.
-	raw, err := json.Marshal(r)
+	raw, err := json.Marshal(&r)
 	if err != nil || len(raw) > o.maxBytes {
 		o.oversize.Add(1)
 		return
@@ -180,7 +200,7 @@ func (o *SafeObserver) admit(r SafeRecord) {
 		return
 	}
 	select {
-	case o.queue <- r:
+	case o.queue <- &r:
 		o.admitted.Add(1)
 	default:
 		o.overflow.Add(1)
@@ -198,7 +218,7 @@ func (o *SafeObserver) Drain(limit int) []SafeRecord {
 	for range limit {
 		select {
 		case r := <-o.queue:
-			result = append(result, r)
+			result = append(result, *r)
 		default:
 			return result
 		}
@@ -210,6 +230,7 @@ func (o *SafeObserver) Close() {
 		o.mu.Lock()
 		o.closed = true
 		o.mu.Unlock()
+		o.signal()
 	}
 }
 func (o *SafeObserver) Health() SafeHealth {

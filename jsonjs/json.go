@@ -28,6 +28,11 @@ func StringifyJSON(raw []byte) ([]byte, error) {
 
 // ArrayIndex recognizes the own-property index keys sorted first by JS.
 func ArrayIndex(key string) (uint64, bool) {
+	// Ordinary property names are not numbers. Avoid constructing a NumError
+	// (and copying its input) for every model/transcript field.
+	if len(key) == 0 || key[0] < '0' || key[0] > '9' {
+		return 0, false
+	}
 	n, err := strconv.ParseUint(key, 10, 32)
 	return n, err == nil && n < 4294967295 && strconv.FormatUint(n, 10) == key
 }
@@ -93,7 +98,12 @@ func (o *ObjectFields) Marshal() []byte {
 		}
 		return 0
 	})
-	out := []byte{'{'}
+	size := 2
+	for _, field := range o.fields {
+		size += len(field.name) + len(field.value) + 2
+	}
+	out := make([]byte, 1, size)
+	out[0] = '{'
 	for i, field := range o.fields {
 		o.positions[string(field.name)] = i
 		if i > 0 {
@@ -121,13 +131,13 @@ func (p *jsonValueParser) value() []byte {
 	p.space()
 	switch p.raw[p.pos] {
 	case '"':
-		return quoteJSONUTF16(p.stringUnits())
+		return p.quotedString()
 	case '{':
 		p.pos++
 		fields := ObjectFields{}
 		p.space()
 		for p.raw[p.pos] != '}' {
-			name := quoteJSONUTF16(p.stringUnits())
+			name := p.quotedString()
 			p.space()
 			p.pos++ // colon
 			fields.Set(name, p.value())
@@ -177,6 +187,44 @@ func (p *jsonValueParser) literal() []byte {
 		}
 	}
 	return p.raw[start:p.pos]
+}
+
+// Unescaped valid UTF-8 already has the same representation in JavaScript.
+// Leave the cursor unchanged on the slow path: escaped/lone-surrogate strings
+// still pass through the existing UTF-16 normalization.
+func (p *jsonValueParser) unescapedString() ([]byte, bool) {
+	start := p.pos + 1
+	for end := start; end < len(p.raw); end++ {
+		switch p.raw[end] {
+		case '\\':
+			return nil, false
+		case '"':
+			raw := p.raw[start:end]
+			if !utf8.Valid(raw) {
+				return nil, false
+			}
+			p.pos = end + 1
+			return raw, true
+		}
+	}
+	return nil, false // Inputs are validated before parsing.
+}
+
+func (p *jsonValueParser) quotedString() []byte {
+	if raw, ok := p.unescapedString(); ok {
+		out := make([]byte, len(raw)+2)
+		out[0], out[len(out)-1] = '"', '"'
+		copy(out[1:], raw)
+		return out
+	}
+	return quoteJSONUTF16(p.stringUnits())
+}
+
+func (p *jsonValueParser) decodedString() string {
+	if raw, ok := p.unescapedString(); ok {
+		return string(raw)
+	}
+	return stringFromUTF16(p.stringUnits())
 }
 
 func (p *jsonValueParser) stringUnits() []uint16 {

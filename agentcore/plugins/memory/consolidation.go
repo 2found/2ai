@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/2found/2ai/agentcore"
@@ -53,29 +54,32 @@ func (c *curation) FinalizeRun(ctx context.Context, result agentcore.RunResult, 
 	if result.StopReason != "" && result.StopReason != "stop" && result.StopReason != "end_turn" {
 		return nil
 	}
-	raw, err := json.Marshal(result.Messages)
+	id, err := rolloutDigest(result.Messages)
 	if err != nil {
 		return err
 	}
-	sum := sha256.Sum256(raw)
-	r := Rollout{ID: hex.EncodeToString(sum[:]), Final: agentcore.TruncateMiddle(result.Final, 8000)}
+	r := Rollout{ID: id, Final: agentcore.TruncateMiddle(result.Final, 8000)}
 	budget := 32000
 	for i := len(result.Messages) - 1; i >= 0 && len(r.Messages) < 32 && budget > 0; i-- {
 		m := result.Messages[i]
 		if m.Role == agentcore.RoleSystem {
 			continue
 		}
-		content := m.Content
+		// Join once: repeatedly appending calls copied a potentially large
+		// tool result up to eight times just to keep a 4 KiB excerpt.
+		parts := []string{m.Content}
 		for _, call := range m.ToolCalls[:min(8, len(m.ToolCalls))] {
-			content += "\nTool call " + agentcore.TruncateBytes(call.Name, 64) + ": " + agentcore.TruncateMiddle(call.Arguments, 1024)
+			parts = append(parts, "\nTool call "+agentcore.TruncateBytes(call.Name, 64)+": "+agentcore.TruncateMiddle(call.Arguments, 1024))
 		}
+		content := strings.Join(parts, "")
 		m = agentcore.Message{Role: m.Role, Name: agentcore.TruncateBytes(m.Name, 64), ToolCallID: agentcore.TruncateBytes(m.ToolCallID, 128), Content: agentcore.TruncateMiddle(content, min(budget, 4000))}
 		if m.Content == "" {
 			continue
 		}
 		budget -= len(m.Content)
-		r.Messages = append([]agentcore.Message{m}, r.Messages...)
+		r.Messages = append(r.Messages, m)
 	}
+	slices.Reverse(r.Messages)
 	if err := c.consolidation.StageRollout(ctx, c.scopeID, r); err != nil {
 		c.report(ctx, err)
 		return nil
@@ -90,41 +94,65 @@ func (c *curation) FinalizeRun(ctx context.Context, result agentcore.RunResult, 
 	return nil
 }
 
-func (c *curation) consolidate(ctx context.Context) {
+// Hash the same JSON array as before without materializing a second complete
+// transcript. Peak scratch space is bounded by one message; nil and empty
+// transcripts deliberately keep their distinct durable digests.
+func rolloutDigest(messages []agentcore.Message) (string, error) {
+	h := sha256.New()
+	if messages == nil {
+		_, _ = h.Write([]byte("null"))
+	} else {
+		_, _ = h.Write([]byte("["))
+		for i := range messages {
+			if i > 0 {
+				_, _ = h.Write([]byte(","))
+			}
+			raw, err := json.Marshal(&messages[i])
+			if err != nil {
+				return "", err
+			}
+			_, _ = h.Write(raw)
+		}
+		_, _ = h.Write([]byte("]"))
+	}
+	return hex.EncodeToString(h.Sum(nil)), nil
+}
+
+func (c *curation) consolidate(ctx context.Context) (processed int, err error) {
 	defer func() {
 		if p := recover(); p != nil {
-			c.report(ctx, fmt.Errorf("memory consolidation panic: %v", p))
+			err = fmt.Errorf("memory consolidation panic: %v", p)
+		}
+		if err != nil {
+			c.report(ctx, err)
 		}
 	}()
 	pending, err := c.consolidation.PendingRollouts(ctx, c.scopeID, 4)
-	if err != nil {
-		c.report(ctx, err)
-		return
-	}
-	if len(pending) == 0 {
-		return
+	if err != nil || len(pending) == 0 {
+		return 0, err
 	}
 	if len(pending) > 1 {
 		ctx = telemetry.WithoutSafeOrigin(ctx)
 	}
 	memories, err := c.store.Recall(ctx, c.scopeID, "", 32)
 	if err != nil {
-		c.report(ctx, err)
-		return
+		return 0, err
 	}
 	in := Consolidation{Rollouts: pending, Memories: memories}
 	changes, err := c.consolidator(ctx, in)
+	if err == nil {
+		err = ctx.Err()
+	}
 	if err == nil {
 		err = ValidateConsolidation(c.scopeID, in, changes)
 	}
 	if err == nil {
 		err = c.consolidation.CommitConsolidation(ctx, c.scopeID, in, changes)
 	}
-	// A secondary model outage must leave durable evidence pending for retry,
-	// never fail successful primary work or consume the pending rollouts.
 	if err != nil {
-		c.report(ctx, err)
+		return 0, err
 	}
+	return len(pending), nil
 }
 func (c *curation) report(ctx context.Context, err error) {
 	defer func() { _ = recover() }()

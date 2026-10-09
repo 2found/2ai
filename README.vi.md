@@ -67,6 +67,9 @@ lịch chạy, pack và app của Soot.
   hoặc lỗi host, fallback dừng; host gắn callback lưu lựa chọn và usage.
 - AgentCore sở hữu một vòng lặp model. Engine nằm dưới policy ứng dụng;
   plugin mở rộng composition, không tạo runtime thứ hai.
+- Plugin subagent native sở hữu hướng dẫn giao việc ngay trong schema tool;
+  host cung cấp đích được phép và callback thực thi, skill cung cấp kiến thức
+  chuyên môn. Không cần agent điều phối riêng hay vòng lặp model thứ hai.
 - Host giải credential và cấp quyền tool. Cài capability không tự cấp quyền.
   Thư mục workspace không tạo môi trường cách ly hệ điều hành.
 - Checkpoint native và identity của value có quy tắc sở hữu. Đọc tài liệu

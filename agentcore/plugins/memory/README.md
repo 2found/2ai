@@ -111,8 +111,15 @@ add/merge/retract changes. The store must atomically validate the supplied
 snapshot, apply changes and consume rollouts. Source IDs and scope are validated
 before commit. The native binding uses no tools and accounts every AI attempt.
 
-Errors leave pending evidence for the next successful run; they do not fail the
-primary answer. `OnConsolidationError` reports secondary failures to hosts.
+Staging hashes the original JSON transcript one message at a time, preserving
+existing rollout IDs without retaining a second complete transcript buffer.
+Evidence still keeps at most 32 messages within 32 KB plus an 8 KB final answer;
+tool-call annotations are joined once before truncation. This bounds staging
+scratch space by the largest message rather than the total transcript.
+
+Errors retain pending evidence and never fail the primary answer. The deferred
+worker retries a deadline failure once; synchronous callers and other failures
+wait for a later successful run. `OnConsolidationError` reports secondary failures to hosts.
 Children, parked, failed and aborted runs do not consolidate. This is independent
 of `learn`/`memory_edit`; omitting consolidation leaves existing behavior intact.
 Soot's Bolt adapter supplies scoped durable pending evidence, snapshot checks,
@@ -124,12 +131,40 @@ Supply `Plugin.Worker` (or `preset.Options.MemoryWorker` together with
 `ConsolidateMemory`) to stage evidence during finalization and defer the model
 pass. Construct one `NewConsolidationWorker(capacity)` per host, call `Run(ctx)`
 once, and cancel/join it before closing stores. Scope IDs must identify the same
-memory store throughout this worker's lifetime. The queue coalesces waiting
-scopes, runs one pass at a time and bounds each pass to 30 seconds. In-flight
-work may have one additional queued pass when new evidence arrives.
+memory store throughout this worker's lifetime. Capacity bounds admitted scopes,
+including in-flight work. The worker runs at most `min(4, capacity)` distinct
+scopes concurrently and never overlaps model snapshots within one scope. A
+200 ms initial coalescing window combines nearby notifications; it does not
+postpone already queued work each time another notification arrives.
 
-Queue overflow, shutdown and model failures retain durable pending evidence for
-the next successful run. The worker does not discover stored scopes on startup.
-Native background usage is recorded through the worker context's telemetry;
-it never mutates the completed agent's usage or goal budget. With no worker,
-AgentCore retains its synchronous consolidation contract for existing consumers.
+Each pass reads at most four rollouts. Successful full batches yield to waiting
+scopes and continue until the backlog drains; arrivals during a pass trigger a
+follow-up even when its snapshot contained fewer than four rollouts. A drained
+worker blocks on notification, with no timer or periodic store polling.
+
+Both native and deferred passes have a 60-second bound (an earlier caller
+cancellation still wins). A timed-out deferred pass gets **one** retry after a
+five-second delay; that delay occupies no model slot. A second timeout, invalid
+proposal or other error leaves durable evidence pending until a later successful
+run. Provider retries/fallback retain the host's existing bounded policy; the
+worker does not add another retry loop for provider/auth/validation failures.
+Shutdown cancels and joins all active passes before returning.
+
+Queue overflow and shutdown retain durable evidence. The worker does not discover
+stored scopes on startup; a successful run re-admits that scope. Background usage
+has independent safe telemetry and never mutates a completed agent's usage or
+goal budget. Continuations do not guess a single originating run. With no worker,
+AgentCore retains the synchronous single-batch contract for existing consumers.
+
+The native prompt asks for at most four concise changes, using only new,
+scope-specific facts/preferences/procedures. It excludes ordinary answers,
+generic advice and toy exercise data from reusable memories. Custom consolidators
+keep the existing validation limit of 16 changes. The output ceiling remains
+2,048 tokens with host-bound auxiliary effort; concision is a model instruction,
+not a guarantee of provider billing or response latency.
+
+Native consolidation requests remain complete JSON within 60,000 bytes. Large
+batches use progressively shorter content excerpts and bounded tag previews,
+retaining every rollout/memory ID. The original evidence and memory snapshot
+remain unchanged for validation and atomic commit. Oversized immutable metadata
+fails before a provider call rather than sending a cut JSON document.

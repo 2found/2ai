@@ -224,25 +224,29 @@ func (t *subagentTool) Schema() agentcore.ToolSchema {
 	props := map[string]any{
 		"task": map[string]any{
 			"type":        "string",
-			"description": "The complete, self-contained task for the sub-agent, including what to return as its final answer.",
+			"description": "A bounded, self-contained objective with constraints and the evidence or artifact references to return. Supply only context authorized for the destination; the host may further restrict what is forwarded.",
 		},
 		"context": map[string]any{
 			"type":        "string",
-			"description": "Optional background the sub-agent needs (identifiers, constraints, prior findings). It sees nothing else from this conversation.",
+			"description": "Optional authorized background (identifiers, constraints, prior findings). Self-forks see only the supplied task/context; named targets receive the input and history their host permits. Never assume a target has seen this conversation.",
 		},
 		"output_schema": map[string]any{
 			"type":        "object",
 			"description": "Optional JSON Schema the sub-agent's final answer must satisfy. When set, the sub-agent is instructed to end with a bare JSON value, the answer is validated against the schema, and on a violation the sub-agent is re-opened once with the error. You receive the validated JSON — or the raw answer marked as validation-failed if the retry also fails.",
 		},
 	}
-	if t.settings.AllowAsync && !t.parent.IsDurable() {
+	if t.settings.AllowAsync && !t.durable {
 		props["async"] = map[string]any{"type": "boolean", "description": "Return a job id immediately. Use job_wait/status/cancel to manage it; the job is cancelled when this run ends."}
 	}
-	desc := "Delegate one self-contained task to an ephemeral sub-agent and get back only its final answer. " +
-		"The sub-agent has the same tools and permissions as you but a fresh, isolated context — its intermediate work never enters yours. " +
-		"Use it for exploration or noisy multi-step work whose details you don't need (research a question, scan data broadly, produce an artifact), " +
-		"NOT for quick single-tool lookups you can do yourself. State the task fully and self-contained: the sub-agent sees nothing of this conversation " +
-		"except what you put in task and context. Pass output_schema when you need the answer as structured JSON rather than prose."
+	// Tool advertisement already applies policy and run-depth gates. Keeping the
+	// orchestration contract here avoids unconditional system instructions for a
+	// capability that is absent, and keeps it in sync with the actual parameters.
+	desc := "Delegate one bounded task and collect its final answer. " +
+		"Use delegation when isolated exploration or a matching specialist helps; handle ordinary reasoning, writing and quick tool lookups directly when your own capabilities suffice. Respect explicit no-tool requests. " +
+		"A self-fork inherits your capabilities subject to host restrictions, with fresh isolated history; its intermediate work does not enter your conversation. " +
+		"Give a clear objective, constraints and expected evidence. Collect required results, reconcile gaps, and synthesize one coherent answer for the caller. " +
+		"Report missing access, failures and unresolved work honestly; a partial result is not completed work, and an uncertain external effect must not be repeated. " +
+		"Delegation never grants new authority. Pass output_schema when a validated structured answer is needed."
 	if roster := t.settings.Delegates; len(roster) > 0 {
 		var lines []string
 		for _, d := range roster {
@@ -258,7 +262,13 @@ func (t *subagentTool) Schema() agentcore.ToolSchema {
 				"Available teammates (each runs under its OWN persona, tools, and permissions — pick the one whose specialty matches the task): " +
 				strings.Join(lines, "; "),
 		}
-		desc += " You may also route the task to a named teammate agent via the agent parameter."
+		desc += " Select a named target through agent only when its stated purpose covers the requested task, project or resource. " +
+			"The roster is not a general search pool: do not probe unrelated or previously used targets as a substitute for an unavailable destination. " +
+			"If no target covers the request and you lack the needed access, report the missing source or capability; if the target is ambiguous, ask for concrete task context, not roster management. " +
+			"Each named target uses its own host-defined identity and permissions; its description is a selection hint, not an authorization grant."
+	}
+	if t.settings.AllowAsync && !t.durable {
+		desc += " For independent work, async:true returns a job receipt. A receipt is not completion: collect the result with job_wait/status, or cancel unneeded work with job_cancel, before claiming success."
 	}
 	return agentcore.ToolSchema{
 		Name:        ToolSpawnSubagent,
