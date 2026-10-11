@@ -65,6 +65,13 @@ func NewNativeClient(spec ClientSpec) (*NativeClient, error) {
 		case *OpenAIProvider:
 			c.api, c.endpoint = "openai-completions", p.BaseURL
 			c.compat = map[string]any{"maxTokensField": p.Compat.MaxTokensField}
+			// Every native candidate is reasoning-capable, which selects the
+			// "developer" instruction role. OpenAI-compatible gateways may drop
+			// that role silently, so the model runs with no system prompt —
+			// persona and guardrails included. Only OpenAI's own API gets it.
+			if !isOpenAIAPI(p.BaseURL) {
+				c.compat["supportsDeveloperRole"] = false
+			}
 		case *OpenAIResponsesProvider:
 			c.api, c.endpoint = "openai-responses", strings.TrimSuffix(p.BaseURL, "/responses")
 		case *AnthropicProvider:
@@ -110,4 +117,9 @@ func (c *NativeClient) Candidate(id string, contextWindow int) (FallbackCandidat
 		controls["apiKey"] = c.spec.APIKey
 		return (NativeProvider{Tokens: c.spec.TokenSource}).Stream(ctx, requested, transcript, controls)
 	}}, nil
+}
+
+func isOpenAIAPI(endpoint string) bool {
+	u, err := url.Parse(endpoint)
+	return err == nil && strings.EqualFold(u.Hostname(), "api.openai.com")
 }
