@@ -107,13 +107,3 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh release edit "v$VERSION" --draft=false --latest
-      - name: Notify website release consumer
-        continue-on-error: true
-        env:
-          GH_TOKEN: ${{ secrets.WEBSITE_DISPATCH_TOKEN }}
-        run: |
-          if [ -z "$GH_TOKEN" ]; then
-            echo 'Website consumes published releases hourly; configure WEBSITE_DISPATCH_TOKEN for immediate refresh.'
-            exit 0
-          fi
-          gh api --method POST repos/2found/2found.dev/dispatches -f event_type=release-published
