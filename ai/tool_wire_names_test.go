@@ -125,3 +125,22 @@ func TestPortableToolNamesStayDistinctAndReversible(t *testing.T) {
 		t.Error("a portable name was renamed")
 	}
 }
+
+func TestPortableCompletionsBodyIsUntouchedOrFullyRenamed(t *testing.T) {
+	clean := json.RawMessage(`{"model":"m","tools":[{"type":"function","function":{"name":"read","parameters":{"z":1,"a":2}}}],"messages":[{"role":"tool","name":"read","content":"<ok>"}]}`)
+	out, _, err := portableCompletionsToolNames(clean)
+	if err != nil || string(out) != string(clean) {
+		t.Fatalf("portable body changed: %s %v", out, err)
+	}
+	body := json.RawMessage(`{"model":"m","tool_choice":{"type":"function","function":{"name":"2x"}},"tools":[{"type":"function","function":{"name":"2x","parameters":{}}}],"messages":[{"role":"system","tools":[{"type":"custom","custom":{"name":"9y"}}]},{"role":"assistant","tool_calls":[{"id":"c","type":"function","function":{"name":"2x","arguments":"{}"}}]},{"role":"tool","name":"2x","tool_call_id":"c","content":"ok"}]}`)
+	out, names, err := portableCompletionsToolNames(body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(out), `"2x"`) || strings.Contains(string(out), `"9y"`) || strings.Count(string(out), `"_2x"`) != 4 || !strings.Contains(string(out), `"_9y"`) {
+		t.Fatalf("not every site was renamed: %s", out)
+	}
+	if names.fromWire("_2x") != "2x" || names.fromWire("_9y") != "9y" {
+		t.Fatal("renames do not map back")
+	}
+}

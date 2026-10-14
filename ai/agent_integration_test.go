@@ -138,3 +138,76 @@ func nativeIntegrationProvider(t *testing.T, endpoint string) *ai.FallbackProvid
 	}
 	return &ai.FallbackProvider{Candidates: []ai.FallbackCandidate{candidate}}
 }
+
+// A gateway in front of a Gemini-class backend repairs a function name that
+// starts with a digit and never restores it. The native agent must still run
+// the tool it declared, across turns, and send nothing left to repair.
+func TestNativeAgentRunsADigitLeadingToolThroughARewritingGateway(t *testing.T) {
+	const tool = "2found-hub_radar_scan"
+	var calls atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var body struct {
+			Tools []struct {
+				Function struct {
+					Name string `json:"name"`
+				} `json:"function"`
+			} `json:"tools"`
+			Messages []struct {
+				Role      string `json:"role"`
+				ToolCalls []struct {
+					Function struct {
+						Name string `json:"name"`
+					} `json:"function"`
+				} `json:"tool_calls"`
+			} `json:"messages"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Errorf("decode request: %v", err)
+		}
+		declared := map[string]bool{}
+		for _, item := range body.Tools {
+			if name := item.Function.Name; name == "" || name[0] >= '0' && name[0] <= '9' {
+				t.Errorf("gateway would have to repair tool %q", name)
+			}
+			declared[item.Function.Name] = true
+		}
+		for _, m := range body.Messages {
+			for _, call := range m.ToolCalls {
+				if !declared[call.Function.Name] {
+					t.Errorf("history call %q matches no declared tool", call.Function.Name)
+				}
+			}
+		}
+		w.Header().Set("Content-Type", "text/event-stream")
+		if calls.Add(1) == 1 {
+			name := body.Tools[0].Function.Name
+			if name[0] >= '0' && name[0] <= '9' {
+				name = "_" + name
+			}
+			_, _ = w.Write([]byte(`data: {"choices":[{"delta":{"tool_calls":[{"index":0,"id":"call_1","type":"function","function":{"name":"` + name + `","arguments":"{}"}}]},"finish_reason":"tool_calls"}]}` + "\n\ndata: [DONE]\n\n"))
+			return
+		}
+		_, _ = w.Write([]byte(`data: {"choices":[{"delta":{"content":"scanned"},"finish_reason":"stop"}]}` + "\n\ndata: [DONE]\n\n"))
+	}))
+	defer srv.Close()
+	var ran atomic.Int32
+	agent, err := agentcore.New(agentcore.Config{
+		NativeProvider: nativeIntegrationProvider(t, srv.URL),
+		Model:          "m",
+		Policy:         agentcore.NewAllowList(tool),
+		Tools: agentcore.NewToolSet(agentcore.StringTool{ToolName: tool, Properties: agentcore.StringProperties(), Required: []string{}, Execute: func(context.Context, map[string]string) (string, error) {
+			ran.Add(1)
+			return "3 new items", nil
+		}}),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	result, err := agent.Prompt(context.Background(), "scan the radar")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if ran.Load() != 1 || result.Final != "scanned" || calls.Load() != 2 {
+		t.Fatalf("tool ran %d times, final=%q, model calls=%d", ran.Load(), result.Final, calls.Load())
+	}
+}

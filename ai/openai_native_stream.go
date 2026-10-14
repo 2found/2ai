@@ -19,6 +19,7 @@ type completionsAccumulator struct {
 	model           completionsModel
 	compat          OpenAICompletionsCompat
 	grammar         map[string]string
+	names           toolWireNames
 	stream          *AssistantMessageEventStream
 	push            func(AssistantMessageEvent)
 	output          *Message
@@ -121,6 +122,7 @@ func (a *completionsAccumulator) ensureTool(call map[string]json.RawMessage) *Co
 	if !samplingNonNull(function["name"]) {
 		name = samplingString(custom["name"])
 	}
+	name = a.names.fromWire(name)
 	id := samplingString(call["id"])
 	index, err := strconv.ParseFloat(string(call["index"]), 64)
 	hasIndex := err == nil

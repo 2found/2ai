@@ -127,6 +127,9 @@ func runCompletionsHTTP(ctx context.Context, acc *completionsAccumulator, rawMod
 	if err != nil {
 		return err
 	}
+	if params, acc.names, err = portableCompletionsToolNames(params); err != nil {
+		return err
+	}
 	return runOpenAIHTTP(ctx, rawModel, options, controls, headers, headerErr, params, openAIHTTPStream{
 		path: "/chat/completions", start: acc.start, chunk: acc.chunk, finish: acc.finish,
 		nonIterableError: "undefined is not a function (near '...chunk of openaiStream...')",

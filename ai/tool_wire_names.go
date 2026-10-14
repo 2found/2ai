@@ -1,6 +1,11 @@
 package ai
 
-import "github.com/2found/2ai/ai/protocol"
+import (
+	"bytes"
+	"encoding/json"
+
+	"github.com/2found/2ai/ai/protocol"
+)
 
 // maxWireToolName is the shortest function-name limit among the
 // OpenAI-compatible backends a gateway may route to.
@@ -37,6 +42,11 @@ func newToolWireNames(req protocol.ChatRequest) toolWireNames {
 	if req.ToolChoice.Mode == protocol.ToolChoiceNamed {
 		names = append(names, req.ToolChoice.Name)
 	}
+	return toolWireNamesFor(names)
+}
+
+// toolWireNamesFor gives every name that needs one a distinct portable name.
+func toolWireNamesFor(names []string) toolWireNames {
 	taken := map[string]bool{}
 	for _, name := range names {
 		taken[name] = true
@@ -103,4 +113,146 @@ func portableToolName(name string) string {
 		out = append(out, hash...)
 	}
 	return string(out)
+}
+
+// portableCompletionsToolNames applies toolWireNames to a built Chat
+// Completions body: declared tools (top level and those a system message
+// anchors), earlier calls, tool results and a named tool_choice. A body whose
+// names are already portable is returned byte for byte.
+func portableCompletionsToolNames(params json.RawMessage) (json.RawMessage, toolWireNames, error) {
+	var names []string
+	if _, err := walkCompletionsToolNames(params, func(name string) string { names = append(names, name); return name }); err != nil {
+		return nil, toolWireNames{}, err
+	}
+	codec := toolWireNamesFor(names)
+	if len(codec.wire) == 0 {
+		return params, codec, nil
+	}
+	out, err := walkCompletionsToolNames(params, codec.toWire)
+	return out, codec, err
+}
+
+func walkCompletionsToolNames(params json.RawMessage, rename func(string) string) (json.RawMessage, error) {
+	return editObject(params, func(body map[string]json.RawMessage) error {
+		var err error
+		if body["tools"], err = editArray(body["tools"], func(tool json.RawMessage) (json.RawMessage, error) {
+			return renameCallee(tool, rename)
+		}); err != nil {
+			return err
+		}
+		if body["tool_choice"], err = renameCallee(body["tool_choice"], rename); err != nil {
+			return err
+		}
+		body["messages"], err = editArray(body["messages"], func(message json.RawMessage) (json.RawMessage, error) {
+			return editObject(message, func(m map[string]json.RawMessage) error {
+				var err error
+				if m["tools"], err = editArray(m["tools"], func(tool json.RawMessage) (json.RawMessage, error) {
+					return renameCallee(tool, rename)
+				}); err != nil {
+					return err
+				}
+				if m["tool_calls"], err = editArray(m["tool_calls"], func(call json.RawMessage) (json.RawMessage, error) {
+					return renameCallee(call, rename)
+				}); err != nil {
+					return err
+				}
+				if samplingString(m["role"]) == "tool" {
+					m["name"], err = renameString(m["name"], rename)
+				}
+				return err
+			})
+		})
+		return err
+	})
+}
+
+// renameCallee renames {"function":{"name"}} and {"custom":{"name"}}.
+func renameCallee(raw json.RawMessage, rename func(string) string) (json.RawMessage, error) {
+	return editObject(raw, func(holder map[string]json.RawMessage) error {
+		for _, key := range []string{"function", "custom"} {
+			var err error
+			if holder[key], err = editObject(holder[key], func(callee map[string]json.RawMessage) error {
+				var err error
+				callee["name"], err = renameString(callee["name"], rename)
+				return err
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+}
+
+func renameString(raw json.RawMessage, rename func(string) string) (json.RawMessage, error) {
+	var name string
+	if len(raw) == 0 || json.Unmarshal(raw, &name) != nil {
+		return raw, nil
+	}
+	if next := rename(name); next != name {
+		return json.Marshal(next)
+	}
+	return raw, nil
+}
+
+// editObject and editArray leave anything that is not an object or array, and
+// every value edit leaves alone, exactly as it was.
+func editObject(raw json.RawMessage, edit func(map[string]json.RawMessage) error) (json.RawMessage, error) {
+	trimmed := bytes.TrimSpace(raw)
+	if len(trimmed) == 0 || trimmed[0] != '{' {
+		return raw, nil
+	}
+	var object map[string]json.RawMessage
+	if err := json.Unmarshal(trimmed, &object); err != nil {
+		return nil, err
+	}
+	before := make(map[string]string, len(object))
+	for key, value := range object {
+		before[key] = string(value)
+	}
+	if err := edit(object); err != nil {
+		return nil, err
+	}
+	changed := false
+	for key, value := range object {
+		if value == nil {
+			if _, ok := before[key]; ok {
+				object[key] = json.RawMessage(before[key])
+			} else {
+				delete(object, key)
+			}
+			continue
+		}
+		if string(value) != before[key] {
+			changed = true
+		}
+	}
+	if !changed {
+		return raw, nil
+	}
+	return json.Marshal(object)
+}
+
+func editArray(raw json.RawMessage, edit func(json.RawMessage) (json.RawMessage, error)) (json.RawMessage, error) {
+	trimmed := bytes.TrimSpace(raw)
+	if len(trimmed) == 0 || trimmed[0] != '[' {
+		return raw, nil
+	}
+	var items []json.RawMessage
+	if err := json.Unmarshal(trimmed, &items); err != nil {
+		return nil, err
+	}
+	changed := false
+	for i, item := range items {
+		next, err := edit(item)
+		if err != nil {
+			return nil, err
+		}
+		if string(next) != string(item) {
+			items[i], changed = next, true
+		}
+	}
+	if !changed {
+		return raw, nil
+	}
+	return json.Marshal(items)
 }
