@@ -335,8 +335,13 @@ func (p *OpenAIProvider) chatOnce(ctx context.Context, req protocol.ChatRequest,
 	// cheap streamed model) reply with text/event-stream even when stream=false
 	// was requested. Detect that and fold the SSE chunks into a single response
 	// rather than failing the JSON decode and degrading the caller.
+	names := newToolWireNames(req)
 	if isSSEResponse(resp.Header.Get("Content-Type"), data) {
-		return decodeSSEResponse(p, resp, data)
+		out, err := decodeSSEResponse(p, resp, data)
+		for i := range out.Message.ToolCalls {
+			out.Message.ToolCalls[i].Name = names.fromWire(out.Message.ToolCalls[i].Name)
+		}
+		return out, err
 	}
 
 	// Classify by HTTP status BEFORE decoding the body. A 5xx/429 from a gateway
@@ -374,7 +379,7 @@ func (p *OpenAIProvider) chatOnce(ctx context.Context, req protocol.ChatRequest,
 	msg := protocol.Message{Role: protocol.RoleAssistant, Content: choice.Message.Content}
 	for _, tc := range choice.Message.ToolCalls {
 		msg.ToolCalls = append(msg.ToolCalls, protocol.ToolCall{
-			ID: tc.ID, Name: tc.Function.Name, Arguments: string(ParseStreamingJSON(tc.Function.Arguments)),
+			ID: tc.ID, Name: names.fromWire(tc.Function.Name), Arguments: string(ParseStreamingJSON(tc.Function.Arguments)),
 		})
 	}
 	return protocol.ChatResponse{
@@ -578,6 +583,7 @@ func (p *OpenAIProvider) streamOnce(ctx context.Context, req protocol.ChatReques
 		return nil, protocol.NewProviderError(p.Name(), resp, strings.TrimSpace(string(data)))
 	}
 
+	names := newToolWireNames(req)
 	ch := make(chan protocol.ChatDelta, 16)
 	go func() {
 		defer close(ch)
@@ -654,6 +660,7 @@ func (p *OpenAIProvider) streamOnce(ctx context.Context, req protocol.ChatReques
 		}
 		for _, idx := range order {
 			tc := *toolAcc[idx]
+			tc.Name = names.fromWire(tc.Name)
 			tc.Arguments = string(ParseStreamingJSON(tc.Arguments))
 			ch <- protocol.ChatDelta{ToolCall: &tc}
 		}
@@ -782,9 +789,12 @@ func (p *OpenAIProvider) maxTokensField() string {
 }
 
 func (p *OpenAIProvider) encodeWithMaxTokenField(req protocol.ChatRequest, maxTokenField string) oaiRequest {
+	names := newToolWireNames(req)
+	choice := req.ToolChoice
+	choice.Name = names.toWire(choice.Name)
 	out := oaiRequest{
 		Model: req.Model, PromptCacheKey: req.CacheKey, ReasoningEffort: req.ReasoningEffort,
-		ToolChoice:        openAIChatToolChoice(req.ToolChoice, len(req.Tools) > 0),
+		ToolChoice:        openAIChatToolChoice(choice, len(req.Tools) > 0),
 		ParallelToolCalls: cloneOptionalBool(req.ParallelToolCalls, len(req.Tools) > 0),
 	}
 	if maxTokenField == "max_completion_tokens" {
@@ -829,7 +839,7 @@ func (p *OpenAIProvider) encodeWithMaxTokenField(req protocol.ChatRequest, maxTo
 					text = textWithImageNotice(text, len(images), false)
 				}
 				out.Messages = append(out.Messages, oaiMessage{
-					Role: string(tm.Role), Content: text, ToolCallID: tm.ToolCallID, Name: tm.Name,
+					Role: string(tm.Role), Content: text, ToolCallID: tm.ToolCallID, Name: names.toWire(tm.Name),
 				})
 			}
 			i--
@@ -861,7 +871,7 @@ func (p *OpenAIProvider) encodeWithMaxTokenField(req protocol.ChatRequest, maxTo
 			var otc oaiToolCall
 			otc.ID = tc.ID
 			otc.Type = "function"
-			otc.Function.Name = tc.Name
+			otc.Function.Name = names.toWire(tc.Name)
 			otc.Function.Arguments = tc.Arguments
 			om.ToolCalls = append(om.ToolCalls, otc)
 		}
@@ -871,7 +881,7 @@ func (p *OpenAIProvider) encodeWithMaxTokenField(req protocol.ChatRequest, maxTo
 		for _, s := range req.Tools {
 			var ot oaiTool
 			ot.Type = "function"
-			ot.Function.Name = s.Name
+			ot.Function.Name = names.toWire(s.Name)
 			ot.Function.Description = s.Description
 			ot.Function.Parameters, ot.Function.Strict = projectedToolParameters(s, toolSchemaGeneric)
 			out.Tools = append(out.Tools, ot)
