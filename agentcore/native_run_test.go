@@ -359,3 +359,35 @@ func TestPublicNativeGoalRevisionAndPlanBudget(t *testing.T) {
 		t.Fatalf("resume: %s %v", second.StopReason, err)
 	}
 }
+
+// An operator who replaces a model must not strand the conversations that ran
+// on it: the next turn resumes the checkpoint on the configured primary.
+func TestPublicNativeRunResumesOnReplacedModel(t *testing.T) {
+	ctx := context.Background()
+	run := func(model string, state json.RawMessage, input string, seen *string) agentcore.RunResult {
+		t.Helper()
+		provider := &ai.FallbackProvider{Candidates: []ai.FallbackCandidate{{Model: json.RawMessage(`{"id":"` + model + `"}`), Stream: func(ctx context.Context, _ json.RawMessage, view ai.TranscriptContext, _ map[string]any) (*ai.AssistantMessageEventStream, error) {
+			if seen != nil {
+				raw, _ := json.Marshal(view)
+				*seen = string(raw)
+			}
+			return nativeReply(ctx, &ai.Message{Role: "assistant", Model: model, StopReason: "stop", Content: ai.BlockContent(ai.ContentBlock{Type: "text", Text: "answer from " + model})})
+		}}}}
+		retry := agentcore.RetryPolicy{MaxAttempts: 1}
+		a, err := agentcore.New(agentcore.Config{NativeProvider: provider, Model: model, Retry: &retry})
+		if err != nil {
+			t.Fatal(err)
+		}
+		result, err := a.RunNative(ctx, agentcore.NativeRun{State: state, Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: input}}})
+		if err != nil {
+			t.Fatalf("%s: %v", model, err)
+		}
+		return result
+	}
+	first := run("retired", nil, "first question", nil)
+	var seen string
+	second := run("replacement", first.NativeState, "second question", &seen)
+	if second.Final != "answer from replacement" || !strings.Contains(seen, "first question") || !strings.Contains(seen, "answer from retired") {
+		t.Fatalf("resume lost the conversation: final=%q view=%s", second.Final, seen)
+	}
+}

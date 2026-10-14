@@ -124,15 +124,14 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 		if err := nativehost.ValidateMessages(checkpoint.Messages); err != nil {
 			return result, err
 		}
-		selected = -1
+		// Resume on the candidate the conversation last settled on. When the
+		// host has since replaced that model, the conversation continues on the
+		// current primary: history is provider-neutral, like a fallback switch.
 		for i, candidate := range provider.Candidates {
 			if nativehost.SameJSON(checkpoint.Model, candidate.Model) {
 				selected = i
 				break
 			}
-		}
-		if selected < 0 {
-			return result, errors.New("agentcore: checkpoint model is absent from the configured providers")
 		}
 	}
 	var history []*ai.Message
