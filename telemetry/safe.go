@@ -402,8 +402,11 @@ func (a *SafeAttempt) Finish(status, failureKind string, accounting SafeAccounti
 }
 
 // FinishModel checks response selection against the immutable approved binding.
-// An unapproved internal fallback is unavailable; response text is never copied
-// into a label. Empty response selection retains the host candidate binding.
+// A different provider answering is unavailable; response text is never copied
+// into a label. A routed model id (a gateway alias such as "flash") answers
+// with its upstream name, so a model-only difference keeps the host binding
+// that was called: the label names what the host approved, not what the
+// response says.
 func (a *SafeAttempt) FinishModel(status, failureKind string, accounting SafeAccounting, provider, model string) {
 	a.FinishAdmission(status, failureKind, accounting, provider, model, true)
 }
@@ -417,7 +420,7 @@ func (a *SafeAttempt) FinishAdmission(status, failureKind string, accounting Saf
 	a.once.Do(func() {
 		r := a.record
 		r.ProducerAdmitted = admitted
-		if (provider != "" && (r.ProviderID == nil || provider != *r.ProviderID)) || (model != "" && (r.ModelID == nil || model != *r.ModelID)) {
+		if provider != "" && (r.ProviderID == nil || provider != *r.ProviderID) {
 			r.ProviderID, r.ModelID, r.LabelsState = nil, nil, "unavailable"
 		}
 		r.SettledAt = time.Now().UTC()

@@ -569,3 +569,46 @@ func TestSafeDevinUsageDecodeValidity(t *testing.T) {
 		})
 	}
 }
+
+// A gateway alias ("flash") answers with its upstream model name. The attempt
+// still went to the approved binding, so its labels stay; the upstream name
+// never becomes one.
+func TestRoutedAliasKeepsTheApprovedBinding(t *testing.T) {
+	o, ctx := safeAIContext(t)
+	upstream := "upstream-model-name"
+	message := &Message{Role: "assistant", StopReason: "stop", Provider: "openai", Model: "flash", ResponseModel: &upstream, Usage: explicitUsage(3, 1, 0, 0, 0, true), Content: TextContent("ok")}
+	labels, err := telemetry.ApproveModelLabels("openai", "flash")
+	if err != nil {
+		t.Fatal(err)
+	}
+	p := FallbackProvider{Candidates: []FallbackCandidate{{Model: json.RawMessage(`{"id":"flash","provider":"openai"}`), SafeLabels: labels, Stream: func(ctx context.Context, _ json.RawMessage, _ TranscriptContext, _ map[string]any) (*AssistantMessageEventStream, error) {
+		return attemptFixture(AssistantMessageEvent{Type: "done", Message: message})(ctx)
+	}}}}
+	s, err := p.Stream(ctx, nil, NormalizeContext(Context{Messages: []Message{{Role: "user", Content: TextContent("hi")}}}), nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for {
+		_, ok, err := s.Next(ctx)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !ok {
+			break
+		}
+	}
+	if err := s.WaitForEnd(ctx); err != nil {
+		t.Fatal(err)
+	}
+	records := safeAttempts(o)
+	if len(records) != 1 || records[0].LabelsState != "approved" || records[0].ProviderID == nil || *records[0].ProviderID != "openai" || records[0].ModelID == nil || *records[0].ModelID != "flash" {
+		t.Fatalf("routed alias lost its approved binding: %+v", records)
+	}
+	raw, err := json.Marshal(records)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(raw), upstream) {
+		t.Fatalf("upstream model name became telemetry: %s", raw)
+	}
+}
