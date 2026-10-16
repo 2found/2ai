@@ -111,9 +111,9 @@ func (b *toolExecutionBudget) reserve() bool {
 }
 
 // reserveCall reserves one execution for a call, free for the first read of
-// each skill. The returned func gives the reservation back when the call did
-// not execute.
-func (b *toolExecutionBudget) reserveCall(name, args string) (bool, func()) {
+// each skill; charged reports whether it counts. The returned func gives the
+// reservation back when the call did not execute.
+func (b *toolExecutionBudget) reserveCall(name, args string) (reserved, charged bool, release func()) {
 	if b != nil && b.skill != nil && name == readSkillToolName {
 		if id, ok := b.skill(args); ok {
 			b.mu.Lock()
@@ -126,7 +126,7 @@ func (b *toolExecutionBudget) reserveCall(name, args string) (bool, func()) {
 			}
 			b.mu.Unlock()
 			if first {
-				return true, func() {
+				return true, false, func() {
 					b.mu.Lock()
 					delete(b.read, id)
 					b.mu.Unlock()
@@ -135,9 +135,17 @@ func (b *toolExecutionBudget) reserveCall(name, args string) (bool, func()) {
 		}
 	}
 	if !b.reserve() {
-		return false, func() {}
+		return false, false, func() {}
 	}
-	return true, b.release
+	return true, true, b.release
+}
+
+// left is how many more calls the run may charge.
+func (b *toolExecutionBudget) left() int64 {
+	if b == nil {
+		return 0
+	}
+	return max(b.max-b.used.Load(), 0)
 }
 
 func (b *toolExecutionBudget) release() {

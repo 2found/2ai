@@ -398,3 +398,39 @@ func TestRepeatOrUnknownSkillReadIsCharged(t *testing.T) {
 		t.Fatalf("run_sql executions = %d, want 0: the repeat and the unknown read spend the budget; traces %+v", work.called, res.Tools)
 	}
 }
+
+// TestToolResultsSayWhenTheBudgetIsNearlySpent: the model cannot see the
+// ceiling, so the last results before it say how many calls are left. A free
+// skill read says nothing.
+func TestToolResultsSayWhenTheBudgetIsNearlySpent(t *testing.T) {
+	work := &echoTool{name: "run_sql"}
+	agent := skillBudgetAgent(t, work, 3,
+		AssistantToolCall("c0", readSkillToolName, `{"id":"query"}`),
+		AssistantToolCall("c1", "run_sql", `{"q":1}`),
+		AssistantToolCall("c2", "run_sql", `{"q":2}`),
+		AssistantToolCall("c3", "run_sql", `{"q":3}`),
+		AssistantText("done"),
+	)
+	res, err := agent.Prompt(context.Background(), "report")
+	if err != nil {
+		t.Fatalf("Prompt: %v", err)
+	}
+	var notices []string
+	for _, m := range res.Messages {
+		if m.Role != RoleTool {
+			continue
+		}
+		_, notice, _ := strings.Cut(m.Content, "[Tool calls left in this run: ")
+		notices = append(notices, notice)
+	}
+	// After the last call none are left, and the wrap-up says so instead.
+	want := []string{"", "2. ", "1. ", ""}
+	if len(notices) != 4 {
+		t.Fatalf("tool results = %d, want 4: %+v", len(notices), res.Messages)
+	}
+	for i, notice := range notices {
+		if !strings.HasPrefix(notice, want[i]) || (want[i] == "" && notice != "") {
+			t.Fatalf("result %d notice = %q, want prefix %q", i, notice, want[i])
+		}
+	}
+}

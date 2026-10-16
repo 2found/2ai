@@ -339,7 +339,7 @@ func (i *nestedToolInvoker) InvokeTool(ctx context.Context, name, args string) (
 		trace := ToolTrace{Tool: name, Args: args, Allowed: false, Reason: string(ToolDenialAborted)}
 		return ToolOutput{Invocations: []ToolInvocation{{Trace: trace}}}, err
 	}
-	reserved, release := i.budget.reserveCall(name, args)
+	reserved, _, release := i.budget.reserveCall(name, args)
 	if !reserved {
 		err := errors.New("tool-call budget exhausted")
 		trace := ToolTrace{Tool: name, Args: args, Allowed: false, Reason: err.Error()}

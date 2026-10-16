@@ -248,9 +248,9 @@ func (h *PiToolHost) Execute(ctx context.Context, params json.RawMessage, emit f
 		return true, ""
 	})
 	call := ToolCall{ID: input.ID, Name: input.Name, Arguments: string(input.Args)}
-	release := func() {}
+	release, charged := func() {}, false
 	reserve := func() (ok bool) {
-		ok, release = h.budget.reserveCall(call.Name, call.Arguments)
+		ok, charged, release = h.budget.reserveCall(call.Name, call.Arguments)
 		return ok
 	}
 	var outcome toolOutcome
@@ -274,6 +274,8 @@ func (h *PiToolHost) Execute(ctx context.Context, params json.RawMessage, emit f
 		outcome = h.agent.runToolCall(ctx, h.exts, h.exempt, h.tools, call, h.agent.limits, update)
 		if !outcome.executed {
 			release()
+		} else if left := h.budget.left(); charged && left > 0 && left <= budgetNoticeAt {
+			outcome.message = withBudgetNotice(outcome.message, left)
 		}
 	}
 	if outcome.childQuestion != nil {
