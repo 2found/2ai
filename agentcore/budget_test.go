@@ -326,3 +326,75 @@ func TestCleanFinishOnTheLastTurnKeepsItsOwnAnswer(t *testing.T) {
 		t.Fatalf("steer injected %d times into a run that finished on its own", n)
 	}
 }
+
+func skillBudgetAgent(t *testing.T, work *echoTool, maxCalls int, script ...ChatResponse) *Agent {
+	t.Helper()
+	limits := DefaultLimits()
+	limits.MaxToolCalls = maxCalls
+	agent, err := New(Config{
+		NativeProvider: scriptedNativeProvider(script...),
+		Model:          "test",
+		Tools:          NewToolSet(work),
+		Policy:         NewAllowList("run_sql"),
+		Limits:         &limits,
+		Definition: AgentDefinition{
+			Skills: []Skill{
+				{ID: "query", Name: "query-runner", Description: "use for query reporting", Enabled: true},
+				{ID: "email", Name: "emailer", Description: "use for outbound email", Enabled: true},
+			},
+			SkillLoader: func(_ context.Context, ids []string) (map[string]string, error) {
+				return map[string]string{"query": "query steps", "email": "email steps"}, nil
+			},
+		},
+	})
+	if err != nil {
+		t.Fatalf("New: %v", err)
+	}
+	return agent
+}
+
+// TestFirstReadOfEachSkillIsFree is why an agent with a small budget can still
+// do the work its skills describe: reading two skills costs nothing, so a
+// budget of two leaves both real calls.
+func TestFirstReadOfEachSkillIsFree(t *testing.T) {
+	work := &echoTool{name: "run_sql"}
+	agent := skillBudgetAgent(t, work, 2,
+		AssistantToolCall("c1", readSkillToolName, `{"id":"query"}`),
+		AssistantToolCall("c2", readSkillToolName, `{"id":"emailer"}`),
+		AssistantToolCall("c3", "run_sql", `{"q":1}`),
+		AssistantToolCall("c4", "run_sql", `{"q":2}`),
+		AssistantText("done"),
+	)
+	res, err := agent.Prompt(context.Background(), "report")
+	if err != nil {
+		t.Fatalf("Prompt: %v", err)
+	}
+	if work.called != 2 {
+		t.Fatalf("run_sql executions = %d, want 2 after two free skill reads; traces %+v", work.called, res.Tools)
+	}
+	for _, trace := range res.Tools {
+		if trace.Reason == "tool-call budget exhausted" {
+			t.Fatalf("a call was refused: %+v", res.Tools)
+		}
+	}
+}
+
+// TestRepeatOrUnknownSkillReadIsCharged keeps the budget a bound on loops: only
+// the first read of a skill the agent has is free.
+func TestRepeatOrUnknownSkillReadIsCharged(t *testing.T) {
+	work := &echoTool{name: "run_sql"}
+	agent := skillBudgetAgent(t, work, 2,
+		AssistantToolCall("c1", readSkillToolName, `{"id":"query"}`),
+		AssistantToolCall("c2", readSkillToolName, `{"id":"query-runner"}`),
+		AssistantToolCall("c3", readSkillToolName, `{"id":"no-such-skill"}`),
+		AssistantToolCall("c4", "run_sql", `{"q":1}`),
+		AssistantText("done"),
+	)
+	res, err := agent.Prompt(context.Background(), "report")
+	if err != nil {
+		t.Fatalf("Prompt: %v", err)
+	}
+	if work.called != 0 {
+		t.Fatalf("run_sql executions = %d, want 0: the repeat and the unknown read spend the budget; traces %+v", work.called, res.Tools)
+	}
+}

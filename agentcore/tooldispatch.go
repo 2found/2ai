@@ -339,7 +339,8 @@ func (i *nestedToolInvoker) InvokeTool(ctx context.Context, name, args string) (
 		trace := ToolTrace{Tool: name, Args: args, Allowed: false, Reason: string(ToolDenialAborted)}
 		return ToolOutput{Invocations: []ToolInvocation{{Trace: trace}}}, err
 	}
-	if !i.budget.reserve() {
+	reserved, release := i.budget.reserveCall(name, args)
+	if !reserved {
 		err := errors.New("tool-call budget exhausted")
 		trace := ToolTrace{Tool: name, Args: args, Allowed: false, Reason: err.Error()}
 		return ToolOutput{Invocations: []ToolInvocation{{Trace: trace}}}, err
@@ -354,13 +355,13 @@ func (i *nestedToolInvoker) InvokeTool(ctx context.Context, name, args string) (
 		defer i.nestedMu.Unlock()
 	}
 	if err := ctx.Err(); err != nil {
-		i.budget.release()
+		release()
 		trace := ToolTrace{CallID: callID, Tool: name, Args: args, Allowed: false, Reason: string(ToolDenialAborted)}
 		return ToolOutput{Invocations: []ToolInvocation{{Trace: trace}}}, err
 	}
 	outcome := i.agent.runToolCall(ctx, i.exts, i.exempt, i.tools, call, i.limits, i.emitUpdate)
 	if !outcome.executed {
-		i.budget.release()
+		release()
 	}
 	invocations := make([]ToolInvocation, 0, 1+len(outcome.invocations))
 	invocations = append(invocations, ToolInvocation{Trace: outcome.trace, Executed: outcome.executed})

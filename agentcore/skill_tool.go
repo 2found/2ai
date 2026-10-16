@@ -89,16 +89,7 @@ func (t readSkillTool) Run(ctx context.Context, args string) (string, error) {
 	if want == "" {
 		return "", fmt.Errorf("id is required")
 	}
-
-	// Resolve the advertised identifier to a skill: match on ID first, then Name.
-	var found *Skill
-	for i := range t.skills {
-		s := &t.skills[i]
-		if skillIdentifier(*s) == want || strings.EqualFold(s.Name, want) {
-			found = s
-			break
-		}
-	}
+	found := t.find(want)
 	if found == nil {
 		return "", fmt.Errorf("unknown skill %q", want)
 	}
@@ -119,6 +110,30 @@ func (t readSkillTool) Run(ctx context.Context, args string) (string, error) {
 		return "", fmt.Errorf("skill %q loaded empty", want)
 	}
 	return body, nil
+}
+
+// find resolves an advertised identifier to an enabled skill: on ID first,
+// then Name.
+func (t readSkillTool) find(want string) *Skill {
+	for i := range t.skills {
+		if s := &t.skills[i]; skillIdentifier(*s) == want || strings.EqualFold(s.Name, want) {
+			return s
+		}
+	}
+	return nil
+}
+
+// reads names the enabled skill a read_skill call's arguments would load, so
+// the run's tool budget can tell a first read from a repeat (reserveCall).
+func (t readSkillTool) reads(args string) (string, bool) {
+	var a readSkillArgs
+	if json.Unmarshal([]byte(args), &a) != nil {
+		return "", false
+	}
+	if found := t.find(strings.TrimSpace(a.ID)); found != nil {
+		return skillIdentifier(*found), true
+	}
+	return "", false
 }
 
 // skillIdentifier is the stable token advertised to the model and accepted by

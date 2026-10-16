@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"sync"
 	"sync/atomic"
 )
 
@@ -64,9 +65,23 @@ func toolStack(ctx context.Context) []string {
 // toolExecutionBudget is shared by every direct and bridged call in one run.
 // Direct and nested calls both reserve before execution, so parallel batches
 // and eval cells cannot race past MaxToolCalls.
+//
+// Reading a skill for the first time is not charged. read_skill returns only
+// this agent's own instructions and reaches nothing outside the run, yet an
+// agent whose task matches two skills had to spend two calls of a small
+// budget before doing any work: a support agent capped at seven calls lost
+// the one it needed to file the customer's note. A second read of the same
+// skill, or a read of a skill the agent does not have, is charged like any
+// call, so the budget still bounds a loop.
 type toolExecutionBudget struct {
 	used atomic.Int64
 	max  int64
+
+	// skill names the enabled skill a read_skill call loads; nil when the run
+	// has no skills.
+	skill func(args string) (string, bool)
+	mu    sync.Mutex
+	read  map[string]bool
 }
 
 func newToolExecutionBudget(maximum int) *toolExecutionBudget {
@@ -93,6 +108,36 @@ func (b *toolExecutionBudget) reserve() bool {
 			return true
 		}
 	}
+}
+
+// reserveCall reserves one execution for a call, free for the first read of
+// each skill. The returned func gives the reservation back when the call did
+// not execute.
+func (b *toolExecutionBudget) reserveCall(name, args string) (bool, func()) {
+	if b != nil && b.skill != nil && name == readSkillToolName {
+		if id, ok := b.skill(args); ok {
+			b.mu.Lock()
+			first := !b.read[id]
+			if first {
+				if b.read == nil {
+					b.read = map[string]bool{}
+				}
+				b.read[id] = true
+			}
+			b.mu.Unlock()
+			if first {
+				return true, func() {
+					b.mu.Lock()
+					delete(b.read, id)
+					b.mu.Unlock()
+				}
+			}
+		}
+	}
+	if !b.reserve() {
+		return false, func() {}
+	}
+	return true, b.release
 }
 
 func (b *toolExecutionBudget) release() {

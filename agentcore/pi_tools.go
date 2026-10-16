@@ -124,6 +124,7 @@ func (a *Agent) openPiTools(ctx context.Context, jsonBindings bool, restoredGoal
 	h.tools = a.tools.With()
 	if len(a.def.enabledSkills()) > 0 {
 		h.tools = withReadSkill(h.tools, a.def)
+		h.budget.skill = newReadSkillTool(a.def).reads
 	}
 	contributed, exempt := h.exts.contributedTools()
 	h.tools = h.tools.With(contributed...)
@@ -247,13 +248,18 @@ func (h *PiToolHost) Execute(ctx context.Context, params json.RawMessage, emit f
 		return true, ""
 	})
 	call := ToolCall{ID: input.ID, Name: input.Name, Arguments: string(input.Args)}
+	release := func() {}
+	reserve := func() (ok bool) {
+		ok, release = h.budget.reserveCall(call.Name, call.Arguments)
+		return ok
+	}
 	var outcome toolOutcome
 	switch {
 	case h.finalizing.Load():
 		outcome = toolOutcome{trace: ToolTrace{CallID: call.ID, Tool: call.Name, Args: call.Arguments, Reason: "run is finalizing"}, message: toolResult(call, "run is finalizing")}
 	case slices.Contains(h.agent.seedDisabledTools, call.Name):
 		outcome = toolOutcome{trace: ToolTrace{CallID: call.ID, Tool: call.Name, Args: call.Arguments, Reason: "tool is disabled"}, message: toolResult(call, "tool is disabled")}
-	case !h.budget.reserve():
+	case !reserve():
 		outcome = toolOutcome{trace: ToolTrace{CallID: call.ID, Tool: call.Name, Args: call.Arguments, Reason: "tool-call budget exhausted"}, message: toolResult(call, "tool-call budget exhausted")}
 	default:
 		var update func(ToolCall, string)
@@ -267,7 +273,7 @@ func (h *PiToolHost) Execute(ctx context.Context, params json.RawMessage, emit f
 		}
 		outcome = h.agent.runToolCall(ctx, h.exts, h.exempt, h.tools, call, h.agent.limits, update)
 		if !outcome.executed {
-			h.budget.release()
+			release()
 		}
 	}
 	if outcome.childQuestion != nil {
