@@ -333,6 +333,15 @@ func TestPublicTextAndStreamTailHideOnlyClosingProtocol(t *testing.T) {
 	if got := goal.StripStatusLine(" words tiếp theo\nSTATUS: BLOCKED"); got != " words tiếp theo" {
 		t.Fatal(got)
 	}
+	if got := goal.PublicText("Gửi lại form nhé.\n\nSTATUS: BLOCKED could not call record_feedback (tool budget exhausted)"); got != "Gửi lại form nhé." {
+		t.Fatal(got)
+	}
+	if got := goal.PublicText("answer\n**STATUS: DONE** — all three checked"); got != "answer" {
+		t.Fatal(got)
+	}
+	if text := "answer\nSTATUS: DONEISH"; goal.PublicText(text) != text {
+		t.Fatal("a word that merely starts like the sentinel was removed")
+	}
 	text := "I cannot claim STATUS: DONE yet.\nMore work remains."
 	if goal.PublicText(text) != text {
 		t.Fatal("ordinary prose was removed")

@@ -313,15 +313,26 @@ func PublicText(text string) string { return strings.TrimSpace(StripStatusLine(t
 // StripStatusLine also works on a buffered stream tail: it preserves every
 // preceding byte, so hosts can hide the completion protocol without joining
 // words or dropping whitespace between preview chunks.
+//
+// A closing line that opens with the sentinel and carries a reason
+// ("STATUS: BLOCKED could not record the lead") satisfies the gate, so it is
+// protocol too and goes as well; a customer was shown that line.
 func StripStatusLine(text string) string {
 	trimmed := strings.TrimRight(text, " \t\r\n")
 	index := strings.LastIndex(trimmed, "\n")
 	normalized := strings.Trim(strings.ToUpper(strings.TrimSpace(trimmed[index+1:])), "*_` ")
-	if normalized == Done || normalized == Blocked {
+	if opensWith(normalized, Done) || opensWith(normalized, Blocked) {
 		if index < 0 {
 			return ""
 		}
 		return trimmed[:index]
 	}
 	return text
+}
+
+// opensWith reports a line that is the sentinel, or the sentinel and then a
+// separate reason; "STATUS: DONEISH" is not a status line.
+func opensWith(line, sentinel string) bool {
+	rest, ok := strings.CutPrefix(line, sentinel)
+	return ok && (rest == "" || strings.ContainsRune(" \t:.-—–(*_`", []rune(rest)[0]))
 }
