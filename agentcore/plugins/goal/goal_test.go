@@ -339,6 +339,12 @@ func TestPublicTextAndStreamTailHideOnlyClosingProtocol(t *testing.T) {
 	if got := goal.PublicText("answer\n**STATUS: DONE** — all three checked"); got != "answer" {
 		t.Fatal(got)
 	}
+	if got := goal.PublicText("Đã đóng lại. Không liên hệ. STATUS: DONE"); got != "Đã đóng lại. Không liên hệ." {
+		t.Fatal(got)
+	}
+	if got := goal.StripStatusLine("intro\nĐã ghi FB-1 — **Status: done**\n"); got != "intro\nĐã ghi FB-1" {
+		t.Fatalf("%q", got)
+	}
 	if text := "answer\nSTATUS: DONEISH"; goal.PublicText(text) != text {
 		t.Fatal("a word that merely starts like the sentinel was removed")
 	}

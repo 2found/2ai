@@ -314,20 +314,42 @@ func PublicText(text string) string { return strings.TrimSpace(StripStatusLine(t
 // preceding byte, so hosts can hide the completion protocol without joining
 // words or dropping whitespace between preview chunks.
 //
-// A closing line that opens with the sentinel and carries a reason
-// ("STATUS: BLOCKED could not record the lead") satisfies the gate, so it is
-// protocol too and goes as well; a customer was shown that line.
+// The gate accepts a closing line that merely contains the sentinel, so two
+// more shapes are protocol and go as well: a line that opens with it and gives
+// a reason ("STATUS: BLOCKED could not record the lead"), and prose that ends
+// with it ("Closed, no contact needed. STATUS: DONE"). Readers were shown both.
 func StripStatusLine(text string) string {
 	trimmed := strings.TrimRight(text, " \t\r\n")
 	index := strings.LastIndex(trimmed, "\n")
-	normalized := strings.Trim(strings.ToUpper(strings.TrimSpace(trimmed[index+1:])), "*_` ")
+	line := trimmed[index+1:]
+	normalized := strings.Trim(strings.ToUpper(strings.TrimSpace(line)), "*_` ")
 	if opensWith(normalized, Done) || opensWith(normalized, Blocked) {
 		if index < 0 {
 			return ""
 		}
 		return trimmed[:index]
 	}
+	for _, sentinel := range []string{Done, Blocked} {
+		if prose, ok := endsWith(line, sentinel); ok {
+			return trimmed[:index+1] + prose
+		}
+	}
 	return text
+}
+
+// endsWith cuts a sentinel that closes a line of prose, with any markdown
+// around it, and returns the prose. The sentinel must stand apart from the
+// word before it.
+func endsWith(line, sentinel string) (string, bool) {
+	body := strings.TrimRight(line, "*_` .")
+	if len(body) < len(sentinel) || !strings.EqualFold(body[len(body)-len(sentinel):], sentinel) {
+		return "", false
+	}
+	prose := strings.TrimRight(body[:len(body)-len(sentinel)], "*_`")
+	if prose == "" || !strings.ContainsRune(" \t", rune(prose[len(prose)-1])) {
+		return "", false
+	}
+	return strings.TrimRight(prose, " \t—–-"), true
 }
 
 // opensWith reports a line that is the sentinel, or the sentinel and then a
