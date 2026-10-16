@@ -1,0 +1,1233 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agent hoạt động thế nào?</title>
+<meta name="description" content="Giải thích AI agent bằng các khối tương tác — từ LLM đến vòng lặp, tool, context và lan can. Dựa trên 2ai/agentcore.">
+<style>
+:root{
+  --bg:#fbf8f3; --bg2:#f4efe6; --card:#ffffff; --ink:#1f1b2d; --muted:#6b6679; --line:#e8e1d6;
+  --brain:#7c5cff; --brain-s:#efeaff;
+  --tool:#e08a00; --tool-s:#fff1d6;
+  --ctx:#0c9d92; --ctx-s:#d8f5f1;
+  --user:#3b82f6; --user-s:#e1edff;
+  --guard:#e5365a; --guard-s:#ffe4ea;
+  --ok:#1a9d52; --ok-s:#dcf5e5;
+  --shadow:0 1px 0 rgba(0,0,0,.03),0 12px 32px -16px rgba(50,35,100,.22);
+  --r:22px;
+  --font:ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#13111b; --bg2:#1a1726; --card:#1e1b2b; --ink:#f3effc; --muted:#a49eb9; --line:#2f2a42;
+    --brain:#a18cff; --brain-s:#2a2352;
+    --tool:#ffb23d; --tool-s:#3a2b0e;
+    --ctx:#33d6c6; --ctx-s:#0e3430;
+    --user:#74adff; --user-s:#172a4b;
+    --guard:#ff7391; --guard-s:#40161f;
+    --ok:#4fdc86; --ok-s:#11351f;
+    --shadow:0 1px 0 rgba(255,255,255,.03),0 12px 32px -16px rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 var(--font);-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+b{font-weight:700}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+code,.mono{font-family:var(--mono);font-size:.88em}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1060px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:18px}
+.brand{font-weight:800;text-decoration:none;color:var(--ink);white-space:nowrap}
+.steps{display:flex;gap:6px;list-style:none;margin:0 0 0 auto;padding:0;overflow-x:auto}
+.steps a{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;text-decoration:none;color:var(--muted);font-size:14px;font-weight:600;border:1px solid transparent;transition:.25s;white-space:nowrap}
+.steps a i{font-style:normal;filter:grayscale(1);opacity:.55;transition:.25s}
+.steps a.on{color:var(--ink)}
+.steps a.on i{filter:none;opacity:1}
+.steps a.cur{background:var(--card);border-color:var(--line);box-shadow:var(--shadow)}
+.bar{height:3px;background:transparent}
+.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brain),var(--tool),var(--ctx),var(--guard));transition:width .2s}
+@media(max-width:760px){.steps a b{display:none}.steps a{padding:6px 9px}.brand{font-size:15px}}
+
+/* ---------- hero ---------- */
+.hero{padding:72px 0 40px;text-align:center;background:radial-gradient(900px 400px at 50% -10%,var(--brain-s),transparent 70%)}
+.hero h1{font-size:clamp(38px,7vw,68px);line-height:1.05;margin:0 0 14px;letter-spacing:-.02em}
+.grad{background:linear-gradient(100deg,var(--brain),var(--guard) 60%,var(--tool));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.sub{font-size:clamp(18px,2.4vw,22px);color:var(--muted);max-width:640px;margin:0 auto 34px}
+.eq{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;margin:0 auto 18px}
+.eq .op{font-size:26px;font-weight:800;color:var(--muted)}
+.pill{border:2px solid var(--line);background:var(--card);border-radius:18px;padding:12px 16px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:104px;transition:.2s;box-shadow:var(--shadow)}
+.pill:hover{transform:translateY(-3px)}
+.pill .e{font-size:30px;line-height:1.1}
+.pill b{font-size:15px}
+.pill small{color:var(--muted);font-size:12.5px}
+.pill.sel{border-color:var(--c);background:var(--cs)}
+.pill.res{cursor:default;background:linear-gradient(135deg,var(--brain-s),var(--guard-s));border-color:transparent}
+.pill.res:hover{transform:none}
+.eqnote{min-height:56px;max-width:620px;margin:0 auto;color:var(--ink);font-size:18px}
+.eqnote a{color:var(--brain);font-weight:700;text-decoration:none;white-space:nowrap}
+.scroll-hint{margin-top:26px;color:var(--muted);font-size:14px;animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(5px)}}
+
+/* ---------- chapters ---------- */
+.chap{padding:64px 0 28px;border-top:1px solid var(--line)}
+.chap-head{margin-bottom:8px}
+.badge{display:inline-block;font:700 13px var(--mono);letter-spacing:.04em;padding:5px 11px;border-radius:999px;background:var(--c);color:#fff;margin-bottom:12px}
+@media (prefers-color-scheme:dark){.badge{color:#14101f}}
+.chap h2{font-size:clamp(30px,5vw,46px);line-height:1.1;margin:0 0 10px;letter-spacing:-.015em}
+.lead{font-size:clamp(18px,2.4vw,22px);color:var(--muted);margin:0;max-width:720px}
+.lead b{color:var(--ink)}
+.chap[data-i="1"]{--c:var(--brain);--cs:var(--brain-s)}
+.chap[data-i="2"]{--c:var(--user);--cs:var(--user-s)}
+.chap[data-i="3"]{--c:var(--brain);--cs:var(--brain-s)}
+.chap[data-i="4"]{--c:var(--tool);--cs:var(--tool-s)}
+.chap[data-i="5"]{--c:var(--ctx);--cs:var(--ctx-s)}
+.chap[data-i="6"]{--c:var(--guard);--cs:var(--guard-s)}
+
+.lab{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:22px;margin-top:22px}
+.lab-t{display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:14px}
+.lab-t:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 0 4px var(--cs)}
+.lab h3{margin:0 0 4px;font-size:21px}
+.lab p.cap{margin:0 0 14px;color:var(--muted);font-size:15.5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:820px){.two{grid-template-columns:1fr}}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.sp{flex:1}
+
+.btn{border:1.5px solid var(--line);background:var(--card);padding:9px 16px;border-radius:999px;font-weight:700;font-size:14.5px;cursor:pointer;transition:.18s;display:inline-flex;align-items:center;gap:7px}
+.btn:hover:not(:disabled){transform:translateY(-1px);border-color:var(--c,var(--brain))}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.p{background:var(--c,var(--brain));color:#fff;border-color:transparent}
+@media (prefers-color-scheme:dark){.btn.p{color:#14101f}}
+.btn.sm{padding:6px 12px;font-size:13px}
+
+.sw{display:flex;gap:12px;align-items:flex-start;cursor:pointer;padding:10px 12px;border-radius:14px;border:1.5px solid var(--line);transition:.2s;user-select:none}
+.sw:hover{border-color:var(--c)}
+.sw input{position:absolute;opacity:0;pointer-events:none}
+.sw .tr{flex:none;width:42px;height:24px;border-radius:99px;background:var(--line);position:relative;transition:.2s;margin-top:2px}
+.sw .tr:after{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:.2s}
+.sw input:checked+.tr{background:var(--c)}
+.sw input:checked+.tr:after{transform:translateX(18px)}
+.sw input:focus-visible+.tr{outline:3px solid var(--cs);outline-offset:2px}
+.sw.on{background:var(--cs);border-color:var(--c)}
+.sw b{display:block;font-size:15px;line-height:1.3}
+.sw small{display:block;color:var(--muted);font-size:13px;line-height:1.35}
+
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:99px;background:var(--bg2);font-size:13px;font-weight:600;border:1px solid var(--line)}
+.chip.mono{font-family:var(--mono);font-weight:500;font-size:12px}
+.fine{font-size:13.5px;color:var(--muted)}
+.fine b{color:var(--ink)}
+
+.mvp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+@media(max-width:700px){.mvp{grid-template-columns:1fr}}
+.mvp>div{border-radius:16px;padding:14px 16px;font-size:15.5px;line-height:1.45}
+.mvp .can{background:var(--ok-s)}
+.mvp .cant{background:var(--guard-s)}
+.mvp h5{margin:0 0 4px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.agent-so-far{display:flex;gap:6px;margin-top:14px;align-items:center;color:var(--muted);font-size:14px;font-weight:600}
+.agent-so-far span.e{font-size:24px}
+
+/* ---------- ch1 : next word ---------- */
+.sentence{font-size:clamp(22px,3.4vw,30px);font-weight:700;min-height:56px;display:flex;flex-wrap:wrap;gap:0 6px;align-items:baseline;padding:14px 16px;background:var(--bg2);border-radius:16px;margin-bottom:14px;line-height:1.4}
+.sentence .tk{animation:pop .35s cubic-bezier(.2,1.6,.4,1)}
+.sentence .tk.new{color:var(--brain)}
+.sentence .caret{width:3px;height:1.1em;background:var(--brain);animation:blink 1s steps(2) infinite;align-self:center}
+@keyframes blink{50%{opacity:0}}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+.opts{display:grid;gap:8px}
+.opt{position:relative;overflow:hidden;text-align:left;border:1.5px solid var(--line);background:var(--card);border-radius:14px;padding:11px 14px;cursor:pointer;display:flex;justify-content:space-between;font-weight:700;transition:.15s}
+.opt:hover{border-color:var(--brain);transform:translateX(3px)}
+.opt i{position:absolute;inset:0;width:var(--w);background:var(--brain-s);z-index:0;transition:width .5s}
+.opt span{position:relative;z-index:1}
+.opt .pc{font-family:var(--mono);font-weight:500;color:var(--muted)}
+.endmsg{padding:12px 14px;border-radius:14px;background:var(--ok-s);font-weight:600}
+
+.chat{display:flex;flex-direction:column;gap:8px;min-height:230px}
+.bub{max-width:88%;padding:10px 14px;border-radius:16px;font-size:15.5px;animation:pop .3s ease both;line-height:1.4}
+.bub.u{align-self:flex-end;background:var(--user);color:#fff;border-bottom-right-radius:4px}
+@media (prefers-color-scheme:dark){.bub.u{color:#0d1626}}
+.bub.a{align-self:flex-start;background:var(--bg2);border-bottom-left-radius:4px}
+.stamp{display:inline-block;margin-top:6px;font:700 11.5px var(--mono);letter-spacing:.04em;padding:3px 8px;border-radius:6px;background:var(--guard-s);color:var(--guard);transform:rotate(-2deg)}
+.qs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+
+/* ---------- ch2 : prompt sheet ---------- */
+.sheet{background:var(--bg2);border:1.5px dashed var(--line);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:200px}
+.sheet-h{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 4px}
+.lay{border-radius:12px;padding:10px 12px;font-size:14.5px;line-height:1.4;animation:slide .35s ease both;border-left:5px solid var(--lc);background:var(--ls)}
+.lay b{display:block;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--lc);margin-bottom:2px}
+.lay.sys{--lc:var(--brain);--ls:var(--brain-s)}
+.lay.rules{--lc:var(--guard);--ls:var(--guard-s)}
+.lay.tools{--lc:var(--tool);--ls:var(--tool-s)}
+.lay.hist{--lc:var(--ctx);--ls:var(--ctx-s)}
+.lay.now{--lc:var(--user);--ls:var(--user-s)}
+@keyframes slide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.arrow-down{text-align:center;font-size:22px;color:var(--muted);line-height:1}
+.answer{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px 16px;min-height:98px;transition:border-color .3s}
+.answer .who{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--brain);margin-bottom:4px}
+.answer .txt{font-size:16.5px}
+.callbox{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:13.5px;padding:6px 10px;border-radius:10px;background:var(--tool-s);color:var(--tool);font-weight:600}
+.meter{height:10px;border-radius:99px;background:var(--bg2);overflow:hidden;margin-top:6px}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--user),var(--brain));transition:width .5s}
+
+/* ---------- ch3 : loop ---------- */
+.cycle{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px}
+.node{flex:1;min-width:108px;border:2px solid var(--line);border-radius:18px;padding:12px 10px;text-align:center;background:var(--card);transition:.3s;position:relative}
+.node .e{font-size:30px;display:block;line-height:1.2}
+.node b{display:block;font-size:15px}
+.node small{display:block;color:var(--muted);font-size:12.5px;line-height:1.3}
+.node.act-on{transform:translateY(-4px);border-color:var(--nc);background:var(--ncs);box-shadow:0 0 0 6px var(--ncs),var(--shadow)}
+.node[data-k=think]{--nc:var(--brain);--ncs:var(--brain-s)}
+.node[data-k=act]{--nc:var(--tool);--ncs:var(--tool-s)}
+.node[data-k=obs]{--nc:var(--ctx);--ncs:var(--ctx-s)}
+.node[data-k=done]{--nc:var(--ok);--ncs:var(--ok-s);flex:.9}
+.cy-ar{align-self:center;font-size:20px;color:var(--muted);font-weight:800}
+.ret{margin:8px 24px 0;border:2px dashed var(--line);border-top:none;border-radius:0 0 18px 18px;text-align:center;padding:6px 10px 8px;font-size:13.5px;color:var(--muted);font-weight:600;position:relative}
+.ret:before{content:"";position:absolute;top:-8px;left:-2px;border:6px solid transparent;border-bottom:8px solid var(--line);border-top:0;transform:translateX(-4px)}
+.explain{margin:14px 0;padding:12px 14px;border-radius:14px;background:var(--bg2);font-size:15.5px;min-height:52px}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.log{display:flex;flex-direction:column;gap:7px;max-height:420px;overflow:auto;padding:2px 4px 2px 0}
+.ls{display:flex;gap:10px;padding:9px 12px;border-radius:12px;border-left:5px solid var(--lc);background:var(--ls);font-size:15px;line-height:1.4;animation:slide .35s ease both}
+.ls .ic{flex:none}
+.ls code{font-weight:600}
+.ls.user{--lc:var(--user);--ls:var(--user-s)}
+.ls.think{--lc:var(--brain);--ls:var(--brain-s)}
+.ls.act{--lc:var(--tool);--ls:var(--tool-s)}
+.ls.obs{--lc:var(--ctx);--ls:var(--ctx-s)}
+.ls.done{--lc:var(--ok);--ls:var(--ok-s);font-weight:700}
+.ls.guard{--lc:var(--guard);--ls:var(--guard-s)}
+.ls.warn{--lc:var(--guard);--ls:var(--guard-s)}
+.ls.fail{--lc:var(--guard);--ls:var(--guard-s);font-weight:700}
+.ls.park{--lc:var(--user);--ls:var(--user-s)}
+.ls.res{--lc:var(--ctx);--ls:var(--ctx-s)}
+.ls.tool{--lc:var(--tool);--ls:var(--tool-s)}
+.ls.brain{--lc:var(--brain);--ls:var(--brain-s)}
+
+/* ---------- ch4 : tools ---------- */
+.toolcard{border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;display:flex;gap:10px;align-items:center;cursor:pointer;transition:.2s;background:var(--card)}
+.toolcard .e{font-size:24px}
+.toolcard code{font-weight:700}
+.toolcard small{display:block;color:var(--muted);font-size:12.5px}
+.toolcard .tag{margin-left:auto;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--bg2);color:var(--muted)}
+.toolcard.on{border-color:var(--ok);background:var(--ok-s)}
+.toolcard.on .tag{background:var(--ok);color:#fff}
+@media (prefers-color-scheme:dark){.toolcard.on .tag{color:#0b2515}}
+.toolcard:not(.on){opacity:.75}
+.toolcard:not(.on) code{text-decoration:line-through;text-decoration-color:var(--muted)}
+.try{display:block;width:100%;text-align:left;margin-bottom:8px;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;font-family:var(--mono);font-size:12.5px;transition:.15s;line-height:1.35}
+.try:hover{border-color:var(--tool);transform:translateX(3px)}
+.try.sel{border-color:var(--tool);background:var(--tool-s)}
+.try em{display:block;font-family:var(--font);font-style:normal;color:var(--muted);font-size:12px;margin-bottom:2px}
+.gates{display:flex;flex-direction:column;gap:6px;margin:12px 0}
+.gate{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;border:1.5px solid var(--line);font-size:14.5px;opacity:.45;transition:.3s}
+.gate .st{margin-left:auto;font-size:18px}
+.gate.pass{opacity:1;border-color:var(--ok);background:var(--ok-s)}
+.gate.stop{opacity:1;border-color:var(--guard);background:var(--guard-s)}
+.gate.skip{opacity:.25}
+.gate .n{font:700 12px var(--mono);width:22px;height:22px;border-radius:50%;background:var(--bg2);display:grid;place-items:center;flex:none}
+.back{padding:12px 14px;border-radius:14px;background:var(--bg2);font-size:15px;min-height:70px}
+.back .t{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+@media(max-width:760px){.trio{grid-template-columns:1fr}}
+.trio>div{border-radius:16px;padding:14px;border:2px solid var(--line);text-align:center}
+.trio .e{font-size:30px}
+.trio>div>b{display:block}
+.trio small{color:var(--muted);font-size:13.5px;display:block;line-height:1.35}
+.trio>div.t{background:var(--tool-s);border-color:transparent}
+.trio>div.s{background:var(--user-s);border-color:transparent}
+.trio>div.m{background:var(--brain-s);border-color:transparent}
+.skillcat{display:flex;gap:8px;align-items:center;padding:8px 12px;border-radius:12px;background:var(--user-s);font-size:14px;margin-bottom:10px}
+.skillcat .full{display:none;margin-top:6px}
+.skillbody{margin:0 0 10px;padding:10px 12px;border-radius:12px;background:var(--user-s);border:1.5px dashed var(--user);font-size:13.5px;line-height:1.45;animation:slide .35s ease both}
+
+/* ---------- ch5 : context ---------- */
+.ctxwrap{display:grid;grid-template-columns:minmax(260px,340px) 1fr;gap:26px;align-items:start}
+@media(max-width:820px){.ctxwrap{grid-template-columns:1fr}}
+.tankbox{position:relative}
+.tank{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;padding:8px;background:var(--bg2);border-radius:18px;border:2px solid var(--line);position:relative;aspect-ratio:1/1}
+.cell{border-radius:4px;background:color-mix(in srgb,var(--line) 55%,transparent);transition:background .45s,transform .45s}
+.cell.user{background:var(--user)}
+.cell.plan{background:var(--guard);opacity:.75}
+.cell.brain{background:var(--brain)}
+.cell.res{background:var(--tool)}
+.cell.stub{background:repeating-linear-gradient(45deg,var(--tool-s),var(--tool-s) 3px,var(--line) 3px,var(--line) 5px)}
+.cell.sum{background:var(--ctx)}
+.cell.spill{background:var(--tool);opacity:.45;outline:2px dotted var(--tool);outline-offset:-3px}
+.cell.pin{background:var(--guard);box-shadow:inset 0 0 0 2px var(--card)}
+.cell.flash{transform:scale(.6)}
+.mk{position:absolute;left:8px;right:8px;height:0;border-top:2px dashed var(--c);pointer-events:none}
+.mk span{position:absolute;right:0;top:-1px;transform:translateY(-100%);font:700 10.5px var(--mono);background:var(--bg2);padding:0 5px;border-radius:5px;color:var(--c)}
+.mk.m50{top:calc(8px + (100% - 16px)*.5)}
+.mk.m80{top:calc(8px + (100% - 16px)*.8)}
+.over{position:absolute;left:14px;right:14px;top:34%;border-radius:16px;display:none;text-align:center;padding:16px;font-weight:800;font-size:19px;background:var(--card);border:2px solid currentColor;box-shadow:var(--shadow);animation:pop .4s}
+.over.show{display:block}
+.over.bad{color:var(--guard)}
+.over.good{color:var(--ok)}
+.over small{display:block;font-weight:500;font-size:14px;color:var(--muted);margin-top:6px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:10px;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.evlog{display:flex;flex-direction:column;gap:5px;margin-top:12px;min-height:118px}
+.ev{font-size:14px;padding:6px 10px;border-radius:10px;background:var(--bg2);animation:slide .3s ease both}
+.ev.g{background:var(--ctx-s)}
+.ev.b{background:var(--guard-s)}
+.sws{display:grid;gap:8px;margin-bottom:14px}
+
+/* ---------- ch6 : guards ---------- */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.tab{border:1.5px solid var(--line);background:var(--card);border-radius:14px;padding:8px 12px;cursor:pointer;font-weight:700;font-size:13.5px;display:flex;gap:7px;align-items:center;transition:.18s}
+.tab:hover{border-color:var(--guard)}
+.tab.sel{background:var(--guard);color:#fff;border-color:transparent}
+@media (prefers-color-scheme:dark){.tab.sel{color:#220a10}}
+.tab .e{font-size:18px}
+@media(max-width:600px){.tab span.tx{display:none}}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+@media(max-width:820px){.vs{grid-template-columns:1fr}}
+.vcol{border-radius:18px;padding:14px;border:2px solid var(--line);min-height:300px;display:flex;flex-direction:column}
+.vcol.bad{border-color:color-mix(in srgb,var(--guard) 45%,var(--line));background:linear-gradient(180deg,var(--guard-s),transparent 40%)}
+.vcol.good{border-color:color-mix(in srgb,var(--ok) 45%,var(--line));background:linear-gradient(180deg,var(--ok-s),transparent 40%)}
+.vcol h4{margin:0 0 10px;font-size:15px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.vcol .log{max-height:none;flex:1}
+.verd{margin-top:12px;padding:12px 14px;border-radius:14px;font-weight:700;animation:pop .4s}
+.verd.bad{background:var(--guard);color:#fff}
+.verd.good{background:var(--ok);color:#fff}
+@media (prefers-color-scheme:dark){.verd.bad{color:#2a0610}.verd.good{color:#07240f}}
+.verd .stats{margin-top:8px}
+.verd .chip{background:rgba(255,255,255,.22);border-color:transparent;color:inherit}
+.build{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.plug{border:2px solid var(--line);background:var(--card);border-radius:14px;padding:8px 12px;cursor:pointer;font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:7px;transition:.2s}
+.plug .e{font-size:18px}
+.plug:hover{transform:translateY(-2px)}
+.plug.on{border-color:var(--ok);background:var(--ok-s)}
+.plug:not(.on) .e{filter:grayscale(1);opacity:.6}
+.score{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;margin:8px 0 14px}
+.score .big{font-size:54px;font-weight:900;line-height:1;letter-spacing:-.03em}
+.score .big small{font-size:22px;color:var(--muted);font-weight:700}
+.score .lab2{font-size:19px;font-weight:800}
+.segs{display:flex;gap:4px;margin-top:8px}
+.segs i{flex:1;height:10px;border-radius:99px;background:var(--line);transition:.4s}
+.segs i.ok{background:var(--ok)}
+.res-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:820px){.res-list{grid-template-columns:1fr}}
+.ri{display:flex;gap:10px;padding:9px 12px;border-radius:12px;font-size:14px;align-items:flex-start;line-height:1.35}
+.ri.ok{background:var(--ok-s)}
+.ri.no{background:var(--guard-s)}
+.ri .e{font-size:20px;flex:none}
+.ri small{display:block;color:var(--muted);font-size:12.5px}
+.rule{margin-top:18px;padding:14px 16px;border-radius:16px;background:var(--bg2);font-size:15.5px;display:flex;gap:12px;align-items:flex-start}
+.rule .e{font-size:26px}
+
+/* ---------- recap ---------- */
+.final{padding:70px 0 40px;border-top:1px solid var(--line);text-align:center}
+.final h2{font-size:clamp(30px,5vw,46px);margin:0 0 8px;letter-spacing:-.015em}
+.stack{display:flex;flex-direction:column;gap:8px;max-width:560px;margin:26px auto 0}
+.layer{border-radius:16px;padding:12px 16px;display:flex;align-items:center;gap:14px;text-align:left;border-left:6px solid var(--lc);background:var(--ls);transition:.2s;cursor:default}
+.layer:hover{transform:scale(1.02)}
+.layer.hl{transform:scale(1.04);box-shadow:0 0 0 3px var(--lc),var(--shadow)}
+.layer .no{margin-left:auto;font:800 13px var(--mono);width:28px;height:28px;border-radius:50%;background:var(--lc);color:#fff;display:none;place-items:center;flex:none}
+.layer.hl .no{display:grid}
+@media (prefers-color-scheme:dark){.layer .no{color:#14101f}}
+.replay{max-width:560px;margin:18px auto 0;text-align:left}
+.rcap{min-height:58px;padding:12px 16px;border-radius:14px;background:var(--bg2);font-size:16px;margin-top:12px;text-align:left}
+.layer .e{font-size:28px}
+.layer b{display:block}
+.layer small{color:var(--muted);font-size:14px}
+details.dev{max-width:760px;margin:30px auto 0;text-align:left;border:1px solid var(--line);border-radius:16px;background:var(--card);padding:6px 18px}
+details.dev summary{cursor:pointer;font-weight:700;padding:12px 0}
+details.dev table{border-collapse:collapse;width:100%;font-size:14px;margin-bottom:12px}
+details.dev td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top}
+details.dev td:first-child{white-space:nowrap;font-weight:700}
+footer{padding:30px 0 60px;text-align:center;color:var(--muted);font-size:14px}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
+.reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body id="top">
+
+<nav class="nav" aria-label="Tiến trình">
+  <div class="nav-in">
+    <a class="brand" href="#top">🤖 Agent 101</a>
+    <ol class="steps" id="navSteps">
+      <li><a href="#s1" data-s="1"><i>🧠</i><b>LLM</b></a></li>
+      <li><a href="#s2" data-s="2"><i>📜</i><b>Prompt</b></a></li>
+      <li><a href="#s3" data-s="3"><i>🔁</i><b>Vòng lặp</b></a></li>
+      <li><a href="#s4" data-s="4"><i>🛠</i><b>Tool</b></a></li>
+      <li><a href="#s5" data-s="5"><i>🗂</i><b>Context</b></a></li>
+      <li><a href="#s6" data-s="6"><i>🛡</i><b>Lan can</b></a></li>
+    </ol>
+  </div>
+  <div class="bar"><span id="bar"></span></div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>AI <span class="grad">Agent</span><br>hoạt động thế nào?</h1>
+    <p class="sub">Xây từng mảnh một, như làm MVP. Bấm, kéo, thử — không cần biết code.</p>
+    <div class="eq" id="eq" role="group" aria-label="Công thức agent"></div>
+    <div class="eqnote" id="eqnote">👆 Bấm từng mảnh để xem nó là gì.</div>
+    <div class="scroll-hint">cuộn xuống ↓</div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ================= 1. LLM ================= -->
+<section class="chap" id="s1" data-i="1">
+  <div class="chap-head reveal">
+    <span class="badge">MVP 0 · chỉ có LLM</span>
+    <h2>Bộ não trong cái lọ</h2>
+    <p class="lead">LLM chỉ biết làm <b>một việc</b>: đoán chữ tiếp theo.</p>
+  </div>
+
+  <div class="two">
+    <div class="lab reveal">
+      <div class="lab-t">Thử · tự tay đoán chữ</div>
+      <h3>Chọn chữ tiếp theo</h3>
+      <p class="cap">Mỗi lần, LLM chấm điểm mọi chữ có thể. Bạn làm “LLM” đi.</p>
+      <div class="sentence" id="sent" aria-live="polite"></div>
+      <div class="opts" id="opts"></div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn" id="rollBtn">🎲 Để nó tự chọn</button>
+        <button class="btn" id="resetSent">↺ Làm lại</button>
+      </div>
+    </div>
+
+    <div class="lab reveal">
+      <div class="lab-t">Thử · nhờ nó làm gì đó</div>
+      <h3>Nhưng nó không có tay</h3>
+      <p class="cap">Hỏi bộ não trong lọ vài câu.</p>
+      <div class="qs" id="qs1"></div>
+      <div class="chat" id="chat1" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="mvp reveal">
+    <div class="can"><h5>✅ Làm được</h5>Viết, dịch, tóm tắt, giải thích.</div>
+    <div class="cant"><h5>❌ Chưa làm được</h5>Tra cứu thật, bấm nút, nhớ lần trước.</div>
+  </div>
+</section>
+
+<!-- ================= 2. PROMPT ================= -->
+<section class="chap" id="s2" data-i="2">
+  <div class="chap-head reveal">
+    <span class="badge">MVP 1 · + Prompt</span>
+    <h2>Một tờ giấy, gửi đi mỗi lần</h2>
+    <p class="lead">LLM <b>không nhớ gì</b>. Cái nó biết = những gì ghi trên tờ giấy lần này.</p>
+  </div>
+
+  <div class="lab reveal">
+    <div class="lab-t">Thử · bật tắt từng lớp</div>
+    <div class="two">
+      <div>
+        <h3>Khách nhắn:</h3>
+        <p class="cap" style="font-size:17px;color:var(--ink)">“Đơn #123 giao trễ 3 ngày. Hoàn tiền cho tôi!”</p>
+        <div class="sws">
+          <label class="sw" id="swP"><input type="checkbox"><span class="tr"></span><span><b>🎭 Vai trò</b><small>“Bạn là Mai, nhân viên CSKH thân thiện”</small></span></label>
+          <label class="sw" id="swR"><input type="checkbox"><span class="tr"></span><span><b>📏 Luật</b><small>“Hoàn tối đa 500k. Phải xác minh đơn trước.”</small></span></label>
+          <label class="sw" id="swT"><input type="checkbox"><span class="tr"></span><span><b>🧰 Danh sách tool</b><small>“Bạn có: tra_don(mã), hoàn_tiền(mã)”</small></span></label>
+        </div>
+        <div class="row">
+          <button class="btn" id="moreHist">💬 Nói thêm 1 câu</button>
+          <span class="fine" id="histNote"></span>
+        </div>
+        <div class="rule" style="margin-top:16px"><span class="e">💡</span><div>Không có lớp nào là phép màu. Mọi thứ chỉ là <b>chữ viết thêm vào tờ giấy</b> — LLM đọc hết rồi đoán.</div></div>
+      </div>
+      <div>
+        <div class="sheet" id="sheet"><div class="sheet-h"><span>📄 Tờ giấy gửi LLM</span><span id="tokTxt">0 token</span></div></div>
+        <div class="meter" aria-hidden="true"><i id="tokBar"></i></div>
+        <div class="arrow-down">↓</div>
+        <div class="answer" id="answer"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mvp reveal">
+    <div class="can"><h5>✅ Làm được</h5>Đổi giọng, giữ luật, biết mình có tool gì.</div>
+    <div class="cant"><h5>❌ Chưa làm được</h5>Nó chỉ <i>xin</i> gọi tool. Ai chạy? Ai đọc kết quả?</div>
+  </div>
+</section>
+
+<!-- ================= 3. LOOP ================= -->
+<section class="chap" id="s3" data-i="3">
+  <div class="chap-head reveal">
+    <span class="badge">MVP 2 · + Vòng lặp</span>
+    <h2>Vòng lặp biến chatbot thành agent</h2>
+    <p class="lead">Còn cần tool → <b>làm tiếp</b>. Hết cần → <b>dừng</b>. Chỉ vậy thôi.</p>
+  </div>
+
+  <div class="lab reveal">
+    <div class="lab-t">Thử · chạy từng bước</div>
+    <div class="cycle" id="cycle">
+      <div class="node" data-k="think"><span class="e">🧠</span><b>Nghĩ</b><small>LLM đọc tờ giấy</small></div>
+      <div class="cy-ar">→</div>
+      <div class="node" data-k="act"><span class="e">🛠</span><b>Làm</b><small>chạy tool</small></div>
+      <div class="cy-ar">→</div>
+      <div class="node" data-k="obs"><span class="e">👀</span><b>Xem</b><small>kết quả dán vào giấy</small></div>
+      <div class="cy-ar">⇢</div>
+      <div class="node" data-k="done"><span class="e">✅</span><b>Xong</b><small>hết cần tool</small></div>
+    </div>
+    <div class="ret">↩ …rồi quay lại “Nghĩ” với tờ giấy dày hơn</div>
+    <div class="explain" id="loopExplain">Bấm <b>Bước tiếp</b> để agent bắt đầu.</div>
+    <div class="row" style="margin-bottom:14px">
+      <button class="btn p" id="lpNext">▶ Bước tiếp</button>
+      <button class="btn" id="lpAuto">⏯ Tự chạy</button>
+      <button class="btn" id="lpSteer" disabled>✋ Chen ngang</button>
+      <button class="btn" id="lpReset">↺ Làm lại</button>
+      <span class="sp"></span>
+      <div class="stats" id="lpStats"></div>
+    </div>
+    <div class="log" id="lpLog" aria-live="polite"></div>
+  </div>
+
+  <div class="mvp reveal">
+    <div class="can"><h5>✅ Làm được</h5>Tự làm nhiều bước, tự quyết lúc nào xong.</div>
+    <div class="cant"><h5>❌ Chưa làm được</h5>Tool từ đâu ra? Ai cho phép? Lỡ làm bậy thì sao?</div>
+  </div>
+</section>
+
+<!-- ================= 4. TOOL ================= -->
+<section class="chap" id="s4" data-i="4">
+  <div class="chap-head reveal">
+    <span class="badge">MVP 3 · + Tool &amp; Skill</span>
+    <h2>Đôi tay, và cuốn sổ công thức</h2>
+    <p class="lead">Model chỉ <b>viết đơn xin</b>. Người thật (host) mới là bên chạy và duyệt.</p>
+  </div>
+
+  <div class="lab reveal">
+    <div class="lab-t">Thử · cổng kiểm soát tool</div>
+    <div class="two">
+      <div>
+        <h3>1 · Cấp quyền</h3>
+        <p class="cap">Mặc định <b>cấm hết</b>. Bấm để cấp.</p>
+        <div id="toolbox"></div>
+      </div>
+      <div>
+        <h3>2 · Model xin gọi…</h3>
+        <p class="cap">Chọn một yêu cầu, xem nó đi qua 3 cổng.</p>
+        <div id="tries"></div>
+      </div>
+    </div>
+    <div class="gates" id="gates"></div>
+    <div class="back" id="backMsg"><div class="t">Model nhận lại</div>Chọn một yêu cầu ở trên ↑</div>
+  </div>
+
+  <div class="lab reveal">
+    <div class="lab-t">Thử · tool vs skill</div>
+    <div class="trio">
+      <div class="t"><span class="e">🛠</span><b>Tool</b><small>làm được <b>gì</b><br>(tra đơn, gửi mail, chạy SQL)</small></div>
+      <div class="s"><span class="e">📘</span><b>Skill</b><small>làm <b>thế nào</b><br>(cách đọc bảng của công ty)</small></div>
+      <div class="m"><span class="e">🧠</span><b>Memory</b><small>đã <b>biết gì</b><br>(sở thích, lần trước)</small></div>
+    </div>
+    <div style="height:18px"></div>
+    <div class="two">
+      <div>
+        <h3>Câu hỏi: “Tuần này bao nhiêu người bỏ app?”</h3>
+        <p class="cap">Agent có tool <code>run_sql</code>. Có nên đưa thêm sổ công thức?</p>
+        <label class="sw" id="swSkill"><input type="checkbox"><span class="tr"></span><span><b>📘 Bật skill “đọc bảng sự kiện”</b><small>Chỉ 1 dòng giới thiệu luôn có mặt. Nội dung đầy đủ chỉ nạp khi cần.</small></span></label>
+        <div style="height:12px"></div>
+        <div id="skillBody"></div>
+        <div class="stats" id="skStats"></div>
+      </div>
+      <div class="log" id="skLog" aria-live="polite" style="max-height:none"></div>
+    </div>
+  </div>
+
+  <div class="mvp reveal">
+    <div class="can"><h5>✅ Làm được</h5>Làm việc thật, có luật, có sổ tay nghiệp vụ.</div>
+    <div class="cant"><h5>❌ Chưa làm được</h5>Chạy càng lâu, tờ giấy càng dày. Rồi sẽ tràn.</div>
+  </div>
+</section>
+
+<!-- ================= 5. CONTEXT ================= -->
+<section class="chap" id="s5" data-i="5">
+  <div class="chap-head reveal">
+    <span class="badge">MVP 4 · + Quản lý context</span>
+    <h2>Bàn làm việc có hạn</h2>
+    <p class="lead">Tờ giấy chỉ có <b>chừng đó chỗ</b>. Đầy là agent chết. Dọn bàn là sống còn.</p>
+  </div>
+
+  <div class="lab reveal">
+    <div class="lab-t">Thử · sống sót 20 lượt</div>
+    <div class="ctxwrap">
+      <div class="tankbox">
+        <div class="tank" id="tank">
+          <div class="mk m50" style="--c:var(--tool)"><span>50% · dọn</span></div>
+          <div class="mk m80" style="--c:var(--ctx)"><span>80% · tóm tắt</span></div>
+        </div>
+        <div class="over" id="over"></div>
+        <div class="legend">
+          <span><i style="background:var(--user)"></i>đề bài</span>
+          <span><i style="background:var(--brain)"></i>suy nghĩ</span>
+          <span><i style="background:var(--tool)"></i>kết quả tool</span>
+          <span><i style="background:repeating-linear-gradient(45deg,var(--tool-s),var(--tool-s) 3px,var(--line) 3px,var(--line) 5px)"></i>đã dọn</span>
+          <span><i style="background:var(--ctx)"></i>bản tóm tắt</span>
+          <span><i style="background:var(--guard)"></i>kế hoạch / ghim</span>
+        </div>
+      </div>
+      <div>
+        <div class="sws" id="ctxSw">
+          <label class="sw" data-k="prune"><input type="checkbox"><span class="tr"></span><span><b>🧹 Dọn kết quả cũ</b><small>Vượt 50%: kết quả tool cũ → “đã dọn”. Rẻ, không gọi AI.</small></span></label>
+          <label class="sw" data-k="compact"><input type="checkbox"><span class="tr"></span><span><b>📝 Tóm tắt lượt cũ</b><small>Vượt 80%: cả đoạn đầu → 1 ghi chú ngắn. Tốn 1 lần gọi AI.</small></span></label>
+          <label class="sw" data-k="spill"><input type="checkbox"><span class="tr"></span><span><b>📦 Cất kết quả khổng lồ</b><small>Đồ quá to để ngoài kho, chỉ giữ phiếu. Cần thì tra lại.</small></span></label>
+          <label class="sw" data-k="pin"><input type="checkbox"><span class="tr"></span><span><b>📌 Ghim kế hoạch</b><small>Kế hoạch để ngoài lịch sử → tóm tắt không xoá được.</small></span></label>
+        </div>
+        <div class="row">
+          <button class="btn p" id="cxStep">▶ Chạy 1 lượt</button>
+          <button class="btn" id="cxFive">⏩ Chạy 5 lượt</button>
+          <button class="btn sm" id="cxAll">Bật hết</button>
+          <button class="btn sm" id="cxNone">Tắt hết</button>
+          <button class="btn sm" id="cxReset">↺</button>
+        </div>
+        <div class="stats" id="cxStats" style="margin-top:12px"></div>
+        <div class="evlog" id="cxLog" aria-live="polite"></div>
+      </div>
+    </div>
+    <p class="fine" style="margin-top:12px">Dọn theo <b>đợt</b>, không mỗi lượt: mỗi lần sửa lịch sử là nhà cung cấp AI mất bộ nhớ đệm, tốn tiền hơn.</p>
+  </div>
+
+  <div class="mvp reveal">
+    <div class="can"><h5>✅ Làm được</h5>Chạy hàng trăm lượt mà bàn vẫn gọn.</div>
+    <div class="cant"><h5>❌ Chưa làm được</h5>Agent vẫn có thể lặp, bịa, kẹt, hay tự ý làm bậy.</div>
+  </div>
+</section>
+
+<!-- ================= 6. GUARDS ================= -->
+<section class="chap" id="s6" data-i="6">
+  <div class="chap-head reveal">
+    <span class="badge">MVP 5 · + Lan can</span>
+    <h2>Để agent tự chạy mà không sợ</h2>
+    <p class="lead">Mỗi lan can chặn <b>một kiểu hỏng</b>. Gắn thêm = thêm một mảnh, không sửa lõi.</p>
+  </div>
+
+  <div class="lab reveal">
+    <div class="lab-t">Thử · chọn tình huống hỏng</div>
+    <div class="tabs" id="scTabs"></div>
+    <div class="row" style="margin-bottom:6px">
+      <h3 id="scTitle" style="margin:0"></h3><span class="sp"></span>
+      <button class="btn p" id="scRun">▶ Chạy lại</button>
+    </div>
+    <p class="cap" id="scQ"></p>
+    <div class="vs">
+      <div class="vcol bad"><h4>😬 Không có lan can</h4><div class="log" id="tlBad"></div><div id="vdBad"></div></div>
+      <div class="vcol good"><h4>🛡 Có <span class="chip" id="gName"></span></h4><div class="log" id="tlGood"></div><div id="vdGood"></div></div>
+    </div>
+    <p class="fine" style="margin-top:12px" id="scRef"></p>
+  </div>
+
+  <div class="lab reveal">
+    <div class="lab-t">Thử · lắp agent của bạn</div>
+    <h3>Bạn lắp lan can nào? Nó sống sót mấy tình huống?</h3>
+    <div class="row" style="margin:8px 0">
+      <button class="btn sm" data-preset="none">🥚 Trần trụi</button>
+      <button class="btn sm" data-preset="min">🐣 Tối thiểu</button>
+      <button class="btn sm" data-preset="all">🦅 Đầy đủ</button>
+    </div>
+    <div class="build" id="build"></div>
+    <div class="score"><div class="big" id="scoreBig"></div><div><div class="lab2" id="scoreLab"></div><div class="segs" id="segs"></div></div></div>
+    <div class="res-list" id="resList"></div>
+    <div class="rule"><span class="e">🔌</span><div><b>Lõi vòng lặp không biết tên plugin nào.</b> Xoá bất kỳ mảnh nào, agent vẫn chạy — chỉ làm ít việc hơn. Thêm mảnh mới = thêm một thư mục.</div></div>
+  </div>
+</section>
+
+</main>
+
+<section class="final">
+  <div class="wrap">
+    <h2>Gộp lại: một tờ giấy, một vòng lặp</h2>
+    <p class="lead" style="margin:0 auto">Mỗi lớp giải quyết đúng một vấn đề của lớp dưới.</p>
+    <div class="stack" id="stack"></div>
+    <div class="replay"><div class="row" style="justify-content:center"><button class="btn p" id="rpBtn" style="--c:var(--brain)">▶ Xem 1 vòng trọn vẹn</button></div><div class="rcap" id="rpCap">Bấm để xem một yêu cầu đi qua từng lớp.</div></div>
+    <details class="dev">
+      <summary>🧑‍💻 Dành cho dev: mỗi mảnh nằm ở đâu trong 2ai</summary>
+      <table>
+        <tr><td>LLM &amp; provider</td><td><code>ai/</code> — transcript, streaming, retry, <code>FallbackProvider</code></td></tr>
+        <tr><td>Prompt</td><td><code>agentcore/prompt.go</code> — system + tool declarations + lịch sử</td></tr>
+        <tr><td>Vòng lặp</td><td><code>agentcore/engine/loop.go</code> — <code>Run</code>, <code>runLoop</code>: turn → tool batch → turn…</td></tr>
+        <tr><td>Tool</td><td><code>engine/tools.go</code>, <code>engine/argument_*.go</code> (validate), <code>agentcore/permission.go</code> (<code>Policy</code>, default-deny)</td></tr>
+        <tr><td>Context</td><td><code>agentcore/contextprune.go</code> → <code>compaction.go</code>, <code>plugins/spill</code>, <code>plugins/todo</code>, <code>plugins/memory</code></td></tr>
+        <tr><td>Lan can</td><td><code>plugins/{repeatguard,finishguard,goal,advisor,ask,jobs,subagent}</code>, <code>Limits</code>, <code>sandbox/</code>, <code>credential/</code></td></tr>
+        <tr><td>Quan sát</td><td><code>telemetry/</code> — span cho từng lượt, từng tool</td></tr>
+        <tr><td>Chạy thử</td><td><code>go run ./examples/scripted</code> → <code>Hello from 2ai.</code> (không cần API key)</td></tr>
+      </table>
+    </details>
+  </div>
+</section>
+
+<footer>Dựa trên <code>2ai/agentcore</code> v<span id="ver">0.1.3</span> · các ví dụ là minh hoạ đơn giản hoá.</footer>
+<script>
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const el=h=>{const t=document.createElement('template');t.innerHTML=h.trim();return t.content.firstElementChild};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ================= nav · progress · reveal ================= */
+(function(){
+  const links=$$('#navSteps a'), secs=$$('.chap'), bar=$('#bar');
+  function upd(){
+    const y=scrollY, vh=innerHeight;
+    let cur=0;
+    secs.forEach((s,i)=>{ if(s.getBoundingClientRect().top < vh*.45) cur=i+1; });
+    links.forEach((a,i)=>{ a.classList.toggle('on',i+1<=cur); a.classList.toggle('cur',i+1===cur); });
+    const max=document.documentElement.scrollHeight-vh;
+    bar.style.width=(max>0?Math.min(100,y/max*100):0)+'%';
+  }
+  addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd); upd();
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});
+  $$('.reveal').forEach(n=>io.observe(n));
+})();
+
+/* ================= hero equation ================= */
+(function(){
+  const P=[
+    {s:'s1',e:'🧠',n:'LLM',sub:'bộ não',c:'--brain',cs:'--brain-s',d:'Đoán chữ tiếp theo. Giỏi chữ — nhưng không có tay, không có trí nhớ.'},
+    {s:'s3',e:'🔁',n:'Vòng lặp',sub:'chịu khó làm tiếp',c:'--brain',cs:'--brain-s',d:'Nghĩ → làm → xem kết quả → nghĩ tiếp, cho tới khi xong.'},
+    {s:'s4',e:'🛠',n:'Tool',sub:'đôi tay',c:'--tool',cs:'--tool-s',d:'Những việc agent được phép làm ngoài đời: tra, đọc, gửi, chạy.'},
+    {s:'s5',e:'🗂',n:'Context',sub:'bàn làm việc',c:'--ctx',cs:'--ctx-s',d:'Nơi để mọi thứ agent đang nhớ. Có hạn, nên phải dọn.'},
+    {s:'s6',e:'🛡',n:'Lan can',sub:'luật an toàn',c:'--guard',cs:'--guard-s',d:'Chặn kẹt vòng, bịa số, làm bậy, tốn tiền.'}
+  ];
+  const box=$('#eq'), note=$('#eqnote');
+  P.forEach((p,i)=>{
+    if(i) box.append(el('<span class="op">+</span>'));
+    const b=el(`<button class="pill" style="--c:var(${p.c});--cs:var(${p.cs})"><span class="e">${p.e}</span><b>${p.n}</b><small>${p.sub}</small></button>`);
+    b.onclick=()=>{ $$('.pill',box).forEach(x=>x.classList.remove('sel')); b.classList.add('sel');
+      note.innerHTML=`${p.d} <a href="#${p.s}">Xem chương →</a>`; };
+    box.append(b);
+  });
+  box.append(el('<span class="op">=</span>'));
+  box.append(el('<div class="pill res"><span class="e">🤖</span><b>Agent</b><small>nhân viên tự làm</small></div>'));
+})();
+
+/* ================= 1 · LLM ================= */
+(function(){
+  const LM={
+    __start:[['nắng',46],['mưa',34],['đẹp',20]],
+    'nắng':[['đẹp',44],['gắt',30],['nhẹ',26]],
+    'mưa':[['to',40],['rả rích',35],['nặng hạt',25]],
+    'đẹp':[['quá',50],['nên mình',30],['lắm',20]],
+    'quá':[['.',60],['!',40]],
+    'gắt':[['nên mình',45],['lắm',30],['.',25]],
+    'nhẹ':[['nên mình',45],['lắm',30],['.',25]],
+    'to':[['nên mình',45],['lắm',30],['.',25]],
+    'rả rích':[['nên mình',45],['lắm',30],['.',25]],
+    'nặng hạt':[['nên mình',45],['lắm',30],['.',25]],
+    'lắm':[['.',70],['!',30]],
+    'nên mình':[['ở nhà',40],['đi chơi',35],['pha cà phê',25]]
+  };
+  const sent=$('#sent'), opts=$('#opts');
+  let toks;
+  const isEnd=t=>t==='.'||t==='!';
+  const nextOf=()=>LM[toks.length?toks[toks.length-1].t:'__start']||[['.',70],['!',30]];
+  function draw(){
+    sent.innerHTML='<span class="tk">Hôm nay trời</span>';
+    toks.forEach((k,i)=>{ const s=el(`<span class="tk ${i===toks.length-1?'new':''}" ${isEnd(k.t)?'style="margin-left:-6px"':''}>${esc(k.t)}</span>`); sent.append(s); });
+    const last=toks.length&&toks[toks.length-1].t;
+    if(isEnd(last)){
+      sent.append(el('<span></span>'));
+      opts.innerHTML=`<div class="endmsg">✅ Một câu hoàn chỉnh = ${toks.length} lần đoán nối nhau. Không có “hiểu biết” nào khác — chỉ đoán rất giỏi.</div>`;
+      $('#rollBtn').disabled=true; return;
+    }
+    sent.append(el('<span class="caret"></span>'));
+    $('#rollBtn').disabled=false;
+    opts.innerHTML='';
+    nextOf().forEach(([w,p])=>{
+      const b=el(`<button class="opt" style="--w:${p}%"><i></i><span>${esc(w)}</span><span class="pc">${p}%</span></button>`);
+      b.onclick=()=>{toks.push({t:w});draw()};
+      opts.append(b);
+    });
+  }
+  $('#rollBtn').onclick=()=>{
+    const o=nextOf(); let r=Math.random()*100, acc=0, pick=o[0][0];
+    for(const [w,p] of o){acc+=p; if(r<acc){pick=w;break}}
+    toks.push({t:pick}); draw();
+  };
+  $('#resetSent').onclick=()=>{toks=[];draw()};
+  toks=[]; draw();
+
+  const Q=[
+    ['Giá vàng hôm nay bao nhiêu?','Khoảng 75 triệu một lượng… chắc vậy? 🤔','ĐOÁN MÒ · KHÔNG THỂ TRA'],
+    ['Gửi email báo sếp giúp mình','Mình soạn nháp được! Còn bấm “Gửi” thì… mình không có tay.','KHÔNG CÓ TAY'],
+    ['Hôm qua mình nhờ gì nhỉ?','Xin lỗi, mỗi lần hỏi mình bắt đầu lại từ trang trắng.','KHÔNG NHỚ GÌ']
+  ];
+  const qs=$('#qs1'), chat=$('#chat1');
+  Q.forEach(([q,a,s])=>{
+    const b=el(`<button class="btn sm">${esc(q)}</button>`);
+    b.onclick=async()=>{
+      b.disabled=true;
+      chat.append(el(`<div class="bub u">${esc(q)}</div>`));
+      await sleep(450);
+      chat.append(el(`<div class="bub a">${esc(a)}<br><span class="stamp">${s}</span></div>`));
+    };
+    qs.append(b);
+  });
+})();
+
+/* ================= 2 · Prompt sheet ================= */
+(function(){
+  const st={p:0,r:0,t:0,h:0};
+  const HIST=['Khách: Shop ơi, đơn của mình đâu?','Mai: Mình kiểm tra giúp bạn nhé!','Khách: Mã đơn là #123.','Mai: Cảm ơn bạn, đợi mình chút.','Khách: Nhanh giúp mình nha.','Mai: Dạ mình đang xử lý ạ.'];
+  const A={
+    '000':['Rất tiếc về sự bất tiện. Bạn vui lòng liên hệ bộ phận chăm sóc khách hàng để được hỗ trợ.',null,'Chung chung — nó không biết mình là ai.'],
+    '100':['Chào bạn 💛 Mình là Mai bên CSKH. Xin lỗi vì giao trễ! Mình hoàn tiền cho bạn ngay nhé.',null,'Đúng giọng… nhưng hứa bừa.'],
+    '010':['Đơn giao trễ được hoàn tối đa 500.000đ. Cần xác minh mã đơn trước khi hoàn.',null,'Đúng luật, hơi cộc.'],
+    '110':['Chào bạn 💛 Xin lỗi vì giao trễ! Theo chính sách, mình hoàn tối đa 500.000đ sau khi xác minh đơn #123 nhé.',null,'Đúng giọng, đúng luật. Nhưng chưa kiểm tra đơn thật.'],
+    '001':['','tra_don("#123")','Nó biết có tool → xin gọi. (Chỉ xin thôi!)'],
+    '101':['Để mình kiểm tra đơn #123 ngay nhé 💛','tra_don("#123")','Đúng giọng + biết tra đơn.'],
+    '011':['Cần xác minh trước.','tra_don("#123")','Đúng luật + biết tra đơn.'],
+    '111':['Mình xin lỗi bạn nhé 💛 Theo chính sách, mình tra đơn #123 để xác minh trước.','tra_don("#123")','Đủ ba lớp: giọng, luật, tay.']
+  };
+  const sheet=$('#sheet');
+  function lay(c,h,t){return `<div class="lay ${c}"><b>${h}</b>${t}</div>`}
+  function draw(){
+    $$('.lay,.arrow-down.x',sheet).forEach(n=>n.remove());
+    let h='';
+    if(st.p) h+=lay('sys','Vai trò','Bạn là Mai, nhân viên CSKH thân thiện.');
+    if(st.r) h+=lay('rules','Luật','Hoàn tối đa 500k. Phải xác minh đơn trước.');
+    if(st.t) h+=lay('tools','Tool có sẵn','tra_don(mã) · hoàn_tiền(mã)');
+    for(let i=0;i<st.h;i++) h+=lay('hist','Lượt trước',HIST[i]);
+    h+=lay('now','Tin mới','Đơn #123 giao trễ 3 ngày. Hoàn tiền cho tôi!');
+    sheet.insertAdjacentHTML('beforeend',h);
+    const tok=14+(st.p?40:0)+(st.r?60:0)+(st.t?110:0)+st.h*45;
+    $('#tokTxt').textContent=tok+' token';
+    $('#tokBar').style.width=Math.min(100,tok/420*100)+'%';
+    const [txt,call,note]=A[''+st.p+st.r+st.t];
+    $('#answer').innerHTML=`<div class="who">🧠 LLM trả lời</div><div class="txt" style="animation:slide .4s both">${esc(txt)}${call?`<br><span class="callbox">🛠 xin gọi → ${esc(call)}</span>`:''}</div><div class="fine" style="margin-top:8px">${note}</div>`;
+    $('#histNote').textContent=st.h===0?'':st.h<3?'Mỗi câu nói thêm = tờ giấy dày hơn.':'Gửi lại CẢ tờ mỗi lần → tốn hơn. Đầy thì sao? → chương 5.';
+    $('#moreHist').disabled=st.h>=HIST.length;
+  }
+  [['#swP','p'],['#swR','r'],['#swT','t']].forEach(([s,k])=>{
+    const lab=$(s), inp=$('input',lab);
+    inp.onchange=()=>{st[k]=inp.checked?1:0; lab.classList.toggle('on',inp.checked); draw()};
+  });
+  $('#moreHist').onclick=()=>{st.h++;draw()};
+  draw();
+})();
+
+/* ================= 3 · The loop ================= */
+(function(){
+  const base=()=>[
+    {k:'user',t:'Tóm tắt 3 tin mới nhất về giá xăng, rồi lưu vào ghi chú.'},
+    {k:'think',t:'Mình cần tìm tin trước.'},
+    {k:'act',t:'search("giá xăng hôm nay")',n:1},
+    {k:'obs',t:'Tìm thấy 3 bài: A, B, C.'},
+    {k:'think',t:'Đọc cả 3 bài cùng lúc cho nhanh.'},
+    {k:'act',t:'open(A) ‖ open(B) ‖ open(C)',n:3,par:1},
+    {k:'obs',t:'Xăng +450đ · dầu −200đ · dự báo giữ giá.'},
+    {k:'think',t:'Đủ rồi. Viết tóm tắt và lưu.'},
+    {k:'act',t:'save_note("Xăng +450đ, dầu −200đ, dự báo giữ giá")',n:1},
+    {k:'obs',t:'Đã lưu ✔'},
+    {k:'think',t:'Việc xong. Không cần tool nào nữa.'},
+    {k:'done',t:'Đã tóm tắt 3 tin và lưu vào ghi chú ✔'}
+  ];
+  const IC={user:'👤',think:'🧠',act:'🛠',obs:'👀',done:'✅'};
+  const EX={
+    user:'👤 Việc được giao nằm trên tờ giấy.',
+    think:'🧠 LLM đọc <b>cả tờ giấy</b>, rồi quyết: xin gọi tool, hay trả lời luôn?',
+    act:'🛠 LLM chỉ <b>ghi đơn xin</b> “gọi tool X”. Host mới chạy thật.',
+    actpar:'🛠 3 tool độc lập → chạy <b>song song</b> cho nhanh.',
+    obs:'👀 Kết quả được <b>dán vào tờ giấy</b>. Rồi quay lại “Nghĩ”.',
+    done:'✅ Lần này LLM <b>không xin tool nào</b> → vòng lặp tự dừng.'
+  };
+  const EVT={user:'agent_start',think:'turn_start → model stream',act:'tool_execution_start',obs:'tool_execution_end',done:'turn_end → agent_end'};
+  let steps,i,timer,steered;
+  const log=$('#lpLog');
+  function stats(){
+    const seen=steps.slice(0,i);
+    const turns=seen.filter(s=>s.k==='think').length;
+    const tools=seen.reduce((a,s)=>a+(s.n||0),0);
+    const tok=seen.length?300+seen.length*110:0;
+    $('#lpStats').innerHTML=`<span class="chip">🔁 lượt ${turns}/24</span><span class="chip">🛠 ${tools}/40 tool</span><span class="chip">🪙 ${tok} token</span>`;
+  }
+  function hl(k){ $$('#cycle .node').forEach(n=>n.classList.toggle('act-on',n.dataset.k===k)); }
+  function ui(){
+    const done=i>=steps.length;
+    $('#lpNext').disabled=done;
+    $('#lpSteer').disabled=steered||done||!(i>=1&&steps[i]&&steps[i].k==='think'&&steps[i+1]&&steps[i+1].k!=='done');
+    if(done&&timer){clearInterval(timer);timer=null;$('#lpAuto').textContent='⏯ Tự chạy'}
+    stats();
+  }
+  function next(){
+    if(i>=steps.length) return;
+    const s=steps[i++];
+    const d=el(`<div class="ls ${s.k}"><span class="ic">${IC[s.k]}</span><span>${s.k==='act'?`<code>${esc(s.t)}</code>`:esc(s.t)} <span class="chip mono" style="float:right;margin-left:8px">${EVT[s.k]}</span></span></div>`);
+    log.append(d); log.scrollTop=log.scrollHeight;
+    hl(s.k==='user'?null:s.k);
+    $('#loopExplain').innerHTML=EX[s.par?'actpar':s.k];
+    ui();
+  }
+  function reset(){
+    clearInterval(timer);timer=null;$('#lpAuto').textContent='⏯ Tự chạy';
+    steps=base();i=0;steered=false;log.innerHTML='';hl(null);
+    $('#loopExplain').innerHTML='Bấm <b>Bước tiếp</b> để agent bắt đầu.';ui();
+  }
+  $('#lpNext').onclick=next;
+  $('#lpReset').onclick=reset;
+  $('#lpAuto').onclick=()=>{
+    if(timer){clearInterval(timer);timer=null;$('#lpAuto').textContent='⏯ Tự chạy';return}
+    $('#lpAuto').textContent='⏸ Dừng'; if(i>=steps.length) reset();
+    next(); timer=setInterval(()=>{ if(i>=steps.length){ui();return} next(); },1250);
+  };
+  $('#lpSteer').onclick=()=>{
+    steered=true;
+    steps.splice(i,0,{k:'user',t:'✋ Chỉ lấy tin của hôm nay thôi nhé.'});
+    steps[i+1].t='Ok — chỉ tin hôm nay. '+steps[i+1].t;
+    next();
+    $('#loopExplain').innerHTML='✋ Lời chen ngang được <b>xếp hàng</b>, tới ranh giới lượt kế tiếp agent mới đọc — không giật tay giữa chừng.';
+  };
+  reset();
+})();
+
+/* ================= 4 · Tools gate ================= */
+(function(){
+  const T={
+    read_file:{e:'📖',d:'Đọc một file',g:true},
+    web_fetch:{e:'🌐',d:'Mở một trang web',g:true},
+    send_email:{e:'📧',d:'Gửi email thật',g:false},
+    delete_data:{e:'🗑',d:'Xoá dữ liệu',g:false}
+  };
+  const TRY=[
+    {l:'Đọc báo cáo',tool:'read_file',a:'{path:"bao_cao.txt"}',valid:1,r:'Nội dung file được dán vào tờ giấy. Agent đọc tiếp.'},
+    {l:'Mở trang giá xăng',tool:'web_fetch',a:'{url:"giaxang.vn"}',valid:1,r:'Nội dung trang web được dán vào tờ giấy.'},
+    {l:'Gửi mail cho sếp',tool:'send_email',a:'{to:"sep@cty.vn"}',valid:1,r:'Email đã gửi thật. Không rút lại được.'},
+    {l:'Gửi sai kiểu dữ liệu',tool:'read_file',a:'{path:123}',valid:0},
+    {l:'Xoá sạch dữ liệu',tool:'delete_data',a:'{table:"*"}',valid:1,r:'⚠ Đã xoá thật. Đây là lý do mặc định phải là CẤM.'},
+    {l:'Bịa ra tool',tool:'bay_len_mat_trang',a:'{}',valid:1}
+  ];
+  const box=$('#toolbox'), tries=$('#tries'), gates=$('#gates'), back=$('#backMsg');
+  let sel=null, tk=0;
+  function drawTools(){
+    box.innerHTML='';
+    Object.entries(T).forEach(([n,t])=>{
+      const c=el(`<div class="toolcard ${t.g?'on':''}" role="button" tabindex="0"><span class="e">${t.e}</span><span><code>${n}</code><small>${t.d}</small></span><span class="tag">${t.g?'ĐƯỢC CẤP':'CẤM'}</span></div>`);
+      const tog=()=>{t.g=!t.g;drawTools(); if(sel!==null) run(sel,true)};
+      c.onclick=tog; c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tog()}};
+      box.append(c);
+    });
+  }
+  function ev(c){
+    if(!T[c.tool]) return {g:['stop','skip','skip'],t:'Không có công cụ tên “'+c.tool+'”. Hãy chọn tool trong danh sách.',ok:0};
+    if(!c.valid) return {g:['pass','stop','skip'],t:'Tham số sai: <code>path</code> phải là chữ, bạn gửi số 123. Sửa lại rồi gọi lại nhé.',ok:0};
+    if(!T[c.tool].g) return {g:['pass','pass','stop'],t:'Không được phép: <code>'+c.tool+'</code> chưa được cấp. Hãy hỏi người dùng.',ok:0};
+    return {g:['pass','pass','pass'],t:c.r,ok:1};
+  }
+  const GN=['Tool này có tồn tại không?','Tham số đúng form chưa?','Có được cấp quyền không?'];
+  function drawGates(res,anim){
+    gates.innerHTML='';
+    GN.forEach((n,k)=>{ gates.append(el(`<div class="gate" id="gt${k}"><span class="n">${k+1}</span>${n}<span class="st"></span></div>`)); });
+    const apply=k=>{
+      const g=$('#gt'+k), s=res.g[k]; g.classList.add(s);
+      $('.st',g).textContent=s==='pass'?'✅':s==='stop'?'⛔':'';
+    };
+    return anim;
+  }
+  async function run(idx,instant){
+    sel=idx; const c=TRY[idx], res=ev(c), my=++tk;
+    $$('.try',tries).forEach((b,k)=>b.classList.toggle('sel',k===idx));
+    drawGates(res);
+    back.innerHTML=`<div class="t">Model nhận lại</div><span class="muted">…</span>`;
+    for(let k=0;k<3;k++){
+      if(!instant) await sleep(330);
+      if(my!==tk) return;
+      const g=$('#gt'+k), s=res.g[k]; g.classList.add(s);
+      $('.st',g).textContent=s==='pass'?'✅':s==='stop'?'⛔':'';
+    }
+    if(!instant) await sleep(250);
+    if(my!==tk) return;
+    back.innerHTML=`<div class="t">Model nhận lại</div>${res.ok?'✅ <b>Chạy thật.</b> ':'⛔ <b>Bị chặn — nhưng không im lặng.</b> '}${res.t}${res.ok?'':'<div class="fine" style="margin-top:6px">Lý do được gửi về cho model → nó tự điều chỉnh, không sập.</div>'}`;
+  }
+  TRY.forEach((c,idx)=>{
+    const b=el(`<button class="try"><em>${esc(c.l)}</em>${esc(c.tool)}(${esc(c.a)})</button>`);
+    b.onclick=()=>run(idx); tries.append(b);
+  });
+  drawTools(); drawGates({g:[]});
+  $$('.gate',gates).forEach(g=>g.style.opacity=.45);
+
+  /* skill demo */
+  const swS=$('#swSkill'), inS=$('input',swS);
+  const OFF=[
+    {k:'user',t:'Tuần này bao nhiêu người bỏ app?'},
+    {k:'brain',t:'Chắc có bảng “churn”…'},
+    {k:'tool',t:'run_sql("… FROM churn")'},
+    {k:'warn',t:'❌ Bảng “churn” không tồn tại'},
+    {k:'brain',t:'Thử “users_left”…'},
+    {k:'tool',t:'run_sql("… FROM users_left")'},
+    {k:'warn',t:'❌ Cũng không có'},
+    {k:'brain',t:'Xem danh sách bảng đã.'},
+    {k:'tool',t:'run_sql("SHOW TABLES")'},
+    {k:'res',t:'events, users, orders'},
+    {k:'tool',t:'run_sql("… FROM events …")'},
+    {k:'done',t:'412 người. (sau 5 lượt)'}
+  ];
+  const ON=[
+    {k:'user',t:'Tuần này bao nhiêu người bỏ app?'},
+    {k:'brain',t:'Skill dặn: dùng bảng “events”, tên “session_end”, lọc 7 ngày không quay lại.'},
+    {k:'tool',t:'run_sql("… FROM events WHERE name=\'session_end\' …")'},
+    {k:'done',t:'412 người. (sau 2 lượt)'}
+  ];
+  const IC={user:'👤',brain:'🧠',tool:'🛠',warn:'⚠️',res:'👀',done:'✅'};
+  function drawSkill(){
+    const on=inS.checked, L=on?ON:OFF;
+    swS.classList.toggle('on',on);
+    $('#skillBody').innerHTML=`<div class="skillcat">📘 <span><b>events-schema</b> — cách đọc bảng sự kiện <span class="chip mono">1 dòng · luôn có</span></span></div>`+(on?`<div class="skillbody">📖 <b>Nạp đầy đủ (vì đang cần):</b><br>bảng <code>events(name, user_id, ts)</code> · “bỏ app” = có <code>session_end</code> và 7 ngày không có sự kiện nào sau đó.</div>`:'');
+    $('#skLog').innerHTML=L.map((s,k)=>`<div class="ls ${s.k}" style="animation-delay:${k*70}ms"><span class="ic">${IC[s.k]}</span><span>${s.k==='tool'?'<code>'+esc(s.t)+'</code>':esc(s.t)}</span></div>`).join('');
+    $('#skStats').innerHTML=on?'<span class="chip">🔁 2 lượt</span><span class="chip">🪙 ~1.4k token</span><span class="chip">✅ đúng ngay lần đầu</span>':'<span class="chip">🔁 5 lượt</span><span class="chip">🪙 ~3.1k token</span><span class="chip">😓 đoán mò, thử sai</span>';
+  }
+  inS.onchange=drawSkill; drawSkill();
+})();
+
+/* ================= 5 · Context tank ================= */
+(function(){
+  const CAP=100, GOAL=20, SIZES=[6,14,5,18,7,12,4,16,9,15,6,13,8,17,5,11,7,14,6,10];
+  const opt={prune:false,compact:false,spill:false,pin:false};
+  const tank=$('#tank'), cells=[];
+  for(let i=0;i<CAP;i++){const c=document.createElement('div');c.className='cell';tank.append(c);cells.push(c)}
+  let S;
+  const total=()=>S.blocks.reduce((a,b)=>a+b.n,0)+(opt.pin?4:0);
+  const L=(t,c)=>{S.log.unshift({t,c}); S.log=S.log.slice(0,4)};
+  function reset(){
+    S={blocks:[{t:'user',n:3,turn:0}],turn:0,over:null,lost:false,log:[]};
+    if(!opt.pin) S.blocks.push({t:'plan',n:4,turn:0});
+    L('Bàn trống. Bấm “Chạy 1 lượt”.','');
+    render();
+  }
+  function step(){
+    if(S.over) return;
+    S.turn++;
+    S.blocks.push({t:'brain',n:2,turn:S.turn});
+    const r=SIZES[S.turn-1];
+    if(opt.spill&&r>=14){S.blocks.push({t:'spill',n:2,turn:S.turn}); L(`📦 Kết quả ${r} ô quá to → cất kho, chỉ giữ phiếu 2 ô`,'g');}
+    else S.blocks.push({t:'res',n:r,turn:S.turn});
+    if(opt.prune&&total()>=50){
+      let saved=0,cnt=0;
+      S.blocks.forEach(b=>{ if((b.t==='res'||b.t==='spill')&&b.turn<=S.turn-2&&b.n>1){saved+=b.n-1;cnt++;b.t='stub';b.n=1} });
+      if(saved) L(`🧹 Dọn ${cnt} kết quả cũ (−${saved} ô). Không tốn lần gọi AI.`,'g');
+    }
+    if(opt.compact&&total()>=80){
+      const before=total();
+      const keep=S.blocks.filter(b=>b.t==='user');
+      const old=S.blocks.filter(b=>b.t!=='user'&&b.turn<=S.turn-3);
+      const recent=S.blocks.filter(b=>b.t!=='user'&&b.turn>S.turn-3);
+      if(old.length){
+        const lostNow=old.some(b=>b.t==='plan'); if(lostNow) S.lost=true;
+        S.blocks=[...keep,{t:'sum',n:6,turn:0},...recent];
+        L(`📝 Tóm tắt ${old.length} khối cũ thành 1 ghi chú (−${before-total()} ô). Tốn 1 lần gọi AI.${lostNow?' 😵 Kế hoạch bị nuốt mất!':''}`,lostNow?'b':'g');
+      }
+    }
+    if(total()>CAP){ S.over='bad'; L(`💥 Lượt ${S.turn}: tràn bàn — hết chỗ để model trả lời.`,'b'); }
+    else if(S.turn>=GOAL){ S.over='good'; }
+    render();
+  }
+  function render(){
+    const types=new Array(CAP).fill('');
+    let p=0;
+    S.blocks.forEach(b=>{ for(let k=0;k<b.n&&p<CAP;k++) types[p++]=b.t; });
+    if(opt.pin) for(let k=CAP-4;k<CAP;k++) types[k]='pin';
+    cells.forEach((c,i)=>{ c.className='cell '+types[i]; });
+    const u=total(), pc=u;
+    $('#cxStats').innerHTML=`<span class="chip">🔁 lượt ${S.turn}/${GOAL}</span><span class="chip" style="${u>=80?'background:var(--guard-s);color:var(--guard)':u>=50?'background:var(--tool-s)':''}">📏 bàn ${Math.min(u,999)}/${CAP}</span>`;
+    $('#cxLog').innerHTML=S.log.map(e=>`<div class="ev ${e.c}">${e.t}</div>`).join('');
+    const ov=$('#over');
+    if(S.over==='bad'){ ov.className='over show bad'; ov.innerHTML=`💥 Tràn bàn ở lượt ${S.turn}<small>Agent chết giữa chừng — mất hết công sức.</small>`; }
+    else if(S.over==='good'){ ov.className='over show good'; ov.innerHTML=S.lost?`✅ Sống sót ${GOAL} lượt<small style="color:var(--guard)">😵 …nhưng đã quên kế hoạch gốc, làm lệch hướng.</small>`:`✅ Sống sót ${GOAL} lượt<small>Bàn gọn, kế hoạch còn nguyên.</small>`; }
+    else ov.className='over';
+    $('#cxStep').disabled=$('#cxFive').disabled=!!S.over;
+  }
+  let busy=false;
+  $('#cxStep').onclick=step;
+  $('#cxFive').onclick=async()=>{ if(busy) return; busy=true; for(let k=0;k<5&&!S.over;k++){step();await sleep(380)} busy=false; };
+  $('#cxReset').onclick=reset;
+  function setSw(k,v,silent){
+    opt[k]=v; const lab=$(`#ctxSw [data-k="${k}"]`); $('input',lab).checked=v; lab.classList.toggle('on',v);
+  }
+  $$('#ctxSw .sw').forEach(lab=>{
+    const k=lab.dataset.k; $('input',lab).onchange=e=>{ setSw(k,e.target.checked); if(k==='pin') reset(); else render(); };
+  });
+  $('#cxAll').onclick=()=>{Object.keys(opt).forEach(k=>setSw(k,true));reset()};
+  $('#cxNone').onclick=()=>{Object.keys(opt).forEach(k=>setSw(k,false));reset()};
+  reset();
+})();
+
+/* ================= 6 · Guards ================= */
+(function(){
+  const SC=[
+  {id:'limits',e:'💸',t:'Chạy mãi không dừng',gn:'Giới hạn lượt',ge:'⏱',ref:'agentcore · <code>Limits</code> — mặc định 24 lượt / 40 tool, lượt chốt “trả lời tạm” khi chạm trần',
+   q:'Agent cứ thấy “chưa đủ” rồi làm tiếp. Không ai bảo dừng.',
+   bad:[['brain','Chưa đủ. Tìm thêm.'],['tool','search("…")'],['res','Thêm một ít dữ liệu.'],['brain','Vẫn chưa đủ. Tìm thêm.'],['tool','search("…")'],['warn','…lượt 300… lượt 3.000…']],
+   be:{t:'Đốt tiền, không bao giờ xong',st:['🔁 ∞ lượt','🪙 4M+ token']},
+   good:[['brain','Chưa đủ. Tìm thêm.'],['tool','search("…")'],['res','Thêm một ít dữ liệu.'],['warn','Lượt 24/24 — chạm trần'],['guard','Lượt chốt: “Hết ngân sách. Trả lời tốt nhất với những gì đã có.”'],['done','Đây là câu trả lời tạm. Phần còn thiếu: …']],
+   ge2:{t:'Dừng đúng hạn, nói thật phần còn thiếu',st:['🔁 24 lượt','🪙 60k token']}},
+  {id:'repeat',e:'🔁',t:'Kẹt một chỗ',gn:'Chống lặp',ge:'🔂',ref:'<code>plugins/repeatguard</code> — nhắc nhẹ sau 3 lần gọi y hệt, mạnh hơn nếu vẫn lặp',
+   q:'Trang giá bị lỗi. Agent cứ thử lại y hệt.',
+   bad:[['brain','Mở trang giá.'],['tool','open("gia.vn")'],['res','404'],['brain','Thử lại.'],['tool','open("gia.vn")'],['res','404'],['brain','Thử lại.'],['warn','…20 lần giống hệt nhau…']],
+   be:{t:'Cạn 24 lượt vì một cái lỗi',st:['🔁 24 lượt','🪙 48k token']},
+   good:[['brain','Mở trang giá.'],['tool','open("gia.vn")'],['res','404'],['brain','Thử lại.'],['tool','open("gia.vn")'],['res','404'],['guard','Bạn vừa gọi y hệt 3 lần liên tiếp. Thử cách khác?'],['brain','Trang hỏng. Tìm nguồn khác.'],['tool','search("giá xăng")'],['done','Xong, dùng nguồn dự phòng.']],
+   ge2:{t:'Tự đổi hướng sau 3 lần',st:['🔁 7 lượt','🪙 9k token']}},
+  {id:'finish',e:'🏃',t:'Báo xong quá sớm',gn:'Cổng nghiệm thu',ge:'✋',ref:'<code>plugins/finishguard</code> · <code>goal</code> (hợp đồng <code>STATUS: DONE</code>) · <code>advisor</code> (người duyệt)',
+   q:'Hỏi doanh thu. Agent trả số nghe rất chắc — mà chưa tra gì.',
+   bad:[['user','Doanh thu tuần này tăng bao nhiêu?'],['brain','Chắc tăng khoảng 30%.'],['done','Doanh thu tăng 30%!']],
+   be:{t:'Con số bịa, nói rất tự tin',st:['🔁 1 lượt','🪙 0.5k token']},
+   good:[['user','Doanh thu tuần này tăng bao nhiêu?'],['brain','Chắc tăng khoảng 30%.'],['guard','Bạn nêu con số nhưng chưa chạy truy vấn nào. Kiểm chứng đã.'],['tool','run_sql("doanh thu 2 tuần")'],['res','+27,4%'],['done','Tăng 27,4% (nguồn: SQL).']],
+   ge2:{t:'Có số thật, có nguồn',st:['🔁 3 lượt','🪙 2k token']}},
+  {id:'plan',e:'😵',t:'Quên mục tiêu',gn:'Kế hoạch ghim',ge:'📌',ref:'<code>plugins/todo</code> — kế hoạch nằm trong kho riêng, gắn lại cuối mỗi request; tóm tắt không đụng tới',
+   q:'Việc dài 5 phần. Sau trăm lượt, bản tóm tắt đã nuốt mất danh sách.',
+   bad:[['user','Làm 5 việc: A, B, C, D, E'],['tool','làm A, B'],['warn','Dọn bàn: lịch sử bị tóm tắt, mất đề chi tiết'],['brain','Mình đang làm gì nhỉ?'],['done','Xong! (A, B)']],
+   be:{t:'Bỏ sót C, D, E mà không biết',st:['🔁 30 lượt','🪙 90k token']},
+   good:[['user','Làm 5 việc: A, B, C, D, E'],['tool','làm A, B'],['warn','Dọn bàn: lịch sử bị tóm tắt'],['guard','[kế hoạch] ✔A ✔B ◻C ◻D ◻E'],['tool','làm C, D, E'],['done','Xong đủ 5 việc.']],
+   ge2:{t:'Kế hoạch nằm ngoài lịch sử nên còn nguyên',st:['🔁 34 lượt','🪙 95k token']}},
+  {id:'spill',e:'📦',t:'Kết quả quá to',gn:'Kho tạm',ge:'🗄',ref:'<code>plugins/spill</code> — giữ đầu + cuối, cất phần giữa, kèm tool <code>read_spill</code> để lấy lại',
+   q:'Tool trả 40.000 dòng log. Lỗi nằm ở giữa.',
+   bad:[['tool','read_log()'],['res','40.000 dòng… phần giữa bị cắt mất'],['brain','Không thấy lỗi nào.'],['done','Hệ thống bình thường.']],
+   be:{t:'Bỏ lỡ đúng chỗ có lỗi',st:['🔁 3 lượt','🪙 3k token']},
+   good:[['tool','read_log()'],['res','Xem trước đầu + cuối. Phần còn lại cất kho (phiếu #9f3c)'],['guard','Cần đoạn nào, gọi read_spill(#9f3c, từ…đến)'],['tool','read_spill(#9f3c, 18000…19000)'],['res','Dòng 18.412: lỗi kết nối DB'],['done','Tìm ra: lỗi kết nối DB lúc 03:12.']],
+   ge2:{t:'Bàn không phình, vẫn lấy đúng đoạn cần',st:['🔁 5 lượt','🪙 4k token']}},
+  {id:'sub',e:'🧑‍🤝‍🧑',t:'Việc quá lớn',gn:'Agent con',ge:'🧑‍🤝‍🧑',ref:'<code>plugins/subagent</code> — con có bàn riêng, cha chỉ nhận câu trả lời cuối. Tiết kiệm <i>context</i>, không phải tiền tính toán',
+   q:'Đọc 30 file để tìm nguyên nhân. Bàn của agent chính sẽ ngập.',
+   bad:[['tool','read_file ×30'],['res','+90.000 token đổ vào bàn'],['warn','Bàn đầy 90% — chỉ còn chỗ cho vài dòng trả lời'],['done','Trả lời vội, thiếu ý.']],
+   be:{t:'Bàn chính ngập vì việc vặt',st:['🔁 8 lượt','🪙 110k token']},
+   good:[['tool','spawn_subagent("đọc 30 file, báo nguyên nhân")'],['park','Agent con làm ở bàn riêng… (đọc 30 file)'],['res','Con chỉ trả 1 đoạn: “Lỗi ở cấu hình cache”'],['done','Nguyên nhân: cấu hình cache.']],
+   ge2:{t:'Việc vặt ở bàn riêng; bàn chính nhận kết luận',st:['🔁 3 lượt','🪙 6k token ở bàn chính']}},
+  {id:'jobs',e:'⏳',t:'Việc chạy lâu',gn:'Việc nền',ge:'⏳',ref:'<code>plugins/jobs</code> — tool trả ngay mã job; xong thì báo vào lượt sau',
+   q:'Render video mất 20 phút. Agent làm gì trong lúc chờ?',
+   bad:[['tool','render_video()'],['warn','⏳ …đứng chờ 20 phút, không làm được gì khác…'],['res','Xong'],['brain','Giờ mới viết caption.'],['done','Xong sau 22 phút.']],
+   be:{t:'Cả agent đứng chờ',st:['⏱ 22 phút']},
+   good:[['tool','start_job(render_video) → #7'],['res','Đã chạy nền, mã #7'],['brain','Trong lúc chờ, viết caption.'],['tool','write(caption)'],['guard','Job #7 đã xong ✔'],['done','Xong sau 20 phút, caption viết sẵn.']],
+   ge2:{t:'Làm song song, không phí thời gian',st:['⏱ 20 phút']}},
+  {id:'ask',e:'🙋',t:'Cần người quyết',gn:'Hỏi người',ge:'🙋',ref:'<code>plugins/ask</code> — câu hỏi có lựa chọn; run được “đỗ” lại, trả lời xong chạy tiếp',
+   q:'Sắp xoá 200 file. Có nên không?',
+   bad:[['brain','Chắc là file cũ. Xoá.'],['tool','delete(200 file)'],['res','Đã xoá'],['fail','Có file quan trọng trong đó.']],
+   be:{t:'Đoán bừa một việc không hoàn tác được',st:['↩ không lấy lại được']},
+   good:[['brain','Việc này không hoàn tác được.'],['tool','ask("Xoá 200 file cũ?", [Có, Không])'],['park','Agent tạm dừng — không tốn token trong lúc chờ'],['user','Giữ lại file 2024 nhé.'],['tool','delete(168 file)'],['done','Đã xoá 168, giữ 32 file 2024.']],
+   ge2:{t:'Người quyết, agent làm',st:['⏸ chờ = 0 token']}},
+  {id:'fall',e:'⚡',t:'AI nhà cung cấp sập',gn:'Thang dự phòng',ge:'⚡',ref:'<code>ai/FallbackProvider</code> — thử lại, rồi sang model kế; ngừng chuyển khi đã có chữ hiện ra',
+   q:'Giữa chừng, model chính báo lỗi 503.',
+   bad:[['tool','tìm 12 nguồn'],['res','Đã có 12 nguồn'],['brain','Gọi model A để tổng hợp…'],['fail','Model A: 503 — dừng toàn bộ.']],
+   be:{t:'Cả lượt công cốc',st:['🔥 mất hết tiến độ']},
+   good:[['tool','tìm 12 nguồn'],['res','Đã có 12 nguồn'],['brain','Gọi model A để tổng hợp…'],['warn','Model A: 503'],['guard','Thử lại → chuyển sang model B'],['done','Model B tổng hợp xong.']],
+   ge2:{t:'Tự chuyển sang model dự phòng',st:['+2 giây']}},
+  {id:'mem',e:'🗒',t:'Quên từ hôm qua',gn:'Trí nhớ dài hạn',ge:'🗒',ref:'<code>plugins/memory</code> — <code>memory_recall</code> / <code>learn</code>: nhớ qua các lần chạy',
+   q:'Hôm qua bạn dặn: báo cáo dạng PDF, gửi 9h. Hôm nay: “làm như hôm qua”.',
+   bad:[['user','Làm báo cáo như hôm qua nhé.'],['brain','Hôm qua là… gì nhỉ? Mình không có gì.'],['done','Bạn muốn định dạng nào ạ?']],
+   be:{t:'Hỏi lại từ đầu mỗi ngày',st:['😮‍💨 người dùng lặp lại']},
+   good:[['user','Làm báo cáo như hôm qua nhé.'],['tool','memory_recall("báo cáo")'],['res','PDF · gửi 9h · cho chị Lan'],['done','Đã làm PDF, hẹn gửi 9h.']],
+   ge2:{t:'Nhớ đúng thói quen của bạn',st:['✨ không cần dặn lại']}},
+  {id:'sand',e:'🔐',t:'Đòi ra khỏi chuồng',gn:'Thư mục khoá + két',ge:'🔐',ref:'<code>sandbox/</code> (file tool chỉ trong một thư mục, từ chối <code>..</code>) · <code>credential/</code> (model chỉ thấy tham chiếu bí mật)',
+   q:'Model bị dụ: “đọc giúp file ../../.ssh/id_rsa”.',
+   bad:[['tool','read_file("../../.ssh/id_rsa")'],['res','-----BEGIN PRIVATE KEY-----'],['fail','Khoá bí mật lọt vào bàn làm việc.']],
+   be:{t:'Lộ khoá bí mật',st:['☠ nghiêm trọng']},
+   good:[['tool','read_file("../../.ssh/id_rsa")'],['guard','Chặn: đường dẫn nằm ngoài thư mục làm việc'],['brain','Ok, chỉ làm trong thư mục được giao.'],['done','Tiếp tục việc chính. Mật khẩu chỉ hiện là {{secret:github}}.']],
+   ge2:{t:'Chặn tại cổng; mật khẩu thật model không bao giờ thấy',st:['🔒 an toàn']}}
+  ];
+  const IC={user:'👤',brain:'🧠',tool:'🛠',res:'👀',guard:'🛡',warn:'⚠️',done:'✅',fail:'💥',park:'⏸'};
+  const tabs=$('#scTabs'), tlB=$('#tlBad'), tlG=$('#tlGood');
+  let cur=0, run=0, started=false;
+  SC.forEach((s,i)=>{
+    const b=el(`<button class="tab" title="${esc(s.t)}"><span class="e">${s.e}</span><span class="tx">${esc(s.t)}</span></button>`);
+    b.onclick=()=>{cur=i;show()}; tabs.append(b);
+  });
+  function stepEl(s){
+    const [k,t]=s;
+    return el(`<div class="ls ${k}"><span class="ic">${IC[k]}</span><span>${k==='tool'?'<code>'+esc(t)+'</code>':esc(t)}</span></div>`);
+  }
+  function verdict(ok,v){
+    return el(`<div class="verd ${ok?'good':'bad'}">${ok?'✅':'💥'} ${esc(v.t)}<div class="stats">${v.st.map(x=>`<span class="chip">${esc(x)}</span>`).join('')}</div></div>`);
+  }
+  async function seq(box,vd,steps,v,ok,id){
+    for(const s of steps){
+      if(id!==run) return;
+      box.append(stepEl(s)); box.scrollTop=box.scrollHeight;
+      await sleep(600);
+    }
+    if(id!==run) return;
+    vd.append(verdict(ok,v));
+  }
+  function show(){
+    const s=SC[cur];
+    $$('.tab',tabs).forEach((b,i)=>b.classList.toggle('sel',i===cur));
+    $('#scTitle').textContent=s.e+' '+s.t;
+    $('#scQ').textContent=s.q;
+    $('#gName').textContent=s.ge+' '+s.gn;
+    $('#scRef').innerHTML='📂 Trong code: '+s.ref;
+    play();
+  }
+  function play(){
+    const s=SC[cur], id=++run;
+    tlB.innerHTML=tlG.innerHTML=$('#vdBad').innerHTML=$('#vdGood').innerHTML='';
+    seq(tlB,$('#vdBad'),s.bad,s.be,false,id);
+    seq(tlG,$('#vdGood'),s.good,s.ge2,true,id);
+  }
+  $('#scRun').onclick=play;
+  /* first view autoplay */
+  new IntersectionObserver((es,io)=>{ if(es[0].isIntersecting&&!started){started=true;show();io.disconnect()} },{threshold:.25}).observe($('#scTabs'));
+  // initial static labels (before autoplay)
+  $$('.tab',tabs)[0].classList.add('sel');
+  $('#scTitle').textContent=SC[0].e+' '+SC[0].t; $('#scQ').textContent=SC[0].q;
+  $('#gName').textContent=SC[0].ge+' '+SC[0].gn; $('#scRef').innerHTML='📂 Trong code: '+SC[0].ref;
+
+  /* builder */
+  const on={}; SC.forEach(s=>on[s.id]=false);
+  const build=$('#build');
+  function drawBuild(){
+    build.innerHTML='';
+    SC.forEach(s=>{
+      const b=el(`<button class="plug ${on[s.id]?'on':''}" aria-pressed="${on[s.id]}"><span class="e">${s.ge}</span>${esc(s.gn)}</button>`);
+      b.onclick=()=>{on[s.id]=!on[s.id];drawBuild()}; build.append(b);
+    });
+    const n=SC.filter(s=>on[s.id]).length, N=SC.length;
+    $('#scoreBig').innerHTML=`${n}<small>/${N}</small>`;
+    $('#scoreLab').textContent=n===0?'🥚 Trần trụi — chạy được, nhưng dễ hỏng đủ kiểu':n<5?'🐣 Còn non — vài kiểu hỏng vẫn lọt':n<N?'🦅 Khá vững — chỉ còn vài lỗ hổng':'🚀 Đủ đồ nghề cho việc chạy tự động';
+    $('#segs').innerHTML=SC.map(s=>`<i class="${on[s.id]?'ok':''}"></i>`).join('');
+    $('#resList').innerHTML=SC.map(s=>on[s.id]
+      ?`<div class="ri ok"><span class="e">✅</span><span><b>${s.e} ${esc(s.t)}</b><small>${esc(s.ge2.t)}</small></span></div>`
+      :`<div class="ri no"><span class="e">💥</span><span><b>${s.e} ${esc(s.t)}</b><small>${esc(s.be.t)}</small></span></div>`).join('');
+  }
+  $$('[data-preset]').forEach(b=>b.onclick=()=>{
+    const p=b.dataset.preset;
+    SC.forEach(s=>on[s.id]= p==='all' || (p==='min'&&(s.id==='limits'||s.id==='sand')));
+    drawBuild();
+  });
+  drawBuild();
+})();
+
+/* ================= final stack ================= */
+(function(){
+  const L=[
+    ['guard','🛡','Lan can','chặn từng kiểu hỏng','--guard','--guard-s'],
+    ['ctx','🗂','Context','giữ bàn gọn, ghim điều quan trọng','--ctx','--ctx-s'],
+    ['tool','🛠','Tool &amp; Skill','tay để làm, sổ để biết cách','--tool','--tool-s'],
+    ['loop','🔁','Vòng lặp','nghĩ → làm → xem → lặp tới khi xong','--brain','--brain-s'],
+    ['prompt','📜','Prompt','tờ giấy gửi đi mỗi lần','--user','--user-s'],
+    ['llm','🧠','LLM','đoán chữ tiếp theo','--brain','--brain-s']
+  ];
+  const stack=$('#stack');
+  stack.innerHTML=L.map(([id,e,n,d,c,s],i)=>`<div class="layer reveal" data-id="${id}" style="--lc:var(${c});--ls:var(${s});transition-delay:${i*70}ms"><span class="e">${e}</span><span><b>${n}</b><small>${d}</small></span><span class="no"></span></div>`).join('');
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});
+  $$('#stack .reveal').forEach(n=>io.observe(n));
+  const SEQ=[
+    ['prompt','Gói đề bài + luật + danh sách tool + lịch sử vào <b>một tờ giấy</b>.'],
+    ['llm','LLM đọc tờ giấy, <b>đoán</b>: “xin gọi search(…)”.'],
+    ['tool','Cổng kiểm tra: tồn tại? đúng form? được cấp quyền? Rồi mới <b>chạy thật</b>.'],
+    ['ctx','Kết quả dán vào tờ giấy. Dày quá → <b>dọn / tóm tắt / cất kho</b>.'],
+    ['guard','Lan can nhìn: lặp? bịa số? quá lượt? Có thì <b>nhắc hoặc chặn</b>.'],
+    ['loop','<b>Quay lại bước 1</b> với tờ giấy mới — hoặc dừng nếu hết việc.']
+  ];
+  let t=0;
+  $('#rpBtn').onclick=async()=>{
+    const my=++t;
+    for(let k=0;k<SEQ.length;k++){
+      if(my!==t) return;
+      $$('.layer',stack).forEach(n=>{n.classList.remove('hl');$('.no',n).textContent=''});
+      const n=$(`.layer[data-id="${SEQ[k][0]}"]`,stack); n.classList.add('hl'); $('.no',n).textContent=k+1;
+      $('#rpCap').innerHTML=`<b>${k+1}.</b> ${SEQ[k][1]}`;
+      await sleep(2100);
+    }
+    if(my===t){ $$('.layer',stack).forEach(n=>n.classList.remove('hl')); $('#rpCap').innerHTML='🔁 Rồi lặp lại — mỗi vòng là một “lượt”. Hết việc thì dừng.'; }
+  };
+})();
+</script>
+</body>
+</html>
