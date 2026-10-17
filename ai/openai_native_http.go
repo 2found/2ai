@@ -3,6 +3,8 @@ package ai
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -340,6 +342,23 @@ type completionsHTTPBody struct {
 
 func (b *completionsHTTPBody) Close() error { defer b.cancel(); return b.ReadCloser.Close() }
 
+// opencodeSessionID is the caller's session when it has one. Otherwise it is
+// derived from the transcript's first message, which stays the same for every
+// turn of one conversation, so its requests share a session.
+func opencodeSessionID(session string, transcript TranscriptContext) string {
+	if session != "" {
+		return session
+	}
+	seed := []byte("soot")
+	if messages := transcript.Messages(); len(messages) > 0 {
+		if encoded, err := json.Marshal(messages[0]); err == nil {
+			seed = encoded
+		}
+	}
+	sum := sha256.Sum256(seed)
+	return "ses_" + hex.EncodeToString(sum[:12])
+}
+
 var completionsHeaderName = regexp.MustCompile("^[!#$%&'*+.^_`|~0-9A-Za-z-]+$")
 
 func completionsHeaders(rawModel json.RawMessage, transcript TranscriptContext, options map[string]json.RawMessage, compat OpenAICompletionsCompat, key string) (http.Header, error) {
@@ -388,6 +407,11 @@ func openAIHeadersFor(rawModel json.RawMessage, transcript TranscriptContext, op
 				}
 			}
 		}
+	}
+	// OpenCode Go refuses a request without x-opencode-session
+	// (MissingSessionID); the header routes one session to one backend.
+	if !azure && (samplingString(model["provider"]) == "opencode-go" || strings.Contains(samplingString(model["baseUrl"]), "opencode.ai/zen/go")) {
+		text("x-opencode-session", opencodeSessionID(samplingString(options["sessionId"]), transcript))
 	}
 	if session := samplingString(options["sessionId"]); session != "" && samplingString(options["cacheRetention"]) != "none" && sendAffinity {
 		if affinityFormat == "openrouter" {
