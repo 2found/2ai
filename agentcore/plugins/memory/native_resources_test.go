@@ -63,3 +63,13 @@ func TestNativeConsolidationBoundsCompleteJSONWithoutMutatingEvidence(t *testing
 		t.Fatal("oversized immutable metadata reached provider")
 	}
 }
+
+// A failure seen during a run is retained by no pass: kept as a fact it is
+// recalled into the runs that follow the fix and they stop trying.
+func TestConsolidationPromptDropsEnvironmentFailures(t *testing.T) {
+	for _, want := range []string{"state of the environment", "unavailable, failing or missing", "Retract any such entry"} {
+		if !strings.Contains(consolidationPrompt, want) {
+			t.Errorf("consolidation prompt lacks %q", want)
+		}
+	}
+}
