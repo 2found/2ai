@@ -186,7 +186,7 @@ func TestFinishGuardNudgePersistedDurably(t *testing.T) {
 	}
 	found := false
 	for _, m := range resumed.Recorded[0].Messages {
-		if m.Role == agentcore.RoleUser && m.Content == "GUARD-NUDGE" {
+		if m.Role == agentcore.RoleUser && strings.HasPrefix(m.Content, "GUARD-NUDGE") {
 			found = true
 		}
 	}

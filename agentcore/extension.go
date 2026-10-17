@@ -671,13 +671,29 @@ func (s *extensionSet) turnStopping(ctx context.Context, info StopInfo) (StopDec
 		// unchanged conversation, so it is treated as accepting the finish.
 		if d.Continue && len(d.Inject) > 0 {
 			s.stopAttempts[name]++
-			return d, name
+			return withAnswerReminder(d), name
 		}
 		if d.StopReason != "" {
 			return StopDecision{StopReason: d.StopReason}, name
 		}
 	}
 	return StopDecision{}, ""
+}
+
+// answerReminder follows every stop-guard nudge. The answer the guard turned
+// back is not the run's result: the run ends on the last answer, so a model
+// that closes its checklist with a status note silently drops the result it
+// had already written.
+const answerReminder = "The answer you just gave is not the final result; only your last answer is. When you finish, give the complete answer again, not a note about the steps."
+
+func withAnswerReminder(d StopDecision) StopDecision {
+	inject := append([]Message(nil), d.Inject...)
+	last := &inject[len(inject)-1]
+	if last.Role == RoleUser && !strings.Contains(last.Content, answerReminder) {
+		last.Content = strings.TrimRight(last.Content, "\n") + "\n\n" + answerReminder
+	}
+	d.Inject = inject
+	return d
 }
 
 // interceptStreamDelta consults the stream interceptors over the assistant text
