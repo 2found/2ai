@@ -88,3 +88,25 @@ func TestPiAnthropicParamsOracle(t *testing.T) {
 		})
 	}
 }
+
+func TestAnthropicThinkingOffFollowsTheModel(t *testing.T) {
+	for id, want := range map[string]any{
+		"claude-sonnet-5-5":           map[string]any{"type": "between_tools"},
+		"anthropic.claude-sonnet-5-5": map[string]any{"type": "between_tools"},
+		"claude-opus-5-5":             nil,
+		"claude-fable-5-1":            nil,
+		"claude-opus-5":               map[string]any{"type": "disabled"},
+		"claude-sonnet-5":             map[string]any{"type": "disabled"},
+	} {
+		model, _ := json.Marshal(map[string]any{"id": id, "api": "anthropic-messages", "provider": "anthropic", "baseUrl": "https://api.anthropic.com", "reasoning": true, "maxTokens": 1000, "input": []string{"text"}, "cost": map[string]float64{}})
+		params, err := BuildAnthropicParams(model, ResolveTranscript(NormalizeContext(Context{Messages: []Message{{Role: "user", Content: TextContent("hi")}}}), false), false, json.RawMessage(`{"thinkingEnabled":false}`))
+		if err != nil {
+			t.Fatal(id, err)
+		}
+		var body map[string]any
+		_ = json.Unmarshal(params, &body)
+		if got := body["thinking"]; !reflect.DeepEqual(got, want) {
+			t.Fatalf("%s: thinking = %v, want %v", id, got, want)
+		}
+	}
+}

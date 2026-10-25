@@ -5,7 +5,9 @@ import (
 	"compress/gzip"
 	"context"
 	"crypto/rand"
+	"crypto/sha256"
 	"encoding/binary"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -170,11 +172,9 @@ func devinAgentStream(ctx context.Context, rawModel json.RawMessage, transcript 
 			Message: "Devin auth error: no session token"}, false, now)
 		return
 	}
-	cascadeID := control.sessionID
-	if cascadeID == "" {
-		cascadeID = newDevinCascadeID()
-	}
-	messages := transcript.Messages()
+	// Cascade has one system prompt. Each native run appends its own system
+	// message, so joining them all would resend every earlier run's prompt.
+	messages := ResolveTranscript(transcript, false).Messages()
 	system := ""
 	list := make([]Message, 0, len(messages))
 	for _, message := range messages {
@@ -186,6 +186,7 @@ func devinAgentStream(ctx context.Context, rawModel json.RawMessage, transcript 
 		}
 		list = append(list, message)
 	}
+	cascadeID := devinThreadID(control.sessionID, list)
 
 	metadata := devinCLIIdentity()
 	metadata.apiKey = session
@@ -304,18 +305,20 @@ func devinStreamChat(ctx context.Context, httpClient *http.Client, base string, 
 		if err != nil {
 			return err
 		}
-		if flag&devinConnectEndStreamFlag != 0 {
-			if trailer := devinTrailerError(payload); trailer != nil {
-				return trailer
-			}
-			continue
-		}
+		// The end-of-stream trailer is compressed like any other frame;
+		// reading it raw hid every stream error behind an empty reply.
 		raw := payload
 		if flag&devinConnectCompressedFlag != 0 {
 			raw, err = devinGunzip(payload)
 			if err != nil {
 				return err
 			}
+		}
+		if flag&devinConnectEndStreamFlag != 0 {
+			if trailer := devinTrailerError(raw); trailer != nil {
+				return trailer
+			}
+			continue
 		}
 		delta, err := devinDecodeChatResponse(raw)
 		if err != nil {
@@ -513,6 +516,21 @@ func devinUnary(ctx context.Context, httpClient *http.Client, url string, body [
 		return nil, devinHTTPError("auth", response, payload)
 	}
 	return payload, nil
+}
+
+// devinThreadID names the Cascade thread for a request. A caller session is a
+// prompt-cache scope that parallel agent threads (subagents) may share, while
+// Cascade message IDs are thread-relative, so the thread is the session plus
+// its first non-system message: stable as one thread grows, distinct per agent.
+func devinThreadID(session string, messages []Message) string {
+	if session == "" {
+		return newDevinCascadeID()
+	}
+	if len(messages) == 0 {
+		return session
+	}
+	sum := sha256.Sum256([]byte(messages[0].Role + "\x00" + ContentText(messages[0].Content)))
+	return session + "-" + hex.EncodeToString(sum[:8])
 }
 
 func newDevinCascadeID() string {

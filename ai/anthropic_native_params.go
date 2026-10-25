@@ -250,7 +250,9 @@ func BuildAnthropicParams(rawModel json.RawMessage, context TranscriptContext, o
 				set("thinking", map[string]any{"type": "enabled", "budget_tokens": budget, "display": display})
 			}
 		} else if string(options["thinkingEnabled"]) == "false" && strings.TrimSpace(string(model.ThinkingLevelMap["off"])) != "null" {
-			set("thinking", map[string]string{"type": "disabled"})
+			if off := anthropicThinkingOff(model.ID); off != "" {
+				set("thinking", map[string]string{"type": off})
+			}
 		}
 	}
 	metadata, _ := samplingObject(options["metadata"])
@@ -277,4 +279,19 @@ func BuildAnthropicParams(rawModel json.RawMessage, context TranscriptContext, o
 		set("fallbacks", values)
 	}
 	return json.Marshal(params)
+}
+
+// anthropicThinkingOff names the thinking type that turns thinking off, or ""
+// when the model cannot turn it off and the field must be omitted. Claude
+// Sonnet 5.5 rejects "disabled" and takes "between_tools"; Claude Opus 5.5 and
+// the Fable/Mythos line reject any explicit off switch.
+func anthropicThinkingOff(id string) string {
+	id = strings.ToLower(id)
+	switch {
+	case strings.Contains(id, "claude-sonnet-5-5"):
+		return "between_tools"
+	case strings.Contains(id, "claude-opus-5-5"), strings.Contains(id, "claude-fable-"), strings.Contains(id, "claude-mythos-"):
+		return ""
+	}
+	return "disabled"
 }

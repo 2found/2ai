@@ -289,6 +289,11 @@ func TestDevinResolveModelUIDOfflineFallback(t *testing.T) {
 // devinTestServer serves GetUserJwt and a Connect-framed GetChatMessage stream.
 func devinTestServer(t *testing.T, frames [][]byte, captured *[]byte) *http.Client {
 	t.Helper()
+	return devinTestServerWithTrailer(t, frames, captured, devinConnectEndStreamFlag, []byte(`{}`))
+}
+
+func devinTestServerWithTrailer(t *testing.T, frames [][]byte, captured *[]byte, trailerFlag byte, trailer []byte) *http.Client {
+	t.Helper()
 	return &http.Client{Transport: roundTripFunc(func(request *http.Request) (*http.Response, error) {
 		switch {
 		case strings.HasSuffix(request.URL.Path, devinAuthPath):
@@ -316,9 +321,9 @@ func devinTestServer(t *testing.T, frames [][]byte, captured *[]byte) *http.Clie
 				stream.Write(length[:])
 				stream.Write(payload)
 			}
-			trailer := []byte(`{}`)
-			stream.WriteByte(devinConnectEndStreamFlag)
+			stream.WriteByte(trailerFlag)
 			var length [4]byte
+			length[2] = byte(len(trailer) >> 8)
 			length[3] = byte(len(trailer))
 			stream.Write(length[:])
 			stream.Write(trailer)
@@ -419,7 +424,7 @@ func TestDevinPooledStreamTextThinkingAndToolCall(t *testing.T) {
 	for _, field := range fields {
 		values[field.Number] = string(field.Bytes)
 	}
-	if values[16] != "cascade-42" {
+	if values[16] != devinThreadID("cascade-42", []Message{{Role: "user", Content: TextContent("say hi")}}) || !strings.HasPrefix(values[16], "cascade-42-") {
 		t.Fatalf("cascadeId = %q", values[16])
 	}
 	if values[21] != "swe-2-high" {
@@ -502,5 +507,89 @@ func TestDevinChatDeltaAdapter(t *testing.T) {
 	}
 	if provider.baseURL() != DevinDefaultBaseURL {
 		t.Fatalf("base url %q", provider.baseURL())
+	}
+}
+
+func TestDevinThreadIDKeepsOneThreadPerAgent(t *testing.T) {
+	user := func(text string) Message { return Message{Role: "user", Content: TextContent(text)} }
+	reply := Message{Role: "assistant", Content: TextContent("ok")}
+	parent := devinThreadID("conv", []Message{user("hello")})
+	if got := devinThreadID("conv", []Message{user("hello"), reply, user("next run")}); got != parent {
+		t.Fatalf("a growing thread changed cascade: %q != %q", got, parent)
+	}
+	if a, b := devinThreadID("conv", []Message{user("child task A")}), devinThreadID("conv", []Message{user("child task B")}); a == b || a == parent {
+		t.Fatal("parallel agents sharing a session must not share a Cascade thread")
+	}
+	if devinThreadID("other", []Message{user("hello")}) == parent {
+		t.Fatal("sessions must not share a Cascade thread")
+	}
+	if devinThreadID("", nil) == devinThreadID("", nil) {
+		t.Fatal("a request without a session must get a fresh thread")
+	}
+}
+
+func TestDevinSendsOnlyTheCurrentSystemPrompt(t *testing.T) {
+	text := pbWriter{}
+	text.str(3, "ok")
+	var captured []byte
+	client := devinTestServer(t, [][]byte{text}, &captured)
+	model := json.RawMessage(`{"id":"swe-2","api":"devin-agent","provider":"devin","baseUrl":"https://cascade.test","maxTokens":1000,"input":["text"],"cost":{}}`)
+	// Each native run appends its own system section to the shared transcript.
+	section := func(value string) Message {
+		return Message{Role: "system", Content: TextContent(""), Sections: SystemSections{{Name: "agentray", Value: &value}}}
+	}
+	transcript := NormalizeContext(Context{Messages: []Message{
+		section("run one prompt"),
+		{Role: "user", Content: TextContent("first")},
+		{Role: "assistant", Content: TextContent("answer")},
+		section("run two prompt"),
+		{Role: "user", Content: TextContent("second")},
+	}})
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	stream, err := StreamDevinPooled(ctx, model, transcript, OpenAICompletionsStreamOptions{Client: client},
+		&fakeTokenSource{tokens: []OAuthToken{{AccountID: "acct", AccessToken: "session-token"}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := stream.WaitForEnd(ctx); err != nil {
+		t.Fatal(err)
+	}
+	payload, err := devinGunzip(captured[5:])
+	if err != nil {
+		t.Fatal(err)
+	}
+	fields, err := pbScan(payload)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, field := range fields {
+		if field.Number == 2 && string(field.Bytes) != "run two prompt" {
+			t.Fatalf("system prompt = %q, want only the current run's", field.Bytes)
+		}
+	}
+}
+
+func TestDevinCompressedTrailerErrorFailsTheStream(t *testing.T) {
+	trailer, err := devinGzip([]byte(`{"error":{"code":"resource_exhausted","message":"Reached free model rate limit."}}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	client := devinTestServerWithTrailer(t, nil, nil, devinConnectEndStreamFlag|devinConnectCompressedFlag, trailer)
+	model := json.RawMessage(`{"id":"swe-2","api":"devin-agent","provider":"devin","baseUrl":"https://cascade.test","maxTokens":1000,"input":["text"],"cost":{}}`)
+	transcript := NormalizeContext(Context{Messages: []Message{{Role: "user", Content: TextContent("say hi")}}})
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	stream, err := StreamDevinPooled(ctx, model, transcript, OpenAICompletionsStreamOptions{Client: client},
+		&fakeTokenSource{tokens: []OAuthToken{{AccountID: "acct", AccessToken: "session-token"}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	result, err := stream.Result(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result.StopReason != "error" || result.ErrorMessage == nil || !strings.Contains(*result.ErrorMessage, "resource_exhausted") {
+		t.Fatalf("a compressed error trailer must fail the stream, got stop=%q error=%v", result.StopReason, result.ErrorMessage)
 	}
 }
