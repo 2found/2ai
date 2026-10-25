@@ -1,11 +1,21 @@
 # Changelog
 
-## Unreleased
+## 0.1.5 — 2026-10-25
+
+Baseline: v0.1.4. Public contracts only gain the optional `PromptCacheKey` run field; no configuration migration is required.
 
 - Native runs put recalled memory in a user-role transcript message after the system prompt, holding only facts the visible transcript lacks. The system prompt stays byte-identical across runs, so a resumed conversation reuses the provider's prompt cache. `StartPiRunWithLifecycle` keeps memory inline.
 - An explicit `PromptCacheKey` gives OpenCode Go one stable `x-opencode-session` per conversation. Before, the session was derived from the first message, so it changed whenever the system prompt changed, and a run without history got a new one every time.
 - Memory consolidation stages only the finished run's own messages, not the restored transcript or the recall block.
+- After compaction, the request pins `[Current request — verbatim]` only while the summary has absorbed the request. A request still verbatim in the retained tail is no longer copied between the summary and the tail, where a new task each run made the provider's cache miss the whole tail on every run.
+- A saved summary that covers a whole earlier run (the next message is the new run's system message) is reapplied instead of being dropped for the full history.
+- Devin: a caller session now names the prompt-cache scope, and each agent thread in it gets its own Cascade thread (the session plus its first message). Parallel subagents no longer share message IDs, and a conversation keeps one thread across runs instead of a random thread per request.
+- Devin: send only the latest system prompt. Each native run appends its own system message, and Cascade joined them all, so every resumed run resent each earlier run's prompt (about 4k tokens per run) and pushed the cacheable prefix further from the cache.
+- Devin: read the compressed end-of-stream trailer. Its errors (rate limit, quota) were dropped, so a refused request came back as an empty answer with no error and the fallback chain never moved on.
+- Claude Sonnet 5.5 turns thinking off with `between_tools`; Claude Opus 5.5 and the Fable/Mythos models omit the field. These models answer `thinking: disabled` with a 400, which made every reasoning-off request fail.
 - Fix a panic ("slice bounds out of range") when parallel subagents deduplicate recalled memory: the accent folder was a shared, stateful transformer.
+
+Upgrade consuming Go modules with `go get github.com/2found/2ai@v0.1.5`, then run their compatibility checks.
 
 ## 0.1.4 — 2026-10-17
 
