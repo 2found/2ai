@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"slices"
 	"strings"
 	"testing"
 
@@ -180,5 +181,46 @@ func TestCompactionCutsHistoricalUserFactsButKeepsLoneTask(t *testing.T) {
 				t.Fatalf("cut = %d, want %d", got, tc.wantCut)
 			}
 		})
+	}
+}
+
+func TestSummaryViewKeepsAStablePrefixAcrossRuns(t *testing.T) {
+	msg := func(role, text string) json.RawMessage {
+		if role == "assistant" {
+			return piRequestJSON(map[string]any{"role": role, "content": []map[string]string{{"type": "text", "text": text}}})
+		}
+		return piRequestJSON(map[string]string{"role": role, "content": text})
+	}
+	envelope := func(text string) json.RawMessage {
+		inner, _ := json.Marshal(map[string]string{"speaker": "alice", "text": text})
+		return msg("user", string(inner))
+	}
+	summary := piRequestJSON(map[string]any{"role": "user", "content": "[Earlier work summary]\nfacts", "agentrayContextSummary": "id", "timestamp": 1})
+	folded := []json.RawMessage{msg("system", "policy"), msg("user", "old task"), msg("assistant", "old answer")}
+	saved := &Summary{Revision: "r", PrefixCount: len(folded), PrefixDigest: PrefixDigest(folded), Message: summary}
+	view := func(task string, messages ...json.RawMessage) []json.RawMessage {
+		c := Compactor{revision: "r", saved: saved, config: CompactionPolicy{Task: task}}
+		var out []json.RawMessage
+		if err := json.Unmarshal(c.Transform(context.Background(), piRequestJSON(append(slices.Clone(folded), messages...))), &out); err != nil {
+			t.Fatal(err)
+		}
+		return out
+	}
+	second := `Compare "A" & <B>`
+	runOne := []json.RawMessage{msg("system", "policy"), envelope("first task"), msg("assistant", "one")}
+	one := view("first task", runOne...)
+	two := view(second, append(runOne, msg("system", "policy"), envelope(second), msg("assistant", "two"))...)
+	if len(two) < len(one) || !SameJSON(piRequestJSON(one), piRequestJSON(two[:len(one)])) {
+		t.Fatalf("run two does not extend run one's request:\n%s\n%s", piRequestJSON(one), piRequestJSON(two))
+	}
+	if !strings.Contains(string(piRequestJSON(one)), "[Earlier work summary]") {
+		t.Fatal("saved summary was not applied", string(piRequestJSON(one)))
+	}
+	if strings.Contains(string(piRequestJSON(two)), "[Current request") {
+		t.Fatal("pinned a request the retained tail already carries")
+	}
+	// A continuation slice keeps the task its folded input carried.
+	if got := view("old task", msg("user", "continue")); !strings.Contains(string(piRequestJSON(got)), `[Current request — verbatim]\nold task`) {
+		t.Fatal("folded current request was not pinned", string(piRequestJSON(got)))
 	}
 }

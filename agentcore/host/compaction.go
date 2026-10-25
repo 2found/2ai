@@ -112,7 +112,9 @@ func (c *Compactor) TransformWithPolicy(ctx context.Context, raw json.RawMessage
 		if saved.PrefixCount < len(original) {
 			_ = json.Unmarshal(original[saved.PrefixCount], &boundary)
 		}
-		if saved.PrefixCount == len(original) || boundary.Role == "assistant" || boundary.Role == "user" {
+		// A system boundary is the next run's opening message: a summary that
+		// covered a whole earlier run still applies.
+		if saved.PrefixCount == len(original) || boundary.Role == "assistant" || boundary.Role == "user" || boundary.Role == "system" {
 			view = summaryViewWithTask(original, saved.PrefixCount, saved.Message, policy.Task)
 			baseCount = saved.PrefixCount
 			headCount = len(view) - (len(original) - baseCount)
