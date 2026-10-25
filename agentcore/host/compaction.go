@@ -1,6 +1,7 @@
 package host
 
 import (
+	"bytes"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -189,9 +190,13 @@ func SummaryView(messages []json.RawMessage, cut int, summary json.RawMessage) [
 	return append(kept, messages[cut:]...)
 }
 
+// summaryViewWithTask pins the current request only while the summary has
+// absorbed it. A request still verbatim in the retained tail needs no copy, and
+// the pin would sit between the summary and the tail: every new run brings a
+// new task, so the provider's prompt cache would miss the whole tail each run.
 func summaryViewWithTask(messages []json.RawMessage, cut int, summary json.RawMessage, task string) []json.RawMessage {
 	view := SummaryView(messages, cut, summary)
-	if task == "" {
+	if task == "" || taskVisible(messages[cut:], task) {
 		return view
 	}
 	// Insert before the retained tail so later user messages keep their order.
@@ -199,6 +204,40 @@ func summaryViewWithTask(messages []json.RawMessage, cut int, summary json.RawMe
 	pinned, _ := json.Marshal(map[string]any{"role": "user", "content": "[Current request — verbatim]\n" + task})
 	view = append(view[:index:index], append([]json.RawMessage{pinned}, view[index:]...)...)
 	return view
+}
+
+// taskVisible reports whether a retained user message still carries task,
+// verbatim or as a JSON string value (consumers may wrap input in an envelope).
+func taskVisible(tail []json.RawMessage, task string) bool {
+	forms := []string{task}
+	for _, escapeHTML := range []bool{true, false} {
+		var b bytes.Buffer
+		encoder := json.NewEncoder(&b)
+		encoder.SetEscapeHTML(escapeHTML)
+		if encoder.Encode(task) == nil {
+			quoted := strings.TrimSpace(b.String())
+			forms = append(forms, quoted[1:len(quoted)-1])
+		}
+	}
+	for _, raw := range tail {
+		var message struct {
+			Role    string
+			Content json.RawMessage
+		}
+		if json.Unmarshal(raw, &message) != nil || message.Role != "user" {
+			continue
+		}
+		text, _, _, err := ProjectContent(message.Content)
+		if err != nil {
+			continue
+		}
+		for _, form := range forms {
+			if strings.Contains(text, form) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // SummaryAllowance reserves the immutable host systems/tools and exact task

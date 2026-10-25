@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"maps"
 	"slices"
+	"strings"
 	"sync"
 	"time"
 
@@ -217,7 +218,7 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 		result.CommandResults[name] = raw
 	}
 
-	system, err := h.StartPiRunWithLifecycle(ctx, input.Task, input.Lifecycle)
+	system, recalled, err := h.startPiRun(ctx, input.Task, input.Lifecycle, false)
 	if err != nil {
 		return result, err
 	}
@@ -758,6 +759,9 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 			agent.SetTools(nil)
 		}
 		prompts := []*ai.Message{nativeSystemMessage(system)}
+		if memory := nativeRecalledMemory(recalled, history, checkpoint.Summary); memory != nil {
+			prompts = append(prompts, memory)
+		}
 		for _, raw := range rawInput {
 			var message ai.Message
 			if err := json.Unmarshal(raw, &message); err != nil {
@@ -825,6 +829,31 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 	}
 
 	return result, failure
+}
+
+// nativeRecalledMemory is the run's recalled memory as a context message ahead
+// of its input, or nil when there is none. It enters the transcript, so later
+// requests read it from the prompt cache instead of rewriting the prefix, and
+// a bullet the request still carries verbatim is not repeated; one covered by a
+// compaction summary is, since the summary may have dropped it.
+func nativeRecalledMemory(recalled []MemoryEntry, history []*ai.Message, summary json.RawMessage) *ai.Message {
+	visible := history
+	var saved nativehost.Summary
+	if len(summary) > 0 && json.Unmarshal(summary, &saved) == nil && saved.PrefixCount > 0 && saved.PrefixCount <= len(visible) {
+		visible = visible[saved.PrefixCount:]
+	}
+	memory := renderRecalledMemory(recalled, func(bullet string) bool {
+		for _, message := range visible {
+			if message != nil && message.Role == "user" && strings.Contains(ai.ContentText(message.Content), bullet) {
+				return true
+			}
+		}
+		return false
+	})
+	if memory == "" {
+		return nil
+	}
+	return &ai.Message{Role: "user", Content: ai.TextContent(memory), Timestamp: time.Now().UnixMilli()}
 }
 
 func nativeSystemMessage(system string) *ai.Message {

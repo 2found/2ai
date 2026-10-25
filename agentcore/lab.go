@@ -258,6 +258,7 @@ func FoldSteps(records []TurnRecord) []LabStep {
 		loadedBySession[r.SessionKey] = loaded
 		system := systemPrompt(r.Messages)
 		persona, memory, advertised := parseSystemPrompt(system)
+		memory = append(memory, contextMemory(r.Messages)...)
 
 		calls := make([]LabToolCall, 0, len(r.ToolCalls))
 		for _, c := range r.ToolCalls {
@@ -413,6 +414,22 @@ func parseSystemPrompt(system string) (persona string, memory []string, skills [
 		}
 	}
 	return persona, memory, skills
+}
+
+// contextMemory returns the bullets of the recalled-memory messages a native run
+// placed in the transcript (see nativeRecalledMemory).
+func contextMemory(messages []Message) (memory []string) {
+	for _, m := range messages {
+		if m.Role != RoleUser || !strings.HasPrefix(m.Content, RecalledMemoryHeader) {
+			continue
+		}
+		for _, line := range strings.Split(m.Content, "\n") {
+			if line = strings.TrimSpace(line); strings.HasPrefix(line, "- ") {
+				memory = append(memory, strings.TrimPrefix(line, "- "))
+			}
+		}
+	}
+	return memory
 }
 
 // splitSections breaks a prompt into a map keyed by its "# Header" lines.

@@ -2,6 +2,7 @@ package ai
 
 import (
 	"encoding/json"
+	"regexp"
 	"testing"
 )
 
@@ -24,9 +25,15 @@ func TestOpenCodeGoSendsSessionHeader(t *testing.T) {
 	if again.Get("x-opencode-session") != derived {
 		t.Fatal("derived session changed between turns of one transcript")
 	}
-	explicit, _ := completionsHeaders(raw, first, map[string]json.RawMessage{"sessionId": json.RawMessage(`"conv-1"`), "cacheRetention": json.RawMessage(`"none"`)}, compat, "key")
-	if got := explicit.Get("x-opencode-session"); got != "conv-1" {
-		t.Fatalf("x-opencode-session = %q, want conv-1", got)
+	// A caller session (the prompt cache key) fixes the header for the whole
+	// conversation, whatever its transcript, in the derived shape.
+	conv := map[string]json.RawMessage{"sessionId": json.RawMessage(`"conv-1"`), "cacheRetention": json.RawMessage(`"none"`)}
+	explicit, _ := completionsHeaders(raw, first, conv, compat, "key")
+	other := TranscriptContext{messages: []Message{{Role: "system", Content: TextContent("changed prompt")}}}
+	same, _ := completionsHeaders(raw, other, conv, compat, "key")
+	got := explicit.Get("x-opencode-session")
+	if got == derived || got != same.Get("x-opencode-session") || !regexp.MustCompile(`^ses_[0-9a-f]{24}$`).MatchString(got) {
+		t.Fatalf("x-opencode-session = %q (other transcript %q, derived %q)", got, same.Get("x-opencode-session"), derived)
 	}
 
 	zen := json.RawMessage(`{"id":"deepseek-v4.1-flash","provider":"opencode-zen","baseUrl":"https://opencode.ai/zen/v1"}`)

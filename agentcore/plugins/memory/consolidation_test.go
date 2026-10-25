@@ -3,6 +3,7 @@ package memory
 import (
 	"context"
 	"errors"
+	"slices"
 	"testing"
 
 	"encoding/json"
@@ -82,5 +83,43 @@ func TestNativeConsolidationAccountsUsageAndSeesCompletedTranscript(t *testing.T
 	result, err := a.RunNative(context.Background(), agentcore.NativeRun{Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: "work"}}})
 	if err != nil || result.Usage.InputTokens != 9 || result.Usage.OutputTokens != 4 || store.commits != 1 {
 		t.Fatalf("consolidation: usage=%+v commits=%d err=%v", result.Usage, store.commits, err)
+	}
+}
+
+// A run that continues a conversation stages only its own messages: the
+// restored turns were evidence for the runs that wrote them. Its recalled
+// memory message is context, not evidence.
+func TestRolloutCarriesOnlyTheRunsOwnMessages(t *testing.T) {
+	store := &consolidationStore{entries: []agentcore.MemoryEntry{{ID: "m1", Kind: "fact", Content: "the user prefers blue"}}}
+	var seen []Consolidation
+	consolidator := func(_ context.Context, in Consolidation) ([]Change, error) {
+		seen = append(seen, in)
+		return nil, nil
+	}
+	run := func(state json.RawMessage, input string) agentcore.RunResult {
+		t.Helper()
+		provider := &ai.FallbackProvider{Candidates: []ai.FallbackCandidate{{Model: json.RawMessage(`{"id":"test"}`), Stream: ai.ScriptedStream(ai.Message{Role: "assistant", StopReason: "stop", Content: ai.BlockContent(ai.ContentBlock{Type: "text", Text: "answer to " + input})})}}}
+		a, err := agentcore.New(agentcore.Config{NativeProvider: provider, Model: "test", Definition: agentcore.AgentDefinition{ScopeID: "own"}, Memory: store, Extensions: []agentcore.ExtensionFactory{Plugin{Store: store, Consolidator: consolidator}}})
+		if err != nil {
+			t.Fatal(err)
+		}
+		result, err := a.RunNative(context.Background(), agentcore.NativeRun{State: state, Task: input, Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: input}}})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return result
+	}
+	first := run(nil, "first")
+	run(first.NativeState, "second")
+	if len(seen) != 2 {
+		t.Fatalf("consolidations = %+v", seen)
+	}
+	rollouts := seen[1].Rollouts
+	var contents []string
+	for _, m := range rollouts[len(rollouts)-1].Messages {
+		contents = append(contents, string(m.Role)+":"+m.Content)
+	}
+	if want := []string{"user:second", "assistant:answer to second"}; !slices.Equal(contents, want) {
+		t.Fatalf("second rollout = %q, want %q", contents, want)
 	}
 }

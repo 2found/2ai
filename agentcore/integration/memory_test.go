@@ -98,11 +98,12 @@ func buildMemoryAgent(t *testing.T, store agentcore.MemoryStore, pol agentcore.P
 	return a
 }
 
-// systemText returns every system-prompt block the provider was sent.
-func systemText(rec *nativeRecorder) string {
+// memoryText returns the first request's system prompt and recalled-memory
+// context message: where a run shows the model its recalled memory.
+func memoryText(rec *nativeRecorder) string {
 	var sb strings.Builder
 	for _, m := range rec.all()[0].Messages {
-		if m.Role == agentcore.RoleSystem {
+		if m.Role == agentcore.RoleSystem || strings.HasPrefix(m.Content, "# Recalled memory\n") {
 			sb.WriteString(m.Content)
 		}
 	}
@@ -146,7 +147,7 @@ func TestMemoryCurationEndToEnd(t *testing.T) {
 
 	// The recalled block carried the id — the model could only have passed it
 	// back if the prompt rendered it.
-	if sys := systemText(recorder2); !strings.Contains(sys, "id "+learnedID) {
+	if sys := memoryText(recorder2); !strings.Contains(sys, "id "+learnedID) {
 		t.Fatalf("recalled block did not render the entry id:\n%s", sys)
 	}
 
@@ -179,7 +180,7 @@ func TestMemoryCurationEndToEnd(t *testing.T) {
 	if _, err := buildMemoryAgent(t, store, allow, p3).Prompt(ctx, "what do you know"); err != nil {
 		t.Fatalf("run 3: %v", err)
 	}
-	if strings.Contains(systemText(recorder3), "deploys moved") {
+	if strings.Contains(memoryText(recorder3), "deploys moved") {
 		t.Error("a retracted memory still appears in recall")
 	}
 }
@@ -224,5 +225,67 @@ func TestMemoryCurationAbsentWithoutStore(t *testing.T) {
 		if name == memory.ToolLearn || name == memory.ToolMemoryEdit {
 			t.Errorf("%q advertised on a memoryless run", name)
 		}
+	}
+}
+
+// Recall is a per-task query, so its result differs between the runs of one
+// conversation. It must not reach the system prompt — the prefix every request
+// shares — or each new run rewrites the provider's prompt cache for the whole
+// transcript. The block rides a transcript message instead, and a bullet the
+// transcript already carries is not repeated.
+func TestRecalledMemoryKeepsTheRequestPrefixStable(t *testing.T) {
+	ctx := context.Background()
+	store := newMemStore()
+	_ = store.Remember(ctx, agentcore.MemoryEntry{ScopeID: "agent-1", Kind: agentcore.MemoryFact, Content: "the user prefers blue"})
+	allow := agentcore.NewAllowList()
+
+	rec1 := &nativeRecorder{}
+	first, err := buildMemoryAgent(t, store, allow, recordedNativeProvider(rec1, agentcore.AssistantText("one"))).RunNative(ctx, agentcore.NativeRun{Task: "first", Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: "first"}}})
+	if err != nil {
+		t.Fatalf("run 1: %v", err)
+	}
+	_ = store.Remember(ctx, agentcore.MemoryEntry{ScopeID: "agent-1", Kind: agentcore.MemoryFact, Content: "the user writes Go"})
+	rec2 := &nativeRecorder{}
+	if _, err := buildMemoryAgent(t, store, allow, recordedNativeProvider(rec2, agentcore.AssistantText("two"))).RunNative(ctx, agentcore.NativeRun{State: first.NativeState, Task: "second", Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: "second"}}}); err != nil {
+		t.Fatalf("run 2: %v", err)
+	}
+
+	// Providers collapse every system message into the head; the scripted
+	// fixture keeps each run's copy in place, so compare without them.
+	// The head becomes the latest system message, as the collapse keeps it.
+	conversation := func(messages []agentcore.Message) (out []agentcore.Message) {
+		out = []agentcore.Message{{Role: agentcore.RoleSystem}}
+		for _, m := range messages {
+			if m.Role == agentcore.RoleSystem {
+				out[0] = m
+			} else {
+				out = append(out, m)
+			}
+		}
+		return out
+	}
+	req1, req2 := conversation(rec1.all()[0].Messages), conversation(rec2.all()[0].Messages)
+	if req1[0].Role != agentcore.RoleSystem || req2[0].Role != agentcore.RoleSystem || req1[0].Content != req2[0].Content {
+		t.Fatalf("system prompt changed between runs:\n%q\n%q", req1[0].Content, req2[0].Content)
+	}
+	if strings.Contains(req1[0].Content, "Recalled memory") {
+		t.Fatalf("recalled memory is in the system prompt:\n%s", req1[0].Content)
+	}
+	// Run 1: system, memory, input.
+	if len(req1) != 3 || !strings.HasPrefix(req1[1].Content, "# Recalled memory\n") || !strings.Contains(req1[1].Content, "id mem-1) the user prefers blue") || req1[2].Content != "first" {
+		t.Fatalf("run 1 request = %+v", req1)
+	}
+	// Run 2 extends run 1's request (plus its answer) instead of rewriting it.
+	for i := range req1 {
+		if req2[i].Role != req1[i].Role || req2[i].Content != req1[i].Content {
+			t.Fatalf("run 2 request is not an extension of run 1 at message %d: %+v", i, req2[i])
+		}
+	}
+	tail := req2[len(req1):]
+	if len(tail) != 3 || tail[0].Content != "one" || tail[2].Content != "second" {
+		t.Fatalf("run 2 tail = %+v", tail)
+	}
+	if !strings.Contains(tail[1].Content, "the user writes Go") || strings.Contains(tail[1].Content, "prefers blue") {
+		t.Fatalf("run 2 memory should add only the new entry:\n%s", tail[1].Content)
 	}
 }

@@ -61,9 +61,12 @@ func (c *curation) FinalizeRun(ctx context.Context, result agentcore.RunResult, 
 	}
 	r := Rollout{ID: id, Final: agentcore.TruncateMiddle(RedactSecrets(result.Final), 8000)}
 	budget := 32000
-	for i := len(result.Messages) - 1; i >= 0 && len(r.Messages) < 32 && budget > 0; i-- {
+	// Only this run's messages: a restored transcript was evidence for the runs
+	// that wrote it, and resending it made every consolidation of a long
+	// conversation pay for the same turns again.
+	for i := len(result.Messages) - 1; i >= min(c.restored, len(result.Messages)) && len(r.Messages) < 32 && budget > 0; i-- {
 		m := result.Messages[i]
-		if m.Role == agentcore.RoleSystem {
+		if m.Role == agentcore.RoleSystem || m.Role == agentcore.RoleUser && strings.HasPrefix(m.Content, agentcore.RecalledMemoryHeader) {
 			continue
 		}
 		// Join once: repeatedly appending calls copied a potentially large

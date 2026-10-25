@@ -342,15 +342,17 @@ type completionsHTTPBody struct {
 
 func (b *completionsHTTPBody) Close() error { defer b.cancel(); return b.ReadCloser.Close() }
 
-// opencodeSessionID is the caller's session when it has one. Otherwise it is
-// derived from the transcript's first message, which stays the same for every
-// turn of one conversation, so its requests share a session.
+// opencodeSessionID derives the session from the caller's session (the prompt
+// cache key) when it has one, else from the transcript's first message. The
+// header routes requests to the backend holding their cached prefix, so it must
+// stay fixed for a conversation; the first message alone does not when the
+// system prompt changes between runs, and carries a fresh timestamp in every
+// run that starts without history. Hashing keeps the shape OpenCode accepts.
 func opencodeSessionID(session string, transcript TranscriptContext) string {
-	if session != "" {
-		return session
-	}
 	seed := []byte("soot")
-	if messages := transcript.Messages(); len(messages) > 0 {
+	if session != "" {
+		seed = []byte("session:" + session)
+	} else if messages := transcript.Messages(); len(messages) > 0 {
 		if encoded, err := json.Marshal(messages[0]); err == nil {
 			seed = encoded
 		}

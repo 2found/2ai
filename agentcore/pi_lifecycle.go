@@ -105,13 +105,23 @@ func (h *PiToolHost) StartPiRun(ctx context.Context, task string) (string, error
 // StartPiRunWithLifecycle is StartPiRun with an optional observer for bounded
 // setup stages. It exposes the stage, never recalled memory content.
 func (h *PiToolHost) StartPiRunWithLifecycle(ctx context.Context, task string, lifecycle func(string)) (string, error) {
+	system, _, err := h.startPiRun(ctx, task, lifecycle, true)
+	return system, err
+}
+
+// startPiRun is StartPiRun. With inline false, recalled memory stays out of the
+// system prompt and is returned for the caller to place: the system prompt is
+// the cached prefix of every request in the conversation, and recall is a
+// per-task query, so a memory block there made each run's first request miss
+// the cache for the whole transcript behind it.
+func (h *PiToolHost) startPiRun(ctx context.Context, task string, lifecycle func(string), inline bool) (string, []MemoryEntry, error) {
 	h.gate.Lock()
 	defer h.gate.Unlock()
 	if h.closed {
-		return "", errors.New("Pi tool host is closed")
+		return "", nil, errors.New("Pi tool host is closed")
 	}
 	if !h.lifecycle.CompareAndSwap(false, true) {
-		return "", errors.New("Pi tool host already bound to a run")
+		return "", nil, errors.New("Pi tool host already bound to a run")
 	}
 	ctx, cancel := context.WithCancel(ctx)
 	detach := context.AfterFunc(h.ctx, cancel)
@@ -135,14 +145,18 @@ func (h *PiToolHost) StartPiRunWithLifecycle(ctx context.Context, task string, l
 		}
 	}
 	if err := ctx.Err(); err != nil {
-		return "", err
+		return "", nil, err
 	}
-	system := buildSystemPrompt(h.agent.def, recalled, h.agent.def.enabledSkills())
+	inlined := recalled
+	if !inline {
+		inlined = nil
+	}
+	system := buildSystemPrompt(h.agent.def, inlined, h.agent.def.enabledSkills())
 	h.baseSystem = system
 	for _, section := range h.exts.systemPrompt() {
 		system += "\n\n" + section
 	}
-	return system, nil
+	return system, recalled, nil
 }
 
 // PreparePiTurn applies the composed step gate and step extensions. A ceiling

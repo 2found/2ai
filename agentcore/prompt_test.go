@@ -2,9 +2,14 @@ package agentcore
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strings"
+	"sync"
 	"testing"
+
+	nativehost "github.com/2found/2ai/agentcore/host"
+	"github.com/2found/2ai/ai"
 )
 
 // The recalled-memory block must not re-pay tokens for paraphrases of the same
@@ -425,4 +430,46 @@ func TestMarkCacheAnchorsWritesNothingWhenNothingIsStable(t *testing.T) {
 			t.Fatalf("anchored at %d with no history to vouch for it", i)
 		}
 	}
+}
+
+// A recalled bullet the request still carries verbatim is not repeated; one
+// only a compaction summary covers is, since the summary may have dropped it.
+func TestNativeRecalledMemorySkipsOnlyVisibleBullets(t *testing.T) {
+	recalled := []MemoryEntry{{ID: "a", Kind: "fact", Content: "alpha"}, {ID: "b", Kind: "fact", Content: "bravo"}}
+	block := func(content string) *ai.Message {
+		return &ai.Message{Role: "user", Content: ai.TextContent(content)}
+	}
+	history := []*ai.Message{block("# Recalled memory\n- (fact, id a) alpha\n"), block("hi"), block("# Recalled memory\n- (fact, id b) bravo\n")}
+
+	if got := nativeRecalledMemory(recalled, history, nil); got != nil {
+		t.Fatalf("every bullet is visible, got %q", ai.ContentText(got.Content))
+	}
+	summary, _ := json.Marshal(nativehost.Summary{PrefixCount: 2})
+	got := nativeRecalledMemory(recalled, history, summary)
+	if got == nil || got.Role != "user" {
+		t.Fatal("a summarized bullet was not re-injected")
+	}
+	if text := ai.ContentText(got.Content); !strings.Contains(text, "(fact, id a) alpha") || strings.Contains(text, "bravo") {
+		t.Fatalf("memory = %q", text)
+	}
+}
+
+// Parallel subagents each assemble their recalled memory. The accent fold
+// once shared one stateful transformer and panicked under that concurrency.
+func TestDedupRecalledIsSafeConcurrently(t *testing.T) {
+	recalled := []MemoryEntry{{Content: "Người dùng thích màu xanh dương khi thiết kế giao diện."}, {Content: "Long là kỹ sư phần mềm làm việc với Go."}, {Content: "Truyện Kiếm Lai được đọc nhiều nhất tuần này."}}
+	var wg sync.WaitGroup
+	for range 16 {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for range 200 {
+				if got := dedupRecalled(recalled); len(got) != 3 {
+					t.Errorf("dedupRecalled kept %d entries", len(got))
+					return
+				}
+			}
+		}()
+	}
+	wg.Wait()
 }

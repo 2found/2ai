@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Native runs put recalled memory in a user-role transcript message after the system prompt, holding only facts the visible transcript lacks. The system prompt stays byte-identical across runs, so a resumed conversation reuses the provider's prompt cache. `StartPiRunWithLifecycle` keeps memory inline.
+- An explicit `PromptCacheKey` gives OpenCode Go one stable `x-opencode-session` per conversation. Before, the session was derived from the first message, so it changed whenever the system prompt changed, and a run without history got a new one every time.
+- Memory consolidation stages only the finished run's own messages, not the restored transcript or the recall block.
+- Fix a panic ("slice bounds out of range") when parallel subagents deduplicate recalled memory: the accent folder was a shared, stateful transformer.
+
 ## 0.1.4 — 2026-10-17
 
 Baseline: v0.1.3. Public contracts are unchanged and no configuration migration is required.

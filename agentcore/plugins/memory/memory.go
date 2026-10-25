@@ -79,6 +79,16 @@ type curation struct {
 	store                agentcore.MemoryStore
 	curator              agentcore.MemoryCurator // nil when the store cannot revise entries
 	scopeID              string
+	// restored counts the transcript messages carried in from earlier runs;
+	// their evidence was staged by those runs.
+	restored int
+}
+
+// ObserveMessages records where this run's own messages begin.
+func (c *curation) ObserveMessages(_ context.Context, phase agentcore.ObservePhase, _ int, msgs []agentcore.Message) {
+	if phase == agentcore.PhaseRestore {
+		c.restored = len(msgs)
+	}
 }
 
 // Name identifies the extension in composition diagnostics.
