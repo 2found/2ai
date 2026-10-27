@@ -30,10 +30,14 @@ type ContextHook func(ctx context.Context, msgs []Message) []Message
 // valid view, as Pi requires transformContext to resolve without throwing.
 type PiContextHook func(context.Context, []json.RawMessage) ([]json.RawMessage, error)
 
-// ProviderRequestHook inspects or rewrites the assembled ChatRequest right
-// before it is sent (pi's `before_provider_request`). Use it to pin a stop
-// sequence, cap tools, or tee the request to a logger. Returning a zero-value
-// request (no messages) is treated as "no change".
+// ProviderRequestHook inspects the assembled ChatRequest right before it is
+// sent (pi's `before_provider_request`): use it to tee the request to a logger
+// or measure its prompt. Native runs hand it a read-only projection (model,
+// visible messages with the system prompt first, tool schemas, cache key);
+// returning a different request is reported as a hook failure, since the
+// native request keeps its provider JSON — reshape messages with a
+// PiContextHook instead. Returning a zero-value request (no messages) is
+// treated as "no change".
 type ProviderRequestHook func(ctx context.Context, req ChatRequest) ChatRequest
 
 // MessageEndHook observes a completed assistant message (pi's `message_end`).
@@ -169,8 +173,9 @@ type Hooks struct {
 	Context []ContextHook
 	// PiContext is the native counterpart of Context, used by the Pi host.
 	PiContext []PiContextHook
-	// BeforeProviderRequest runs in order on the assembled request, each seeing
-	// the previous one's output.
+	// BeforeProviderRequest runs in order on the assembled request of every
+	// provider attempt, each seeing the previous one's output (read-only on
+	// native runs; see ProviderRequestHook).
 	BeforeProviderRequest []ProviderRequestHook
 	// MessageEnd observers run in order after each assistant message completes.
 	MessageEnd []MessageEndHook

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Native runs call the `BeforeAgentStart` and `BeforeProviderRequest` hooks, which were declared but never invoked. `BeforeAgentStart` sees the assembled system prompt, the seed messages and the task once per run and may reshape the prompt and seeds (and the prompt again after a goal revision). `BeforeProviderRequest` sees every provider attempt as a read-only projection — model, visible messages with the system prompt first, tool schemas and cache key — so a host can measure exactly what each request carries; a hook that returns a changed request is reported through `OnError` and not applied.
+
 ## 0.1.5 — 2026-10-25
 
 Baseline: v0.1.4. Public contracts only gain the optional `PromptCacheKey` run field; no configuration migration is required.

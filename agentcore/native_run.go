@@ -1,6 +1,7 @@
 package agentcore
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -222,6 +223,16 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 	if err != nil {
 		return result, err
 	}
+	if len(a.hooks.BeforeAgentStart) > 0 {
+		start, err := a.hooks.runBeforeAgentStart(ctx, RunStart{System: system, Messages: slices.Clone(input.Input), Task: input.Task})
+		if err != nil {
+			return result, err
+		}
+		system = start.System
+		if rawInput, err = nativehost.InputMessages(start.Messages); err != nil {
+			return result, fmt.Errorf("before_agent_start: %w", err)
+		}
+	}
 	external, err := json.Marshal(rawInput)
 	if err != nil {
 		return result, err
@@ -393,6 +404,15 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 		if err != nil {
 			return nil, err
 		}
+		if changed && len(a.hooks.BeforeAgentStart) > 0 {
+			// A goal revision re-assembles the prompt; the start hooks shape
+			// it again so their edits survive. There are no seeds to shape.
+			start, err := a.hooks.runBeforeAgentStart(ctx, RunStart{System: system, Task: input.Task})
+			if err != nil {
+				return nil, err
+			}
+			system = start.System
+		}
 		if changed {
 			messages.Append(nativeSystemMessage(system))
 		}
@@ -486,6 +506,11 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 						}
 						if err := h.ObservePiMessages(ctx, PhaseRequest, result.Turns, view); err != nil {
 							return nil, &ai.PreparationError{Cause: err}
+						}
+						if len(a.hooks.BeforeProviderRequest) > 0 {
+							if err := a.observeNativeRequest(ctx, candidate.Model, view, source.Context.Tools); err != nil {
+								return nil, &ai.PreparationError{Cause: err}
+							}
 						}
 						trace.Start(candidate.Model, transcript)
 						return candidate.Stream(ctx, slices.Clone(candidate.Model), transcript, maps.Clone(controls))
@@ -854,6 +879,55 @@ func nativeRecalledMemory(recalled []MemoryEntry, history []*ai.Message, summary
 		return nil
 	}
 	return &ai.Message{Role: "user", Content: ai.TextContent(memory), Timestamp: time.Now().UnixMilli()}
+}
+
+// observeNativeRequest hands the BeforeProviderRequest hooks a projection of
+// the request about to be sent: the model, the visible messages (the system
+// prompt first), the tool schemas and the cache identity. Native requests keep
+// their provider JSON, so the projection is read-only: a hook that returns a
+// different request is reported as a hook failure (use PiContext hooks or
+// generation controls to change what is sent).
+func (a *Agent) observeNativeRequest(ctx context.Context, model json.RawMessage, view json.RawMessage, tools *engine.ToolList) error {
+	var selected struct {
+		ID string `json:"id"`
+	}
+	_ = json.Unmarshal(model, &selected)
+	req := ChatRequest{Model: selected.ID, MaxTokens: a.maxTokens, SessionID: a.cacheKey, CacheKey: a.cacheKey, CacheRetention: a.cacheRetention}
+	var raws []json.RawMessage
+	if err := json.Unmarshal(view, &raws); err != nil {
+		return err
+	}
+	for _, raw := range raws {
+		message, err := nativehost.ProjectMessage(raw)
+		if err != nil {
+			return err
+		}
+		// An empty system message only announces tool changes; Tools
+		// carries those.
+		if message.Role == RoleSystem && message.Content == "" {
+			continue
+		}
+		req.Messages = append(req.Messages, message)
+	}
+	if tools != nil {
+		for _, tool := range tools.Values() {
+			var parameters map[string]any
+			_ = json.Unmarshal(tool.Parameters, &parameters)
+			req.Tools = append(req.Tools, ToolSchema{Name: tool.Name, Description: tool.Description, Parameters: parameters})
+		}
+	}
+	before, err := json.Marshal(req)
+	if err != nil {
+		return err
+	}
+	out, err := a.hooks.runBeforeProviderRequest(ctx, req)
+	if err != nil {
+		return err
+	}
+	if after, err := json.Marshal(out); err == nil && !bytes.Equal(before, after) {
+		return a.hooks.emitErr("before_provider_request", errors.New("native requests are read-only to this hook; rewrite messages with a PiContext hook"))
+	}
+	return nil
 }
 
 func nativeSystemMessage(system string) *ai.Message {
