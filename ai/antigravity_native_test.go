@@ -148,3 +148,47 @@ func TestAntigravityCrossProviderReplay(t *testing.T) {
 		t.Fatal("caller history was mutated")
 	}
 }
+
+func TestAntigravitySessionKeepsTrajectory(t *testing.T) {
+	model := completionsModel{ID: "gemini-3-pro", API: VendorGoogleAntigravity, Provider: VendorGoogleAntigravity, Input: []string{"text"}}
+	transcript := NormalizeContext(Context{Messages: []Message{{Role: "user", Content: TextContent("hi")}}})
+	read := func(controls map[string]json.RawMessage) (trajectory, session, requestID string) {
+		raw, err := antigravityNativePayload(model, transcript, controls, OAuthToken{ProjectID: "project"}, 1)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var body struct {
+			RequestID string `json:"requestId"`
+			Request   struct {
+				SessionID string            `json:"sessionId"`
+				Labels    map[string]string `json:"labels"`
+			} `json:"request"`
+		}
+		if err := json.Unmarshal(raw, &body); err != nil {
+			t.Fatal(err)
+		}
+		return body.Request.Labels["trajectory_id"], body.Request.SessionID, body.RequestID
+	}
+	conv := func(id string) map[string]json.RawMessage {
+		return map[string]json.RawMessage{"sessionId": json.RawMessage(`"` + id + `"`)}
+	}
+	a1, s1, r1 := read(conv("soot-abc"))
+	a2, _, r2 := read(conv("soot-abc"))
+	b, _, _ := read(conv("soot-def"))
+	if a1 != a2 || a1 == b || s1 != "soot-abc" {
+		t.Fatalf("trajectory not tied to session: %s %s %s (session %q)", a1, a2, b, s1)
+	}
+	if !strings.Contains(r1, a1) || r1 == r2 {
+		t.Fatalf("requestId should carry the trajectory and stay unique: %s %s", r1, r2)
+	}
+	n1, ns, _ := read(nil)
+	n2, _, _ := read(nil)
+	if n1 == n2 || ns != "" {
+		t.Fatalf("no session should keep a fresh trajectory and send no sessionId: %s %s %q", n1, n2, ns)
+	}
+	off := conv("soot-abc")
+	off["cacheRetention"] = json.RawMessage(`"none"`)
+	if o1, os, _ := read(off); o1 == a1 || os != "" {
+		t.Fatalf("cacheRetention none must not pin the session: %s %q", o1, os)
+	}
+}

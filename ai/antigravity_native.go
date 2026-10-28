@@ -28,6 +28,9 @@ func StreamAntigravityPooled(ctx context.Context, model json.RawMessage, transcr
 	return nativeOAuthPoolStream(ctx, model, transcript, options, source, "Antigravity", streamAntigravityAccount)
 }
 
+// antigravityTrajectorySpace derives a stable trajectory UUID from a session.
+var antigravityTrajectorySpace = uuid.MustParse("6f1c2b8e-2a4d-5c1e-9b7a-0d3e5f6a7b8c")
+
 func antigravityNativePayload(model completionsModel, transcript TranscriptContext, controls map[string]json.RawMessage, token OAuthToken, now int64) (json.RawMessage, error) {
 	if strings.TrimSpace(token.ProjectID) == "" {
 		return nil, errors.New("Antigravity account has no project ID")
@@ -143,8 +146,19 @@ func antigravityNativePayload(model completionsModel, transcript TranscriptConte
 	if raw, ok := controls["temperature"]; ok {
 		generation["temperature"] = raw
 	}
-	trajectory := uuid.NewString()
+	// A conversation's sessionId keeps its turns on one trajectory and session,
+	// which is what the backend's prompt cache keys on; a fresh trajectory per
+	// request (the old behaviour) starts every turn cold.
+	trajectory, session := uuid.NewString(), ""
+	if samplingString(controls["cacheRetention"]) != "none" {
+		if session = strings.TrimSpace(samplingString(controls["sessionId"])); session != "" {
+			trajectory = uuid.NewSHA1(antigravityTrajectorySpace, []byte(session)).String()
+		}
+	}
 	inner := map[string]any{"contents": contents, "generationConfig": generation, "labels": map[string]string{"used_claude": fmt.Sprint(claude), "used_claude_conservative": fmt.Sprint(claude), "trajectory_id": trajectory, "last_step_index": "1"}}
+	if session != "" {
+		inner["sessionId"] = session
+	}
 	if prompt := GetCurrentSystemPrompt(transcript.Messages()); prompt != "" {
 		inner["systemInstruction"] = map[string]any{"role": "user", "parts": []map[string]string{{"text": SanitizeSurrogates(prompt)}}}
 	}
