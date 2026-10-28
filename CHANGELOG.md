@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 0.1.7 — 2026-10-28
+
+Baseline: v0.1.6. Public contracts only gain `telemetry.WithRecordingParent`; no configuration migration is required.
+
+- An async sub-agent (`spawn_subagent` with `async: true`) records its spans under the parent's `agentray.agent.run` span, which joins the job, instead of under the spawn call's `agentray.tool.execute` span, which ends when the call returns its receipt. A child that opened its run after that span ended was a late no-op, so its whole run (spans, attempts, advisor reviews) sometimes vanished from the run's telemetry. The safe-telemetry lineage (origin execution, parent span) is unchanged.
+- `telemetry.WithRecordingParent(ctx, parent)` rebinds only the private recording parent and keeps the context's safe scope.
+
+Upgrade consuming Go modules with `go get github.com/2found/2ai@v0.1.7`, then run their compatibility checks.
+
 ## 0.1.6 — 2026-10-28
 
 Baseline: v0.1.5. Public contracts are unchanged and no configuration migration is required.
