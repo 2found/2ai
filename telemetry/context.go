@@ -13,6 +13,14 @@ func WithContext(ctx context.Context, parent Context) context.Context {
 	return context.WithValue(ctx, contextKey{}, parent)
 }
 
+// WithRecordingParent rebinds only the private recording parent, keeping ctx's
+// safe scope (its execution lineage). Work that outlives the span it was
+// started from (an async child of a tool call) records under a parent that
+// lives as long as that work is joined, instead of becoming a late no-op.
+func WithRecordingParent(ctx context.Context, parent Context) context.Context {
+	return context.WithValue(ctx, contextKey{}, parent)
+}
+
 func FromContext(ctx context.Context) Context {
 	parent, _ := ctx.Value(contextKey{}).(Context)
 	return parent

@@ -334,7 +334,16 @@ func (t *subagentTool) RunStreaming(ctx context.Context, args string, emit func(
 		}
 		values := context.WithoutCancel(ctx)
 		receipt, err := agentcore.LaunchBackground(ctx, ToolSpawnSubagent, task, func(runCtx context.Context) (string, error) {
-			childCtx := agentcore.WithDelegationDepth(asyncContext{Context: runCtx, values: values}, depth+1)
+			var childCtx context.Context = asyncContext{Context: runCtx, values: values}
+			// The spawn call's span ends with this receipt; a child that opens
+			// its spans after that would be a late no-op and vanish from the
+			// run's telemetry. The launcher's context records under the run,
+			// which outlives every job it joins. The execution lineage (safe
+			// scope) stays the spawn call's.
+			if run := telemetry.FromContext(runCtx); !run.IsZero() {
+				childCtx = telemetry.WithRecordingParent(childCtx, run)
+			}
+			childCtx = agentcore.WithDelegationDepth(childCtx, depth+1)
 			return t.execute(childCtx, in, task, schema, func(note string) {
 				agentcore.ReportProgress(childCtx, note)
 			})
