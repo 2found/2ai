@@ -2,7 +2,13 @@
 
 ## Unreleased
 
+## 0.1.8 — 2026-10-28
+
+Baseline: v0.1.7. No public contract changes and no configuration migration.
+
 - **Antigravity keeps a conversation on one session, so its prompt cache can hit.** The native payload drew a fresh `trajectory_id` for every request and ignored the `sessionId` option, so each turn looked like a new trajectory to the backend. A `sessionId` (unless `cacheRetention` is `none`) now sends `request.sessionId` and a trajectory UUID derived from it; `requestId` stays unique per request. Without a session the payload is unchanged.
+
+Upgrade consuming Go modules with `go get github.com/2found/2ai@v0.1.8`, then run their compatibility checks.
 
 ## 0.1.7 — 2026-10-28
 
