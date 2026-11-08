@@ -377,3 +377,24 @@ func TestPiToolsContextContributionsOutliveIndividualCalls(t *testing.T) {
 		t.Fatal("run context or extension outlived Close")
 	}
 }
+
+func TestSchemaTransformRewritesOnlyTheDeclaration(t *testing.T) {
+	read := piHostTool{"read", func(context.Context, string) (string, error) { return "ok", nil }}
+	a := piHostAgent(t, Config{Tools: NewToolSet(read), Policy: NewAllowList("read")})
+	a.schemaTransform = func(s ToolSchema) ToolSchema {
+		s.Description, s.Parameters = "stub", map[string]any{"type": "object"}
+		return s
+	}
+	h, err := a.OpenPiTools(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer h.Close()
+	definitions, err := h.Definitions(context.Background())
+	if err != nil || !strings.Contains(string(definitions), `"description":"stub"`) {
+		t.Fatalf("declaration not rewritten: %s %v", definitions, err)
+	}
+	if got, _ := h.tools.Get("read"); got.Schema().Description == "stub" {
+		t.Fatal("the tool's own schema must not change")
+	}
+}

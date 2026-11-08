@@ -130,6 +130,9 @@ type Agent struct {
 	// resumed (the disable survives via the durable log → RecoverSession). Empty —
 	// the default — starts every tool enabled.
 	seedDisabledTools []string
+	// schemaTransform, when set, rewrites each schema as it is declared to the
+	// model (see Registry.SetSchemaTransform).
+	schemaTransform func(ToolSchema) ToolSchema
 	// resumeSession makes the run continue the existing durable log at sessionID
 	// instead of opening a fresh one: drive rebuilds history from the log,
 	// replays dangling retry-safe calls with their original call IDs, and skips
@@ -606,6 +609,7 @@ func (a *Agent) Describe() string {
 	// Durability and context.
 	present("session", a.session != nil)
 	line("session_resume", a.resumeSession)
+	present("schema_transform", a.schemaTransform != nil)
 	line("seed_disabled", strings.Join(sorted(a.seedDisabledTools), ", "))
 	present("memory", a.memory != nil)
 	// The compaction budget an operator configured is not the one that applies:

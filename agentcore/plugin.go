@@ -118,6 +118,7 @@ type Registry struct {
 	cacheRetention    string
 	promptResume      bool
 	seedDisabled      []string
+	schemaTransform   func(ToolSchema) ToolSchema
 
 	budgetGate      func(ctx context.Context, u Usage) bool
 	stepGate        func(ctx context.Context, turn int) error
@@ -350,6 +351,15 @@ func (r *Registry) SetProviderSession(s *ProviderSession, id string) error {
 // tool that was broken in a crashed run stays disabled across a resume.
 func (r *Registry) SetSeedDisabledTools(names []string) error {
 	return setSeam(r, "seed_disabled_tools", &r.seedDisabled, names)
+}
+
+// SetSchemaTransform installs a rewrite applied to every permitted tool
+// schema just before it is declared to the model. Execution, validation and
+// permission still use the tool's own schema; only the declaration changes.
+// A host uses it to declare a tool as a stub and deliver the full definition
+// on demand, which keeps the declared tool array stable for prompt caching.
+func (r *Registry) SetSchemaTransform(fn func(ToolSchema) ToolSchema) error {
+	return setSeam(r, "schema_transform", &r.schemaTransform, fn)
 }
 
 // SetMemory installs the working-memory store.

@@ -168,6 +168,9 @@ func (h *PiToolHost) Definitions(ctx context.Context) (json.RawMessage, error) {
 		if !slices.Contains(permitted, schema.Name) && !gateExemptTools[schema.Name] && !h.exempt[schema.Name] {
 			continue
 		}
+		if h.agent.schemaTransform != nil {
+			schema = h.agent.schemaTransform(schema)
+		}
 		mode := "sequential"
 		if isParallelTool(h.tools, ToolCall{Name: schema.Name}) {
 			mode = "parallel"

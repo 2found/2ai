@@ -238,6 +238,7 @@ func (r *Registry) build() (*Agent, error) {
 		cacheKey:           r.cacheKey,
 		cacheRetention:     r.cacheRetention,
 		seedDisabledTools:  r.seedDisabled,
+		schemaTransform:    r.schemaTransform,
 		maxTokens:          r.maxTokens,
 		reasoningEffort:    r.reasoningEffort,
 		outputSchema:       r.outputSchema,
