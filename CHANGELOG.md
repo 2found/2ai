@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.1.9 — 2026-11-09
+
+Baseline: v0.1.8. Public API gains `Registry.SetSchemaTransform`; no configuration migration and no change for hosts that do not call it.
+
+- **A host can declare tools to the model as stubs.** `Registry.SetSchemaTransform(fn)` installs a rewrite applied to each permitted tool schema just before it is declared to the model. Execution, validation and permission keep using the tool's own schema; only the declaration changes. A host uses it to declare a tool as a stub and deliver the full definition on demand, which keeps the declared tool array stable for prompt caching. `Agent.Describe` reports `schema_transform` when set.
+
+Upgrade consuming Go modules with `go get github.com/2found/2ai@v0.1.9`, then run their compatibility checks.
+
 ## 0.1.8 — 2026-10-28
 
 Baseline: v0.1.7. No public contract changes and no configuration migration.
