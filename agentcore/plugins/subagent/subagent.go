@@ -140,10 +140,16 @@ func (p Plugin) Register(r *agentcore.Registry) error {
 func (p Plugin) BeginRun(ctx context.Context, info agentcore.RunInfo) (agentcore.Extension, error) {
 	settings := p.normalized(info.Limits)
 	settings.MaxDepth = depthCeiling(ctx, settings.MaxDepth)
+	// A background child's mailbox rides its context (see job_send); only the
+	// run at the depth it was made for claims it.
+	mail := mailboxFor(ctx, info.Depth)
 	if info.Depth >= settings.MaxDepth {
+		if mail != nil {
+			return steerer{mail}, nil
+		}
 		return nil, nil
 	}
-	return &subagentTool{parent: info.Agent, settings: settings, durable: info.Durable}, nil
+	return &subagentTool{parent: info.Agent, settings: settings, durable: info.Durable, mail: mail}, nil
 }
 
 type depthCeilingKey struct{}
@@ -209,6 +215,8 @@ type subagentTool struct {
 	settings Plugin
 	durable  bool
 	spawned  int32 // atomic; children spawned this run
+	// mail carries job_send messages to this run when it is a background child.
+	mail *mailbox
 }
 
 // Name identifies both the extension and the tool — they are the same thing.
@@ -357,8 +365,24 @@ func (t *subagentTool) RunStreaming(ctx context.Context, args string, emit func(
 			return "", errors.New("async delegation is not available for this run")
 		}
 		values := context.WithoutCancel(ctx)
-		receipt, err := agentcore.LaunchBackground(ctx, ToolSpawnSubagent, task, func(runCtx context.Context) (string, error) {
+		// A self-fork can be steered with job_send; a named delegate is an
+		// opaque closure with no step boundary to deliver to.
+		var mail *mailbox
+		if who := strings.TrimSpace(in.Agent); who == "" || strings.EqualFold(who, "self") {
+			mail = &mailbox{depth: depth + 1}
+		}
+		receipt, err := agentcore.LaunchBackground(ctx, ToolSpawnSubagent, task, func(runCtx context.Context) (answer string, err error) {
 			var childCtx context.Context = asyncContext{Context: runCtx, values: values}
+			if mail != nil {
+				agentcore.HandleJobMessages(runCtx, mail.push)
+				childCtx = context.WithValue(childCtx, mailboxKey{}, mail)
+				defer func() {
+					if left := mail.close(); err == nil {
+						answer += undelivered(left)
+					}
+				}()
+			}
+			agentcore.PublishJobOutput(runCtx, "[sub-agent] started: "+clip(task, 120)+"\n")
 			// The spawn call's span ends with this receipt; a child that opens
 			// its spans after that would be a late no-op and vanish from the
 			// run's telemetry. The launcher's context records under the run,
@@ -370,6 +394,9 @@ func (t *subagentTool) RunStreaming(ctx context.Context, args string, emit func(
 			childCtx = t.delegated(childCtx, depth)
 			return t.execute(childCtx, in, task, schema, func(note string) {
 				agentcore.ReportProgress(childCtx, note)
+				// The job board shows the newest notes of a running job, so the
+				// parent can see which step the child is on.
+				agentcore.PublishJobOutput(runCtx, note+"\n")
 			})
 		})
 		if err != nil {
@@ -584,4 +611,13 @@ func (t *subagentTool) childSession(ctx context.Context) (string, error) {
 		return "", errors.New("durable sub-agent requires a recorded native invocation")
 	}
 	return t.parent.SessionID() + "/" + key, nil
+}
+
+// clip shortens s for a one-line note.
+func clip(s string, n int) string {
+	s = strings.Join(strings.Fields(s), " ")
+	if len(s) <= n {
+		return s
+	}
+	return strings.ToValidUTF8(s[:n], "") + "..."
 }

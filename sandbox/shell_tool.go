@@ -365,6 +365,12 @@ func (t *ShellTool) execute(ctx context.Context, req agentcore.SandboxExec, emit
 // log, when there is one), and renders the result for the model.
 func runBounded(ctx context.Context, sb agentcore.Sandbox, req agentcore.SandboxExec, emit func(string), log *shellLog) (string, error) {
 	out := newShellOutput(log)
+	// Inside a background job the output also streams to the job, so the model
+	// can read how a long command is doing; the context is the job's own, so a
+	// synchronous call never publishes.
+	if agentcore.InBackgroundJob(ctx) {
+		out.live = func(text string) { agentcore.PublishJobOutput(ctx, text) }
+	}
 	stop := out.report(emit)
 	res, err := captureOutput(ctx, sb, req, out)
 	stop()
