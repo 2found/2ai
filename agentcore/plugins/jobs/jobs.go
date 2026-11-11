@@ -11,6 +11,12 @@
 // by another run, and every job is cancelled when its run ends. The board's
 // records are checkpointed: a resumed run can still read the results of jobs
 // that finished, and learns which ones the end of the previous run interrupted.
+//
+// A running job is not a black box: its work publishes output as it goes
+// (agentcore.PublishJobOutput), and job_status / job_list show the newest part
+// of it. Two opt-ins extend the board: Plugin.AllowSend adds job_send, which
+// steers a running background sub-agent, and Plugin.Survive lets a job the
+// model marks with job_keep outlive the run that started it (see Survival).
 package jobs
 
 import (
@@ -18,6 +24,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -49,6 +56,11 @@ type record struct {
 	EndedAt   time.Time `json:"ended_at,omitzero"`
 	// Announced is set once a completion notice carried the job.
 	Announced bool `json:"announced,omitempty"`
+	// Output is the newest part of the job's output, kept once it ended
+	// without a result (failed, cancelled, interrupted), bounded.
+	Output string `json:"output,omitempty"`
+	// Keep marks a job the model asked to outlive its run (job_keep).
+	Keep bool `json:"keep,omitempty"`
 }
 
 func (r record) done() bool { return r.State != running }
@@ -68,6 +80,13 @@ var errNotFound = errors.New("job not found")
 type Plugin struct {
 	// MaxConcurrent bounds running jobs per run. Zero uses 15; -1 disables the ceiling.
 	MaxConcurrent int
+	// AllowSend adds job_send, which delivers a message to a running
+	// background sub-agent at its next step. Off by default: it changes the
+	// tool list the model sees.
+	AllowSend bool
+	// Survive, when set, adds job_keep and lets kept jobs outlive their run.
+	// Nil keeps every job bound to its run, exactly as without the option.
+	Survive *Survival
 }
 
 // Name identifies the plugin and the extension it installs.
@@ -103,7 +122,7 @@ const (
 const interrupted = "interrupted: the run ended before this job finished; start it again if it is still needed"
 
 // BeginRun gives the run its own board.
-func (p Plugin) BeginRun(_ context.Context, info agentcore.RunInfo) (agentcore.Extension, error) {
+func (p Plugin) BeginRun(ctx context.Context, info agentcore.RunInfo) (agentcore.Extension, error) {
 	if p.MaxConcurrent < -1 {
 		return nil, fmt.Errorf("jobs: MaxConcurrent must be nonnegative or -1")
 	}
@@ -115,7 +134,13 @@ func (p Plugin) BeginRun(_ context.Context, info agentcore.RunInfo) (agentcore.E
 	if maxBytes <= 0 {
 		maxBytes = defaultResultBytes
 	}
-	return &board{maxConcurrent: limit, maxBytes: maxBytes, stopWait: stopWait}, nil
+	b := &board{maxConcurrent: limit, maxBytes: maxBytes, stopWait: stopWait, allowSend: p.AllowSend, mu: new(sync.Mutex)}
+	if p.Survive != nil {
+		if err := b.attach(ctx, info, p.Survive); err != nil {
+			return nil, err
+		}
+	}
+	return b, nil
 }
 
 // board is one run's background work and the agentcore.Extension the loop
@@ -124,8 +149,16 @@ type board struct {
 	maxConcurrent int
 	maxBytes      int
 	stopWait      time.Duration
+	allowSend     bool
+	// survive is the resolved Survival config, nil when jobs never outlive
+	// their run. conv is the conversation the run belongs to.
+	survive *survival
+	conv    string
 
-	mu   sync.Mutex
+	// mu guards every record and the job lists. With Survive set it is the
+	// Hold's mutex, shared by every board of the Hold, so a job changes owner
+	// (run, then Hold, then another run) and ends atomically.
+	mu   *sync.Mutex
 	seq  int
 	jobs []*job // oldest first
 }
@@ -134,19 +167,40 @@ type job struct {
 	record
 	cancel   context.CancelFunc
 	finished chan struct{} // closed once the work has returned
+	out      *outputBuffer
+	maxBytes int
+	// onMsg receives job_send messages; set by the work through
+	// agentcore.HandleJobMessages.
+	onMsg func(string) error
+	// owner is the board the job belongs to; nil while the job is detached in
+	// a Hold. Guarded by the board mutex.
+	owner *board
+	hold  *Hold
+	conv  string
+	// timer expires a kept job at its max age; expired is the reason.
+	timer   *time.Timer
+	expired string
 }
 
 // Name identifies the extension in composition diagnostics.
 func (*board) Name() string { return "jobs" }
 
-// Tools contributes the four observation tools.
+// Tools contributes the four observation tools, plus job_send and job_keep
+// when the plugin enables them.
 func (b *board) Tools() []agentcore.Tool {
-	return []agentcore.Tool{
+	tools := []agentcore.Tool{
 		jobListTool{jobTool{b, "job_list"}},
 		jobStatusTool{jobTool{b, "job_status"}},
 		jobWaitTool{jobTool{b, "job_wait"}},
 		jobCancelTool{jobTool{b, "job_cancel"}},
 	}
+	if b.allowSend {
+		tools = append(tools, jobSendTool{jobTool{b, "job_send"}})
+	}
+	if b.survive != nil {
+		tools = append(tools, jobKeepTool{jobTool{b, "job_keep"}})
+	}
+	return tools
 }
 
 // RunContext binds the launcher to the run's context, which is how a tool finds
@@ -182,15 +236,42 @@ func (b *board) start(ctx context.Context, tool, label string, run func(context.
 		return record{}, fmt.Errorf("concurrent job capacity reached (%d)", b.maxConcurrent)
 	}
 	b.seq++
-	jobCtx, cancel := context.WithCancel(ctx)
-	j := &job{record: record{ID: fmt.Sprintf("job_%d", b.seq), Tool: tool, Label: label, State: running, StartedAt: time.Now()}, cancel: cancel, finished: make(chan struct{})}
+	// With Survive set the job's context must not die with the run: a kept job
+	// outlives it. Everything else is cancelled with the run, as before.
+	base := ctx
+	if b.survive != nil {
+		base = context.WithoutCancel(ctx)
+	}
+	jobCtx, cancel := context.WithCancel(base)
+	j := &job{record: record{ID: fmt.Sprintf("job_%d", b.seq), Tool: tool, Label: label, State: running, StartedAt: time.Now()}, cancel: cancel, finished: make(chan struct{}), out: new(outputBuffer), maxBytes: b.maxBytes, owner: b, hold: b.survive.hold(), conv: b.conv}
 	b.jobs = append(b.jobs, j)
 	snapshot := j.record
+	mu := b.mu
 	b.mu.Unlock()
+	stopRun := func() bool { return false }
+	if b.survive != nil {
+		stopRun = context.AfterFunc(ctx, func() {
+			mu.Lock()
+			kept := j.Keep
+			mu.Unlock()
+			if !kept {
+				cancel()
+			}
+		})
+	}
+	jobCtx = agentcore.WithBackgroundJob(jobCtx, agentcore.BackgroundJob{
+		Output: j.out.write,
+		OnMessage: func(handle func(string) error) {
+			mu.Lock()
+			j.onMsg = handle
+			mu.Unlock()
+		},
+	})
 
 	go func() {
 		defer close(j.finished)
 		defer cancel()
+		defer stopRun()
 		var out string
 		var err error
 		// A panicking job must not take the process down: it becomes a failed
@@ -203,21 +284,35 @@ func (b *board) start(ctx context.Context, tool, label string, run func(context.
 			}()
 			out, err = run(jobCtx)
 		}()
-		b.mu.Lock()
-		defer b.mu.Unlock()
+		mu.Lock()
 		j.EndedAt = time.Now()
 		switch {
 		case jobCtx.Err() != nil && err != nil:
 			j.State = cancelled
 			j.Err = jobCtx.Err().Error()
+			if j.expired != "" {
+				j.Err = j.expired
+			}
 		case err != nil:
 			j.State = failed
 			j.Err = err.Error()
 		default:
 			j.State = succeeded
-			j.Result = agentcore.TruncateMiddle(out, b.maxBytes)
+			j.Result = agentcore.TruncateMiddle(out, j.maxBytes)
 		}
-		b.evictLocked()
+		if j.State != succeeded {
+			j.Output = j.out.text(keepOutput)
+		}
+		j.onMsg = nil
+		if j.timer != nil {
+			j.timer.Stop()
+		}
+		ended := j.endedDetachedLocked()
+		if j.owner != nil {
+			j.owner.evictLocked()
+		}
+		mu.Unlock()
+		j.hold.notify(ended)
 	}()
 	return snapshot, nil
 }
@@ -306,13 +401,16 @@ func (b *board) drain() []record {
 	return out
 }
 
-// CloseRun cancels everything this run started. A job outliving its run would
-// be unobservable and uncancellable — nothing left to look at it.
+// CloseRun cancels everything this run started, except the jobs the model kept
+// when the plugin has Survive set. A job outliving its run without that would be
+// unobservable and uncancellable — nothing left to look at it.
 func (b *board) CloseRun() {
+	// A kept job survives this call (see detach); everything else is cancelled.
+	defer b.detach()
 	b.mu.Lock()
 	pending := make([]*job, 0, len(b.jobs))
 	for _, j := range b.jobs {
-		if !j.done() {
+		if !j.done() && !j.Keep {
 			pending = append(pending, j)
 		}
 	}
@@ -340,7 +438,7 @@ func (b *board) TurnStopping(ctx context.Context, _ agentcore.StopInfo) agentcor
 	waitCtx, cancel := context.WithTimeout(ctx, b.stopWait)
 	defer cancel()
 	for _, r := range b.list() {
-		if r.done() {
+		if r.done() || r.Keep {
 			continue
 		}
 		if settled, err := b.wait(waitCtx, r.ID); err != nil || !settled.done() {
@@ -385,8 +483,11 @@ func (b *board) NativeState() (json.RawMessage, error) {
 	out := checkpoint{Seq: b.seq, Jobs: make([]record, 0, len(b.jobs))}
 	for _, j := range b.jobs {
 		r := j.record
-		if !r.done() {
+		if !r.done() && !(r.Keep && b.survive != nil) {
 			r.State, r.Err, r.EndedAt, r.Announced = cancelled, interrupted, time.Now(), false
+		}
+		if !r.done() || r.State == cancelled {
+			r.Output = j.out.text(keepOutput)
 		}
 		out.Jobs = append(out.Jobs, r)
 	}
@@ -403,24 +504,55 @@ func (b *board) RestoreNativeState(raw json.RawMessage) error {
 	if saved.Seq < 0 || len(saved.Jobs) > saved.Seq {
 		return errors.New("jobs: invalid checkpoint")
 	}
-	restored := make([]*job, 0, len(saved.Jobs))
+	// Jobs adopted from the Hold at BeginRun are live: a checkpointed record
+	// of one of them yields to the running job. A checkpointed running job the
+	// Hold no longer holds died with the process (or expired) and is reported
+	// as interrupted, exactly like a job the end of a run cut off.
+	b.mu.Lock()
+	live := map[string]*job{}
+	for _, j := range b.jobs {
+		live[j.ID] = j
+	}
+	b.mu.Unlock()
+	restored := make([]*job, 0, len(saved.Jobs)+len(live))
 	for _, r := range saved.Jobs {
 		switch r.State {
 		case succeeded, failed, cancelled:
+		case running:
+			if b.survive == nil || !r.Keep {
+				return fmt.Errorf("jobs: invalid checkpointed state %q", r.State)
+			}
 		default:
 			return fmt.Errorf("jobs: invalid checkpointed state %q", r.State)
 		}
 		if r.ID == "" {
 			return errors.New("jobs: checkpointed job has no id")
 		}
+		if j := live[r.ID]; j != nil {
+			restored = append(restored, j)
+			delete(live, r.ID)
+			continue
+		}
+		if r.State == running {
+			r.State, r.Err, r.EndedAt, r.Announced = cancelled, interrupted, time.Now(), false
+		}
 		r.Result = agentcore.TruncateMiddle(r.Result, b.maxBytes)
+		r.Output = agentcore.TruncateMiddle(r.Output, keepOutput)
 		finished := make(chan struct{})
 		close(finished)
-		restored = append(restored, &job{record: r, cancel: func() {}, finished: finished})
+		restored = append(restored, &job{record: r, cancel: func() {}, finished: finished, out: new(outputBuffer), maxBytes: b.maxBytes, owner: b})
 	}
 	b.mu.Lock()
 	defer b.mu.Unlock()
-	b.seq, b.jobs = saved.Seq, restored
+	for _, j := range b.jobs {
+		if live[j.ID] != nil {
+			restored = append(restored, j)
+		}
+	}
+	if len(live) > 0 {
+		sort.SliceStable(restored, func(i, k int) bool { return restored[i].StartedAt.Before(restored[k].StartedAt) })
+	}
+	b.seq, b.jobs = max(saved.Seq, b.seq), restored
 	b.evictLocked()
 	return nil
 }
@@ -503,11 +635,10 @@ type jobListTool struct{ jobTool }
 
 func (t jobListTool) Schema() agentcore.ToolSchema {
 	return agentcore.ToolSchema{
-		Name:   "job_list",
-		Strict: agentcore.ToolStrictEnabled,
-		Description: "List the background jobs this session started, newest first, with their state and duration. " +
-			"Jobs still running when you finish your answer are cancelled — wait for the ones whose results you need.",
-		Parameters: map[string]any{"type": "object", "properties": map[string]any{}, "additionalProperties": false},
+		Name:        "job_list",
+		Strict:      agentcore.ToolStrictEnabled,
+		Description: t.board.listDescription(),
+		Parameters:  map[string]any{"type": "object", "properties": map[string]any{}, "additionalProperties": false},
 	}
 }
 
@@ -518,7 +649,17 @@ func (t jobListTool) Run(_ context.Context, _ string) (string, error) {
 	}
 	var b strings.Builder
 	for _, j := range jobs {
-		fmt.Fprintf(&b, "%s\t%s\t%s\t%s\t%s\n", j.ID, j.State, j.Tool, j.duration().Round(time.Millisecond), j.Label)
+		state := string(j.State)
+		if j.Keep && !j.done() {
+			state += " (kept)"
+		}
+		fmt.Fprintf(&b, "%s\t%s\t%s\t%s\t%s", j.ID, state, j.Tool, j.duration().Round(time.Millisecond), j.Label)
+		if !j.done() {
+			if line := t.board.lastLine(j.ID); line != "" {
+				fmt.Fprintf(&b, "\n\t> %s", line)
+			}
+		}
+		b.WriteString("\n")
 	}
 	return strings.TrimRight(b.String(), "\n"), nil
 }
@@ -527,19 +668,36 @@ type jobStatusTool struct{ jobTool }
 
 func (t jobStatusTool) Schema() agentcore.ToolSchema {
 	return jobIDSchema("job_status",
-		"Read one background job: its state, and its full output once it has finished.", nil)
+		"Read one background job: its state, and its full output once it has finished. "+
+			"While it runs you get the newest part of its output so far; pass output_bytes for more of it.",
+		map[string]any{
+			"output_bytes": map[string]any{
+				"type":        "integer",
+				"description": fmt.Sprintf("How much of a running job's output to return, newest first. Defaults to %d; at most %d.", defaultStatusTail, t.board.maxBytes),
+			},
+		})
 }
 
 func (t jobStatusTool) Run(_ context.Context, args string) (string, error) {
-	id, err := jobIDArg(args)
-	if err != nil {
-		return "", err
+	var in struct {
+		ID          string `json:"id"`
+		OutputBytes int    `json:"output_bytes"`
 	}
-	j, err := t.board.get(id)
-	if err != nil {
-		return "", err
+	if err := json.Unmarshal([]byte(args), &in); err != nil {
+		return "", fmt.Errorf("invalid arguments: %w", err)
 	}
-	return renderJob(j), nil
+	id := strings.TrimSpace(in.ID)
+	if id == "" {
+		return "", errors.New("id is required")
+	}
+	if in.OutputBytes < 0 {
+		return "", errors.New("output_bytes must not be negative")
+	}
+	tail := defaultStatusTail
+	if in.OutputBytes > 0 {
+		tail = min(in.OutputBytes, t.board.maxBytes)
+	}
+	return t.board.render(id, tail)
 }
 
 type jobWaitTool struct{ jobTool }
@@ -578,7 +736,11 @@ func (t jobWaitTool) Run(ctx context.Context, args string) (string, error) {
 		return "", err
 	}
 	if !j.done() {
-		return fmt.Sprintf("Job %s is still running after %s. It was not cancelled — continue with other work and check job_status later.", j.ID, wait), nil
+		msg := fmt.Sprintf("Job %s is still running after %s. It was not cancelled — continue with other work and check job_status later.", j.ID, wait)
+		if out := t.board.outputTail(j.ID, waitTail); out != "" {
+			msg += "\nOutput so far (newest part):\n" + out
+		}
+		return msg, nil
 	}
 	return renderJob(j), nil
 }
@@ -600,6 +762,13 @@ func (t jobCancelTool) Run(_ context.Context, args string) (string, error) {
 	}
 	j.cancel()
 	return fmt.Sprintf("Cancellation requested for %s.", id), nil
+}
+
+func unmarshalArgs(args string, v any) error {
+	if err := json.Unmarshal([]byte(args), v); err != nil {
+		return fmt.Errorf("invalid arguments: %w", err)
+	}
+	return nil
 }
 
 // jobIDArg pulls the required id out of a job tool's arguments.
@@ -627,8 +796,63 @@ func renderJob(j record) string {
 		}
 		return head + "\n" + j.Result
 	case failed, cancelled:
+		if j.Output != "" {
+			return head + "\n" + j.Err + "\nLast output:\n" + j.Output
+		}
 		return head + "\n" + j.Err
 	default:
 		return head
 	}
+}
+
+// render formats one job for job_status. A running job also shows the newest
+// tail bytes of its output, which is what lets the model decide to wait, keep
+// working or cancel.
+func (b *board) render(id string, tail int) (string, error) {
+	j, err := b.find(id)
+	if err != nil {
+		return "", err
+	}
+	b.mu.Lock()
+	r := j.record
+	b.mu.Unlock()
+	text := renderJob(r)
+	if r.done() {
+		return text, nil
+	}
+	if r.Keep {
+		text += "\nkept: it keeps running after this run ends and can be listed and cancelled from your next turn."
+	}
+	if total := j.out.size(); total > 0 {
+		out := j.out.text(tail)
+		text += fmt.Sprintf("\noutput so far (%d bytes in all, newest %d shown):\n%s", total, min(tail, len(out)), out)
+	}
+	return text, nil
+}
+
+// outputTail is the newest n bytes of a running job's output, or "".
+func (b *board) outputTail(id string, n int) string {
+	j, err := b.find(id)
+	if err != nil {
+		return ""
+	}
+	return j.out.text(n)
+}
+
+// lastLine is the newest line of a job's output, or "".
+func (b *board) lastLine(id string) string {
+	j, err := b.find(id)
+	if err != nil {
+		return ""
+	}
+	return j.out.lastLine()
+}
+
+func (b *board) listDescription() string {
+	d := "List the background jobs this session started, newest first, with their state and duration; a running job also shows its newest output line. " +
+		"Jobs still running when you finish your answer are cancelled — wait for the ones whose results you need."
+	if b.survive != nil {
+		d += " Use job_keep for work that should keep running after your answer; kept jobs are listed here on your next turn."
+	}
+	return d
 }

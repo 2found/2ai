@@ -159,6 +159,9 @@ type shellOutput struct {
 	// background logs are kept even when short: their path was already given
 	// to the model.
 	keepLog bool
+	// live, when set, receives every chunk as it arrives: a background job
+	// publishes it as the job's live output.
+	live func(string)
 }
 
 func newShellOutput(log *shellLog) *shellOutput {
@@ -182,6 +185,9 @@ func (w shellStream) Write(p []byte) (int, error) {
 	w.o.recent.write(p)
 	w.o.writes++
 	w.o.log.write(p)
+	if w.o.live != nil {
+		w.o.live(string(p))
+	}
 	return len(p), nil
 }
 

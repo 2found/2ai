@@ -295,3 +295,59 @@ func skipOnWindows(t *testing.T) {
 		t.Skip("POSIX shell")
 	}
 }
+
+// Inside a background job the command's output streams to the job as it is
+// produced, bounded by the job's own buffer; the same command run in the
+// foreground publishes nothing.
+func TestShellBackgroundPublishesLiveOutputToTheJob(t *testing.T) {
+	skipOnWindows(t)
+	var job func(context.Context) (string, error)
+	ctx := agentcore.WithBackgroundLauncher(context.Background(), func(_, _ string, run func(context.Context) (string, error)) (json.RawMessage, error) {
+		job = run
+		return json.RawMessage(`{"id":"job_1"}`), nil
+	})
+	tool := NewShellTool(nil, agentcore.SandboxLimits{}, nil)
+	if _, err := tool.Run(ctx, `{"command":"echo first; sleep 0.3; echo second >&2; sleep 0.3; echo third","run_in_background":true}`); err != nil {
+		t.Fatal(err)
+	}
+	var mu sync.Mutex
+	var published strings.Builder
+	var sawFirstBeforeEnd bool
+	jobCtx := agentcore.WithBackgroundJob(context.Background(), agentcore.BackgroundJob{Output: func(text string) {
+		mu.Lock()
+		defer mu.Unlock()
+		published.WriteString(text)
+	}})
+	done := make(chan string, 1)
+	go func() { res, _ := job(jobCtx); done <- res }()
+	deadline := time.After(10 * time.Second)
+	for !sawFirstBeforeEnd {
+		select {
+		case <-done:
+			t.Fatal("the job ended before its first output was visible")
+		case <-deadline:
+			t.Fatal("no live output")
+		case <-time.After(10 * time.Millisecond):
+		}
+		mu.Lock()
+		sawFirstBeforeEnd = strings.Contains(published.String(), "first")
+		mu.Unlock()
+	}
+	res := <-done
+	mu.Lock()
+	got := published.String()
+	mu.Unlock()
+	for _, want := range []string{"first", "second", "third"} {
+		if !strings.Contains(got, want) || !strings.Contains(res, want) {
+			t.Fatalf("%q missing from live output %q or result %q", want, got, res)
+		}
+	}
+
+	// A foreground call has no job: nothing is published and nothing breaks.
+	if out, err := tool.Run(context.Background(), `{"command":"echo sync"}`); err != nil || !strings.Contains(out, "sync") {
+		t.Fatalf("foreground = %q, %v", out, err)
+	}
+	if strings.Contains(published.String(), "sync") {
+		t.Fatal("a foreground command published to a job")
+	}
+}

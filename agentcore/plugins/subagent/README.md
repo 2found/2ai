@@ -167,12 +167,34 @@ original native checkpoint.
   child to hand back an artifact reference instead of prose.
 - **No per-child budget.** `MaxPerRun` counts spawns, not tokens or cost; one
   expensive child can consume the whole run's budget.
-- **A child cannot be steered.** No steering queue, no step gate — once started
-  it runs to completion or cancellation.
+- **A synchronous child cannot be steered.** No steering queue, no step gate —
+  once started it runs to completion or cancellation. An async self-fork can
+  receive `job_send` messages when `jobs.Plugin{AllowSend: true}` is set (see
+  below); a named delegate cannot.
+- **An async child cannot outlive its run.** Its token usage is folded into the
+  spawning Agent, which has finished by then; `jobs.Plugin{Survive: ...}` refuses
+  to keep a `spawn_subagent` job.
 - **`Delegate` is fully opaque.** agentcore cannot verify that a delegate's
   scope is narrower than the caller's; that guarantee is the consumer's.
 - **Depth is the only recursion bound.** There is no detection of a semantic
   cycle below `MaxDepth` (A asks B the same question A was asked).
+
+## Steering and live progress of an async child
+
+An async self-fork registers a message handler for its job
+(`agentcore.HandleJobMessages`) and a mailbox on the child's context. The
+mailbox is claimed once, by the child's own run (a grandchild inherits the
+context but runs at another delegation depth, so it never reads it). The child's
+extension (`BeforeStep`, and `TurnStopping` for a message that arrives while it
+composes its final answer) turns queued messages into user messages the loop
+persists in the child's transcript. A child at the depth cap still gets no
+`spawn_subagent`: it gets the mailbox extension only. Depth limits, the delegating
+policy intersection and budgets are untouched: a message adds no capability.
+Messages left unread when the child ends are appended to its job result.
+
+The child also publishes a start line and each current tool or progress note as
+the job's live output (`agentcore.PublishJobOutput`), which `job_status` and
+`job_list` show while it runs.
 
 ## Native execution
 
