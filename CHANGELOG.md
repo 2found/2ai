@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.2.1 — 2026-11-12
+
+Baseline: v0.2.0. No migration is required; a host that never set `SharePromptCache` changes behavior as described below.
+
 - **The summary call shares the run's prompt cache by default.** A compaction first asks for the handoff as one more turn of the live conversation and falls back to the standalone call when the reply is not a summary block. `CompactionSettings.StandaloneSummary` turns this off; a run with a forced tool choice or an output schema keeps the standalone call, and a compaction model (`Registry.SetCompactionModel`) serves only the standalone call, so set `StandaloneSummary` to have it write every summary. `CompactionSettings.SharePromptCache` is deprecated and ignored. A scripted provider that recognizes only the standalone request (by `SummarySystemPrompt`) now sees one extra conversation request per compaction: set `StandaloneSummary` in such a test, or answer the request that ends with the compaction instruction.
 
 ## 0.2.0 — 2026-11-11
