@@ -23,3 +23,21 @@ func TestValidateURL(t *testing.T) {
 		t.Errorf("plain http should pass when explicitly allowed: %v", err)
 	}
 }
+
+func TestHTTPToolNetworkHosts(t *testing.T) {
+	tool := NewHTTPRequestTool(nil)
+	hosts, err := tool.NetworkHosts(`{"url":"https://API.Example.com:8443/v1?q={{cred:K}}"}`)
+	if err != nil || len(hosts) != 1 || hosts[0] != "api.example.com" {
+		t.Fatalf("NetworkHosts = %v, %v", hosts, err)
+	}
+	for _, args := range []string{
+		`not json`,
+		`{"url":"/relative"}`,
+		`{"url":"https://{{cred:HOST}}/x"}`, // where a secret goes must not depend on a secret
+		`{"url":"https://{{cred:HOST}}.example.com/x"}`,
+	} {
+		if hosts, err := tool.NetworkHosts(args); err == nil {
+			t.Errorf("NetworkHosts(%s) = %v, want an error", args, hosts)
+		}
+	}
+}

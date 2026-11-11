@@ -84,8 +84,8 @@ type Tool struct{}
 // Name identifies the tool.
 func (Tool) Name() string { return ToolName }
 
-// PiArgumentPreparation selects this plugin's bundled synchronous Pi hook.
-func (Tool) PiArgumentPreparation() string { return "ask-v1" }
+// ArgumentPreparation selects this plugin's bundled synchronous Pi hook.
+func (Tool) ArgumentPreparation() string { return "ask-v1" }
 
 // Schema advertises the tool to the model.
 func (Tool) Schema() agentcore.ToolSchema {
@@ -176,7 +176,6 @@ func (p Plugin) BeginRun(_ context.Context, info agentcore.RunInfo) (agentcore.E
 	return p, nil
 }
 func (Plugin) Tools() []agentcore.Tool { return []agentcore.Tool{Tool{}} }
-func (Plugin) SelfGated() bool         { return true }
 
 // QuestionText renders the bounded question for hosts with a plain-text human
 // channel. Structured clients may render the original payload directly.

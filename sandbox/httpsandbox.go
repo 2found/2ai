@@ -49,9 +49,10 @@ type sandboxHTTPRequest struct {
 	// io.LimitReader.
 	MaxBodyBytes int64
 	// AllowHosts confines the container's egress to these hosts (and their
-	// subdomains) via the sandbox's filtering proxy. It must never be empty: an
-	// empty list means "open network" to the backend, which would let a redirect
-	// or a rebound DNS name reach the host's internal services.
+	// subdomains) via the sandbox's filtering proxy. It must never be empty (the
+	// Docker backend refuses network with no allowlist) and never AnyHost:
+	// unrestricted egress would let a redirect or a rebound DNS name reach the
+	// host's internal services.
 	AllowHosts []string
 	// FollowRedirects enables curl -L (web_fetch); http_request surfaces a 3xx
 	// to the model instead of following it.
@@ -64,9 +65,9 @@ type sandboxHTTPRequest struct {
 // parsed here into the same shape the host path gets from net/http, so the two
 // substrates render identically.
 func execSandboxHTTP(ctx context.Context, sb agentcore.Sandbox, tool string, req sandboxHTTPRequest) (*http.Response, []byte, error) {
-	if len(req.AllowHosts) == 0 {
-		// Fail closed. Without an allowlist the container gets an open network and
-		// no IP-level guard, which is strictly worse than the host path it replaced.
+	if len(req.AllowHosts) == 0 || newEgressAllow(req.AllowHosts).unrestricted {
+		// Fail closed. Without a concrete allowlist the container has no
+		// IP-level guard, which is strictly worse than the host path it replaced.
 		return nil, nil, fmt.Errorf("%s: refusing to run in the sandbox without an egress allowlist", tool)
 	}
 	timeout := req.TimeoutSeconds

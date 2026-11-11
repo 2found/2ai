@@ -46,6 +46,9 @@ func TestEndToEndCredentialReachesServerNotTrace(t *testing.T) {
 
 	env := agentcore.DefaultEnv()
 	env.Credentials = vault
+	env.CredentialGrants = []agentcore.CredentialGrant{{
+		Name: "API_KEY", Tools: []string{sandbox.ToolHTTPRequest}, Hosts: []string{"127.0.0.1"},
+	}}
 	agent, err := agentcore.New(agentcore.Config{
 		NativeProvider: httpCallProvider(args),
 		Model:          "test",
@@ -117,4 +120,54 @@ func httpCallProvider(args json.RawMessage) *ai.FallbackProvider {
 			ai.Message{Role: "assistant", StopReason: "stop", Content: ai.BlockContent(ai.ContentBlock{Type: "text", Text: "done"})},
 		),
 	}}}
+}
+
+// A host-scoped grant does not follow the call elsewhere: the same credential
+// aimed at a host the grant does not name is refused before it is resolved.
+func TestCredentialGrantRefusesOtherHosts(t *testing.T) {
+	var hits int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	vault := credential.NewVault()
+	if err := vault.Put("API_KEY", "sk-real-secret"); err != nil {
+		t.Fatalf("Put: %v", err)
+	}
+	tool := sandbox.NewHTTPRequestTool(nil,
+		sandbox.WithHTTPAllowHosts([]string{"127.0.0.1"}),
+		sandbox.WithHTTPAllowPlain(true),
+	)
+	tool.AllowAllIPsForTest()
+	args, _ := json.Marshal(map[string]any{
+		"method":  "GET",
+		"url":     srv.URL,
+		"headers": map[string]string{"Authorization": "Bearer {{cred:API_KEY}}"},
+	})
+	env := agentcore.DefaultEnv()
+	env.Credentials = vault
+	env.CredentialGrants = []agentcore.CredentialGrant{{
+		Name: "API_KEY", Tools: []string{sandbox.ToolHTTPRequest}, Hosts: []string{"api.example.com"},
+	}}
+	agent, err := agentcore.New(agentcore.Config{
+		NativeProvider: httpCallProvider(args),
+		Model:          "test",
+		Tools:          agentcore.NewToolSet(tool),
+		Policy:         agentcore.NewAllowList(sandbox.ToolHTTPRequest),
+		Env:            &env,
+	})
+	if err != nil {
+		t.Fatalf("New: %v", err)
+	}
+	res, _ := agent.Prompt(context.Background(), "fetch it")
+	if hits != 0 {
+		t.Fatalf("the request reached a host the grant does not name (%d hits)", hits)
+	}
+	for _, tr := range res.Tools {
+		if strings.Contains(tr.Error, "sk-real-secret") || strings.Contains(tr.Args, "sk-real-secret") {
+			t.Fatal("secret leaked into the trace")
+		}
+	}
 }

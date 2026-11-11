@@ -240,20 +240,9 @@ func antigravityControlledPayload(raw json.RawMessage, opts NativeGenerationCont
 		if err := ValidateNativeToolChoice(opts.ToolChoice, names); err != nil {
 			return nil, err
 		}
-		mode := "VALIDATED"
-		switch opts.ToolChoice.Mode {
-		case protocol.ToolChoiceAuto:
-			mode = "AUTO"
-		case protocol.ToolChoiceNone:
-			mode = "NONE"
-		case protocol.ToolChoiceNamed, protocol.ToolChoiceRequired:
-			mode = "ANY"
+		if opts.ToolChoice.Mode != protocol.ToolChoiceDefault {
+			request["toolConfig"], _ = json.Marshal(map[string]any{"functionCallingConfig": antigravityFunctionCalling(opts.ToolChoice.Mode, opts.ToolChoice.Name)})
 		}
-		choice := map[string]any{"mode": mode}
-		if opts.ToolChoice.Mode == protocol.ToolChoiceNamed {
-			choice["allowedFunctionNames"] = []string{opts.ToolChoice.Name}
-		}
-		request["toolConfig"], _ = json.Marshal(map[string]any{"functionCallingConfig": choice})
 	} else {
 		delete(request, "toolConfig")
 	}

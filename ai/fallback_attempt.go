@@ -3,16 +3,20 @@ package ai
 import (
 	"context"
 	"errors"
+	"time"
 )
 
 // AttemptOutcome keeps the original terminal event and any withheld
 // metadata. The caller decides retry/escalation and publishes a final terminal;
 // a failed attempt must not settle the logical request's stream.
 type AttemptOutcome struct {
-	AdmissionError   error
-	Terminal         AssistantMessageEvent
-	pending          []AssistantMessageEvent
-	Committed        bool
+	AdmissionError error
+	Terminal       AssistantMessageEvent
+	pending        []AssistantMessageEvent
+	Committed      bool
+	// FirstOutput is when the first non-replayable output (or a done
+	// terminal without any) arrived; zero when nothing did.
+	FirstOutput      time.Time
 	failureKind      string
 	producerAdmitted bool
 }
@@ -124,6 +128,9 @@ func relayNativeAttempt(ctx context.Context, out *AssistantMessageEventStream, o
 				return result, err
 			}
 			if event.Type == "done" {
+				if result.FirstOutput.IsZero() {
+					result.FirstOutput = time.Now()
+				}
 				if err = admit(); err != nil {
 					return result, err
 				}
@@ -141,6 +148,9 @@ func relayNativeAttempt(ctx context.Context, out *AssistantMessageEventStream, o
 		}
 		if err = admit(); err != nil {
 			return result, err
+		}
+		if result.FirstOutput.IsZero() {
+			result.FirstOutput = time.Now()
 		}
 		out.Push(event)
 	}

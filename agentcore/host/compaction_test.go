@@ -11,7 +11,7 @@ import (
 	"github.com/2found/2ai/ai/protocol"
 )
 
-func piLongRequest() []json.RawMessage {
+func nativeLongRequest() []json.RawMessage {
 	result := []json.RawMessage{json.RawMessage(`{"role":"system","content":"policy","toolsAdded":[{"name":"read","parameters":{"type":"object"}}]}`), json.RawMessage(`{"role":"user","content":"complete the task"}`)}
 	for i := 0; i < 4; i++ {
 		result = append(result, json.RawMessage(`{"role":"assistant","content":[{"type":"thinking","thinking":"reason","thinkingSignature":"opaque"},{"type":"toolCall","id":"reused","name":"read","arguments":{}}]}`))
@@ -21,21 +21,21 @@ func piLongRequest() []json.RawMessage {
 	return result
 }
 
-func piRequestJSON(value any) json.RawMessage { raw, _ := json.Marshal(value); return raw }
+func nativeRequestJSON(value any) json.RawMessage { raw, _ := json.Marshal(value); return raw }
 
-func TestPiRequestCompactionPreservesTranscriptAndReusesExactPrefix(t *testing.T) {
-	messages := piLongRequest()
-	raw := piRequestJSON(messages)
+func TestNativeRequestCompactionPreservesTranscriptAndReusesExactPrefix(t *testing.T) {
+	messages := nativeLongRequest()
+	raw := nativeRequestJSON(messages)
 	before := string(raw)
 	calls, writes, total := 0, 0, 0
-	c := Compactor{revision: "r", config: CompactionPolicy{Budget: 1500, KeepRecent: 500, Summarize: func(_ context.Context, raw json.RawMessage, revision string) (string, protocol.Usage, error) {
+	c := Compactor{revision: "r", config: CompactionPolicy{Budget: 1500, KeepRecent: 500, Instructions: "keep the evidence", Summarize: func(_ context.Context, raw json.RawMessage, instructions string) (string, protocol.Usage, error) {
 		calls++
-		if ValidateMessages(raw) != nil || revision != "r" {
+		if ValidateMessages(raw) != nil || instructions != "keep the evidence" {
 			t.Fatal("summary split tool batch")
 		}
 		return "Task and earlier evidence.", protocol.Usage{InputTokens: 17}, nil
 	}}, record: func(context.Context, json.RawMessage) error { writes++; return nil }, usage: func(u protocol.Usage) { total += u.InputTokens }}
-	view := c.Transform(context.Background(), raw)
+	view := c.testTransform(context.Background(), raw)
 	if c.saved == nil || calls != 1 || writes != 1 || total != 17 || len(view) >= len(raw) {
 		t.Fatalf("compaction did not persist/save bytes: calls=%d writes=%d usage=%d", calls, writes, total)
 	}
@@ -54,25 +54,25 @@ func TestPiRequestCompactionPreservesTranscriptAndReusesExactPrefix(t *testing.T
 	}
 	// A fresh compactor loads only its durable summary. No paid replay or usage
 	// charge occurs when the same full native transcript is presented again.
-	persisted, err := ParseSummary(string(piRequestJSON(c.saved)))
+	persisted, err := ParseSummary(string(nativeRequestJSON(c.saved)))
 	if err != nil {
 		t.Fatal(err)
 	}
 	restored := Compactor{revision: "r", saved: &persisted, config: c.config, record: c.record, usage: c.usage}
-	again := restored.Transform(context.Background(), raw)
+	again := restored.testTransform(context.Background(), raw)
 	if !SameJSON(view, again) || calls != 1 || total != 17 {
 		t.Fatal("restored summary reran or charged historical work")
 	}
 	// An opaque edit invalidates the summary even when rendered text is equal.
 	messages[2] = json.RawMessage(strings.Replace(string(messages[2]), "opaque", "different-signature", 1))
-	changed := restored.Transform(context.Background(), piRequestJSON(messages))
+	changed := restored.testTransform(context.Background(), nativeRequestJSON(messages))
 	if calls != 2 || SameJSON(view, changed) {
 		t.Fatal("summary survived a changed native prefix")
 	}
 }
 
-func TestPiRequestCompactionIteratesWithoutLosingEarlierSummary(t *testing.T) {
-	messages := piLongRequest()
+func TestNativeRequestCompactionIteratesWithoutLosingEarlierSummary(t *testing.T) {
+	messages := nativeLongRequest()
 	calls := 0
 	c := Compactor{revision: "r", config: CompactionPolicy{Budget: 1500, KeepRecent: 500, Summarize: func(_ context.Context, raw json.RawMessage, _ string) (string, protocol.Usage, error) {
 		calls++
@@ -81,17 +81,17 @@ func TestPiRequestCompactionIteratesWithoutLosingEarlierSummary(t *testing.T) {
 		}
 		return "prior facts and more evidence", protocol.Usage{}, nil
 	}}}
-	c.Transform(context.Background(), piRequestJSON(messages))
+	c.testTransform(context.Background(), nativeRequestJSON(messages))
 	first := c.saved.PrefixCount
-	messages = append(messages, piLongRequest()[2:]...)
-	view := c.Transform(context.Background(), piRequestJSON(messages))
+	messages = append(messages, nativeLongRequest()[2:]...)
+	view := c.testTransform(context.Background(), nativeRequestJSON(messages))
 	if calls != 2 || c.saved.PrefixCount <= first || c.saved.PrefixDigest != PrefixDigest(messages[:c.saved.PrefixCount]) || ValidateMessages(view) != nil {
 		t.Fatal("iterative compaction lost original prefix indexing")
 	}
 }
 
-func TestPiRequestCompactionFailuresUseSafeNativeView(t *testing.T) {
-	raw := piRequestJSON(piLongRequest())
+func TestNativeRequestCompactionFailuresUseSafeNativeView(t *testing.T) {
+	raw := nativeRequestJSON(nativeLongRequest())
 	for _, kind := range []string{"error", "panic", "empty", "tool markup", "too long", "storage", "cancel"} {
 		t.Run(kind, func(t *testing.T) {
 			ctx, cancel := context.WithCancel(context.Background())
@@ -121,7 +121,7 @@ func TestPiRequestCompactionFailuresUseSafeNativeView(t *testing.T) {
 				t.Fatal("failed summary published")
 				return nil
 			}, usage: func(u protocol.Usage) { charged += u.InputTokens }}
-			if got := c.Transform(ctx, raw); !SameJSON(got, raw) || c.saved != nil {
+			if got := c.testTransform(ctx, raw); !SameJSON(got, raw) || c.saved != nil {
 				t.Fatal("failed summary changed view")
 			}
 			if kind != "panic" && charged != 9 {
@@ -132,26 +132,26 @@ func TestPiRequestCompactionFailuresUseSafeNativeView(t *testing.T) {
 }
 
 func TestCompactionKeepsCurrentRequestDespiteLossySummary(t *testing.T) {
-	raw := piRequestJSON(piLongRequest())
+	raw := nativeRequestJSON(nativeLongRequest())
 	task := "Write synthesis.json with release_code, budget, sites and total_cost; do not edit policy.json."
 	c := Compactor{revision: "r", config: CompactionPolicy{Budget: 1500, KeepRecent: 500, Task: task, Summarize: func(context.Context, json.RawMessage, string) (string, protocol.Usage, error) {
 		return "facts only", protocol.Usage{}, nil
 	}}}
-	view := c.Transform(context.Background(), raw)
+	view := c.testTransform(context.Background(), raw)
 	if c.saved == nil || !strings.Contains(string(view), task) {
 		t.Fatal("exact current request missing", string(view))
 	}
-	if !SameJSON(view, c.Transform(context.Background(), raw)) {
+	if !SameJSON(view, c.testTransform(context.Background(), raw)) {
 		t.Fatal("restored view dropped or duplicated task")
 	}
 	bad := *c.saved
-	bad.Message = piRequestJSON(map[string]any{"role": "user", "content": "[Earlier work summary]\n<|open|>tools<|sep|>session_query", "agentrayContextSummary": "id", "timestamp": 1})
-	if _, err := ParseSummary(string(piRequestJSON(bad))); err == nil {
+	bad.Message = nativeRequestJSON(map[string]any{"role": "user", "content": "[Earlier work summary]\n<|open|>tools<|sep|>session_query", "agentrayContextSummary": "id", "timestamp": 1})
+	if _, err := ParseSummary(string(nativeRequestJSON(bad))); err == nil {
 		t.Fatal("persisted wire output accepted as summary")
 	}
 }
 
-func TestPiRequestCompactionDigestAndCorruptRecords(t *testing.T) {
+func TestNativeRequestCompactionDigestAndCorruptRecords(t *testing.T) {
 	a := []json.RawMessage{json.RawMessage(`{"role":"user","extension":9007199254740992}`)}
 	b := []json.RawMessage{json.RawMessage(`{"extension":9007199254740992,"role":"user"}`)}
 	c := []json.RawMessage{json.RawMessage(`{"role":"user","extension":9007199254740993}`)}
@@ -159,13 +159,13 @@ func TestPiRequestCompactionDigestAndCorruptRecords(t *testing.T) {
 		t.Fatal("digest lost JSON identity or numeric precision")
 	}
 	broken := []json.RawMessage{json.RawMessage(`{"role":"user","content":"task"}`), json.RawMessage(`{"role":"assistant","content":[{"type":"toolCall","id":"c","name":"write"}]}`), json.RawMessage(`{"role":"user","content":"later"}`)}
-	if compactionCut(broken, 1, 1) != 0 {
+	if compactionCut(new(transcriptMemo).of(broken), 1, 1) != 0 {
 		t.Fatal("compaction split an unfinished effect batch")
 	}
 }
 
 func TestCompactionCutsHistoricalUserFactsButKeepsLoneTask(t *testing.T) {
-	fact := piRequestJSON(map[string]string{"role": "user", "content": strings.Repeat("historical evidence ", 1000)})
+	fact := nativeRequestJSON(map[string]string{"role": "user", "content": strings.Repeat("historical evidence ", 1000)})
 	system := json.RawMessage(`{"role":"system","content":"policy"}`)
 	question := json.RawMessage(`{"role":"user","content":"Explain the findings."}`)
 	for _, tc := range []struct {
@@ -177,7 +177,7 @@ func TestCompactionCutsHistoricalUserFactsButKeepsLoneTask(t *testing.T) {
 		{"two facts and question", []json.RawMessage{system, fact, fact, question}, 2},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			if got := compactionCut(tc.messages, 4096, 2048); got != tc.wantCut {
+			if got := compactionCut(new(transcriptMemo).of(tc.messages), 4096, 2048); got != tc.wantCut {
 				t.Fatalf("cut = %d, want %d", got, tc.wantCut)
 			}
 		})
@@ -187,21 +187,21 @@ func TestCompactionCutsHistoricalUserFactsButKeepsLoneTask(t *testing.T) {
 func TestSummaryViewKeepsAStablePrefixAcrossRuns(t *testing.T) {
 	msg := func(role, text string) json.RawMessage {
 		if role == "assistant" {
-			return piRequestJSON(map[string]any{"role": role, "content": []map[string]string{{"type": "text", "text": text}}})
+			return nativeRequestJSON(map[string]any{"role": role, "content": []map[string]string{{"type": "text", "text": text}}})
 		}
-		return piRequestJSON(map[string]string{"role": role, "content": text})
+		return nativeRequestJSON(map[string]string{"role": role, "content": text})
 	}
 	envelope := func(text string) json.RawMessage {
 		inner, _ := json.Marshal(map[string]string{"speaker": "alice", "text": text})
 		return msg("user", string(inner))
 	}
-	summary := piRequestJSON(map[string]any{"role": "user", "content": "[Earlier work summary]\nfacts", "agentrayContextSummary": "id", "timestamp": 1})
+	summary := nativeRequestJSON(map[string]any{"role": "user", "content": "[Earlier work summary]\nfacts", "agentrayContextSummary": "id", "timestamp": 1})
 	folded := []json.RawMessage{msg("system", "policy"), msg("user", "old task"), msg("assistant", "old answer")}
 	saved := &Summary{Revision: "r", PrefixCount: len(folded), PrefixDigest: PrefixDigest(folded), Message: summary}
 	view := func(task string, messages ...json.RawMessage) []json.RawMessage {
 		c := Compactor{revision: "r", saved: saved, config: CompactionPolicy{Task: task}}
 		var out []json.RawMessage
-		if err := json.Unmarshal(c.Transform(context.Background(), piRequestJSON(append(slices.Clone(folded), messages...))), &out); err != nil {
+		if err := json.Unmarshal(c.testTransform(context.Background(), nativeRequestJSON(append(slices.Clone(folded), messages...))), &out); err != nil {
 			t.Fatal(err)
 		}
 		return out
@@ -210,17 +210,17 @@ func TestSummaryViewKeepsAStablePrefixAcrossRuns(t *testing.T) {
 	runOne := []json.RawMessage{msg("system", "policy"), envelope("first task"), msg("assistant", "one")}
 	one := view("first task", runOne...)
 	two := view(second, append(runOne, msg("system", "policy"), envelope(second), msg("assistant", "two"))...)
-	if len(two) < len(one) || !SameJSON(piRequestJSON(one), piRequestJSON(two[:len(one)])) {
-		t.Fatalf("run two does not extend run one's request:\n%s\n%s", piRequestJSON(one), piRequestJSON(two))
+	if len(two) < len(one) || !SameJSON(nativeRequestJSON(one), nativeRequestJSON(two[:len(one)])) {
+		t.Fatalf("run two does not extend run one's request:\n%s\n%s", nativeRequestJSON(one), nativeRequestJSON(two))
 	}
-	if !strings.Contains(string(piRequestJSON(one)), "[Earlier work summary]") {
-		t.Fatal("saved summary was not applied", string(piRequestJSON(one)))
+	if !strings.Contains(string(nativeRequestJSON(one)), "[Earlier work summary]") {
+		t.Fatal("saved summary was not applied", string(nativeRequestJSON(one)))
 	}
-	if strings.Contains(string(piRequestJSON(two)), "[Current request") {
+	if strings.Contains(string(nativeRequestJSON(two)), "[Current request") {
 		t.Fatal("pinned a request the retained tail already carries")
 	}
 	// A continuation slice keeps the task its folded input carried.
-	if got := view("old task", msg("user", "continue")); !strings.Contains(string(piRequestJSON(got)), `[Current request — verbatim]\nold task`) {
-		t.Fatal("folded current request was not pinned", string(piRequestJSON(got)))
+	if got := view("old task", msg("user", "continue")); !strings.Contains(string(nativeRequestJSON(got)), `[Current request — verbatim]\nold task`) {
+		t.Fatal("folded current request was not pinned", string(nativeRequestJSON(got)))
 	}
 }

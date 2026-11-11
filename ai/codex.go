@@ -271,15 +271,9 @@ type codexStreamEvent struct {
 		Arguments string `json:"arguments"`
 	} `json:"item,omitempty"` // response.output_item.done
 	Response *struct {
-		Status string `json:"status"`
-		Usage  *struct {
-			InputTokens        int `json:"input_tokens"`
-			OutputTokens       int `json:"output_tokens"`
-			InputTokensDetails *struct {
-				CachedTokens int `json:"cached_tokens"`
-			} `json:"input_tokens_details,omitempty"`
-		} `json:"usage,omitempty"`
-		Error *struct {
+		Status string              `json:"status"`
+		Usage  *responsesWireUsage `json:"usage,omitempty"`
+		Error  *struct {
 			Code    string `json:"code"`
 			Message string `json:"message"`
 		} `json:"error,omitempty"`
@@ -373,17 +367,7 @@ func (p *CodexProvider) Stream(ctx context.Context, req protocol.ChatRequest) (<
 				if ev.Response != nil {
 					stopReason = ev.Response.Status
 					if u := ev.Response.Usage; u != nil {
-						cached := 0
-						if u.InputTokensDetails != nil {
-							cached = u.InputTokensDetails.CachedTokens
-						}
-						// input_tokens includes the cached prefix; the neutral
-						// contract keeps InputTokens full-price-only.
-						usage = protocol.Usage{
-							InputTokens:     u.InputTokens - cached,
-							OutputTokens:    u.OutputTokens,
-							CacheReadTokens: cached,
-						}
+						usage = u.usage()
 					}
 				}
 			case "response.failed", "error":

@@ -28,17 +28,17 @@ type RunFinalizer interface {
 	FinalizeRun(context.Context, RunResult, error) error
 }
 
-// ControlPiRun checks the composed controllers without executing a provider.
-func (h *PiToolHost) ControlPiRun(ctx context.Context, info StepInfo) (string, error) {
+// ControlRun checks the composed controllers without executing a provider.
+func (h *ToolHost) ControlRun(ctx context.Context, info StepInfo) (string, error) {
 	h.gate.RLock()
 	defer h.gate.RUnlock()
 	if h.closed {
-		return "", errors.New("Pi tool host is closed")
+		return "", errors.New("tool host is closed")
 	}
 	return h.controlRun(ctx, info)
 }
-func (h *PiToolHost) controlRun(ctx context.Context, info StepInfo) (string, error) {
-	info.Usage = addUsage(info.Usage, h.agent.peekChildUsage())
+func (h *ToolHost) controlRun(ctx context.Context, info StepInfo) (string, error) {
+	info.Usage = info.Usage.Add(h.agent.peekChildUsage())
 	for _, ext := range h.exts.all {
 		if c, ok := ext.(RunController); ok {
 			var reason string

@@ -91,21 +91,36 @@ func walkOrderLess(a, b string) bool {
 // host substrate
 // ---------------------------------------------------------------------------
 
-// hostFS runs the file tools' I/O directly on the host, under the Workspace
-// guards that have always protected them: relative paths only, symlinks
-// resolved and re-checked against the root, and a refusal to follow a symlink
-// out on write.
+// hostFS runs the file tools' I/O directly on the host. Every operation goes
+// through an os.Root opened on the workspace, so the kernel resolves each path
+// component inside the workspace: a symlink (or a directory swapped for one
+// mid-call) that points outside is refused at open, not checked beforehand and
+// raced afterwards. Symlinks that stay inside the workspace still work.
 type hostFS struct{ ws *Workspace }
+
+// open validates rel and opens the workspace root. The caller closes the root.
+func (h hostFS) open(rel string) (*os.Root, string, error) {
+	_, clean, err := h.ws.Resolve(rel)
+	if err != nil {
+		return nil, "", err
+	}
+	root, err := h.ws.openRoot()
+	if err != nil {
+		return nil, "", err
+	}
+	return root, clean, nil
+}
 
 func (h hostFS) Stat(ctx context.Context, rel string) (fsStat, error) {
 	if err := ctx.Err(); err != nil {
 		return fsStat{}, err
 	}
-	resolved, err := h.resolveExisting(rel)
+	root, clean, err := h.open(rel)
 	if err != nil {
 		return fsStat{}, err
 	}
-	info, err := os.Stat(resolved)
+	defer root.Close()
+	info, err := root.Stat(clean)
 	if err != nil {
 		return fsStat{}, err
 	}
@@ -116,46 +131,94 @@ func (h hostFS) ReadFile(ctx context.Context, rel string) ([]byte, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
-	resolved, err := h.resolveExisting(rel)
+	root, clean, err := h.open(rel)
 	if err != nil {
 		return nil, err
 	}
-	data, err := os.ReadFile(resolved)
+	defer root.Close()
+	data, err := root.ReadFile(clean)
 	if ctx.Err() != nil {
 		return nil, ctx.Err()
 	}
 	return data, err
 }
 
-func (h hostFS) WriteFile(_ context.Context, rel string, data []byte) error {
-	abs, _, err := h.ws.Resolve(rel)
+// WriteFile replaces rel atomically: the content goes to a temp file in the
+// same directory, which is then renamed over the target, so a reader (or a
+// crash) sees the old file or the new one, never a torn mix. An existing
+// file's permission bits are kept. A symlink at rel is refused rather than
+// replaced, and parent directories are created inside the root only.
+func (h hostFS) WriteFile(ctx context.Context, rel string, data []byte) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	root, clean, err := h.open(rel)
 	if err != nil {
 		return err
 	}
-	dir := filepath.Dir(abs)
-	if err := os.MkdirAll(dir, 0o755); err != nil {
-		return err
-	}
-	resolvedDir, err := filepath.EvalSymlinks(dir)
-	if err != nil {
-		return err
-	}
-	if !inside(h.ws.Root(), resolvedDir) {
-		return fmt.Errorf("path escapes workspace")
-	}
-	if info, err := os.Lstat(abs); err == nil && info.Mode()&os.ModeSymlink != 0 {
-		return fmt.Errorf("refusing to follow symlink")
-	}
-	return os.WriteFile(abs, data, 0o644)
+	defer root.Close()
+	return atomicWrite(root, clean, data)
 }
 
-func (h hostFS) List(ctx context.Context, root string) ([]string, error) {
-	abs, err := searchRoot(h.ws, root)
+func atomicWrite(root *os.Root, name string, data []byte) error {
+	dir := filepath.Dir(name)
+	if err := root.MkdirAll(dir, 0o755); err != nil {
+		return err
+	}
+	mode := fs.FileMode(0o644)
+	switch info, err := root.Lstat(name); {
+	case err == nil && info.Mode()&fs.ModeSymlink != 0:
+		return fmt.Errorf("refusing to follow symlink")
+	case err == nil && !info.Mode().IsRegular():
+		return fmt.Errorf("%s is not a regular file", filepath.ToSlash(name))
+	case err == nil:
+		mode = info.Mode().Perm()
+	case !errors.Is(err, fs.ErrNotExist):
+		return err
+	}
+	tmp := filepath.Join(dir, "."+filepath.Base(name)+".tmp-"+randHex(6))
+	f, err := root.OpenFile(tmp, os.O_WRONLY|os.O_CREATE|os.O_EXCL, mode)
+	if err != nil {
+		return err
+	}
+	_, err = f.Write(data)
+	if err == nil {
+		err = f.Chmod(mode) // the umask applied at create; restore the exact bits
+	}
+	if cerr := f.Close(); err == nil {
+		err = cerr
+	}
+	if err == nil {
+		err = root.Rename(tmp, name)
+	}
+	if err != nil {
+		_ = root.Remove(tmp)
+	}
+	return err
+}
+
+func (h hostFS) List(ctx context.Context, sub string) ([]string, error) {
+	if h.ws == nil || h.ws.Root() == "" {
+		return nil, fmt.Errorf("workspace is not configured")
+	}
+	start := "."
+	if strings.TrimSpace(sub) != "" && filepath.Clean(sub) != "." {
+		_, clean, err := h.ws.Resolve(sub)
+		if err != nil {
+			return nil, err
+		}
+		start = filepath.ToSlash(clean)
+	}
+	root, err := h.ws.openRoot()
 	if err != nil {
 		return nil, err
 	}
+	defer root.Close()
+	if _, err := root.Stat(start); err != nil {
+		return nil, err
+	}
 	var out []string
-	walkErr := filepath.WalkDir(abs, func(path string, d fs.DirEntry, err error) error {
+	walkErr := fs.WalkDir(root.FS(), start, func(path string, d fs.DirEntry, err error) error {
 		if err := ctx.Err(); err != nil {
 			return err
 		}
@@ -163,15 +226,15 @@ func (h hostFS) List(ctx context.Context, root string) ([]string, error) {
 			return nil // skip unreadable entries rather than aborting the search
 		}
 		if d.IsDir() {
-			if _, skip := skipDir[d.Name()]; skip && path != abs {
-				return filepath.SkipDir
+			if _, skip := skipDir[d.Name()]; skip && path != start {
+				return fs.SkipDir
 			}
 			return nil
 		}
 		if !d.Type().IsRegular() {
 			return nil // never follow symlinks out of the workspace
 		}
-		out = append(out, workspaceRel(h.ws, path))
+		out = append(out, path)
 		if len(out) > 100000 {
 			return fmt.Errorf("file listing exceeds 100000 entries; narrow path")
 		}
@@ -180,28 +243,25 @@ func (h hostFS) List(ctx context.Context, root string) ([]string, error) {
 	if walkErr != nil {
 		return nil, walkErr
 	}
-	return filterIgnored(ctx, h, out, root)
+	return filterIgnored(ctx, h, out, sub)
 }
 
 func (h hostFS) ReadEach(ctx context.Context, rels []string, maxBytes int64, fn func(string, []byte) error) error {
+	root, err := h.ws.openRoot()
+	if err != nil {
+		return err
+	}
+	defer root.Close()
 	for _, rel := range rels {
 		if err := ctx.Err(); err != nil {
 			return err
 		}
-		abs := filepath.Join(h.ws.Root(), filepath.FromSlash(rel))
-		info, err := os.Stat(abs)
-		if err != nil || info.IsDir() || info.Size() > maxBytes {
-			if err := fn(rel, nil); err != nil {
-				return err
+		var data []byte
+		name := filepath.FromSlash(rel)
+		if info, err := root.Stat(name); err == nil && info.Mode().IsRegular() && info.Size() <= maxBytes {
+			if data, err = root.ReadFile(name); err != nil {
+				data = nil
 			}
-			continue
-		}
-		data, err := os.ReadFile(abs)
-		if err != nil {
-			if err := fn(rel, nil); err != nil {
-				return err
-			}
-			continue
 		}
 		if err := fn(rel, data); err != nil {
 			return err
@@ -214,11 +274,12 @@ func (h hostFS) ReadRange(ctx context.Context, rel string, offset int64, limit i
 	if err := ctx.Err(); err != nil {
 		return nil, "", err
 	}
-	path, err := h.resolveExisting(rel)
+	root, clean, err := h.open(rel)
 	if err != nil {
 		return nil, "", err
 	}
-	f, err := os.Open(path)
+	defer root.Close()
+	f, err := root.Open(clean)
 	if err != nil {
 		return nil, "", err
 	}
@@ -265,23 +326,6 @@ func (h hostFS) ReadRange(ctx context.Context, rel string, offset int64, limit i
 		return nil, "", err
 	}
 	return data, strings.ToUpper(hex.EncodeToString(hash.Sum(nil)[:fileHashHexLen/2])), err
-}
-
-// resolveExisting applies the read-path guard: resolve the relative path, follow
-// symlinks, and refuse anything that lands outside the workspace root.
-func (h hostFS) resolveExisting(rel string) (string, error) {
-	abs, _, err := h.ws.Resolve(rel)
-	if err != nil {
-		return "", err
-	}
-	resolved, err := filepath.EvalSymlinks(abs)
-	if err != nil {
-		return "", err
-	}
-	if !inside(h.ws.Root(), resolved) {
-		return "", fmt.Errorf("path escapes workspace")
-	}
-	return resolved, nil
 }
 
 // ---------------------------------------------------------------------------
@@ -340,7 +384,7 @@ fi`
 		return fsStat{}, err
 	}
 	if res.ExitCode == fsExitNotFound {
-		return fsStat{}, fmt.Errorf("%s: no such file or directory", rel)
+		return fsStat{}, fmt.Errorf("%s: %w", rel, fs.ErrNotExist)
 	}
 	if res.ExitCode != 0 {
 		return fsStat{}, sandboxCmdErr("stat", res)
@@ -369,7 +413,7 @@ func (s sandboxFS) ReadFile(ctx context.Context, rel string) ([]byte, error) {
 		return nil, err
 	}
 	if !found {
-		return nil, fmt.Errorf("%s: no such file or directory", rel)
+		return nil, fmt.Errorf("%s: %w", rel, fs.ErrNotExist)
 	}
 	return out, nil
 }
@@ -380,9 +424,15 @@ func (s sandboxFS) WriteFile(ctx context.Context, rel string, data []byte) error
 	}
 	// Content rides stdin, so it never appears in argv or env — the same property
 	// the sandboxed HTTP path needs for a resolved credential.
+	// Atomic like the host path: write a sibling temp file (cp -p first so an
+	// existing file's mode carries over), then rename it over the target. A
+	// symlink at the target is refused, never written through.
 	const script = `p="$1"
-mkdir -p "$(dirname "$p")" || exit 1
-cat > "$p"`
+[ -L "$p" ] && { echo "refusing to follow symlink" >&2; exit 1; }
+d=$(dirname "$p"); t="$d/.$(basename "$p").tmp-$$"
+mkdir -p "$d" || exit 1
+if [ -f "$p" ]; then cp -p "$p" "$t" || exit 1; fi
+cat > "$t" && mv -f "$t" "$p" || { rm -f "$t"; exit 1; }`
 	res, err := s.exec(ctx, agentcore.SandboxExec{
 		Argv:  []string{"/bin/sh", "-c", script, "sh", rel},
 		Stdin: string(data),

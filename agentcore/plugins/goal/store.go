@@ -68,8 +68,8 @@ func (s *Store) Revisions() []Revision {
 
 // Update replaces the condition and marks it for the loop to persist. A revision
 // to the identical condition is dropped: it is not a change, and letting it
-// through would write an EntryGoal and rebuild the system prompt — invalidating
-// the provider's KV cache for the whole prefix — in exchange for nothing.
+// through would write an EntryGoal and a new statement of the condition in
+// exchange for nothing.
 func (s *Store) Update(goal, reason string) bool {
 	changed, _ := s.update(context.Background(), goal, reason)
 	return changed
@@ -100,7 +100,7 @@ func (s *Store) update(ctx context.Context, goal, reason string) (bool, error) {
 //
 // The distinction is the whole point of the drain flag. A recovered condition is
 // not a revision: nothing changed, the log already holds an EntryGoal for it, and
-// the system prompt is being assembled from it right now. Routing it through
+// the run is about to state it to the model. Routing it through
 // Update would leave pending set, so the resumed run's very first turn would
 // drain it — appending a duplicate EntryGoal and emitting "goal updated: <the
 // same goal>" to a watching human about a change that never happened, which is

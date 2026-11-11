@@ -10,7 +10,6 @@ import (
 	"sync"
 
 	"github.com/2found/2ai/agentcore"
-	"github.com/2found/2ai/agentcore/host"
 	"github.com/2found/2ai/ai"
 )
 
@@ -76,7 +75,7 @@ func (r *nativeRecorder) wrap(inner ai.StreamFn) ai.StreamFn {
 			if err != nil {
 				return nil, err
 			}
-			projected, err := host.ProjectMessage(raw)
+			projected, err := ai.ProjectMessage(raw)
 			if err != nil {
 				return nil, err
 			}

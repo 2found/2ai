@@ -84,38 +84,6 @@ func TestRepeatGuard_DifferentArgumentsResetTheChain(t *testing.T) {
 	}
 }
 
-func TestRepeatGuard_ExcludedToolIsTransparentNotAReset(t *testing.T) {
-	// This is the whole point of exclusion: a bookkeeping call interleaved into
-	// a loop must not launder it.
-	g := mustGuard(t, &Plugin{Thresholds: []int{3}, Exclude: []string{"update_plan"}})
-	c := call("run_sql", `{"q":1}`)
-	plan := call("update_plan", `{"items":[]}`)
-
-	g.observe([]agentcore.ToolCall{c})
-	g.observe([]agentcore.ToolCall{plan})
-	g.observe([]agentcore.ToolCall{c})
-	g.observe([]agentcore.ToolCall{plan})
-	if got := g.observe([]agentcore.ToolCall{c}); got != repeatReminderShort {
-		t.Fatalf("interleaved excluded calls must not reset the chain, got %q", got)
-	}
-}
-
-func TestRepeatGuard_IncludeLimitsTracking(t *testing.T) {
-	g := mustGuard(t, &Plugin{Thresholds: []int{3}, Include: []string{"run_*"}, Exclude: []string{}})
-	// An untracked tool never nudges no matter how often it repeats.
-	for i := 0; i < 10; i++ {
-		if got := g.observe([]agentcore.ToolCall{call("web_fetch", `{}`)}); got != "" {
-			t.Fatalf("web_fetch is outside Include, got %q", got)
-		}
-	}
-	c := call("run_sql", `{"q":1}`)
-	g.observe([]agentcore.ToolCall{c})
-	g.observe([]agentcore.ToolCall{c})
-	if got := g.observe([]agentcore.ToolCall{c}); got != repeatReminderShort {
-		t.Fatalf("included tool should nudge, got %q", got)
-	}
-}
-
 func TestRepeatGuard_CountsWithinOneBatch(t *testing.T) {
 	// A model that emits the same call three times in ONE assistant turn is
 	// looping just as hard as one that spreads them over three turns.
@@ -139,7 +107,7 @@ func TestRepeatGuard_ResetClearsTheChain(t *testing.T) {
 
 func TestRepeatGuard_ArgumentPreviewIsBoundedButDetectionIsNot(t *testing.T) {
 	long := strings.Repeat("z", 4000)
-	g := mustGuard(t, &Plugin{Thresholds: []int{2, 3}, ArgumentsPreviewChars: 50})
+	g := mustGuard(t, &Plugin{Thresholds: []int{2, 3}})
 	c := call("write", `{"body":"`+long+`"}`)
 	g.observe([]agentcore.ToolCall{c})
 	g.observe([]agentcore.ToolCall{c}) // threshold 2 -> short form
@@ -147,7 +115,7 @@ func TestRepeatGuard_ArgumentPreviewIsBoundedButDetectionIsNot(t *testing.T) {
 	if !strings.Contains(detailed, "more chars)") {
 		t.Fatalf("preview should report omission, got %q", detailed)
 	}
-	if len(detailed) > 1000 {
+	if len(detailed) > argumentsPreviewChars+1000 {
 		t.Fatalf("detailed reminder is unbounded (%d bytes) — it rides into every later request", len(detailed))
 	}
 	// Detection still used the FULL argument string: a call differing only past
@@ -196,15 +164,6 @@ func TestRepeatGuard_DefaultsApplied(t *testing.T) {
 	if len(g.thresholds) != len(DefaultThresholds) || g.thresholds[0] != 3 {
 		t.Fatalf("thresholds = %v, want %v", g.thresholds, DefaultThresholds)
 	}
-	if g.previewChars != defaultArgumentsPreviewChars {
-		t.Fatalf("previewChars = %d", g.previewChars)
-	}
-	// Nothing is excluded by default: this plugin names no other capability's
-	// tools. Bookkeeping transparency now comes from the run's predicate, which
-	// TestRepeatGuard_BookkeepingToolIsTransparent covers.
-	if len(g.exclude) != 0 {
-		t.Fatalf("DefaultExclude should be empty, got %v", g.exclude)
-	}
 }
 
 // An extension the loop holds must never be nil: "off" is expressed by not
@@ -251,29 +210,6 @@ func TestRepeatGuard_InterceptBatchEmitsOneUserMessage(t *testing.T) {
 	d := g.InterceptBatch(context.Background(), []agentcore.ToolCall{c})
 	if len(d.AdditionalContexts) != 1 || d.AdditionalContexts[0].Role != agentcore.RoleUser {
 		t.Fatalf("want one synthetic user message, got %+v", d.AdditionalContexts)
-	}
-}
-
-func TestMatchToolPattern(t *testing.T) {
-	cases := []struct {
-		pattern, name string
-		want          bool
-	}{
-		{"run_sql", "run_sql", true},
-		{"run_sql", "run_sqlx", false},
-		{"run_*", "run_sql", true},
-		{"run_*", "web_fetch", false},
-		{"*_sql", "run_sql", true},
-		{"*_sql", "run_sqlx", false},
-		{"*", "anything", true},
-		{"mcp_*", "run_sql", false},
-		{"a*c", "abc", true},
-		{"a*c", "abd", false},
-	}
-	for _, c := range cases {
-		if got := matchToolPattern(c.pattern, c.name); got != c.want {
-			t.Errorf("matchToolPattern(%q, %q) = %v, want %v", c.pattern, c.name, got, c.want)
-		}
 	}
 }
 

@@ -24,7 +24,7 @@ func RecoverNativeTranscript(entries []SessionEntry) (json.RawMessage, error) {
 	var selection *ai.FallbackSelection
 	for _, entry := range entries {
 		switch entry.Kind {
-		case EntryPiModelSelection:
+		case EntryNativeModelSelection:
 			if !seenState {
 				return nil, errors.New("native ladder selection precedes initial state")
 			}
@@ -34,39 +34,39 @@ func RecoverNativeTranscript(entries []SessionEntry) (json.RawMessage, error) {
 			}
 			selection = &next
 			state["model"] = append(json.RawMessage(nil), next.Model...)
-		case EntryPiContextSummary:
+		case EntryNativeContextSummary:
 			if _, err := nativehost.ParseSummary(entry.Content); err != nil {
 				return nil, err
 			}
-		case EntryPiAnswer, EntryPiDelegation, EntryPiDelegationBatch, EntryPiGoal, EntryPiGoalRevision, EntryPiInvocation, EntryPiChildResult:
+		case EntryNativeAnswer, EntryNativeDelegation, EntryNativeDelegationBatch, EntryNativeGoal, EntryNativeGoalRevision, EntryNativeInvocation, EntryNativeChildResult:
 			// Workflow metadata belongs to the consumer. It does not rewrite
 			// any provider message during transcript recovery.
-		case EntryPiEffectStart, EntryPiEffectDone:
+		case EntryNativeEffectStart, EntryNativeEffectDone:
 			var effect struct {
 				ID string `json:"effectId"`
 			}
 			if err := json.Unmarshal([]byte(entry.Content), &effect); err != nil || effect.ID == "" {
-				return nil, errors.New("corrupt Pi effect record")
+				return nil, errors.New("corrupt native effect record")
 			}
-			if entry.Kind == EntryPiEffectStart {
+			if entry.Kind == EntryNativeEffectStart {
 				unsettled[effect.ID] = entry.CallID
 			} else {
 				delete(unsettled, effect.ID)
 			}
-		case EntryPiState:
+		case EntryNativeState:
 			state = map[string]json.RawMessage{}
 			pendingResult = nil
 			if err := json.Unmarshal([]byte(entry.Content), &state); err != nil || state == nil {
-				return nil, errors.New("corrupt Pi state record")
+				return nil, errors.New("corrupt native state record")
 			}
 			if err := json.Unmarshal(state["messages"], &messages); err != nil {
 				return nil, err
 			}
 			if selection != nil && !nativehost.SameJSON(state["model"], selection.Model) {
-				return nil, errors.New("Pi checkpoint disagrees with committed native ladder model")
+				return nil, errors.New("native checkpoint disagrees with committed native ladder model")
 			}
 			seenState = true
-		case EntryPiEvent:
+		case EntryNativeEvent:
 			var event struct {
 				Type    string          `json:"type"`
 				Message json.RawMessage `json:"message"`
@@ -81,7 +81,7 @@ func RecoverNativeTranscript(entries []SessionEntry) (json.RawMessage, error) {
 				}
 				if message.Role == "toolResult" {
 					if pendingResult != nil {
-						return nil, errors.New("overlapping Pi tool-result messages")
+						return nil, errors.New("overlapping native tool-result messages")
 					}
 					// Pi emits the complete immutable result at message_start,
 					// including its native timestamp. Never invent that message
@@ -91,22 +91,22 @@ func RecoverNativeTranscript(entries []SessionEntry) (json.RawMessage, error) {
 			}
 			if event.Type == "message_end" {
 				if !json.Valid(event.Message) {
-					return nil, errors.New("corrupt Pi message record")
+					return nil, errors.New("corrupt native message record")
 				}
 				if pendingResult != nil {
 					if string(pendingResult) != string(event.Message) {
-						return nil, errors.New("Pi tool-result start/end mismatch")
+						return nil, errors.New("native tool-result start/end mismatch")
 					}
 					pendingResult = nil
 				}
 				messages = append(messages, event.Message)
 			}
 		default:
-			return nil, fmt.Errorf("session kind %q is not a native Pi record", entry.Kind)
+			return nil, fmt.Errorf("session kind %q is not a native record", entry.Kind)
 		}
 	}
 	if !seenState {
-		return nil, errors.New("Pi session has no initial state")
+		return nil, errors.New("native session has no initial state")
 	}
 	if len(unsettled) > 0 {
 		ids := make([]string, 0, len(unsettled))

@@ -41,10 +41,22 @@ func TestGoalGateHoldsUntilDone(t *testing.T) {
 	if len(faux.Recorded) != 3 {
 		t.Fatalf("provider calls = %d, want 3 (two nudges)", len(faux.Recorded))
 	}
-	// The contract must ride in the system prompt of every request.
+	// The protocol rides in the system prompt; the condition is stated once,
+	// as a later system message, and stays in every later request.
 	sys := faux.Recorded[0].Messages[0]
-	if sys.Role != agentcore.RoleSystem || !strings.Contains(sys.Content, "all tests pass") || !strings.Contains(sys.Content, goal.Done) {
-		t.Fatalf("goal contract missing from system prompt: %q", sys.Content)
+	if sys.Role != agentcore.RoleSystem || !strings.Contains(sys.Content, goal.Done) || strings.Contains(sys.Content, "all tests pass") {
+		t.Fatalf("system prompt must carry the protocol and not the condition: %q", sys.Content)
+	}
+	for i, req := range faux.Recorded {
+		statements := 0
+		for _, m := range req.Messages {
+			if m.Role == agentcore.RoleSystem && m.Content == goal.StatementPrefix+" This run finishes when:\nall tests pass" {
+				statements++
+			}
+		}
+		if statements != 1 {
+			t.Fatalf("request %d states the condition %d times, want once", i+1, statements)
+		}
 	}
 	// Each re-opened request must carry the nudge as a user message.
 	var nudges int

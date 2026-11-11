@@ -63,7 +63,7 @@ func browserUseAgent(t *testing.T, provider agentcore.LLMProvider, model string,
 	agent, err := agentcore.New(agentcore.Config{
 		Provider:   provider,
 		Model:      model,
-		Tools:      agentcore.NewToolSet(NewBrowserTool(sb, ws, BrowserUseLimits(), browserImageName())),
+		Tools:      agentcore.NewToolSet(NewBrowserTool(sb, ws, BrowserUseLimits(AnyHost), browserImageName())),
 		Policy:     agentcore.NewAllowList(ToolBrowserUse),
 		Definition: def,
 	})
@@ -100,11 +100,11 @@ func TestBrowserUseAgent_ControlsBrowser_Faux(t *testing.T) {
 	faux := agentcore.NewFauxProvider(
 		// Call 1: open a page — starts Chrome inside the persistent session.
 		agentcore.AssistantToolCall("c1", ToolBrowserUse,
-			`{"command":"agent-browser open https://example.com"}`),
+			`{"args":["open","https://example.com"]}`),
 		// Call 2: snapshot the page the FIRST call left open (proves persistence
 		// across docker-exec calls into the same session container).
 		agentcore.AssistantToolCall("c2", ToolBrowserUse,
-			`{"command":"agent-browser snapshot"}`),
+			`{"args":["snapshot"]}`),
 		agentcore.AssistantText("Browsed example.com."),
 	)
 	agent := browserUseAgent(t, faux, "faux-model", sb, ws, agentcore.AgentDefinition{})
@@ -164,8 +164,8 @@ func TestBrowserUseAgent_RealProvider_DrivesBrowser(t *testing.T) {
 	provider := ai.NewOpenAIProvider(apiKey, baseURL, ai.DefaultCompat())
 	agent := browserUseAgent(t, provider, model, sb, ws, agentcore.AgentDefinition{
 		Agents: "You can drive a real web browser with the browser_use tool, which runs " +
-			"`agent-browser` CLI commands in a Linux sandbox. Use a stable session, e.g. " +
-			"`agent-browser open <url>` then `agent-browser snapshot` to read the page's " +
+			"`agent-browser` with the argv you pass as args, e.g. " +
+			"[\"open\", \"<url>\"] then [\"snapshot\"] to read the page's " +
 			"accessibility tree. Actually use the tool to inspect pages — do not guess.",
 	})
 

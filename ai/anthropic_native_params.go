@@ -189,20 +189,19 @@ func BuildAnthropicParams(rawModel json.RawMessage, context TranscriptContext, o
 		set("betas", betas)
 	}
 	systemBlocks := []map[string]any{}
-	systemBlock := func(text string) map[string]any {
-		block := map[string]any{"type": "text", "text": text}
-		if samplingTruthy(cache) {
-			block["cache_control"] = cache
-		}
-		return block
-	}
 	if oauth {
-		systemBlocks = append(systemBlocks, systemBlock("You are Claude Code, Anthropic's official CLI for Claude."))
+		systemBlocks = append(systemBlocks, map[string]any{"type": "text", "text": "You are Claude Code, Anthropic's official CLI for Claude."})
 	}
 	if system != "" {
-		systemBlocks = append(systemBlocks, systemBlock(SanitizeSurrogates(system)))
+		systemBlocks = append(systemBlocks, map[string]any{"type": "text", "text": SanitizeSurrogates(system)})
 	}
 	if len(systemBlocks) > 0 {
+		// One breakpoint closes the stable prefix (tools + system). Marking each
+		// system block spent a second of Anthropic's four breakpoints on the
+		// identity line, which is below the minimum cacheable length anyway.
+		if samplingTruthy(cache) {
+			systemBlocks[len(systemBlocks)-1]["cache_control"] = cache
+		}
 		set("system", systemBlocks)
 	}
 	if value, exists := options["temperature"]; exists && !samplingTruthy(options["thinkingEnabled"]) && !managed && compat.SupportsTemperature {

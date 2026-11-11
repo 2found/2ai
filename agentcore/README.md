@@ -36,7 +36,9 @@ provider history through `RunNative` and `RunResult.NativeState`. Durable
 execution uses the native session host. Recorded native fixtures and the integration suite run with ordinary Go tests.
 Native integration tests cover memory, compaction, todo and advisor. Native retry/fallback orchestration now lives in
 `ai.FallbackProvider`. The runtime binds durable selection and accounting to
-its callbacks. `ai.NativeProvider` owns native transport dispatch, and
+its callbacks, and an `ai.FallbackLadder` (`NativeRun.Fallback`, or one private
+to the run resumed on the checkpoint's model) brings a run that fell back
+returning to the primary once it recovers. `ai.NativeProvider` owns native transport dispatch, and
 `engine.StreamFn` aliases the shared `ai.StreamFn` contract.
 
 `engine` owns native scheduling and provider events. The root still supplies
@@ -54,7 +56,7 @@ The earlier port also removed `LabStepDiff`, `DiffStep`, and the observe helpers
 `AggregateRunSummaries`/`AggregateRunCoverage`. Existing `Plugin`, `Tool`,
 `LLMProvider`, `SessionStore` and extension interface method sets are unchanged;
 no plugin package has been removed. Provider contracts are now owned by
-`ai/protocol` and re-exported by the root package while callers migrate. Native integrations use `Hooks.PiContext`
+`ai/protocol` and re-exported by the root package while callers migrate. Native integrations use `Hooks.Context`
 for native transcripts and `subagent.Settings.RunFork` for native child runs.
 
 The sibling Soot consumer uses `New` with `Config.NativeProvider` and
@@ -78,6 +80,48 @@ compaction emits a rebase before the request observation, and settled messages
 emit append observations. This keeps advisor and other existing `RunObserver`
 plugins informed without giving them control over native history. Integration
 tests exercise memory, todo, advisor and compaction through the native engine.
+
+Native compaction has three steps, cheapest first, all over the request view;
+the authoritative transcript is never rewritten.
+
+1. **Tool-result clearing** (`CompactionSettings.ClearToolResults`, on by
+   default). Old tool results become a one-line placeholder that names the
+   call and, when the archive saved the result, its `read_spill` locator.
+   The five most recent results, errors' first 300 bytes and `read_skill`
+   results are kept. The boundary is persisted in `NativeState`, so every
+   later request repeats the same bytes and the prompt cache still reads the
+   prefix. It moves only when that saves at least `ClearAtLeast`, and only
+   once the request is past `Trigger` or the cache has gone cold.
+2. **Summary**, when the cleared view still exceeds the budget.
+3. **Preview** of a single result still too large for the window.
+
+A native summary is a structured handoff: goal, the user's messages,
+decisions, work done, identifiers, errors, pending work, current state and next
+step. The summarizer reads the compacted prefix as bounded role-labelled text
+without thinking signatures, usage records or image bytes, and a later
+compaction extends the earlier handoff instead of rereading it, copying the
+user's corrections forward word for word. The current task stays pinned after
+the summary. The summary is followed by a capped reattachment (at most 8192
+tokens, and an eighth of the budget): an extension implementing
+`CompactionReattacher` restores what it needs (the todo plugin reattaches a
+plan the summary folded away), and skills loaded with `read_skill` are
+reattached by default.
+`CompactionSettings.Instructions` adds a host or user focus.
+`Config.CompactionProvider` (or `CompactionPlugin.Provider`) sends standalone
+summaries to a cheaper `ai.FallbackProvider` than the run's own.
+`NativeRun.Compact` is `/compact`: it summarizes the history now, with its
+`Instructions` as the focus, and fails when nothing could be compacted.
+`NativeRun.Checkpoint` receives the resumable `NativeState` after every settled
+turn; an error or a cancellation still returns the last resumable state in
+`RunResult.NativeState`. The wrap-up turn after a budget stop keeps its tools
+in the request and sends `tool_choice` none, so the cached prefix survives.
+`CompactionSettings.SharePromptCache` (off by default) asks for the summary as
+one more turn of the live conversation so the call reads the run's prompt
+cache, and falls back to the standalone call when the reply is not a summary.
+`Hooks.BeforeCompact` can defer a summary with `Skip`. After three consecutive
+failed summaries the run stops asking until a provider overflow forces one.
+`RunResult.Compactions` reports each compaction's trigger, mode, token counts
+and usage.
 
 Native context summary progress reports each chunk's settlement, including a
 failed chunk. It does not claim that the entire compaction succeeded or that the
@@ -181,13 +225,13 @@ cannot give one belongs in a plugin, or belongs nowhere.
 | [`hooks.go`](hooks.go) | **contract** — the lifecycle hook types and their dispatch, including the `BeforeToolCall` shape the permission gate is built from. |
 | [`tool.go`](tool.go) | **contract** — `Tool`, optional additive `RichTool`, `ToolSet`, `ArgPreparer`, and the loop's own byte bounding. Ordinary text stays compatible while image parts can cross the neutral provider seam. |
 | [`toolbridge.go`](toolbridge.go) | **contract + loop** — the run-owned `ToolInvoker` capability for tools such as eval that need to call another registered tool. Nested calls re-enter the single dispatch trust boundary (schema, policy, credentials, hooks, bounds, tracing, idempotency), share the run's atomic execution budget, reject recursion, and persist as audit metadata without inventing provider-authored tool messages. Directly constructing a tool never grants this capability. |
-| [`pi_tools.go`](pi_tools.go) | **host adapter** — exposes a composed Agent's tools to the native Go engine through the existing dispatch boundary. Owns extension resources and the busy slot, supplies native tool definitions/results, and shares the execution budget with nested calls. |
+| [`tool_host.go`](tool_host.go) | **host adapter** — exposes a composed Agent's tools to the native Go engine through the existing dispatch boundary. Owns extension resources and the busy slot, supplies native tool definitions/results, and shares the execution budget with nested calls. |
 | `native_session.go` | Restores the native transcript from journal entries, retaining opaque messages and rejecting unsettled effects. Consumer workflow validation remains separate. |
 | `native_run.go` | Composed plugins and consumer checkpoints over the native engine; AI-owned retry/fallback. |
-| `pi_lifecycle.go` | Native-loop host boundary for composed prompt, step, batch, stop, and ceiling policies. Calls extension contracts while Pi owns scheduling and native history. |
+| `native_lifecycle.go` | Native-loop host boundary for composed prompt, step, batch, stop, and ceiling policies. Calls extension contracts while the engine owns scheduling and native history. |
 | [`image.go`](image.go) | **loop** — the central rich-image trust boundary: decode validation, MIME correction, pixel/input limits, provider-portable resize/recompression, aggregate byte budgeting, and coordinate mapping. Keeping it beside tool dispatch gives every rich tool identical laptop/server behavior without trusting each implementation to normalize correctly. |
 | [`permission.go`](permission.go) | **contract + seam default** — `Policy`, `Decision`, and `DenyAll`. Default-deny is the kernel's, so a composition that forgets governance is not ungoverned. |
-| [`prompt.go`](prompt.go) | **loop** — system-prompt assembly, recall dedup (native runs carry recall as a transcript message so the system prompt stays a stable cache prefix), and provider-neutral prompt-cache breakpoints placed at the end of the request's *append-only* prefix (the persisted history), not on its final message. A `ContextHook` trailer is re-rendered every turn, so a prefix ending in one can never be read back: measured on a 300-turn run, **7 of 299** cache entries were still a prefix of the next request; anchoring before the trailer makes it **277 of 299** (the rest are the 22 compactions, which legitimately rewrite the window). |
+| [`prompt.go`](prompt.go) | **loop** — system-prompt assembly and recall dedup (native runs carry recall as a transcript message so the system prompt stays a stable cache prefix). |
 | [`skill_tool.go`](skill_tool.go) | **loop** — the `read_skill` built-in, registered by the loop whenever a definition carries skills. Progressive disclosure is part of the prompt, not an add-on. |
 | [`schema.go`](schema.go) | **loop** — compiles `OutputSchema` at composition time and validates final text locally, so providers that ignore structured-output hints cannot silently violate the result contract. |
 
@@ -199,8 +243,7 @@ cannot give one belongs in a plugin, or belongs nowhere.
 | [`session.go`](session.go) | **log** — `SessionEntry` kinds, `SessionStore`, reduce/recover, side records (`EntryInbox`/`EntryInboxDone`, `EntryAssistantFrame`, `EntryToolProgress`, `EntryToolOutcome`), idempotent parked-call answers, optional `SessionLeaseStore` ownership, and the goal as a *fact about the run* (written once, recovered on resume; what to DO about an unmet goal is [`plugins/goal`](plugins/goal/)). The log is the source of truth; run state is rebuilt by reducing it, never mutated in place. Chain entries form the session tree; side records capture intent and mid-turn granularity without forking the chain. A completed outcome is journaled before slower siblings finish, then superseded by its canonical source-order result. `SessionBatchStore` upgrades a turn save point from ordered-prefix compatibility to an atomic commit. The windowed read (`SessionWindowStore`, `LoadResumeLog`) lets the fold restart at a checkpoint, so a resume reads a suffix rather than a history — and the rule for when that is safe lives here, once, rather than in each backend. |
 | [`session_tree.go`](session_tree.go) | **log** — the log is a tree: parent ids, branches, `EntryLeafMove`, `Rewind`. Reduce and recover walk only the active branch. |
 | [`memsession.go`](memsession.go) | **seam default** — in-process append-only `SessionStore` with atomic save-point batches and per-session resume ownership, so a laptop run is resumable and the log/concurrency invariants are checkable with nothing wired. |
-| [`compaction.go`](compaction.go) | **log + seam default** — WHEN to compact and the durable bracket around it, plus the goal pin that survives summarization, and `Compactor`/`DefaultCompactor`: WHAT replaces the old span, as a strategy with more than one right answer. The trigger is `min(model window − output headroom, configured ceiling)`, re-derived per turn from the answering rung: the ladder routinely mixes models whose windows differ by 30x, and a ceiling too high for the current one means the loop never compacts before the provider rejects the request. The kernel knows no model's window — the rung carries it. |
-| [`contextprune.go`](contextprune.go) | **contract + seam default** — `ContextPruner` is the optional deterministic first-stage contract; the built-in implementation batch-prunes superseded, stale, and bulky old tool results before paying for an LLM summary. It protects deep warm-cache prefixes, requires meaningful aggregate savings for age-only rewrites, and preserves recoverable artifact references. A replacement compactor brings its own policy; the loop still owns the durable bracket around every rewrite. |
+| [`compaction.go`](compaction.go) | **seam default** — `CompactionSettings` (kept tail, focus, shared prompt cache, tool-result clearing), the budget and the `CompactionReattacher` contract with its default skill reattachment. The budget is `min(model window − output headroom, configured ceiling)`, re-derived per request from the answering candidate: a fallback chain routinely mixes models whose windows differ by 30x. The kernel knows no model's window — the candidate carries it. The mechanics (clearing, summary, preview, persisted boundaries) live in [`host/`](host/). |
 | [`fork.go`](fork.go) | **loop** — everything that crosses an agent boundary: building a child from a parent's *unexported* fields (a delegation plugin cannot do this from outside without those fields becoming exported, which is exactly how a child ends up out-scoping its parent), delegation depth (a spawn plugin's recursion cap is only enforceable if the depth survives the hop), and the run's session id (a sub-agent shares its parent's provider and ctx, so without this tag the two are one undifferentiated stream to anything decorating the seam). All three ride ctx — the only thread that survives the hop. |
 | [`lab.go`](lab.go) | **log** — the read model: one pure fold from recorded facts to ordered steps, so a live-stepped run and a replayed run read identically — and the same fold one level up as chapters: a run's compaction summaries ARE its table of contents, and dividing the fold at them is what makes a several-thousand-step run navigable rather than merely paginated. |
 
@@ -217,7 +260,7 @@ cannot give one belongs in a plugin, or belongs nowhere.
 Root tests exercise **loop-owned** behaviour, not plugin policy. Two that look
 like plugin tests and are not, because the state is the kernel's:
 
-- `budget_test.go` — the graceful-stop protocol (one tool-free wrap-up turn,
+- `budget_test.go` — the graceful-stop protocol (one wrap-up turn with `tool_choice` none,
   then `budget_exhausted`) is the loop's; `BudgetPlugin` in `seams.go`
   only supplies the ceiling.
 - `session_test.go`, `compaction_test.go` — the goal's persistence and its

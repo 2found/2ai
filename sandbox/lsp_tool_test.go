@@ -153,9 +153,17 @@ func TestLSPToolSerializesConcurrentCalls(t *testing.T) {
 	}
 }
 
+// A call cancelled while the server is busy must discard that client (its
+// stream holds an unanswered request) and the next call must start a fresh one
+// without replaying the cancelled request.
+//
+// The client is warmed by a successful call first. Without that, the short
+// deadline could fire before the re-executed helper had even logged its
+// initialize (slow under -race), so the first client died uncounted and the
+// count of 2 depended on scheduling — the test, not the tool, was racy.
 func TestLSPToolCancellationDiscardsClientWithoutReplay(t *testing.T) {
 	ws := mustWorkspace(t)
-	mustWrite(t, ws, "main.ts", "const SLOW = SLOW;\n")
+	mustWrite(t, ws, "main.ts", "const target = target;\n")
 	counter := filepath.Join(t.TempDir(), "initialize.log")
 	registry := NewLSPSessionRegistry(2, time.Minute)
 	t.Cleanup(registry.Close)
@@ -169,18 +177,32 @@ func TestLSPToolCancellationDiscardsClientWithoutReplay(t *testing.T) {
 		t.Fatal(err)
 	}
 	base := agentcore.WithSandboxSession(context.Background(), "conversation")
-	ctx, cancel := context.WithTimeout(base, 20*time.Millisecond)
+	if _, err := tool.Run(base, `{"action":"hover","file":"main.ts","line":1,"symbol":"target#2"}`); err != nil {
+		t.Fatalf("warm client: %v", err)
+	}
+	if got := countLines(t, counter); got != 1 {
+		t.Fatalf("initialize count = %d after warm-up, want 1", got)
+	}
+
+	// The helper sleeps 300ms on a SLOW hover; the call gives up at 50ms.
+	mustWrite(t, ws, "main.ts", "const SLOW = SLOW;\n")
+	ctx, cancel := context.WithTimeout(base, 50*time.Millisecond)
 	_, err = tool.Run(ctx, `{"action":"hover","file":"main.ts","line":1,"symbol":"SLOW#2"}`)
 	cancel()
 	if err == nil || !strings.Contains(err.Error(), "deadline exceeded") {
 		t.Fatalf("timeout error = %v", err)
 	}
+
 	mustWrite(t, ws, "main.ts", "const target = target;\n")
-	if _, err := tool.Run(base, `{"action":"hover","file":"main.ts","line":1,"symbol":"target#2"}`); err != nil {
+	out, err := tool.Run(base, `{"action":"hover","file":"main.ts","line":1,"symbol":"target#2"}`)
+	if err != nil {
 		t.Fatalf("replacement client: %v", err)
 	}
+	if !strings.Contains(out, "text=const target") || strings.Contains(out, "SLOW") {
+		t.Fatalf("replacement answered for the cancelled request: %q", out)
+	}
 	if got := countLines(t, counter); got != 2 {
-		t.Fatalf("initialize count = %d, want timed-out client replaced", got)
+		t.Fatalf("initialize count = %d, want the timed-out client replaced", got)
 	}
 }
 

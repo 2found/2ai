@@ -1,7 +1,6 @@
 package agentcore
 
 import (
-	"context"
 	"errors"
 	"fmt"
 )
@@ -114,8 +113,6 @@ func (r *Registry) ApplyConfig(cfg Config) error {
 		CompactionPlugin{
 			Settings: cfg.Compaction,
 			Provider: cfg.CompactionProvider,
-			Model:    cfg.CompactionModel,
-			Strategy: cfg.Compactor,
 		},
 		SteeringPlugin{
 			Steer:           cfg.GetSteeringMessages,
@@ -138,25 +135,6 @@ func (r *Registry) ApplyConfig(cfg Config) error {
 			r.AddExtension(f)
 		}
 	}
-	return nil
-}
-
-// UsePolicy installs the permission gate AND the BeforeToolCall hook that
-// enforces it, at PriorityGate so it is consulted before any consumer hook
-// whatever order plugins were listed in.
-//
-// This pairing is the whole trust boundary, so it is one call: a composition
-// cannot install the policy and forget the hook that reads it.
-func (r *Registry) UsePolicy(p Policy) error {
-	if p == nil {
-		p = DenyAll{}
-	}
-	if err := r.SetPolicy(p); err != nil {
-		return err
-	}
-	r.AddHooks(PriorityGate, Hooks{
-		Before: []BeforeToolCall{func(ctx context.Context, call ToolCall) Decision { return p.Allow(ctx, call) }},
-	})
 	return nil
 }
 
@@ -204,47 +182,45 @@ func (r *Registry) build() (*Agent, error) {
 	}
 
 	a := &Agent{
-		extensions:         r.extensions,
-		nativeProvider:     r.nativeProvider,
-		provider:           r.provider,
-		model:              r.model,
-		tools:              r.tools,
-		policy:             r.policy,
-		hooks:              r.mergedHooks(),
-		memory:             r.memory,
-		def:                r.definition,
-		limits:             r.limits,
-		env:                r.env,
-		compaction:         r.compaction,
-		compactor:          r.compactor,
-		compactionProvider: r.compactionRung.Provider,
-		compactionModel:    r.compactionRung.Model,
-		refreshKey:         r.refreshKey,
-		escalation:         append([]ModelRung(nil), r.escalation...),
-		contextWindow:      r.contextWindow,
-		modelCapabilities:  r.modelCapabilities,
-		getSteering:        r.getSteering,
-		getFollowUp:        r.getFollowUp,
-		goal:               r.goal,
-		prepareNextTurn:    r.prepareNextTurn,
-		budgetGate:         r.budgetGate,
-		session:            r.session,
-		sessionID:          r.sessionID,
-		providerSession:    r.providerSession,
-		providerSessionID:  r.providerSessionID,
-		resumeSession:      r.promptResume,
-		stepGate:           r.stepGate,
-		retry:              r.retry,
-		cacheKey:           r.cacheKey,
-		cacheRetention:     r.cacheRetention,
-		seedDisabledTools:  r.seedDisabled,
-		schemaTransform:    r.schemaTransform,
-		maxTokens:          r.maxTokens,
-		reasoningEffort:    r.reasoningEffort,
-		outputSchema:       r.outputSchema,
-		outputValidator:    outputValidator,
-		toolChoice:         r.toolChoice,
-		parallelToolCalls:  parallelToolCalls,
+		extensions:        values(r.extensions),
+		nativeProvider:    r.nativeProvider,
+		provider:          r.provider,
+		model:             r.model,
+		tools:             r.tools,
+		policy:            r.policy,
+		hooks:             r.mergedHooks(),
+		memory:            r.memory,
+		def:               r.definition,
+		limits:            r.limits,
+		env:               r.env,
+		compaction:        r.compaction,
+		compactionModel:   r.compactionModel,
+		refreshKey:        r.refreshKey,
+		escalation:        append([]ModelRung(nil), r.escalation...),
+		contextWindow:     r.contextWindow,
+		modelCapabilities: r.modelCapabilities,
+		getSteering:       r.getSteering,
+		getFollowUp:       r.getFollowUp,
+		goal:              r.goal,
+		prepareNextTurn:   r.prepareNextTurn,
+		budgetGate:        r.budgetGate,
+		session:           r.session,
+		sessionID:         r.sessionID,
+		providerSession:   r.providerSession,
+		providerSessionID: r.providerSessionID,
+		resumeSession:     r.promptResume,
+		stepGate:          r.stepGate,
+		retry:             r.retry,
+		cacheKey:          r.cacheKey,
+		cacheRetention:    r.cacheRetention,
+		seedDisabledTools: r.seedDisabled,
+		schemaTransform:   r.schemaTransform,
+		maxTokens:         r.maxTokens,
+		reasoningEffort:   r.reasoningEffort,
+		outputSchema:      r.outputSchema,
+		outputValidator:   outputValidator,
+		toolChoice:        r.toolChoice,
+		parallelToolCalls: parallelToolCalls,
 	}
 	return a, nil
 }

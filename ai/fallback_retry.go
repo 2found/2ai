@@ -14,6 +14,7 @@ import (
 // can account for usage without inserting failed messages into the transcript.
 type FallbackAttempt struct {
 	Number      int
+	Rung        int // the candidate index; Run sets it
 	Outcome     AttemptOutcome
 	Failure     error
 	FailureKind string
@@ -90,6 +91,11 @@ func (r nativeRungAttempts) run(ctx context.Context, out *AssistantMessageEventS
 		}
 		if kind == "" || kind == "none" {
 			kind = nativeFailureKind(failure, capture.HostFailure())
+		}
+		// A refusal before any stream opened is structurally known even when
+		// its error type is not.
+		if kind == "unknown" && last.AdmissionError != nil && !last.producerAdmitted {
+			kind = "provider_admission"
 		}
 		status := "completed"
 		if failure != nil {

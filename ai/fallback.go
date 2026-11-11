@@ -48,9 +48,13 @@ type FallbackProvider struct {
 type FallbackRequest struct {
 	// SafeLabels is an optional immutable host-approved binding per candidate.
 	// An omitted entry uses the corresponding candidate's approved labels.
-	SafeLabels    []telemetry.SafeLabels
-	Start         int
-	Candidates    int
+	SafeLabels []telemetry.SafeLabels
+	Start      int
+	Candidates int
+	// Probe makes rungs Start..Probe-1 recovery probes back toward a primary
+	// the host fell away from: one attempt each, no retry budget, so a still
+	// failing primary costs one request before the known-good rung serves.
+	Probe         int
 	Open          func(context.Context, int, int) (*AssistantMessageEventStream, error)
 	Commit        func(context.Context, int) error
 	Observe       func(context.Context, int, FallbackAttempt) error
@@ -64,7 +68,7 @@ type FallbackRequest struct {
 // Run publishes to a caller-owned stream without ending it. Hosts with durable
 // selection/request admission use this entry point; ordinary consumers use Stream.
 func (p FallbackProvider) Run(ctx context.Context, out *AssistantMessageEventStream, request FallbackRequest) (AttemptOutcome, error) {
-	if out == nil || request.Open == nil || request.Start < 0 || request.Start >= request.Candidates {
+	if out == nil || request.Open == nil || request.Start < 0 || request.Start >= request.Candidates || request.Probe >= request.Candidates {
 		return AttemptOutcome{}, errors.New("fallback requires a stream, provider and active candidate")
 	}
 	safeCall := telemetry.NewSafeCall(ctx)
@@ -88,16 +92,23 @@ func (p FallbackProvider) Run(ctx context.Context, out *AssistantMessageEventStr
 			},
 			wait: p.Wait,
 		}
+		if index < request.Probe {
+			attempts.policy = protocol.RetryPolicy{MaxAttempts: 1}
+		}
 		if index < len(request.SafeLabels) {
 			attempts.safeLabels = request.SafeLabels[index]
 		} else if index < len(p.Candidates) {
 			attempts.safeLabels = p.Candidates[index].SafeLabels
 		}
 		if request.Observe != nil {
-			attempts.observe = func(ctx context.Context, attempt FallbackAttempt) error { return request.Observe(ctx, index, attempt) }
+			attempts.observe = func(ctx context.Context, attempt FallbackAttempt) error {
+				attempt.Rung = index
+				return request.Observe(ctx, index, attempt)
+			}
 		}
 		if request.Recover != nil {
 			attempts.recover = func(ctx context.Context, attempt FallbackAttempt) (bool, error) {
+				attempt.Rung = index
 				return request.Recover(ctx, index, attempt)
 			}
 		}

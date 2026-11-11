@@ -24,20 +24,6 @@ type readSkillTool struct {
 	loader SkillLoader // optional deferred loader; nil means bodies must be preloaded
 }
 
-// withReadSkill returns a copy of base with the built-in read_skill tool added,
-// leaving base untouched so the shared Agent toolset is never mutated per run.
-func withReadSkill(base *ToolSet, def AgentDefinition) *ToolSet {
-	clone := &ToolSet{
-		order: append([]string{}, base.order...),
-		byKey: make(map[string]Tool, len(base.byKey)+1),
-	}
-	for k, v := range base.byKey {
-		clone.byKey[k] = v
-	}
-	clone.Add(newReadSkillTool(def))
-	return clone
-}
-
 // newReadSkillTool builds the tool over the enabled skills of a definition.
 func newReadSkillTool(def AgentDefinition) readSkillTool {
 	enabled := make([]Skill, 0, len(def.Skills))

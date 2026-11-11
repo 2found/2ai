@@ -56,12 +56,12 @@ func TestNativeGoalHostRejectsMissingRecorderAndUncommittedDrain(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	host, err := a.OpenPiTools(ctx)
+	host, err := a.OpenTools(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer host.Close()
-	if _, err := host.StartPiRun(ctx, "work"); err != nil {
+	if _, err := host.StartRun(ctx, "work"); err != nil {
 		t.Fatal(err)
 	}
 	_, audit, err := host.Execute(ctx, []byte(`{"toolCallId":"call","toolName":"update_goal","args":{"goal":"next","reason":"finding"}}`), nil)
@@ -69,7 +69,7 @@ func TestNativeGoalHostRejectsMissingRecorderAndUncommittedDrain(t *testing.T) {
 		t.Fatalf("native tool bypassed commit boundary: %+v %v goal=%s", audit, err, store.Goal())
 	}
 	store.Update("uncommitted", "external change")
-	if _, _, err := host.RefreshPiGoal(); err == nil || !strings.Contains(err.Error(), "committed condition") || host.PiGoal() != "original" {
+	if _, _, err := host.RefreshGoal(); err == nil || !strings.Contains(err.Error(), "committed condition") || host.Goal() != "original" {
 		t.Fatalf("uncommitted extension change reached native prompt: %v", err)
 	}
 }

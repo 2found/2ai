@@ -37,9 +37,9 @@ const (
 //
 // With a sandbox injected the fetch is made from inside the container instead.
 // Because the tool has no host allowlist of its own, the container's egress is
-// pinned per call to the requested URL's host (and its subdomains) — an empty
-// egress allowlist would hand the container an open network with no IP guard,
-// which is exactly the SSRF surface this tool exists to close. The visible
+// pinned per call to the requested URL's host (and its subdomains) — open
+// egress would have no IP guard, which is exactly the SSRF surface this tool
+// exists to close. The visible
 // consequence is that a redirect off that host is refused by the egress proxy
 // rather than followed.
 type WebFetchTool struct {
@@ -68,10 +68,17 @@ func NewWebFetchTool(sb agentcore.Sandbox, ws *Workspace, options ...WebFetchOpt
 		maxBodyBytes: webFetchMaxBodyBytes,
 		client: &http.Client{
 			Timeout: webFetchTimeout,
-			CheckRedirect: func(_ *http.Request, via []*http.Request) error {
+			// A redirect stays on the requested host and its subdomains, as the
+			// sandbox path's egress pin enforces, so NetworkHosts is exact; it
+			// carries no Referer, so the original URL never travels with it.
+			CheckRedirect: func(req *http.Request, via []*http.Request) error {
 				if len(via) >= webFetchMaxRedirects {
 					return fmt.Errorf("stopped after %d redirects", webFetchMaxRedirects)
 				}
+				if from := via[0].URL.Hostname(); !hostWithin(req.URL.Hostname(), from) {
+					return fmt.Errorf("redirected off %s to %s; fetch that URL directly if it is needed", from, req.URL.Hostname())
+				}
+				req.Header.Del("Referer")
 				return nil
 			},
 			Transport: &http.Transport{
@@ -109,6 +116,25 @@ func WithWebFetchTimeout(timeout time.Duration) WebFetchOption {
 
 func (t *WebFetchTool) Name() string   { return ToolWebFetch }
 func (t *WebFetchTool) Parallel() bool { return true }
+
+// ExternalContent marks fetched pages as untrusted (agentcore.ExternalContentTool).
+func (t *WebFetchTool) ExternalContent() bool { return true }
+
+// NetworkHosts reports the requested host (agentcore.NetworkTool). Both
+// substrates keep every redirect on that host and its subdomains.
+func (t *WebFetchTool) NetworkHosts(args string) ([]string, error) {
+	var in struct {
+		URL string `json:"url"`
+	}
+	if err := json.Unmarshal([]byte(args), &in); err != nil {
+		return nil, fmt.Errorf("web_fetch: invalid arguments: %w", err)
+	}
+	u, err := parseAbsoluteURL(in.URL)
+	if err != nil {
+		return nil, fmt.Errorf("web_fetch: %w", err)
+	}
+	return plainHost(ToolWebFetch, u.Hostname())
+}
 
 func (t *WebFetchTool) Schema() agentcore.ToolSchema {
 	props := map[string]any{

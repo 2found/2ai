@@ -113,14 +113,6 @@ func GetSupportedThinkingLevels(rawModel json.RawMessage) ([]string, error) {
 	return supportedThinkingLevels(model), nil
 }
 
-func ClampThinkingLevel(rawModel json.RawMessage, level string) (string, error) {
-	var model completionsModel
-	if err := json.Unmarshal(rawModel, &model); err != nil {
-		return "", err
-	}
-	return clampThinkingLevel(model, level), nil
-}
-
 func ClampMaxTokensToContext(contextWindow float64, transcript TranscriptContext, maxTokens float64) float64 {
 	if contextWindow <= 0 {
 		return math.Max(1, maxTokens)

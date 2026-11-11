@@ -264,9 +264,11 @@ func (t *stateTool) Run(ctx context.Context, _ string) (string, error) {
 	return string(raw), err
 }
 
-// ObserveMessages starts a new host task after a terminal goal only when the
-// host opts in. Paused and budget-limited goals require an explicit command.
+// ObserveMessages tracks what the model can see (for BeforeStep), and starts a
+// new host task after a terminal goal only when the host opts in. Paused and
+// budget-limited goals require an explicit command.
 func (g *gateRun) ObserveMessages(_ context.Context, phase agentcore.ObservePhase, turn int, msgs []agentcore.Message) {
+	g.sight.observe(phase, msgs)
 	if !g.lifecycle || !g.newTaskOnInput || phase != agentcore.PhaseExternalInput || turn != 0 || len(msgs) == 0 {
 		return
 	}

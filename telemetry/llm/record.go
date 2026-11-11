@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"os"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/2found/2ai/ai/protocol"
@@ -82,30 +83,49 @@ type SinkFunc func(TraceRecord)
 
 func (f SinkFunc) Record(r TraceRecord) { f(r) }
 
-// FileSink appends one JSON object per line (JSONL) to an open file. Safe
-// for concurrent runs. Close it when the process shuts down.
+// FileSink appends one JSON object per line (JSONL) to a file only its owner
+// can read, since records hold prompts and responses. Safe for concurrent
+// runs. Close it when the process shuts down.
 type FileSink struct {
-	mu  sync.Mutex
-	w   *os.File
-	enc *json.Encoder
+	// OnError, when set before the first Record, receives each write failure.
+	OnError func(error)
+
+	mu      sync.Mutex
+	w       *os.File
+	enc     *json.Encoder
+	dropped atomic.Int64
 }
 
-// NewFileSink opens (creating/appending) a JSONL trace file at path.
+// NewFileSink opens (creating/appending) a JSONL trace file at path with mode
+// 0600, tightening an existing file to it.
 func NewFileSink(path string) (*FileSink, error) {
-	f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o644)
+	f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600)
 	if err != nil {
+		return nil, err
+	}
+	if err := f.Chmod(0o600); err != nil {
+		_ = f.Close()
 		return nil, err
 	}
 	return &FileSink{w: f, enc: json.NewEncoder(f)}, nil
 }
 
-// Record writes one JSONL line. Encoding/IO errors are dropped — tracing must
-// never break a run.
+// Record writes one JSONL line. A failure never breaks the run: it is
+// counted in Dropped and passed to OnError.
 func (s *FileSink) Record(r TraceRecord) {
 	s.mu.Lock()
-	defer s.mu.Unlock()
-	_ = s.enc.Encode(r)
+	err := s.enc.Encode(r)
+	s.mu.Unlock()
+	if err != nil {
+		s.dropped.Add(1)
+		if s.OnError != nil {
+			s.OnError(err)
+		}
+	}
 }
+
+// Dropped counts records that failed to write.
+func (s *FileSink) Dropped() int64 { return s.dropped.Load() }
 
 // Close releases the underlying file.
 func (s *FileSink) Close() error { return s.w.Close() }

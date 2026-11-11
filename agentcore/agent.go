@@ -2,6 +2,7 @@ package agentcore
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/2found/2ai/ai"
@@ -31,18 +32,12 @@ type Agent struct {
 	def            AgentDefinition
 	limits         Limits
 	env            Env
-	// compaction tunes how the loop summarizes a long transcript once it
-	// approaches limits.MaxContextTokens.
+	// compaction tunes how a native run keeps its request inside
+	// limits.MaxContextTokens.
 	compaction CompactionSettings
-	// compactionProvider + compactionModel, when both set, pin the compaction
-	// summary call to a dedicated tier (e.g. a cheap "lite" rung) instead of
-	// borrowing whichever rung the run has escalated to. Leaving either unset
-	// preserves the default: compaction uses the active rung's model.
-	compactionProvider LLMProvider
-	compactionModel    string
-	// compactor is the strategy that actually shrinks the transcript. Never
-	// nil on a composed agent — the registry defaults it to DefaultCompactor.
-	compactor Compactor
+	// compactionModel, when set, answers the standalone summary call instead
+	// of the run's own models.
+	compactionModel *ai.FallbackProvider
 	// refreshKey, when set, re-resolves the provider's API key before each turn
 	// (pi's per-turn getApiKey) so expiring BYO tokens don't kill long runs. The
 	// returned key is applied only if the provider implements KeyUpdater.
@@ -168,12 +163,7 @@ type Agent struct {
 // addChildUsage folds one child run's usage into the parent's accumulator.
 func (a *Agent) addChildUsage(u Usage) {
 	a.childMu.Lock()
-	a.childUsage.InputTokens += u.InputTokens
-	a.childUsage.OutputTokens += u.OutputTokens
-	a.childUsage.CacheReadTokens += u.CacheReadTokens
-	a.childUsage.CacheWriteTokens += u.CacheWriteTokens
-	a.childUsage.CostUSD += u.CostUSD
-	a.childUsage.CostUnpriced = a.childUsage.CostUnpriced || u.CostUnpriced
+	a.childUsage = a.childUsage.Add(u)
 	a.childMu.Unlock()
 }
 
@@ -193,47 +183,6 @@ func (a *Agent) peekChildUsage() Usage {
 	a.childMu.Lock()
 	u := a.childUsage
 	a.childMu.Unlock()
-	return u
-}
-
-// addUsage returns u plus v across every metered dimension.
-func addUsage(u, v Usage) Usage {
-	u.InputTokens += v.InputTokens
-	u.OutputTokens += v.OutputTokens
-	u.CacheReadTokens += v.CacheReadTokens
-	u.CacheWriteTokens += v.CacheWriteTokens
-	u.CostUSD += v.CostUSD
-	u.CostUnpriced = u.CostUnpriced || v.CostUnpriced
-	return u
-}
-
-// mergeUsage folds one report of the SAME turn's usage into what is known so
-// far, taking the newest non-zero value of each field. Reports within a turn are
-// running totals, not increments, so they are overwritten rather than summed —
-// adding them would double-count a provider that restates a field it already
-// sent. Across turns, use addUsage: those are genuinely separate spends.
-func mergeUsage(u, v Usage) Usage {
-	if v.InputTokens != 0 {
-		u.InputTokens = v.InputTokens
-	}
-	if v.OutputTokens != 0 {
-		u.OutputTokens = v.OutputTokens
-	}
-	if v.CacheReadTokens != 0 {
-		u.CacheReadTokens = v.CacheReadTokens
-	}
-	if v.CacheWriteTokens != 0 {
-		u.CacheWriteTokens = v.CacheWriteTokens
-	}
-	// CostUSD and CostUnpriced are one fact from one source (observe's pricing
-	// pass) and must be overwritten together: a fresher report of "unpriced,
-	// $0" (CostUSD == 0, CostUnpriced == true) is real information, and gating
-	// solely on "CostUSD != 0" (as every other field above does) would silently
-	// drop it, leaving a stale "priced" flag from an earlier report.
-	if v.CostUSD != 0 || v.CostUnpriced {
-		u.CostUSD = v.CostUSD
-		u.CostUnpriced = v.CostUnpriced
-	}
 	return u
 }
 
@@ -304,19 +253,13 @@ type Config struct {
 	Definition    AgentDefinition
 	Limits        *Limits
 	Env           *Env
-	// Compaction overrides the default compaction settings (recent-token budget
-	// kept verbatim). nil uses DefaultCompactionSettings().
+	// Compaction overrides the default compaction settings. nil uses
+	// DefaultCompactionSettings().
 	Compaction *CompactionSettings
-	// CompactionProvider + CompactionModel, when both set, pin the in-loop
-	// compaction summary call to a dedicated tier instead of borrowing the run's
-	// active escalation rung. Leaving either unset keeps today's behavior (the
-	// active rung summarizes). The consumer's tier system maps a "compaction"
-	// task kind onto these.
-	CompactionProvider LLMProvider
-	CompactionModel    string
-	// Compactor replaces the transcript-shrinking strategy. nil keeps
-	// DefaultCompactor (summarize the older span with a model call).
-	Compactor Compactor
+	// CompactionProvider, when set, answers the standalone summary call
+	// instead of the run's own models: usually a cheaper tier. The consumer's
+	// tier system maps a "compaction" task kind onto it.
+	CompactionProvider *ai.FallbackProvider
 	// RefreshKey is an optional per-turn API-key resolver. It is invoked before
 	// each turn with the provider name; a non-empty result is pushed into the
 	// provider via KeyUpdater. Use it for short-lived / rotating BYO credentials.
@@ -444,9 +387,8 @@ type Config struct {
 // you need to REPLACE a seam (your own governance plugin)
 // rather than configure one.
 //
-// The permission gate is installed by Registry.UsePolicy at PriorityGate, so it
-// is still consulted before any consumer hook — now as a property of the hook
-// ordering rather than a side effect of prepending to a slice.
+// The permission policy is part of the executor, not a hook: every gated call
+// is judged by it before any consumer BeforeToolCall hook runs.
 func New(cfg Config) (*Agent, error) {
 	return Build(ConfigPlugin(cfg))
 }
@@ -617,11 +559,13 @@ func (a *Agent) Describe() string {
 	// since a run that compacts unexpectedly early or late is diagnosed here.
 	line("context_window", a.contextWindow)
 	budget := effectiveBudget(a.limits.MaxContextTokens, a.contextWindow)
-	compaction := effectiveCompaction(a.compaction, budget)
-	line("compaction", fmt.Sprintf("keep_recent=%d budget=%d prune_cache_suffix=%d prune_min_savings=%d",
-		compaction.KeepRecentTokens, budget, compaction.PruneCacheWarmSuffixTokens, compaction.PruneMinimumSavingsTokens))
-	line("compactor", compactorName(a.compactor))
-	line("compaction_model", orDash(a.compactionModel))
+	clearing := "on"
+	if a.compaction.ClearToolResults.Disabled {
+		clearing = "off"
+	}
+	line("compaction", fmt.Sprintf("keep_recent=%d budget=%d clear_tool_results=%s shared_cache=%t",
+		a.compaction.keepRecent(budget), budget, clearing, a.compaction.SharePromptCache))
+	line("compaction_model", orDash(fallbackModelIDs(a.compactionModel)))
 
 	// Extensions — the capabilities this agent has beyond the core loop. Named
 	// rather than described: what each one does is its own package's README, and
@@ -675,11 +619,16 @@ func extensionNames(fs []ExtensionFactory) []string {
 	return names
 }
 
-// compactorName names the installed compaction strategy, so "what is actually
-// running?" distinguishes the built-in summarizer from a replacement.
-func compactorName(c Compactor) string {
-	if c == nil {
-		return DefaultCompactor().Name()
+// fallbackModelIDs names the models of a fallback provider, in order.
+func fallbackModelIDs(p *ai.FallbackProvider) string {
+	if p == nil {
+		return ""
 	}
-	return c.Name()
+	ids := make([]string, 0, len(p.Candidates))
+	for _, candidate := range p.Candidates {
+		var model struct{ ID string }
+		_ = json.Unmarshal(candidate.Model, &model)
+		ids = append(ids, model.ID)
+	}
+	return strings.Join(ids, ", ")
 }

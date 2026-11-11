@@ -3,6 +3,7 @@ package sandbox
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -78,17 +79,7 @@ func (h *HostSandbox) Exec(ctx context.Context, req agentcore.SandboxExec) (agen
 	}
 	defer cleanup()
 
-	cmd := exec.CommandContext(runCtx, req.Argv[0], req.Argv[1:]...)
-	// Put the command in its own process group and kill the group on timeout.
-	// os/exec's default cancel kills only the direct child, which would leave a
-	// `sleep 300 &` the shell spawned running past the deadline.
-	setProcessGroup(cmd)
-	cmd.Cancel = func() error { return killProcessGroup(cmd) }
-	cmd.Dir = dir
-	// A non-nil Env is what stops os/exec from handing the child the host
-	// process environment. hostEnv always returns non-nil, including for an empty
-	// req.Env — the difference between "no variables" and "all of the server's".
-	cmd.Env = hostEnv(req.Env)
+	cmd := hostCommand(runCtx, req, dir)
 	if req.Stdin != "" {
 		cmd.Stdin = strings.NewReader(req.Stdin)
 	}
@@ -99,19 +90,40 @@ func (h *HostSandbox) Exec(ctx context.Context, req agentcore.SandboxExec) (agen
 	runErr := cmd.Run()
 	res := agentcore.SandboxResult{Stdout: stdout.String(), Stderr: stderr.String()}
 
-	if runCtx.Err() == context.DeadlineExceeded {
+	// A caller's cancellation is an error; only the deadline is a result.
+	if err := ctx.Err(); err != nil {
+		return res, err
+	}
+	if errors.Is(runCtx.Err(), context.DeadlineExceeded) {
 		res.Killed = true
-		res.KillReason = "execution deadline exceeded"
+		res.KillReason = hostDeadlineReason
 		return res, nil
 	}
 	if runErr != nil {
-		if ee, ok := runErr.(*exec.ExitError); ok {
+		var ee *exec.ExitError
+		if errors.As(runErr, &ee) {
 			res.ExitCode = ee.ExitCode()
 			return res, nil
 		}
 		return res, fmt.Errorf("sandbox: host exec: %w", runErr)
 	}
 	return res, nil
+}
+
+const hostDeadlineReason = "execution deadline exceeded"
+
+// hostCommand builds the child for req: in its own process group, killed as a
+// group when ctx ends (os/exec's default kills only the direct child, which
+// would leave a `sleep 300 &` the shell spawned running past the deadline),
+// in dir, and with only req.Env — a non-nil Env is what stops os/exec from
+// handing the child the host process environment.
+func hostCommand(ctx context.Context, req agentcore.SandboxExec, dir string) *exec.Cmd {
+	cmd := exec.CommandContext(ctx, req.Argv[0], req.Argv[1:]...)
+	setProcessGroup(cmd)
+	cmd.Cancel = func() error { return killProcessGroup(cmd) }
+	cmd.Dir = dir
+	cmd.Env = hostEnv(req.Env)
+	return cmd
 }
 
 // Start launches an interactive host process under the same environment,
@@ -132,39 +144,16 @@ func (h *HostSandbox) Start(ctx context.Context, req agentcore.SandboxExec) (age
 		return nil, err
 	}
 
-	cmd := exec.CommandContext(runCtx, req.Argv[0], req.Argv[1:]...)
-	setProcessGroup(cmd)
-	cmd.Cancel = func() error { return killProcessGroup(cmd) }
-	cmd.Dir = dir
-	cmd.Env = hostEnv(req.Env)
-	stdin, err := cmd.StdinPipe()
+	cmd := hostCommand(runCtx, req, dir)
+	proc, err := startCommand(cmd, runCtx, cancel, "host")
 	if err != nil {
-		cancel()
 		cleanup()
-		return nil, fmt.Errorf("sandbox: host stdin pipe: %w", err)
+		return nil, err
 	}
-	stdout, err := cmd.StdoutPipe()
-	if err != nil {
-		cancel()
-		cleanup()
-		return nil, fmt.Errorf("sandbox: host stdout pipe: %w", err)
-	}
-	stderr, err := cmd.StderrPipe()
-	if err != nil {
-		cancel()
-		cleanup()
-		return nil, fmt.Errorf("sandbox: host stderr pipe: %w", err)
-	}
-	if err := cmd.Start(); err != nil {
-		cancel()
-		cleanup()
-		return nil, fmt.Errorf("sandbox: host start: %w", err)
-	}
-	return &commandProcess{
-		cmd: cmd, stdin: stdin, stdout: stdout, stderr: stderr,
-		runCtx: runCtx, cancel: cancel, killFn: func() error { return killProcessGroup(cmd) },
-		cleanup: cleanup, errLabel: "host wait", timeout: "execution deadline exceeded",
-	}, nil
+	proc.killFn = func() error { return killProcessGroup(cmd) }
+	proc.cleanup = cleanup
+	proc.timeout = hostDeadlineReason
+	return proc, nil
 }
 
 // hostEnv renders req.Env as a KEY=VALUE slice. It returns a non-nil slice even

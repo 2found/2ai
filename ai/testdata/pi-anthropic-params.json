@@ -188,10 +188,7 @@
           "system": [
             {
               "type": "text",
-              "text": "You are Claude Code, Anthropic's official CLI for Claude.",
-              "cache_control": {
-                "type": "ephemeral"
-              }
+              "text": "You are Claude Code, Anthropic's official CLI for Claude."
             },
             {
               "type": "text",
@@ -2734,78 +2731,102 @@
           "supportsMidConvoToolChanges": false
         },
         "params": {
-          "model": "claude-test",
+          "max_tokens": 8192,
           "messages": [
             {
-              "role": "user",
-              "content": "hi"
-            },
-            {
-              "role": "assistant",
               "content": [
                 {
-                  "type": "tool_use",
+                  "cache_control": {
+                    "type": "ephemeral"
+                  },
+                  "text": "hi",
+                  "type": "text"
+                }
+              ],
+              "role": "user"
+            },
+            {
+              "content": [
+                {
                   "id": "call",
-                  "name": "read",
                   "input": {
                     "file": "<>& 😀"
-                  }
+                  },
+                  "name": "read",
+                  "type": "tool_use"
                 }
-              ]
+              ],
+              "role": "assistant"
             },
             {
-              "role": "user",
               "content": [
                 {
-                  "type": "tool_result",
-                  "tool_use_id": "call",
                   "content": "result",
-                  "is_error": false
+                  "is_error": false,
+                  "tool_use_id": "call",
+                  "type": "tool_result"
                 }
-              ]
+              ],
+              "role": "user"
             },
             {
-              "role": "user",
-              "content": "next"
+              "content": "<system-reminder>\nchanged\n</system-reminder>",
+              "role": "user"
             },
             {
-              "role": "assistant",
               "content": [
                 {
-                  "type": "text",
-                  "text": "answer"
+                  "cache_control": {
+                    "type": "ephemeral"
+                  },
+                  "text": "next",
+                  "type": "text"
                 }
-              ]
+              ],
+              "role": "user"
+            },
+            {
+              "content": [
+                {
+                  "text": "answer",
+                  "type": "text"
+                }
+              ],
+              "role": "assistant"
+            },
+            {
+              "content": "<system-reminder>\nlast\n</system-reminder>",
+              "role": "user"
             }
           ],
-          "max_tokens": 8192,
+          "model": "claude-test",
           "stream": true,
           "system": [
             {
-              "type": "text",
-              "text": "first\n\nchanged\n\nlast",
               "cache_control": {
                 "type": "ephemeral"
-              }
+              },
+              "text": "first",
+              "type": "text"
             }
           ],
           "tools": [
             {
-              "name": "read",
+              "cache_control": {
+                "type": "ephemeral"
+              },
               "description": "New read",
               "eager_input_streaming": true,
               "input_schema": {
-                "type": "object",
                 "properties": {
                   "path": {
                     "type": "string"
                   }
                 },
-                "required": []
+                "required": [],
+                "type": "object"
               },
-              "cache_control": {
-                "type": "ephemeral"
-              }
+              "name": "read"
             }
           ]
         },
@@ -2969,89 +2990,110 @@
           "supportsMidConvoToolChanges": false
         },
         "params": {
-          "model": "claude-test",
-          "messages": [
-            {
-              "role": "user",
-              "content": "hi"
-            },
-            {
-              "role": "assistant",
-              "content": [
-                {
-                  "type": "tool_use",
-                  "id": "call",
-                  "name": "Read",
-                  "input": {
-                    "file": "<>& 😀"
-                  }
-                }
-              ]
-            },
-            {
-              "role": "user",
-              "content": [
-                {
-                  "type": "tool_result",
-                  "tool_use_id": "call",
-                  "content": "result",
-                  "is_error": false
-                }
-              ]
-            },
-            {
-              "role": "user",
-              "content": "next"
-            },
-            {
-              "role": "assistant",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "answer"
-                }
-              ]
-            }
-          ],
-          "max_tokens": 8192,
-          "stream": true,
           "betas": [
             "claude-code-20250219",
             "oauth-2025-04-20"
           ],
-          "system": [
+          "max_tokens": 8192,
+          "messages": [
             {
-              "type": "text",
-              "text": "You are Claude Code, Anthropic's official CLI for Claude.",
-              "cache_control": {
-                "type": "ephemeral"
-              }
+              "content": [
+                {
+                  "cache_control": {
+                    "type": "ephemeral"
+                  },
+                  "text": "hi",
+                  "type": "text"
+                }
+              ],
+              "role": "user"
             },
             {
-              "type": "text",
-              "text": "first\n\nchanged\n\nlast",
+              "content": [
+                {
+                  "id": "call",
+                  "input": {
+                    "file": "<>& 😀"
+                  },
+                  "name": "Read",
+                  "type": "tool_use"
+                }
+              ],
+              "role": "assistant"
+            },
+            {
+              "content": [
+                {
+                  "content": "result",
+                  "is_error": false,
+                  "tool_use_id": "call",
+                  "type": "tool_result"
+                }
+              ],
+              "role": "user"
+            },
+            {
+              "content": "<system-reminder>\nchanged\n</system-reminder>",
+              "role": "user"
+            },
+            {
+              "content": [
+                {
+                  "cache_control": {
+                    "type": "ephemeral"
+                  },
+                  "text": "next",
+                  "type": "text"
+                }
+              ],
+              "role": "user"
+            },
+            {
+              "content": [
+                {
+                  "text": "answer",
+                  "type": "text"
+                }
+              ],
+              "role": "assistant"
+            },
+            {
+              "content": "<system-reminder>\nlast\n</system-reminder>",
+              "role": "user"
+            }
+          ],
+          "model": "claude-test",
+          "stream": true,
+          "system": [
+            {
+              "text": "You are Claude Code, Anthropic's official CLI for Claude.",
+              "type": "text"
+            },
+            {
               "cache_control": {
                 "type": "ephemeral"
-              }
+              },
+              "text": "first",
+              "type": "text"
             }
           ],
           "tools": [
             {
-              "name": "Read",
+              "cache_control": {
+                "type": "ephemeral"
+              },
               "description": "New read",
               "eager_input_streaming": true,
               "input_schema": {
-                "type": "object",
                 "properties": {
                   "path": {
                     "type": "string"
                   }
                 },
-                "required": []
+                "required": [],
+                "type": "object"
               },
-              "cache_control": {
-                "type": "ephemeral"
-              }
+              "name": "Read"
             }
           ]
         },
@@ -3217,99 +3259,112 @@
           "supportsMidConvoToolChanges": false
         },
         "params": {
-          "model": "claude-test",
+          "max_tokens": 8192,
           "messages": [
             {
-              "role": "user",
-              "content": "hi"
-            },
-            {
-              "role": "assistant",
               "content": [
                 {
-                  "type": "tool_use",
-                  "id": "call",
-                  "name": "read",
-                  "input": {
-                    "file": "<>& 😀"
-                  }
-                }
-              ]
-            },
-            {
-              "role": "user",
-              "content": [
-                {
-                  "type": "tool_result",
-                  "tool_use_id": "call",
-                  "content": "result",
-                  "is_error": false
-                }
-              ]
-            },
-            {
-              "role": "user",
-              "content": "next"
-            },
-            {
-              "role": "system",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "changed"
-                }
-              ]
-            },
-            {
-              "role": "assistant",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "answer"
-                }
-              ]
-            },
-            {
-              "role": "system",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "last",
                   "cache_control": {
                     "type": "ephemeral"
-                  }
+                  },
+                  "text": "hi",
+                  "type": "text"
                 }
-              ]
+              ],
+              "role": "user"
+            },
+            {
+              "content": [
+                {
+                  "id": "call",
+                  "input": {
+                    "file": "<>& 😀"
+                  },
+                  "name": "read",
+                  "type": "tool_use"
+                }
+              ],
+              "role": "assistant"
+            },
+            {
+              "content": [
+                {
+                  "content": "result",
+                  "is_error": false,
+                  "tool_use_id": "call",
+                  "type": "tool_result"
+                }
+              ],
+              "role": "user"
+            },
+            {
+              "content": [
+                {
+                  "cache_control": {
+                    "type": "ephemeral"
+                  },
+                  "text": "next",
+                  "type": "text"
+                }
+              ],
+              "role": "user"
+            },
+            {
+              "content": [
+                {
+                  "text": "changed",
+                  "type": "text"
+                }
+              ],
+              "role": "system"
+            },
+            {
+              "content": [
+                {
+                  "text": "answer",
+                  "type": "text"
+                }
+              ],
+              "role": "assistant"
+            },
+            {
+              "content": [
+                {
+                  "text": "last",
+                  "type": "text"
+                }
+              ],
+              "role": "system"
             }
           ],
-          "max_tokens": 8192,
+          "model": "claude-test",
           "stream": true,
           "system": [
             {
-              "type": "text",
-              "text": "first",
               "cache_control": {
                 "type": "ephemeral"
-              }
+              },
+              "text": "first",
+              "type": "text"
             }
           ],
           "tools": [
             {
-              "name": "read",
+              "cache_control": {
+                "type": "ephemeral"
+              },
               "description": "New read",
               "eager_input_streaming": true,
               "input_schema": {
-                "type": "object",
                 "properties": {
                   "path": {
                     "type": "string"
                   }
                 },
-                "required": []
+                "required": [],
+                "type": "object"
               },
-              "cache_control": {
-                "type": "ephemeral"
-              }
+              "name": "read"
             }
           ]
         },
@@ -3475,110 +3530,120 @@
           "supportsMidConvoToolChanges": false
         },
         "params": {
-          "model": "claude-test",
-          "messages": [
-            {
-              "role": "user",
-              "content": "hi"
-            },
-            {
-              "role": "assistant",
-              "content": [
-                {
-                  "type": "tool_use",
-                  "id": "call",
-                  "name": "Read",
-                  "input": {
-                    "file": "<>& 😀"
-                  }
-                }
-              ]
-            },
-            {
-              "role": "user",
-              "content": [
-                {
-                  "type": "tool_result",
-                  "tool_use_id": "call",
-                  "content": "result",
-                  "is_error": false
-                }
-              ]
-            },
-            {
-              "role": "user",
-              "content": "next"
-            },
-            {
-              "role": "system",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "changed"
-                }
-              ]
-            },
-            {
-              "role": "assistant",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "answer"
-                }
-              ]
-            },
-            {
-              "role": "system",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "last",
-                  "cache_control": {
-                    "type": "ephemeral"
-                  }
-                }
-              ]
-            }
-          ],
-          "max_tokens": 8192,
-          "stream": true,
           "betas": [
             "claude-code-20250219",
             "oauth-2025-04-20"
           ],
-          "system": [
+          "max_tokens": 8192,
+          "messages": [
             {
-              "type": "text",
-              "text": "You are Claude Code, Anthropic's official CLI for Claude.",
-              "cache_control": {
-                "type": "ephemeral"
-              }
+              "content": [
+                {
+                  "cache_control": {
+                    "type": "ephemeral"
+                  },
+                  "text": "hi",
+                  "type": "text"
+                }
+              ],
+              "role": "user"
             },
             {
-              "type": "text",
-              "text": "first",
+              "content": [
+                {
+                  "id": "call",
+                  "input": {
+                    "file": "<>& 😀"
+                  },
+                  "name": "Read",
+                  "type": "tool_use"
+                }
+              ],
+              "role": "assistant"
+            },
+            {
+              "content": [
+                {
+                  "content": "result",
+                  "is_error": false,
+                  "tool_use_id": "call",
+                  "type": "tool_result"
+                }
+              ],
+              "role": "user"
+            },
+            {
+              "content": [
+                {
+                  "cache_control": {
+                    "type": "ephemeral"
+                  },
+                  "text": "next",
+                  "type": "text"
+                }
+              ],
+              "role": "user"
+            },
+            {
+              "content": [
+                {
+                  "text": "changed",
+                  "type": "text"
+                }
+              ],
+              "role": "system"
+            },
+            {
+              "content": [
+                {
+                  "text": "answer",
+                  "type": "text"
+                }
+              ],
+              "role": "assistant"
+            },
+            {
+              "content": [
+                {
+                  "text": "last",
+                  "type": "text"
+                }
+              ],
+              "role": "system"
+            }
+          ],
+          "model": "claude-test",
+          "stream": true,
+          "system": [
+            {
+              "text": "You are Claude Code, Anthropic's official CLI for Claude.",
+              "type": "text"
+            },
+            {
               "cache_control": {
                 "type": "ephemeral"
-              }
+              },
+              "text": "first",
+              "type": "text"
             }
           ],
           "tools": [
             {
-              "name": "Read",
+              "cache_control": {
+                "type": "ephemeral"
+              },
               "description": "New read",
               "eager_input_streaming": true,
               "input_schema": {
-                "type": "object",
                 "properties": {
                   "path": {
                     "type": "string"
                   }
                 },
-                "required": []
+                "required": [],
+                "type": "object"
               },
-              "cache_control": {
-                "type": "ephemeral"
-              }
+              "name": "Read"
             }
           ]
         },
@@ -3833,6 +3898,9 @@
                         ]
                       }
                     }
+                  },
+                  "cache_control": {
+                    "type": "ephemeral"
                   }
                 }
               ]
@@ -4163,6 +4231,9 @@
                         ]
                       }
                     }
+                  },
+                  "cache_control": {
+                    "type": "ephemeral"
                   }
                 }
               ]
@@ -4206,10 +4277,7 @@
           "system": [
             {
               "type": "text",
-              "text": "You are Claude Code, Anthropic's official CLI for Claude.",
-              "cache_control": {
-                "type": "ephemeral"
-              }
+              "text": "You are Claude Code, Anthropic's official CLI for Claude."
             },
             {
               "type": "text",
@@ -4503,6 +4571,9 @@
                         ]
                       }
                     }
+                  },
+                  "cache_control": {
+                    "type": "ephemeral"
                   }
                 }
               ]
@@ -4860,6 +4931,9 @@
                         ]
                       }
                     }
+                  },
+                  "cache_control": {
+                    "type": "ephemeral"
                   }
                 }
               ]
@@ -4919,10 +4993,7 @@
           "system": [
             {
               "type": "text",
-              "text": "You are Claude Code, Anthropic's official CLI for Claude.",
-              "cache_control": {
-                "type": "ephemeral"
-              }
+              "text": "You are Claude Code, Anthropic's official CLI for Claude."
             },
             {
               "type": "text",
@@ -5025,30 +5096,35 @@
           "supportsMidConvoToolChanges": false
         },
         "params": {
-          "model": "claude-test",
+          "max_tokens": 8192,
           "messages": [
             {
-              "role": "user",
-              "content": "first"
+              "content": "first",
+              "role": "user"
             },
             {
-              "role": "user",
-              "content": "second"
-            },
-            {
-              "role": "system",
               "content": [
                 {
-                  "type": "text",
-                  "text": "update",
                   "cache_control": {
                     "type": "ephemeral"
-                  }
+                  },
+                  "text": "second",
+                  "type": "text"
                 }
-              ]
+              ],
+              "role": "user"
+            },
+            {
+              "content": [
+                {
+                  "text": "update",
+                  "type": "text"
+                }
+              ],
+              "role": "system"
             }
           ],
-          "max_tokens": 8192,
+          "model": "claude-test",
           "stream": true
         },
         "error": null
@@ -5113,43 +5189,49 @@
           "supportsMidConvoToolChanges": true
         },
         "params": {
-          "model": "claude-test",
+          "max_tokens": 8192,
           "messages": [
             {
-              "role": "user",
-              "content": "hi"
-            },
-            {
-              "role": "system",
               "content": [
                 {
-                  "type": "text",
-                  "text": "new tool",
                   "cache_control": {
                     "type": "ephemeral"
-                  }
+                  },
+                  "text": "hi",
+                  "type": "text"
                 }
-              ]
+              ],
+              "role": "user"
+            },
+            {
+              "content": [
+                {
+                  "text": "new tool",
+                  "type": "text"
+                }
+              ],
+              "role": "system"
             }
           ],
-          "max_tokens": 8192,
+          "model": "claude-test",
           "stream": true,
           "system": [
             {
-              "type": "text",
-              "text": "first",
               "cache_control": {
                 "type": "ephemeral"
-              }
+              },
+              "text": "first",
+              "type": "text"
             }
           ],
           "tools": [
             {
-              "name": "read",
+              "cache_control": {
+                "type": "ephemeral"
+              },
               "description": "Read",
               "eager_input_streaming": true,
               "input_schema": {
-                "type": "object",
                 "properties": {
                   "file": {
                     "type": "string"
@@ -5157,11 +5239,10 @@
                 },
                 "required": [
                   "file"
-                ]
+                ],
+                "type": "object"
               },
-              "cache_control": {
-                "type": "ephemeral"
-              }
+              "name": "read"
             }
           ]
         },
@@ -5547,74 +5628,90 @@
           "supportsMidConvoToolChanges": false
         },
         "params": {
-          "model": "claude-test",
+          "max_tokens": 8192,
           "messages": [
             {
-              "role": "user",
-              "content": "hi"
-            },
-            {
-              "role": "assistant",
               "content": [
                 {
-                  "type": "tool_use",
+                  "cache_control": {
+                    "type": "ephemeral"
+                  },
+                  "text": "hi",
+                  "type": "text"
+                }
+              ],
+              "role": "user"
+            },
+            {
+              "content": [
+                {
                   "id": "a",
-                  "name": "read",
                   "input": {
                     "file": "<>& 😀"
-                  }
+                  },
+                  "name": "read",
+                  "type": "tool_use"
                 },
                 {
-                  "type": "tool_use",
                   "id": "b",
-                  "name": "read",
                   "input": {
                     "file": "<>& 😀"
-                  }
+                  },
+                  "name": "read",
+                  "type": "tool_use"
                 }
-              ]
+              ],
+              "role": "assistant"
             },
             {
-              "role": "user",
               "content": [
                 {
-                  "type": "tool_result",
-                  "tool_use_id": "a",
                   "content": "result",
-                  "is_error": false
+                  "is_error": false,
+                  "tool_use_id": "a",
+                  "type": "tool_result"
                 },
                 {
-                  "type": "tool_result",
-                  "tool_use_id": "b",
                   "content": "result",
-                  "is_error": false
+                  "is_error": false,
+                  "tool_use_id": "b",
+                  "type": "tool_result"
                 }
-              ]
+              ],
+              "role": "user"
             },
             {
-              "role": "user",
-              "content": "next"
-            },
-            {
-              "role": "system",
               "content": [
                 {
-                  "type": "text",
-                  "text": "update"
+                  "cache_control": {
+                    "type": "ephemeral"
+                  },
+                  "text": "next",
+                  "type": "text"
                 }
-              ]
+              ],
+              "role": "user"
             },
             {
-              "role": "assistant",
               "content": [
                 {
-                  "type": "text",
-                  "text": "answer"
+                  "text": "update",
+                  "type": "text"
                 }
-              ]
+              ],
+              "role": "system"
+            },
+            {
+              "content": [
+                {
+                  "text": "answer",
+                  "type": "text"
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "max_tokens": 8192,
+          "model": "claude-test",
           "stream": true
         },
         "error": null
@@ -5668,23 +5765,31 @@
           "supportsMidConvoToolChanges": false
         },
         "params": {
-          "model": "claude-test",
+          "max_tokens": 8192,
           "messages": [
             {
-              "role": "user",
-              "content": "hi"
-            },
-            {
-              "role": "assistant",
               "content": [
                 {
-                  "type": "text",
-                  "text": "answer"
+                  "cache_control": {
+                    "type": "ephemeral"
+                  },
+                  "text": "hi",
+                  "type": "text"
                 }
-              ]
+              ],
+              "role": "user"
+            },
+            {
+              "content": [
+                {
+                  "text": "answer",
+                  "type": "text"
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "max_tokens": 8192,
+          "model": "claude-test",
           "stream": true
         },
         "error": null
@@ -7069,23 +7174,31 @@
           "supportsMidConvoToolChanges": false
         },
         "params": {
-          "model": "claude-test",
+          "max_tokens": 8192,
           "messages": [
             {
-              "role": "user",
-              "content": "hi"
-            },
-            {
-              "role": "assistant",
               "content": [
                 {
-                  "type": "text",
-                  "text": "answer"
+                  "cache_control": {
+                    "type": "ephemeral"
+                  },
+                  "text": "hi",
+                  "type": "text"
                 }
-              ]
+              ],
+              "role": "user"
+            },
+            {
+              "content": [
+                {
+                  "text": "answer",
+                  "type": "text"
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "max_tokens": 8192,
+          "model": "claude-test",
           "stream": true
         },
         "error": null
@@ -10633,10 +10746,7 @@
           "system": [
             {
               "type": "text",
-              "text": "You are Claude Code, Anthropic's official CLI for Claude.",
-              "cache_control": {
-                "type": "ephemeral"
-              }
+              "text": "You are Claude Code, Anthropic's official CLI for Claude."
             },
             {
               "type": "text",

@@ -7,17 +7,22 @@ import (
 	"fmt"
 	"slices"
 
-	nativehost "github.com/2found/2ai/agentcore/host"
+	"github.com/2found/2ai/ai"
 )
 
-// ObservePiMessages delivers a detached display projection to existing plugin
+// ObserveMessages delivers a detached display projection to existing plugin
 // observers. Native request/history JSON remains authoritative and cannot be
 // rewritten by a legacy observer.
-func (h *PiToolHost) ObservePiMessages(ctx context.Context, phase ObservePhase, turn int, raw json.RawMessage) error {
+func (h *ToolHost) ObserveMessages(ctx context.Context, phase ObservePhase, turn int, raw json.RawMessage) error {
 	h.gate.RLock()
 	defer h.gate.RUnlock()
 	if h.closed || !h.lifecycle.Load() {
-		return errors.New("Pi tool host is not running")
+		return errors.New("native tool host is not running")
+	}
+	// The projection is for observers only; a long transcript is not decoded
+	// on every request for nobody.
+	if len(h.exts.observers) == 0 {
+		return nil
 	}
 	var messages []json.RawMessage
 	if err := json.Unmarshal(raw, &messages); err != nil {
@@ -25,41 +30,42 @@ func (h *PiToolHost) ObservePiMessages(ctx context.Context, phase ObservePhase, 
 	}
 	projected := make([]Message, 0, len(messages))
 	for _, message := range messages {
-		value, err := nativehost.ProjectMessage(message)
+		value, err := ai.ProjectMessage(message)
 		if err != nil {
 			return err
 		}
 		projected = append(projected, value)
 	}
-	h.exts.observe(piToolContext{Context: ctx, values: h.ctx}, phase, turn, projected)
+	h.exts.observe(toolCallContext{Context: ctx, values: h.ctx}, phase, turn, projected)
 	return nil
 }
 
-// PiTurnPreparation contains host-authored additions for the next native turn.
-// Append Messages through Pi's prompt/prepareNextTurnWithContext lifecycle;
-// never rebuild provider history from these legacy host message values.
-type PiTurnPreparation struct {
-	Messages     []Message
-	DisableTools bool
-	StopReason   string
-	Note         string
+// TurnPreparation contains host-authored additions for the next native turn.
+// Append Messages through the engine's prompt/prepareNextTurnWithContext
+// lifecycle; never rebuild provider history from these host message values. A
+// StopReason makes the turn the run's wrap-up: it is asked for with tool
+// choice "none", and a tool call it makes anyway is refused.
+type TurnPreparation struct {
+	Messages   []Message
+	StopReason string
+	Note       string
 }
 
-// PiGoal is the composed host's completion contract. Native persistence keeps
+// Goal is the composed host's completion contract. Native persistence keeps
 // it separately from provider messages so a resumed host can re-arm the gate.
-func (h *PiToolHost) PiGoal() string {
+func (h *ToolHost) Goal() string {
 	h.gate.RLock()
 	defer h.gate.RUnlock()
 	return h.goal
 }
 
-// RefreshPiGoal drains committed extension updates between native turns. The
+// RefreshGoal drains committed extension updates between native turns. The
 // returned prompt is a new named system section, never a history replacement.
-func (h *PiToolHost) RefreshPiGoal() (system string, changed bool, err error) {
+func (h *ToolHost) RefreshGoal() (system string, changed bool, err error) {
 	h.gate.Lock()
 	defer h.gate.Unlock()
 	if h.closed || !h.lifecycle.Load() {
-		return "", false, errors.New("Pi tool host is not running")
+		return "", false, errors.New("native tool host is not running")
 	}
 	next := h.goal
 	for _, goal := range h.exts.goalRevisions() {
@@ -79,49 +85,42 @@ func (h *PiToolHost) RefreshPiGoal() (system string, changed bool, err error) {
 	return system, changed, nil
 }
 
-// PiCompactionPolicy exposes the composed host's existing context limits to
-// native consumer transforms, including limits inherited by a fork.
-func (h *PiToolHost) PiCompactionPolicy() (budget, keepRecent int) {
-	budget = effectiveBudget(h.agent.limits.MaxContextTokens, h.agent.contextWindow)
-	return budget, effectiveCompaction(h.agent.compaction, budget).KeepRecentTokens
-}
-
-// ValidatePiSession checks that native persistence and the governed tool host
+// ValidateSession checks that native persistence and the governed tool host
 // agree on the session identity used for tool idempotency and extension scope.
-func (h *PiToolHost) ValidatePiSession(id string, durable bool) error {
+func (h *ToolHost) ValidateSession(id string, durable bool) error {
 	if h.agent.sessionID != id || (h.agent.session != nil) != durable {
-		return errors.New("Pi session binding differs from the composed tool host")
+		return errors.New("native session binding differs from the composed tool host")
 	}
 	return nil
 }
 
-// StartPiRun claims the host for one native run and assembles the composed definition, recalled memory, skills,
+// StartRun claims the host for one native run and assembles the composed definition, recalled memory, skills,
 // and extension instructions. It does not execute legacy transcript-editing
 // hooks; callers integrating those hooks must preserve the native transcript.
-func (h *PiToolHost) StartPiRun(ctx context.Context, task string) (string, error) {
-	return h.StartPiRunWithLifecycle(ctx, task, nil)
+func (h *ToolHost) StartRun(ctx context.Context, task string) (string, error) {
+	return h.StartRunWithLifecycle(ctx, task, nil)
 }
 
-// StartPiRunWithLifecycle is StartPiRun with an optional observer for bounded
+// StartRunWithLifecycle is StartRun with an optional observer for bounded
 // setup stages. It exposes the stage, never recalled memory content.
-func (h *PiToolHost) StartPiRunWithLifecycle(ctx context.Context, task string, lifecycle func(string)) (string, error) {
-	system, _, err := h.startPiRun(ctx, task, lifecycle, true)
+func (h *ToolHost) StartRunWithLifecycle(ctx context.Context, task string, lifecycle func(string)) (string, error) {
+	system, _, err := h.startRun(ctx, task, lifecycle, true)
 	return system, err
 }
 
-// startPiRun is StartPiRun. With inline false, recalled memory stays out of the
+// startRun is StartRun. With inline false, recalled memory stays out of the
 // system prompt and is returned for the caller to place: the system prompt is
 // the cached prefix of every request in the conversation, and recall is a
 // per-task query, so a memory block there made each run's first request miss
 // the cache for the whole transcript behind it.
-func (h *PiToolHost) startPiRun(ctx context.Context, task string, lifecycle func(string), inline bool) (string, []MemoryEntry, error) {
+func (h *ToolHost) startRun(ctx context.Context, task string, lifecycle func(string), inline bool) (string, []MemoryEntry, error) {
 	h.gate.Lock()
 	defer h.gate.Unlock()
 	if h.closed {
-		return "", nil, errors.New("Pi tool host is closed")
+		return "", nil, errors.New("native tool host is closed")
 	}
 	if !h.lifecycle.CompareAndSwap(false, true) {
-		return "", nil, errors.New("Pi tool host already bound to a run")
+		return "", nil, errors.New("native tool host already bound to a run")
 	}
 	ctx, cancel := context.WithCancel(ctx)
 	detach := context.AfterFunc(h.ctx, cancel)
@@ -129,7 +128,7 @@ func (h *PiToolHost) startPiRun(ctx context.Context, task string, lifecycle func
 	if h.ctx.Err() != nil {
 		cancel()
 	}
-	ctx = piToolContext{Context: ctx, values: h.ctx}
+	ctx = toolCallContext{Context: ctx, values: h.ctx}
 	var recalled []MemoryEntry
 	if h.agent.memory != nil {
 		if lifecycle != nil {
@@ -159,14 +158,15 @@ func (h *PiToolHost) startPiRun(ctx context.Context, task string, lifecycle func
 	return system, recalled, nil
 }
 
-// PreparePiTurn applies the composed step gate and step extensions. A ceiling
-// allows one tool-free wrap-up; FinishPiTurn ends it regardless of stop guards.
+// PrepareTurn applies the composed step gate and step extensions. A ceiling
+// allows one wrap-up turn without tool calls; FinishTurn ends it regardless
+// of stop guards.
 // The native host calls this serially, once before each provider turn.
-func (h *PiToolHost) PreparePiTurn(ctx context.Context, info StepInfo) (PiTurnPreparation, error) {
+func (h *ToolHost) PrepareTurn(ctx context.Context, info StepInfo) (TurnPreparation, error) {
 	h.gate.RLock()
 	defer h.gate.RUnlock()
 	if h.closed {
-		return PiTurnPreparation{}, errors.New("Pi tool host is closed")
+		return TurnPreparation{}, errors.New("native tool host is closed")
 	}
 	ctx, cancel := context.WithCancel(ctx)
 	detach := context.AfterFunc(h.ctx, cancel)
@@ -174,18 +174,18 @@ func (h *PiToolHost) PreparePiTurn(ctx context.Context, info StepInfo) (PiTurnPr
 	if h.ctx.Err() != nil {
 		cancel()
 	}
-	ctx = piToolContext{Context: ctx, values: h.ctx}
-	info.Usage = addUsage(info.Usage, h.agent.peekChildUsage())
+	ctx = toolCallContext{Context: ctx, values: h.ctx}
+	info.Usage = info.Usage.Add(h.agent.peekChildUsage())
 	if err := ctx.Err(); err != nil {
-		return PiTurnPreparation{}, err
+		return TurnPreparation{}, err
 	}
 	if h.agent.stepGate != nil {
 		if err := h.agent.stepGate(ctx, info.Turn); err != nil {
-			return PiTurnPreparation{}, err
+			return TurnPreparation{}, err
 		}
 	}
 	if err := h.agent.hooks.runTurnHooks(ctx, h.agent.hooks.TurnStart, "turn_start", TurnInfo{Turn: info.Turn, Model: info.Model, Usage: info.Usage}); err != nil {
-		return PiTurnPreparation{}, err
+		return TurnPreparation{}, err
 	}
 	var reason string
 	switch {
@@ -198,7 +198,7 @@ func (h *PiToolHost) PreparePiTurn(ctx context.Context, info StepInfo) (PiTurnPr
 	}
 	if reason != "" {
 		h.finalizing.Store(true)
-		return PiTurnPreparation{Messages: []Message{{Role: RoleUser, Content: finalizeSteer(reason)}}, DisableTools: true, StopReason: reason, Note: finalizeNote(reason)}, nil
+		return TurnPreparation{Messages: []Message{{Role: RoleUser, Content: finalizeSteer(reason)}}, StopReason: reason, Note: finalizeNote(reason)}, nil
 	}
 	messages := h.exts.beforeStep(ctx, info)
 	if h.agent.getSteering != nil {
@@ -206,33 +206,33 @@ func (h *PiToolHost) PreparePiTurn(ctx context.Context, info StepInfo) (PiTurnPr
 		h.exts.observe(ctx, PhaseExternalInput, info.Turn, steering)
 		messages = append(messages, steering...)
 	}
-	return PiTurnPreparation{Messages: messages}, nil
+	return TurnPreparation{Messages: messages}, nil
 }
 
-// PiCompletedTurn is a display/control projection of one completed native turn.
+// CompletedTurn is a display/control projection of one completed native turn.
 // Outcomes must be in assistant source order, not parallel completion order.
-type PiCompletedTurn struct {
+type CompletedTurn struct {
 	Info              StopInfo
 	Usage             Usage
 	Model, StopReason string
 	Calls             []ToolCall
-	Outcomes          []PiToolOutcome
+	Outcomes          []ToolOutcome
 }
 
-// PiTurnDecision tells the native host whether to end or schedule another turn.
-type PiTurnDecision struct {
+// TurnDecision tells the native host whether to end or schedule another turn.
+type TurnDecision struct {
 	StopDecision
 	End    bool
 	Parked bool
 }
 
-// FinishPiTurn runs batch and stop policies over a completed native turn. Tool
+// FinishTurn runs batch and stop policies over a completed native turn. Tool
 // effects and native transcript placement have already settled at this point.
-func (h *PiToolHost) FinishPiTurn(ctx context.Context, turn PiCompletedTurn) (PiTurnDecision, error) {
+func (h *ToolHost) FinishTurn(ctx context.Context, turn CompletedTurn) (TurnDecision, error) {
 	h.gate.RLock()
 	defer h.gate.RUnlock()
 	if h.closed {
-		return PiTurnDecision{}, errors.New("Pi tool host is closed")
+		return TurnDecision{}, errors.New("native tool host is closed")
 	}
 	ctx, cancel := context.WithCancel(ctx)
 	detach := context.AfterFunc(h.ctx, cancel)
@@ -240,35 +240,35 @@ func (h *PiToolHost) FinishPiTurn(ctx context.Context, turn PiCompletedTurn) (Pi
 	if h.ctx.Err() != nil {
 		cancel()
 	}
-	ctx = piToolContext{Context: ctx, values: h.ctx}
+	ctx = toolCallContext{Context: ctx, values: h.ctx}
 
-	if err := h.agent.hooks.runTurnHooks(ctx, h.agent.hooks.TurnEnd, "turn_end", TurnInfo{Turn: turn.Info.Turns, Model: turn.Model, Usage: addUsage(turn.Usage, h.agent.peekChildUsage()), StopReason: turn.StopReason}); err != nil {
-		return PiTurnDecision{}, err
+	if err := h.agent.hooks.runTurnHooks(ctx, h.agent.hooks.TurnEnd, "turn_end", TurnInfo{Turn: turn.Info.Turns, Model: turn.Model, Usage: turn.Usage.Add(h.agent.peekChildUsage()), StopReason: turn.StopReason}); err != nil {
+		return TurnDecision{}, err
 	}
 	if turn.StopReason == "error" || turn.StopReason == "aborted" {
-		return PiTurnDecision{}, nil
+		return TurnDecision{}, nil
 	}
-	// Pi retains the original response in native history. Reject invalid text
+	// The engine retains the original response in native history. Reject invalid text
 	// through its failure lifecycle before a stop guard can accept the answer.
 	if len(turn.Calls) == 0 && h.agent.outputValidator != nil {
 		if err := h.agent.outputValidator(turn.Info.Final); err != nil {
-			return PiTurnDecision{}, err
+			return TurnDecision{}, err
 		}
 	}
-	batch, err := h.finishPiBatch(ctx, turn.Calls, turn.Outcomes)
+	batch, err := h.finishBatch(ctx, turn.Calls, turn.Outcomes)
 	if err != nil || batch.End {
 		return batch, err
 	}
 
 	reason, controlErr := h.controlRun(ctx, StepInfo{Turn: turn.Info.Turns + 1, Model: turn.Model, Usage: turn.Usage})
 	if controlErr != nil {
-		return PiTurnDecision{}, controlErr
+		return TurnDecision{}, controlErr
 	}
 	if reason != "" {
-		return PiTurnDecision{End: true, StopDecision: StopDecision{StopReason: reason}}, nil
+		return TurnDecision{End: true, StopDecision: StopDecision{StopReason: reason}}, nil
 	}
 	if len(turn.Calls) > 0 {
-		// Pi decides whether this batch schedules another request. A native
+		// The engine decides whether this batch schedules another request. A native
 		// before/after-tool hook may have terminated every result; extra host
 		// context must not resurrect that deliberately ended batch.
 		return batch, nil
@@ -291,19 +291,19 @@ func (h *PiToolHost) FinishPiTurn(ctx context.Context, turn PiCompletedTurn) (Pi
 			stop = StopDecision{Continue: true, Inject: follow}
 		}
 	}
-	return PiTurnDecision{StopDecision: stop}, nil
+	return TurnDecision{StopDecision: stop}, nil
 }
 
-// FinishPiDelegationBatch applies batch policy after every parked call in the
+// FinishDelegationBatch applies batch policy after every parked call in the
 // original assistant batch has settled. Calls and outcomes must retain source
 // order and include nondelegated siblings. This is not another model turn: it
 // does not rerun TurnEnd, output validation, steering, or stop guards. The
 // durable host must record the decision before delivering its contexts.
-func (h *PiToolHost) FinishPiDelegationBatch(ctx context.Context, calls []ToolCall, outcomes []PiToolOutcome) (PiTurnDecision, error) {
+func (h *ToolHost) FinishDelegationBatch(ctx context.Context, calls []ToolCall, outcomes []ToolOutcome) (TurnDecision, error) {
 	h.gate.RLock()
 	defer h.gate.RUnlock()
 	if h.closed || !h.lifecycle.Load() {
-		return PiTurnDecision{}, errors.New("Pi tool host is not running")
+		return TurnDecision{}, errors.New("native tool host is not running")
 	}
 	ctx, cancel := context.WithCancel(ctx)
 	detach := context.AfterFunc(h.ctx, cancel)
@@ -311,14 +311,14 @@ func (h *PiToolHost) FinishPiDelegationBatch(ctx context.Context, calls []ToolCa
 	if h.ctx.Err() != nil {
 		cancel()
 	}
-	ctx = piToolContext{Context: ctx, values: h.ctx}
-	return h.finishPiBatch(ctx, calls, outcomes)
+	ctx = toolCallContext{Context: ctx, values: h.ctx}
+	return h.finishBatch(ctx, calls, outcomes)
 }
 
 // Caller holds the host gate and has bound cancellation and host values.
-func (h *PiToolHost) finishPiBatch(ctx context.Context, calls []ToolCall, outcomes []PiToolOutcome) (PiTurnDecision, error) {
+func (h *ToolHost) finishBatch(ctx context.Context, calls []ToolCall, outcomes []ToolOutcome) (TurnDecision, error) {
 	if err := ctx.Err(); err != nil {
-		return PiTurnDecision{}, err
+		return TurnDecision{}, err
 	}
 	var extra []Message
 	var parked, terminal bool
@@ -328,22 +328,22 @@ func (h *PiToolHost) finishPiBatch(ctx context.Context, calls []ToolCall, outcom
 		terminal = terminal || outcome.Terminate
 	}
 	if parked || terminal || h.finalizing.Load() {
-		return PiTurnDecision{End: true, Parked: parked}, nil
+		return TurnDecision{End: true, Parked: parked}, nil
 	}
 	if len(calls) > 0 {
 		// Extension callbacks may edit their slice; source history is immutable.
 		extra = append(extra, h.exts.interceptBatch(ctx, slices.Clone(calls))...)
 	}
 	if err := ctx.Err(); err != nil {
-		return PiTurnDecision{}, err
+		return TurnDecision{}, err
 	}
-	return PiTurnDecision{StopDecision: StopDecision{Inject: extra}}, nil
+	return TurnDecision{StopDecision: StopDecision{Inject: extra}}, nil
 }
 
-// CompletePiRun closes run resources, folds child spend once, and emits terminal
+// CompleteRun closes run resources, folds child spend once, and emits terminal
 // observers. Provider history stays native; result.Messages is a read-only
 // display projection for observers, never input to another provider request.
-func (h *PiToolHost) CompletePiRun(ctx context.Context, result RunResult) RunResult {
+func (h *ToolHost) CompleteRun(ctx context.Context, result RunResult) RunResult {
 	h.cancel()
 	h.gate.Lock()
 	defer h.gate.Unlock()
@@ -355,18 +355,18 @@ func (h *PiToolHost) CompletePiRun(ctx context.Context, result RunResult) RunRes
 		h.exts.closeRun()
 		defer h.agent.release()
 	}
-	result.Usage = addUsage(result.Usage, h.agent.takeChildUsage())
-	h.agent.hooks.runAgentEnd(piToolContext{Context: ctx, values: h.ctx}, result)
+	result.Usage = result.Usage.Add(h.agent.takeChildUsage())
+	h.agent.hooks.runAgentEnd(toolCallContext{Context: ctx, values: h.ctx}, result)
 	return result
 }
 
-// TransformPiContext applies native request-view hooks without rewriting the
+// TransformContext applies native request-view hooks without rewriting the
 // durable transcript. A failing or mutating hook cannot damage the last valid
 // view: each receives an isolated copy, and invalid output is discarded.
-func (h *PiToolHost) TransformPiContext(ctx context.Context, raw json.RawMessage) json.RawMessage {
+func (h *ToolHost) TransformContext(ctx context.Context, raw json.RawMessage) json.RawMessage {
 	h.gate.RLock()
 	defer h.gate.RUnlock()
-	if h.closed || (len(h.agent.hooks.PiContext) == 0 && len(h.exts.contexts) == 0) {
+	if h.closed || (len(h.agent.hooks.Context) == 0 && len(h.exts.contexts) == 0) {
 		return raw
 	}
 	ctx, cancel := context.WithCancel(ctx)
@@ -375,15 +375,15 @@ func (h *PiToolHost) TransformPiContext(ctx context.Context, raw json.RawMessage
 	if h.ctx.Err() != nil {
 		cancel()
 	}
-	ctx = piToolContext{Context: ctx, values: h.ctx}
+	ctx = toolCallContext{Context: ctx, values: h.ctx}
 	var current []json.RawMessage
 	if err := json.Unmarshal(raw, &current); err != nil {
 		return raw
 	}
-	hooks := slices.Clone(h.agent.hooks.PiContext)
+	hooks := slices.Clone(h.agent.hooks.Context)
 	sources := make([]string, len(hooks))
 	for i := range hooks {
-		sources[i] = fmt.Sprintf("pi_context[%d]", i)
+		sources[i] = fmt.Sprintf("context[%d]", i)
 	}
 	for _, extension := range h.exts.contexts {
 		hooks = append(hooks, extension.TransformNativeContext)

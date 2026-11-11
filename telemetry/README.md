@@ -38,6 +38,35 @@ boolean `ai.output_committed`, without parsing or publishing provider error text
 These diagnostics do not change retries; committed output still fences replay.
 Native AI attempt events also expose numeric `ai.attempt` and `ai.duration_ms`
 attributes without requiring hosts to parse the private `llm.trace` body.
+Attempt events and their request span carry OpenTelemetry GenAI attributes
+(`gen_ai.provider.name`, `gen_ai.request.model`, `gen_ai.response.model`,
+`gen_ai.response.finish_reasons`, `gen_ai.usage.input_tokens` (the whole
+prompt, cache included), `gen_ai.usage.output_tokens`,
+`gen_ai.usage.cache_read.input_tokens`, `gen_ai.usage.cache_creation.input_tokens`,
+the 2ai extension `gen_ai.usage.reasoning.output_tokens`) plus `ai.cost_usd`,
+`ai.context_window`, `ai.time_to_first_token_ms`, `ai.fallback.rung`; a failed
+attempt's event adds `error.type`.
+
+## Bounds and payloads
+
+`NewInMemory(Limits{...})` bounds a scope: spans held (default 10,000), events
+per span (default 1,000). `Dropped()` counts what was refused. Payloads are
+opt-in: `Span.AddEventWithPayload` produces its payload only when `Limits.Payloads`
+is positive, within `Limits.PayloadBytes` (default 1 MiB); a payload dropped by
+count, size or producer error is counted and marked `<key>.dropped`. The full
+`llm.trace` request/response is such a payload, so it is never serialized
+unless a host opts in, for example `export.New(sink, telemetry.Limits{Payloads: 1000})`.
+`NewStream(settled, limits)` hands each span off as it settles and forgets it.
+
+## Export
+
+`export.New(sink)` delivers one whole tree per root span, synchronously at root
+end, for in-process consumers that need the complete tree. `export.NewExporter`
+is the production path: settled spans leave on a background goroutine in
+batches (`BatchSize`, `Interval`), recording never blocks (a full `Queue` drops
+and counts), `Sample` decides per root (`SampleRatio`), `Heartbeat` exports a
+snapshot of each running root, and `Flush`/`Close` deliver what is queued.
+`export.OTLP(endpoint, service, headers, client)` is a stdlib OTLP/HTTP JSON sink.
 
 `Attributes` is an ordered object, constructed with `NewAttributes(Property{...},
 ...)`; use `Get`, `Lookup`, `Set`, `Delete`, `Len` and `Entries` instead of map

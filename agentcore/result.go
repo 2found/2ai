@@ -33,6 +33,10 @@ type RunResult struct {
 	// this run cannot be reconstructed (pi's Faulted state, degraded to a
 	// flagged result instead of a halt).
 	UnpersistedEntries int `json:"unpersisted_entries,omitempty"`
+	// Compactions lists every context-summary attempt the run made, in order:
+	// what triggered it, how it was produced, the estimated tokens before and
+	// after, and what it cost. Empty when the run never compacted.
+	Compactions []CompactionEvent `json:"compactions,omitempty"`
 	// Parked is true when the run ended inside a tool call that is waiting on a
 	// human (the ask tool): the call stays dangling in the durable log behind an
 	// EntryQuestion, and the run resumes when an EntryAnswer lands. Distinct

@@ -55,8 +55,7 @@ different arguments, or finish the task if enough evidence has been gathered.
 
 #### Token effect
 
-**Capped.** The quoted arguments are clamped to `ArgumentsPreviewChars`
-(default 500 runes) with an explicit `… (+N more chars)` marker, so a looping
+**Capped.** The quoted arguments are clamped to 500 runes with an explicit `… (+N more chars)` marker, so a looping
 write-shaped payload cannot ride unbounded into every subsequent request. The
 chain key always compares the **full** canonical string; only the reminder text
 is bounded.

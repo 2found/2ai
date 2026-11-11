@@ -5,8 +5,19 @@ import (
 	"math"
 )
 
-// Pi's conservative fallback estimate; settled provider usage remains authoritative.
-const estimatedCharsPerToken = 3.5
+// EstimatedCharsPerToken is Pi's conservative fallback ratio; settled provider
+// usage remains authoritative. This is the module's only token estimator:
+// hosts estimate serialized text with EstimateTextTokens and transcripts with
+// EstimateContextTokens.
+const EstimatedCharsPerToken = 3.5
+
+// estimatedImageChars is the flat character charge for one inline image.
+const estimatedImageChars = 4800
+
+// EstimatedImageTokens is the flat token estimate for one inline image:
+// providers bill an image by its dimensions, never by the length of its base64
+// text. A host estimating serialized messages replaces an image's data with it.
+const EstimatedImageTokens = estimatedImageChars / EstimatedCharsPerToken
 
 // ContextUsageEstimate follows Pi's usage-aware estimate. Usage applies only
 // when its response is at least as new as every preceding transcript message.
@@ -36,22 +47,7 @@ func estimateUTF16Length(text string) int {
 }
 
 func EstimateTextTokens(text string) float64 {
-	return math.Ceil(float64(estimateUTF16Length(text)) / estimatedCharsPerToken)
-}
-
-func EstimateTextAndImageContentTokens(content MessageContent) float64 {
-	if content.Text != nil {
-		return EstimateTextTokens(*content.Text)
-	}
-	chars := 0
-	for _, block := range content.Blocks.Values() {
-		if block.Type == "text" {
-			chars += estimateUTF16Length(block.Text)
-		} else {
-			chars += 4800
-		}
-	}
-	return math.Ceil(float64(chars) / estimatedCharsPerToken)
+	return math.Ceil(float64(estimateUTF16Length(text)) / EstimatedCharsPerToken)
 }
 
 func estimateJSONString(value any) string {
@@ -78,11 +74,15 @@ func EstimateMessageTokens(message Message) float64 {
 		}
 		return tokens
 	case "user", "toolResult":
-		return EstimateTextAndImageContentTokens(message.Content)
+		if message.Content.Text != nil {
+			return EstimateTextTokens(*message.Content.Text)
+		}
 	}
 	chars := 0
 	for _, block := range message.Content.Blocks.Values() {
 		switch block.Type {
+		case "image":
+			chars += estimatedImageChars
 		case "text":
 			chars += estimateUTF16Length(block.Text)
 		case "thinking":
@@ -95,7 +95,7 @@ func EstimateMessageTokens(message Message) float64 {
 			chars += estimateUTF16Length(block.Name) + estimateUTF16Length(args)
 		}
 	}
-	return math.Ceil(float64(chars) / estimatedCharsPerToken)
+	return math.Ceil(float64(chars) / EstimatedCharsPerToken)
 }
 
 func EstimateContextTokens(messages []Message) ContextUsageEstimate {

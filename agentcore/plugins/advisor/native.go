@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/2found/2ai/agentcore"
-	"github.com/2found/2ai/agentcore/host"
 	"github.com/2found/2ai/ai"
 	"github.com/2found/2ai/telemetry"
 )
@@ -48,7 +47,7 @@ func (p nativePlugin) BeginRun(_ context.Context, info agentcore.RunInfo) (agent
 			return p.provider.Run(ctx, out, ai.FallbackRequest{Candidates: len(p.provider.Candidates), Open: func(ctx context.Context, index, _ int) (*ai.AssistantMessageEventStream, error) {
 				candidate := p.provider.Candidates[index]
 				trace.Start(candidate.Model, transcript)
-				return candidate.Stream(ctx, candidate.Model, transcript, map[string]any{"maxTokens": 1024, "reasoning": "off"})
+				return candidate.Stream(ctx, candidate.Model, transcript, map[string]any{"maxTokens": 1024, "reasoning": "off", "cacheRetention": "none"})
 			}, Observe: func(_ context.Context, _ int, attempt ai.FallbackAttempt) error {
 				trace.Finish(attempt)
 				if msg := attempt.Outcome.Message(); msg != nil {
@@ -56,7 +55,7 @@ func (p nativePlugin) BeginRun(_ context.Context, info agentcore.RunInfo) (agent
 					if err != nil {
 						return err
 					}
-					projected, err := host.ProjectMessage(raw)
+					projected, err := ai.ProjectMessage(raw)
 					if err != nil {
 						return err
 					}
@@ -78,7 +77,7 @@ func (p nativePlugin) BeginRun(_ context.Context, info agentcore.RunInfo) (agent
 		if err != nil {
 			return nil, err
 		}
-		projected, err := host.ProjectMessage(raw)
+		projected, err := ai.ProjectMessage(raw)
 		if err != nil {
 			return nil, err
 		}

@@ -334,10 +334,6 @@ func (c *lspConn) request(ctx context.Context, method string, params any) (json.
 	}
 }
 
-func wireIDEqual(raw json.RawMessage, id int) bool {
-	return string(bytes.TrimSpace(raw)) == strconv.Itoa(id)
-}
-
 func (c *lspConn) handleIncoming(msg lspWireMessage) error {
 	if msg.Method == "textDocument/publishDiagnostics" {
 		var params struct {
@@ -499,11 +495,6 @@ func lspSettingSection(settings map[string]any, section string) any {
 	return current
 }
 
-func (c *lspConn) waitForDiagnostics(ctx context.Context, uri string, version int) ([]lspDiagnostic, bool, error) {
-	diagnostics, known, _, err := c.waitForDiagnosticsOrCapability(ctx, uri, version, "")
-	return diagnostics, known, err
-}
-
 func (c *lspConn) waitForDiagnosticsOrCapability(ctx context.Context, uri string, version int, capability string) ([]lspDiagnostic, bool, bool, error) {
 	c.initialize()
 	for {
@@ -534,11 +525,6 @@ func (c *lspConn) waitForDiagnosticsOrCapability(ctx context.Context, uri string
 		case <-settle:
 		}
 	}
-}
-
-func (c *lspConn) currentDiagnostics(uri string, version int) ([]lspDiagnostic, bool) {
-	diagnostics, known, _ := c.diagnosticsStatus(uri, version)
-	return diagnostics, known
 }
 
 func (c *lspConn) diagnosticsStatus(uri string, version int) ([]lspDiagnostic, bool, time.Duration) {

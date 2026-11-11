@@ -68,7 +68,7 @@ func TestDelegationGuidanceFollowsAdvertisedCapabilities(t *testing.T) {
 			if tc.durable {
 				// Durable execution belongs to the consuming session host. Inspect
 				// its actual policy-filtered definitions through the native bridge.
-				host, err := a.OpenPiTools(ctx)
+				host, err := a.OpenTools(ctx)
 				if err != nil {
 					t.Fatal(err)
 				}

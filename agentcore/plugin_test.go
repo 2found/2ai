@@ -4,6 +4,8 @@ import (
 	"context"
 	"strings"
 	"testing"
+
+	"github.com/2found/2ai/ai"
 )
 
 // These cover the composition MECHANISM: seams, priorities, reversibility,
@@ -135,6 +137,7 @@ func TestRegistry_EverySetterClaimsItsSeam(t *testing.T) {
 		{"prompt_cache", func(r *Registry) error { return r.SetPromptCache("k", "") }},
 		{"session", func(r *Registry) error { return r.SetSession(NewMemorySessionStore(), "s", false) }},
 		{"compaction", func(r *Registry) error { return r.SetCompaction(DefaultCompactionSettings()) }},
+		{"compaction_model", func(r *Registry) error { return r.SetCompactionModel(scriptedNativeProvider()) }},
 	}
 	for _, tc := range cases {
 		r := newRegistry()
@@ -145,6 +148,15 @@ func TestRegistry_EverySetterClaimsItsSeam(t *testing.T) {
 		r.current = "b"
 		if err := tc.set(r); err == nil {
 			t.Fatalf("%s: a second plugin must not be able to claim it", tc.seam)
+		}
+	}
+}
+
+// A compaction model without candidates could never answer a summary.
+func TestRegistry_CompactionModelNeedsCandidates(t *testing.T) {
+	for _, p := range []*ai.FallbackProvider{nil, {}} {
+		if err := newRegistry().SetCompactionModel(p); err == nil {
+			t.Fatalf("accepted compaction model %v", p)
 		}
 	}
 }
@@ -199,11 +211,11 @@ func TestRegistry_PartialPluginRollsBack(t *testing.T) {
 func TestRegistry_UnloadReversesEverything(t *testing.T) {
 	r, err := BuildRegistry(
 		modelOf("m"),
-		funcPlugin{name: "policy", fn: func(r *Registry) error { return r.UsePolicy(NewAllowList("echo")) }},
-		funcPlugin{name: "tools", fn: func(r *Registry) error {
-			r.AddTools(&echoTool{name: "echo"})
-			return nil
+		funcPlugin{name: "policy", fn: func(r *Registry) error {
+			r.AddHooks(PriorityGate, Hooks{Before: []BeforeToolCall{func(context.Context, ToolCall) Decision { return Allowed() }}})
+			return r.SetPolicy(NewAllowList("echo"))
 		}},
+		funcPlugin{name: "tools", fn: func(r *Registry) error { return r.AddTools(&echoTool{name: "echo"}) }},
 	)
 	if err != nil {
 		t.Fatalf("BuildRegistry: %v", err)
@@ -212,7 +224,7 @@ func TestRegistry_UnloadReversesEverything(t *testing.T) {
 		t.Fatalf("policy seam owner = %q", r.Provider("policy"))
 	}
 	if len(r.mergedHooks().Before) != 1 {
-		t.Fatal("UsePolicy should have contributed the gate hook")
+		t.Fatal("the policy plugin's hook did not register")
 	}
 
 	if err := r.Unload("policy"); err != nil {
@@ -234,7 +246,7 @@ func TestRegistry_UnloadReversesEverything(t *testing.T) {
 		t.Fatalf("unload leaked into another plugin: %v", r.tools.Names())
 	}
 	// And the freed seam really is claimable again.
-	if err := r.register(funcPlugin{name: "policy2", fn: func(r *Registry) error { return r.UsePolicy(DenyAll{}) }}); err != nil {
+	if err := r.register(funcPlugin{name: "policy2", fn: func(r *Registry) error { return r.SetPolicy(DenyAll{}) }}); err != nil {
 		t.Fatalf("re-registering into the freed seam: %v", err)
 	}
 }
@@ -242,10 +254,7 @@ func TestRegistry_UnloadReversesEverything(t *testing.T) {
 func TestRegistry_UnloadWithdrawsTools(t *testing.T) {
 	r, err := BuildRegistry(
 		modelOf("m"),
-		funcPlugin{name: "tools", fn: func(r *Registry) error {
-			r.AddTools(&echoTool{name: "a"})
-			return nil
-		}},
+		funcPlugin{name: "tools", fn: func(r *Registry) error { return r.AddTools(&echoTool{name: "a"}) }},
 	)
 	if err != nil {
 		t.Fatalf("BuildRegistry: %v", err)
@@ -255,6 +264,81 @@ func TestRegistry_UnloadWithdrawsTools(t *testing.T) {
 	}
 	if len(r.tools.Names()) != 0 {
 		t.Fatalf("unloading a tools plugin must withdraw its tools: %v", r.tools.Names())
+	}
+}
+
+// contributor registers one extension, one tool and one hook under its name,
+// so unload order can be provoked across every additive registration.
+func contributor(name string, began *int) Plugin {
+	return funcPlugin{name: name, fn: func(r *Registry) error {
+		r.AddExtension(countingExtension{name: name + "_ext", began: began})
+		r.AddHooks(PriorityDefault, Hooks{Before: []BeforeToolCall{func(context.Context, ToolCall) Decision { return Allowed() }}})
+		return r.AddTools(&echoTool{name: name + "_tool"})
+	}}
+}
+
+// Unload used to restore a snapshot taken when the plugin registered, so
+// unloading an EARLIER plugin also erased every later plugin's tools and
+// extensions, and a hook added after an unload could reuse a live hook's id.
+func TestRegistry_UnloadIsOrderIndependent(t *testing.T) {
+	began := 0
+	r, err := BuildRegistry(contributor("a", &began), contributor("b", &began))
+	if err != nil {
+		t.Fatalf("BuildRegistry: %v", err)
+	}
+	if err := r.Unload("a"); err != nil { // first in, first out: not LIFO
+		t.Fatalf("Unload: %v", err)
+	}
+	if got := strings.Join(r.tools.Names(), ","); got != "b_tool" {
+		t.Fatalf("tools after unloading a = %q, want b_tool", got)
+	}
+	if got := strings.Join(extensionNames(values(r.extensions)), ","); got != "b_ext" {
+		t.Fatalf("extensions after unloading a = %q, want b_ext", got)
+	}
+	if n := len(r.mergedHooks().Before); n != 1 {
+		t.Fatalf("hooks after unloading a = %d, want 1", n)
+	}
+	// A plugin registered after the unload must not share an id with b's hook.
+	if err := r.register(contributor("c", &began)); err != nil {
+		t.Fatalf("register c: %v", err)
+	}
+	if err := r.Unload("c"); err != nil {
+		t.Fatalf("Unload c: %v", err)
+	}
+	if n := len(r.mergedHooks().Before); n != 1 {
+		t.Fatalf("unloading c removed b's hook: %d hooks left", n)
+	}
+	if got := strings.Join(r.tools.Names(), ","); got != "b_tool" {
+		t.Fatalf("tools after unloading c = %q, want b_tool", got)
+	}
+}
+
+func TestRegistry_ToolNameCollisionIsAnError(t *testing.T) {
+	_, err := BuildRegistry(
+		funcPlugin{name: "first", fn: func(r *Registry) error { return r.AddTools(&echoTool{name: "echo"}) }},
+		funcPlugin{name: "second", fn: func(r *Registry) error { return r.AddTools(&echoTool{name: "echo"}) }},
+	)
+	if err == nil || !strings.Contains(err.Error(), `"first"`) || !strings.Contains(err.Error(), `"echo"`) {
+		t.Fatalf("a second plugin silently replaced a tool: err = %v", err)
+	}
+	if _, err := BuildRegistry(funcPlugin{name: "dup", fn: func(r *Registry) error {
+		return r.AddTools(&echoTool{name: "x"}, &echoTool{name: "x"})
+	}}); err == nil {
+		t.Fatal("one registration naming a tool twice must fail")
+	}
+}
+
+// An extension tool that shadows a composed tool is a configuration error at
+// run start, never a silent swap of which code runs under that name.
+func TestExtensionToolCollisionFailsTheRun(t *testing.T) {
+	began := 0
+	a, err := Build(modelOf("m"), countingExtension{name: "ext", began: &began},
+		funcPlugin{name: "tools", fn: func(r *Registry) error { return r.AddTools(&echoTool{name: "ext_tool"}) }})
+	if err != nil {
+		t.Fatalf("Build: %v", err)
+	}
+	if _, err := a.OpenTools(context.Background()); err == nil || !strings.Contains(err.Error(), "ext_tool") {
+		t.Fatalf("colliding extension tool was accepted: %v", err)
 	}
 }
 
@@ -304,35 +388,58 @@ func TestRegistry_TiesBreakByRegistrationOrder(t *testing.T) {
 	}
 }
 
-// TestPolicyGate_RunsBeforeConsumerHooks is the reason PriorityGate exists: a
-// consumer hook registered EARLIER in the list still cannot see or approve a
-// call the gate blocks.
+// TestPolicyGate_RunsBeforeConsumerHooks: a consumer hook registered EARLIER
+// in the list, even at PriorityGate, still cannot see or approve a call the
+// policy refuses, because the policy is part of the executor.
 func TestPolicyGate_RunsBeforeConsumerHooks(t *testing.T) {
 	var saw []string
-	r, err := BuildRegistry(
+	a, err := Build(modelOf("m"),
 		funcPlugin{name: "consumer", fn: func(r *Registry) error { // listed FIRST
-			r.AddHooks(PriorityDefault, Hooks{Before: []BeforeToolCall{
+			r.AddHooks(PriorityGate, Hooks{Before: []BeforeToolCall{
 				func(ctx context.Context, call ToolCall) Decision {
-					saw = append(saw, "consumer")
+					saw = append(saw, call.Name)
 					return Allowed()
 				},
 			}})
 			return nil
 		}},
-		funcPlugin{name: "policy", fn: func(r *Registry) error { return r.UsePolicy(NewAllowList("ok")) }},
+		PolicyAllowList("ok"),
 	)
 	if err != nil {
-		t.Fatalf("BuildRegistry: %v", err)
+		t.Fatalf("Build: %v", err)
 	}
-	hooks := r.mergedHooks()
-	if len(hooks.Before) != 2 {
-		t.Fatalf("expected 2 before-hooks, got %d", len(hooks.Before))
+	if d, _ := a.gate(context.Background(), ToolCall{Name: "forbidden"}); d.Allow {
+		t.Fatal("the policy did not refuse an unlisted tool")
 	}
-	if d := hooks.Before[0](context.Background(), ToolCall{Name: "forbidden"}); d.Allow {
-		t.Fatal("the first before-hook must be the permission gate")
+	if d, _ := a.gate(context.Background(), ToolCall{Name: "ok"}); !d.Allow {
+		t.Fatalf("an allowed call was refused: %+v", d)
 	}
-	if len(saw) != 0 {
-		t.Fatal("the consumer hook must not have run before the gate")
+	if strings.Join(saw, ",") != "ok" {
+		t.Fatalf("consumer hook saw %v, want only the allowed call", saw)
+	}
+}
+
+// A composition with no policy plugin still enforces the default-deny policy
+// at execution, not only in the advertised tool list.
+func TestNoPolicyPluginStillDeniesExecution(t *testing.T) {
+	ran := false
+	a, err := Build(modelOf("m"), funcPlugin{name: "tools", fn: func(r *Registry) error {
+		return r.AddTools(funcTool{name: "danger", run: func(context.Context, string) (string, error) { ran = true; return "", nil }})
+	}})
+	if err != nil {
+		t.Fatalf("Build: %v", err)
+	}
+	host, err := a.OpenTools(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer host.Close()
+	_, audit, err := host.Execute(context.Background(), nativeHostCall("danger", `{}`), nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if ran || audit.Trace.Allowed {
+		t.Fatalf("an unadvertised tool ran without a policy: ran=%v trace=%+v", ran, audit.Trace)
 	}
 }
 
@@ -375,27 +482,13 @@ func TestApplyConfig_LeavesUnsetSeamsFree(t *testing.T) {
 	}
 }
 
-func TestNew_KeepsTheGateFirst(t *testing.T) {
-	a, err := New(Config{Provider: &FauxProvider{}, Model: "m", Policy: NewAllowList("echo"),
-		Hooks: Hooks{Before: []BeforeToolCall{func(context.Context, ToolCall) Decision { return Allowed() }}}})
-	if err != nil {
-		t.Fatalf("New: %v", err)
-	}
-	if d := a.hooks.Before[0](context.Background(), ToolCall{Name: "nope"}); d.Allow {
-		t.Fatal("the permission gate is no longer the first before-hook")
-	}
-}
-
 // --- diagnostics ----------------------------------------------------------
 
 func TestRegistry_DescribeNamesSeamOwners(t *testing.T) {
 	r, err := BuildRegistry(
 		modelOf("m"),
-		funcPlugin{name: "policy", fn: func(r *Registry) error { return r.UsePolicy(NewAllowList("echo")) }},
-		funcPlugin{name: "tools", fn: func(r *Registry) error {
-			r.AddTools(&echoTool{name: "echo"})
-			return nil
-		}},
+		PolicyAllowList("echo"),
+		funcPlugin{name: "tools", fn: func(r *Registry) error { return r.AddTools(&echoTool{name: "echo"}) }},
 	)
 	if err != nil {
 		t.Fatalf("BuildRegistry: %v", err)

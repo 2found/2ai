@@ -110,10 +110,11 @@ func TestFoldStepsCompactionStep(t *testing.T) {
 			Response: "a", TokensIn: 50,
 		},
 		{
-			// Compaction folded a summary message into this turn's context.
+			// Compaction replaced the earlier messages of this turn's request
+			// with a native summary message.
 			Messages: []Message{
 				{Role: RoleSystem, Content: sys},
-				{Role: RoleSystem, Content: summaryMarker + "\nearlier: user asked many things"},
+				{Role: RoleUser, Content: "[Earlier work summary]\nearlier: user asked many things\n\n[Context reattached after the summary]\nplan: step 2"},
 				{Role: RoleUser, Content: "more"},
 			},
 			Response: "b", TokensIn: 30,

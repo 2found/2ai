@@ -15,9 +15,13 @@ import "context"
 // Fork builds an ephemeral child Agent for one delegated task.
 //
 // The child inherits every capability-bearing field verbatim — provider,
-// ladder, tools, policy (including the permission gate already installed in
-// hooks), memory, definition, limits, env, compaction, retry, caching, output
-// cap, and the parent's extensions — so scope can only NARROW, never widen.
+// ladder, tools, policy, hooks, memory, definition, limits, env, compaction,
+// retry, caching, output cap, and the parent's extensions — so scope can only
+// NARROW, never widen. Each narrow policy is intersected with the parent's:
+// the child may call a tool only when the parent's policy and every narrowing
+// policy allow it. Independently of Fork, every run started from inside a tool
+// call (a fork or a named delegate) is also held to the calling run's policy,
+// which rides the context.
 //
 // It deliberately drops the run-control seams: no durable session, no
 // steering/follow-up queues, no step gate, no PrepareNextTurn. A child is one
@@ -33,38 +37,36 @@ import "context"
 //
 // Depth is not a field: it rides the context (see WithDelegationDepth), so a
 // cap holds across an A -> B -> A cycle the same as a straight chain.
-func (a *Agent) Fork(childSessionID string) *Agent {
+func (a *Agent) Fork(childSessionID string, narrow ...Policy) *Agent {
 	child := &Agent{
-		provider:           a.provider,
-		nativeProvider:     a.nativeProvider,
-		model:              a.model,
-		modelCapabilities:  a.modelCapabilities,
-		contextWindow:      a.contextWindow,
-		tools:              a.tools,
-		policy:             a.policy,
-		hooks:              a.hooks,
-		memory:             a.memory,
-		def:                a.def,
-		limits:             a.limits,
-		env:                a.env,
-		compaction:         a.compaction,
-		compactionProvider: a.compactionProvider,
-		compactionModel:    a.compactionModel,
-		compactor:          a.compactor,
-		refreshKey:         a.refreshKey,
-		escalation:         a.escalation,
-		retry:              a.retry,
-		cacheKey:           a.cacheKey,
-		cacheRetention:     a.cacheRetention,
-		maxTokens:          a.maxTokens,
-		reasoningEffort:    a.reasoningEffort,
-		outputSchema:       a.outputSchema,
-		outputValidator:    a.outputValidator,
-		toolChoice:         a.toolChoice,
-		parallelToolCalls:  cloneBool(a.parallelToolCalls),
-		providerSession:    a.providerSession,
-		providerSessionID:  childSessionID,
-		extensions:         a.extensions,
+		provider:          a.provider,
+		nativeProvider:    a.nativeProvider,
+		model:             a.model,
+		modelCapabilities: a.modelCapabilities,
+		contextWindow:     a.contextWindow,
+		tools:             a.tools,
+		policy:            narrowPolicy(a.policy, narrow),
+		hooks:             a.hooks,
+		memory:            a.memory,
+		def:               a.def,
+		limits:            a.limits,
+		env:               a.env,
+		compaction:        a.compaction,
+		compactionModel:   a.compactionModel,
+		refreshKey:        a.refreshKey,
+		escalation:        a.escalation,
+		retry:             a.retry,
+		cacheKey:          a.cacheKey,
+		cacheRetention:    a.cacheRetention,
+		maxTokens:         a.maxTokens,
+		reasoningEffort:   a.reasoningEffort,
+		outputSchema:      a.outputSchema,
+		outputValidator:   a.outputValidator,
+		toolChoice:        a.toolChoice,
+		parallelToolCalls: cloneBool(a.parallelToolCalls),
+		providerSession:   a.providerSession,
+		providerSessionID: childSessionID,
+		extensions:        a.extensions,
 	}
 	if childSessionID != "" && a.session != nil && a.sessionID != "" {
 		child.session = a.session

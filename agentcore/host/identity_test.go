@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestPiJSONIdentityPreservesNumbersAcrossJSONBSpelling(t *testing.T) {
+func TestNativeJSONIdentityPreservesNumbersAcrossJSONBSpelling(t *testing.T) {
 	for _, pair := range [][2]string{
 		{`1e3`, `1000`}, {`1.000`, `1`}, {`4e-8`, `0.00000004`},
 		{`1e21`, `1000000000000000000000`}, {`-0.000`, `0`},

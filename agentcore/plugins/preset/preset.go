@@ -78,7 +78,7 @@ func Plugins(cfg agentcore.Config) []agentcore.Plugin {
 			SeedDisabledTools: cfg.SeedDisabledTools,
 		},
 		memory.Plugin{Store: cfg.Memory},
-		agentcore.CompactionPlugin{Settings: cfg.Compaction, Provider: cfg.CompactionProvider, Model: cfg.CompactionModel, Strategy: cfg.Compactor},
+		agentcore.CompactionPlugin{Settings: cfg.Compaction, Provider: cfg.CompactionProvider},
 
 		// steering
 		agentcore.SteeringPlugin{
@@ -138,13 +138,6 @@ type Options struct {
 	// log, so a store that cannot outlive the process would mint locators that a
 	// resumed run reads back as not-found. Supply a durable store to turn it on.
 	Spill spill.SpillStore
-	// Jobs owns background work. nil uses a fresh in-process store per run —
-	// correct for a single server, since a job cannot outlive the run that
-	// started it anyway.
-	Jobs jobs.JobStore
-	// SessionQuery backs the session_query tool. nil searches the run's OWN
-	// durable log, which needs no external index.
-	SessionQuery sessionquery.SessionQuery
 }
 
 // Full is the default agent plus the capabilities that agentcore.Config has no
@@ -193,9 +186,9 @@ func Full(cfg agentcore.Config, o Options) []agentcore.Plugin {
 		list = append(list, spill.To(o.Spill))
 	}
 	list = append(list,
-		jobs.Plugin{Store: o.Jobs},
+		jobs.Plugin{},
 		repeatguard.Default(),
-		sessionquery.Plugin{Provider: o.SessionQuery, Native: o.NativeHistory},
+		sessionquery.Plugin{Native: o.NativeHistory},
 	)
 	if o.Plan != nil {
 		list = append(list, todo.With(o.Plan))

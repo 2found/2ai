@@ -38,15 +38,30 @@ the log, so an empty `Goal` field is not proof the run is ungated.
 
 #### What the model sees
 
-The completion contract appended to the system prompt.
+The completion protocol (sentinels, "the most recent `[run goal]` message is in
+force") appended to the system prompt, and the condition itself as one persisted
+system message at the first step (a provider without mid-conversation system
+messages reads it as a `<system-reminder>` at that position):
+
+```
+[run goal] This run finishes when:
+<the condition>
+```
+
+The statement is appended again only when the model can no longer see it in
+force: after a revision, or when a resumed or chained run holds a condition the
+history does not show. Compaction keeps system messages verbatim, so a summary
+never drops the condition.
 
 #### Token effect
 
-**Fixed** and **retained** — it is in the prefix of every provider call.
+**Fixed** and **retained** — protocol in the prefix of every call, the
+condition once in the transcript.
 
 #### KV cache effect
 
-**Prefix-stable.**
+**Prefix-stable / append-only.** The system prompt never contains the
+condition, so neither a revision nor a resume rewrites it.
 
 ### The model finishes without a sentinel
 
@@ -68,7 +83,9 @@ turn/tool/budget limits.
 #### What the model sees
 
 An `update_goal(goal, reason)` tool. Calling it replaces the completion condition
-the gate enforces, from the next turn on.
+the gate enforces, from the next turn on. Its result confirms the change, and
+the next step appends the new `[run goal]` statement, which replaces the old
+one.
 
 #### Token effect
 
@@ -78,10 +95,11 @@ question, should not pay it.
 
 #### KV cache effect
 
-**Prefix-invalidating, once per accepted revision.** The condition is in the
-system prompt, so changing it rewrites the whole cached prefix. That is the real
-price of a revision, and it is why an identical restatement is rejected rather
-than written through.
+**Append-only.** The new statement is appended; nothing already sent is
+rewritten. Statements are never summarized away, so each revision keeps one
+statement in the transcript for the rest of the run (bounded by the tool-call
+limit). An identical restatement is still rejected rather than
+written through, so it records no revision.
 
 ## Impact on the agent
 

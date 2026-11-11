@@ -156,14 +156,20 @@ func TestParseCurlResponseTruncatesBody(t *testing.T) {
 	}
 }
 
-// Refusing to run without an egress allowlist is the fail-closed default: an
-// empty list means "open network" to the backend.
+// Refusing to run without a concrete egress allowlist is the fail-closed
+// default: open egress inside the container has no IP guard.
 func TestSandboxHTTPRefusesEmptyAllowlist(t *testing.T) {
-	_, _, err := execSandboxHTTP(context.Background(), &stubSandbox{}, "http_request", sandboxHTTPRequest{
-		URL: "https://example.com/",
-	})
-	if err == nil || !strings.Contains(err.Error(), "egress allowlist") {
-		t.Fatalf("error = %v, want a refusal to run without an allowlist", err)
+	for _, allow := range [][]string{nil, {AnyHost}, {"example.com", AnyHost}} {
+		stub := &stubSandbox{}
+		_, _, err := execSandboxHTTP(context.Background(), stub, "http_request", sandboxHTTPRequest{
+			URL: "https://example.com/", AllowHosts: allow,
+		})
+		if err == nil || !strings.Contains(err.Error(), "egress allowlist") {
+			t.Fatalf("AllowHosts %v: error = %v, want a refusal", allow, err)
+		}
+		if stub.last.Argv != nil {
+			t.Fatalf("AllowHosts %v: refused request still ran", allow)
+		}
 	}
 }
 

@@ -3,7 +3,9 @@ package sandbox
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io/fs"
 	"strings"
 	"unicode/utf8"
 
@@ -238,7 +240,9 @@ type WriteFileTool struct {
 // NewWriteFileTool builds write_file over the given sandbox. sb is optional: nil
 // writes directly to the host filesystem under the Workspace guards (the
 // default), non-nil writes from inside the sandbox with the workspace
-// bind-mounted — where the content rides stdin, never argv or env.
+// bind-mounted — where the content rides stdin, never argv or env. Either way
+// the write is atomic (temp file + rename, mode preserved) and replacing an
+// existing file requires its current content_hash.
 func NewWriteFileTool(sb agentcore.Sandbox, workspace *Workspace) *WriteFileTool {
 	return &WriteFileTool{workspace: workspace, fs: newWorkspaceFS(sb, workspace)}
 }
@@ -247,16 +251,20 @@ func (t *WriteFileTool) Name() string { return ToolWriteFile }
 
 func (t *WriteFileTool) Schema() agentcore.ToolSchema {
 	return agentcore.ToolSchema{
-		Name:        ToolWriteFile,
-		Description: "Write a UTF-8 text file inside the agent workspace. The result includes a content_hash for a subsequent edit_file or edit_lines call. Parent directories are created; paths must be relative and cannot escape the workspace.",
-		Strict:      agentcore.ToolStrictEnabled,
+		Name: ToolWriteFile,
+		Description: "Create or replace a UTF-8 text file inside the agent workspace. Replacing an existing file requires " +
+			"expected_hash: the content_hash from your latest read_file, write_file, edit_file, or edit_lines result for that " +
+			"path, so a file you have not read (or that changed since) is never overwritten. The write is atomic. The result " +
+			"includes a content_hash for a subsequent edit. Parent directories are created; paths must be relative and cannot " +
+			"escape the workspace.",
+		Strict: agentcore.ToolStrictEnabled,
 		Parameters: map[string]any{
 			"type":                 "object",
 			"additionalProperties": false,
 			"properties": map[string]any{
 				"path":                    map[string]any{"type": "string", "description": "Workspace-relative file path."},
 				"content":                 map[string]any{"type": "string", "description": "Complete file content to write."},
-				"expected_hash":           map[string]any{"type": "string", "description": "Required with allow_partial_overwrite; hash of the current complete file."},
+				"expected_hash":           map[string]any{"type": "string", "description": "Required when the file exists: content_hash of the current complete file. Omit when creating a new file."},
 				"allow_partial_overwrite": map[string]any{"type": "boolean", "description": "Explicitly confirm a full-file replacement after a partial read. Requires expected_hash. Prefer edit_file/edit_lines for partial reads."},
 			},
 			"required": []string{"path", "content"},
@@ -281,18 +289,34 @@ func (t *WriteFileTool) Run(ctx context.Context, args string) (string, error) {
 	if t.workspace.partialRead(rel) != "" && !in.AllowPartialOverwrite {
 		return "", fmt.Errorf("write_file: %s was only partially read; use edit_file/edit_lines, read the full file, or explicitly confirm allow_partial_overwrite with expected_hash", rel)
 	}
-	if in.ExpectedHash != "" || in.AllowPartialOverwrite {
+	// Overwriting is hash-guarded exactly like edit_file: an existing file is
+	// replaced only when the caller names the snapshot it is replacing, so a
+	// file the model never read (or that changed since) is never clobbered.
+	info, statErr := t.fs.Stat(ctx, rel)
+	switch {
+	case statErr == nil && info.IsDir:
+		return "", fmt.Errorf("write_file: %s is a directory", rel)
+	case statErr == nil:
+		if strings.TrimSpace(in.ExpectedHash) == "" {
+			return "", fmt.Errorf("write_file: %s already exists; read it and pass its content_hash as expected_hash to replace it, or use edit_file/edit_lines", rel)
+		}
 		hash, err := normalizeFileHash(in.ExpectedHash)
 		if err != nil {
 			return "", fmt.Errorf("write_file: expected_hash %w", err)
 		}
 		_, actual, err := t.fs.ReadRange(ctx, rel, 0, 0)
 		if err != nil {
-			return "", err
+			return "", fmt.Errorf("write_file: %w", err)
 		}
 		if hash != actual {
-			return "", fmt.Errorf("write_file: stale snapshot for %s; re-read the file", rel)
+			return "", fmt.Errorf("write_file: stale snapshot for %s: expected %s, current content_hash is %s; re-read the file", rel, hash, actual)
 		}
+	case errors.Is(statErr, fs.ErrNotExist):
+		if strings.TrimSpace(in.ExpectedHash) != "" {
+			return "", fmt.Errorf("write_file: stale snapshot for %s: the file no longer exists; omit expected_hash to create it", rel)
+		}
+	default:
+		return "", fmt.Errorf("write_file: %w", statErr)
 	}
 	if err := t.fs.WriteFile(ctx, rel, []byte(in.Content)); err != nil {
 		return "", fmt.Errorf("write_file: %w", err)

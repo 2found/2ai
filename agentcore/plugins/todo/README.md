@@ -1,21 +1,24 @@
 # todo
 
-**Contribution.** A tool plus a context hook. Ejectable — without it a long run
+**Contribution.** Two tools plus a plan reminder. Ejectable — without it a long run
 loses its checklist and drifts off the original task as compaction summarizes the
 early turns away.
 
-The plan is deliberately **not** part of the transcript. It lives in a `Store`
-the tool writes and the hook reads, so compaction can never trim it. That is the
-whole point of the capability, and it is why the plan is pinned to the *request
-view* rather than appended to history.
+The plan is owned by a `Store`, not by the transcript, so compaction can never
+lose it. It reaches the model by appending only (tool results and, when the plan
+is no longer visible, one `[run plan]` user message), so the cached request
+prefix is never rewritten.
 
 ## Model Experience
 
-### Every request, once a plan exists
+### When the current plan is no longer visible
 
 #### What the model sees
 
-A trailing system reminder, rebuilt from the store on every turn:
+One persisted user message appended before the next step (when the plan
+changed after a summary, or when a run starts with a restored plan the history
+does not show). A summary that folds the plan away carries the same block after
+its text instead:
 
 ##### Verbatim text
 
@@ -34,15 +37,14 @@ actually written one. The count line appears only once steps have been folded
 
 #### Token effect
 
-**Fixed** per turn and **bounded** — capped at `maxRenderBytes` (2 KB, ~500
-tokens) no matter how long the plan gets. It is **replaced**, not accumulated:
-each turn's reminder supersedes the last rather than stacking.
+**Bounded** — capped at `maxRenderBytes` (2 KB, ~500 tokens) no matter how
+long the plan gets — and paid only when the plan is not visible: once per
+summary or restore, not per turn.
 
 #### KV cache effect
 
-**Replacing.** The reminder is the final message, and its content changes
-whenever the plan does, so the tail of the prefix is invalidated on any plan
-change. The persona/skills prefix ahead of it is untouched.
+**Append-only.** The reminder is a new final message; nothing already sent is
+rewritten. In a summary it rides the rewrite that already resets the cache.
 
 ### The model calls `update_plan`
 
@@ -78,7 +80,7 @@ against what was actually stored rather than what was sent.
 - **At most one `in_progress` item**, enforced by the tool. A plan with three
   things in progress is not a plan.
 - **The plan has a ceiling, because surviving compaction is not the same as
-  being free.** The block is pinned into every request and nothing else in the
+  being free.** The block outlives every summary and nothing else in the
   system will ever bring it back down — the property that makes it useful is the
   property that makes it dangerous. An agent that decomposes as it discovers
   (what a long run does) appends steps and leaves finished ones behind as the
@@ -111,10 +113,9 @@ store := todo.NewStore()                       // one per run
 agentcore.Build(/* … */, todo.With(store))
 ```
 
-`PiContextHook` is the native request hook; the old typed `ContextHook` has
-been removed. The tool and the hook are registered together because either alone is broken:
-the tool without the hook writes a plan the model never sees again, and the hook
-without the tool pins a plan nothing can write.
+The tools and the reminder are registered together because either alone is
+broken: the tools without the reminder write a plan the model loses at the next
+summary, and the reminder without the tools pins a plan nothing can write.
 
 A composition with no `Store` is refused rather than silently downgraded — a
 plan tool that forgets is worse for the model than no plan tool at all.
@@ -140,9 +141,29 @@ plan tool that forgets is worse for the model than no plan tool at all.
   `blocked`, which a long autonomous run arguably wants.
 
 The plugin registers one `ExtensionFactory`. Each run contributes its own
-`update_plan` tool, `NativeContextContributor` and checkpoint state. Forks get
-a fresh plan; the model-facing reminder is a request view, never persisted
-provider history. Standalone callers may still use `NewTool`/`PiContextHook`.
+`update_plan`/`patch_plan` tools, a `RunObserver` + `StepInterceptor` pair and
+checkpoint state. Forks get a fresh plan.
+
+## How the plan reaches the model without breaking the prompt cache
+
+The plan is never rewritten in place and never sent as a system message.
+Providers without mid-conversation system messages merge those into the system
+prompt, so a per-request system reminder would rewrite the cached prefix of
+every request. Instead:
+
+- every `update_plan`/`patch_plan` result carries the rendered plan, so the
+  update itself is what the model reads next;
+- a summary that folds away a message showing the current plan carries the
+  `[run plan]` block after its text (`agentcore.CompactionReattacher`), so the
+  compacted request itself has the plan. A plan too large for the reattach room
+  is left to the reminder rather than cut in the middle;
+- the run tracks what the model last saw (the latest request view plus appended
+  messages). When the current rendering is not in it — the plan changed after
+  the summary, or was restored from a checkpoint — the next step appends one
+  persisted `[run plan]` user message.
+
+Each request is therefore a byte prefix of the next one, and the summary
+rewrite that already resets the cache is what carries the plan.
 
 ## Phases and atomic deltas
 

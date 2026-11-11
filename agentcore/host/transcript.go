@@ -7,7 +7,7 @@ import (
 )
 
 // ErrUnsettledEffect marks a missing physical effect receipt or native tool result.
-var ErrUnsettledEffect = errors.New("Pi session has an unsettled tool effect")
+var ErrUnsettledEffect = errors.New("native session has an unsettled tool effect")
 
 // ValidateMessages checks completed native tool batches without projecting or
 // changing messages. Provider error/aborted partial calls require no results.

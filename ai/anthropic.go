@@ -292,14 +292,22 @@ type antUsage struct {
 	OutputTokens             int `json:"output_tokens"`
 	CacheReadInputTokens     int `json:"cache_read_input_tokens"`
 	CacheCreationInputTokens int `json:"cache_creation_input_tokens"`
+	CacheCreation            struct {
+		Ephemeral1hInputTokens int `json:"ephemeral_1h_input_tokens"`
+	} `json:"cache_creation"`
+	OutputTokensDetails struct {
+		ThinkingTokens int `json:"thinking_tokens"`
+	} `json:"output_tokens_details"`
 }
 
 func (u antUsage) usage() protocol.Usage {
 	return protocol.Usage{
-		InputTokens:      u.InputTokens,
-		OutputTokens:     u.OutputTokens,
-		CacheReadTokens:  u.CacheReadInputTokens,
-		CacheWriteTokens: u.CacheCreationInputTokens,
+		InputTokens:        u.InputTokens,
+		OutputTokens:       u.OutputTokens,
+		CacheReadTokens:    u.CacheReadInputTokens,
+		CacheWriteTokens:   u.CacheCreationInputTokens,
+		CacheWrite1hTokens: u.CacheCreation.Ephemeral1hInputTokens,
+		ReasoningTokens:    u.OutputTokensDetails.ThinkingTokens,
 	}
 }
 
@@ -579,6 +587,7 @@ func (p *AnthropicProvider) Stream(ctx context.Context, req protocol.ChatRequest
 					usage.InputTokens = u.InputTokens
 					usage.CacheReadTokens = u.CacheReadTokens
 					usage.CacheWriteTokens = u.CacheWriteTokens
+					usage.CacheWrite1hTokens = u.CacheWrite1hTokens
 				}
 			case "content_block_start":
 				if ev.ContentBlock != nil {
@@ -696,14 +705,6 @@ func (p *AnthropicProvider) encode(req protocol.ChatRequest) antRequest {
 	}
 
 	var systemParts []string
-	var anchored []int // out.Messages indices whose source message carried CacheAnchor
-	// anchorRequested distinguishes "the caller placed no anchors" (standalone
-	// use — fall back to the moving breakpoint) from "the caller placed anchors
-	// that could not be mapped here" (an anchor on a system message, which is
-	// hoisted out of Messages). Without the distinction the fallback silently
-	// overrides a deliberate placement and re-anchors the final message — which
-	// is the very thing markCacheAnchors moved the breakpoint away from.
-	anchorRequested := false
 	allowImages := imageInputAllowed(p.ModelCapabilities(req.Model))
 	replayScope := p.replayScope(req.Model)
 	for _, m := range req.Messages {
@@ -794,14 +795,6 @@ func (p *AnthropicProvider) encode(req protocol.ChatRequest) antRequest {
 				Role: "user", Content: blocks,
 			})
 		}
-		// System messages don't reach out.Messages (hoisted into the system
-		// block below), so an anchor on one has nothing to attach to.
-		if m.CacheAnchor {
-			anchorRequested = true
-			if m.Role != protocol.RoleSystem && len(out.Messages) > 0 {
-				anchored = append(anchored, len(out.Messages)-1)
-			}
-		}
 	}
 	// The system prompt is the largest stable prefix of a long run. When caching is
 	// requested, send it as a structured block carrying cache_control so Anthropic
@@ -832,35 +825,14 @@ func (p *AnthropicProvider) encode(req protocol.ChatRequest) antRequest {
 		}
 	}
 
-	// Anchor-driven breakpoints: the loop decides placement (protocol.Message.CacheAnchor,
-	// see markCacheAnchors); this provider only translates each anchor into
-	// cache_control on that message's last block. With no anchors REQUESTED at all
-	// (the provider used standalone, outside the loop) fall back to the classic
-	// moving breakpoint on the final message, so the whole transcript-so-far
-	// becomes the cached prefix: next turn re-sends the same transcript plus one
-	// exchange and Anthropic prefix-matches the previous breakpoint, billing
-	// everything before it as a cache read.
-	//
-	// The fallback is deliberately NOT taken when anchors were requested but none
-	// landed here (an anchor on a system message, hoisted into the system block
-	// above). Falling back there would re-anchor the final message and undo the
-	// loop's placement — and the loop moves the breakpoint off the final message
-	// precisely because a ContextHook's regenerated trailer sits there.
-	//
-	// Anthropic allows at most 4 breakpoints per request; one is spent on the
-	// system block, so only the last 3 anchors are honored.
+	// The moving breakpoint on the final message makes the whole
+	// transcript-so-far the cached prefix: the next turn re-sends the same
+	// transcript plus one exchange and Anthropic prefix-matches the previous
+	// breakpoint, billing everything before it as a cache read.
 	if req.CacheKey != "" && len(out.Messages) > 0 {
-		if len(anchored) == 0 && !anchorRequested {
-			anchored = []int{len(out.Messages) - 1}
-		}
-		if len(anchored) > 3 {
-			anchored = anchored[len(anchored)-3:]
-		}
-		for _, idx := range anchored {
-			msg := &out.Messages[idx]
-			if n := len(msg.Content); n > 0 {
-				msg.Content[n-1].CacheControl = &antCacheControl{Type: "ephemeral", TTL: antCacheTTL(req.CacheRetention)}
-			}
+		msg := &out.Messages[len(out.Messages)-1]
+		if n := len(msg.Content); n > 0 {
+			msg.Content[n-1].CacheControl = &antCacheControl{Type: "ephemeral", TTL: antCacheTTL(req.CacheRetention)}
 		}
 	}
 

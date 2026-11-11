@@ -19,7 +19,7 @@ func TestNativeRunObservationToolsRemainAvailableUnderWorkloadPolicy(t *testing.
 	if err != nil {
 		t.Fatal(err)
 	}
-	host, err := a.OpenPiTools(context.Background())
+	host, err := a.OpenTools(context.Background())
 	if err != nil {
 		t.Fatal(err)
 	}

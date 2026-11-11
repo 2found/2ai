@@ -10,10 +10,10 @@ import (
 	nativehost "github.com/2found/2ai/agentcore/host"
 )
 
-func TestPiSessionRecoveryKeepsNativeMessages(t *testing.T) {
-	initial := agentcore.SessionEntry{Kind: agentcore.EntryPiState, Content: `{"messages":[{"role":"system","content":"system","timestamp":1}],"model":{"id":"test"},"tools":[],"thinkingLevel":"off","isStreaming":false}`}
+func TestNativeSessionRecoveryKeepsNativeMessages(t *testing.T) {
+	initial := agentcore.SessionEntry{Kind: agentcore.EntryNativeState, Content: `{"messages":[{"role":"system","content":"system","timestamp":1}],"model":{"id":"test"},"tools":[],"thinkingLevel":"off","isStreaming":false}`}
 	event := `{"type":"message_end","message":{"role":"custom","timestamp":2,"content":[{"type":"image","mimeType":"image/png","data":"abc"}],"extension":{"signature":"opaque > & \u2028","opaque":9007199254740993}}}`
-	state, err := agentcore.RecoverNativeTranscript([]agentcore.SessionEntry{initial, {Kind: agentcore.EntryPiEvent, Content: event}})
+	state, err := agentcore.RecoverNativeTranscript([]agentcore.SessionEntry{initial, {Kind: agentcore.EntryNativeEvent, Content: event}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -34,13 +34,13 @@ func TestPiSessionRecoveryKeepsNativeMessages(t *testing.T) {
 	}
 }
 
-func TestPiSessionRecoveryCannotMaskUnsettledEffectsWithReusedCallID(t *testing.T) {
+func TestNativeSessionRecoveryCannotMaskUnsettledEffectsWithReusedCallID(t *testing.T) {
 	entries := []agentcore.SessionEntry{
-		{Kind: agentcore.EntryPiState, Content: `{"messages":[],"tools":[]}`},
-		{Kind: agentcore.EntryPiEffectStart, CallID: "reused", Content: `{"effectId":"first"}`},
-		{Kind: agentcore.EntryPiEffectStart, CallID: "reused", Content: `{"effectId":"second"}`},
-		{Kind: agentcore.EntryPiEffectDone, CallID: "reused", Content: `{"effectId":"second"}`},
-		{Kind: agentcore.EntryPiState, Content: `{"messages":[],"tools":[]}`},
+		{Kind: agentcore.EntryNativeState, Content: `{"messages":[],"tools":[]}`},
+		{Kind: agentcore.EntryNativeEffectStart, CallID: "reused", Content: `{"effectId":"first"}`},
+		{Kind: agentcore.EntryNativeEffectStart, CallID: "reused", Content: `{"effectId":"second"}`},
+		{Kind: agentcore.EntryNativeEffectDone, CallID: "reused", Content: `{"effectId":"second"}`},
+		{Kind: agentcore.EntryNativeState, Content: `{"messages":[],"tools":[]}`},
 	}
 	_, err := agentcore.RecoverNativeTranscript(entries)
 	if !errors.Is(err, nativehost.ErrUnsettledEffect) || !strings.Contains(err.Error(), "reused/first") {
@@ -48,12 +48,12 @@ func TestPiSessionRecoveryCannotMaskUnsettledEffectsWithReusedCallID(t *testing.
 	}
 }
 
-func TestPiSessionRecoveryRejectsLegacyAndUnplacedResults(t *testing.T) {
+func TestNativeSessionRecoveryRejectsLegacyAndUnplacedResults(t *testing.T) {
 	for name, entries := range map[string][]agentcore.SessionEntry{
 		"legacy":         {{Kind: agentcore.EntryMessage}},
 		"empty":          nil,
-		"broken":         {{Kind: agentcore.EntryPiState, Content: `{`}},
-		"missing result": {{Kind: agentcore.EntryPiState, Content: `{"messages":[{"role":"assistant","content":[{"type":"toolCall","id":"call","name":"write","arguments":{}}]}]}`}},
+		"broken":         {{Kind: agentcore.EntryNativeState, Content: `{`}},
+		"missing result": {{Kind: agentcore.EntryNativeState, Content: `{"messages":[{"role":"assistant","content":[{"type":"toolCall","id":"call","name":"write","arguments":{}}]}]}`}},
 	} {
 		t.Run(name, func(t *testing.T) {
 			if _, err := agentcore.RecoverNativeTranscript(entries); err == nil {
@@ -63,11 +63,11 @@ func TestPiSessionRecoveryRejectsLegacyAndUnplacedResults(t *testing.T) {
 	}
 }
 
-func TestPiSessionRecoversExactStartedResult(t *testing.T) {
+func TestNativeSessionRecoversExactStartedResult(t *testing.T) {
 	result := `{"role":"toolResult","toolCallId":"call","toolName":"write","content":[{"type":"text","text":"ok"}],"timestamp":1234,"details":{"signature":"opaque"},"isError":false}`
-	initial := agentcore.SessionEntry{Kind: agentcore.EntryPiState, Content: `{"messages":[{"role":"assistant","content":[{"type":"toolCall","id":"call","name":"write"}]}]}`}
-	start := agentcore.SessionEntry{Kind: agentcore.EntryPiEvent, Content: `{"type":"message_start","message":` + result + `}`}
-	end := agentcore.SessionEntry{Kind: agentcore.EntryPiEvent, Content: `{"type":"message_end","message":` + result + `}`}
+	initial := agentcore.SessionEntry{Kind: agentcore.EntryNativeState, Content: `{"messages":[{"role":"assistant","content":[{"type":"toolCall","id":"call","name":"write"}]}]}`}
+	start := agentcore.SessionEntry{Kind: agentcore.EntryNativeEvent, Content: `{"type":"message_start","message":` + result + `}`}
+	end := agentcore.SessionEntry{Kind: agentcore.EntryNativeEvent, Content: `{"type":"message_end","message":` + result + `}`}
 	for _, finished := range []bool{false, true} {
 		entries := []agentcore.SessionEntry{initial, start}
 		if finished {
@@ -84,8 +84,8 @@ func TestPiSessionRecoversExactStartedResult(t *testing.T) {
 	}
 }
 
-func TestPiSessionRecoveryRejectsCrossBatchResult(t *testing.T) {
-	_, err := agentcore.RecoverNativeTranscript([]agentcore.SessionEntry{{Kind: agentcore.EntryPiState, Content: `{"messages":[
+func TestNativeSessionRecoveryRejectsCrossBatchResult(t *testing.T) {
+	_, err := agentcore.RecoverNativeTranscript([]agentcore.SessionEntry{{Kind: agentcore.EntryNativeState, Content: `{"messages":[
 		{"role":"assistant","content":[{"type":"toolCall","id":"reused","name":"write"}]},
 		{"role":"assistant","content":[{"type":"toolCall","id":"reused","name":"write"}]},
 		{"role":"toolResult","toolCallId":"reused","content":[]}
@@ -95,23 +95,23 @@ func TestPiSessionRecoveryRejectsCrossBatchResult(t *testing.T) {
 	}
 }
 
-func TestPiSessionRecoveryRequiresNativeResult(t *testing.T) {
+func TestNativeSessionRecoveryRequiresNativeResult(t *testing.T) {
 	_, err := agentcore.RecoverNativeTranscript([]agentcore.SessionEntry{
-		{Kind: agentcore.EntryPiState, Content: `{"messages":[{"role":"assistant","content":[{"type":"toolCall","id":"call","name":"write"}]}]}`},
-		{Kind: agentcore.EntryPiEffectStart, CallID: "call", Content: `{"effectId":"effect"}`},
-		{Kind: agentcore.EntryPiEffectDone, CallID: "call", Content: `{"effectId":"effect","result":{"content":[]}}`},
-		{Kind: agentcore.EntryPiEvent, Content: `{"type":"tool_execution_end","toolCallId":"call","toolName":"write","result":{"content":[]},"isError":false}`},
+		{Kind: agentcore.EntryNativeState, Content: `{"messages":[{"role":"assistant","content":[{"type":"toolCall","id":"call","name":"write"}]}]}`},
+		{Kind: agentcore.EntryNativeEffectStart, CallID: "call", Content: `{"effectId":"effect"}`},
+		{Kind: agentcore.EntryNativeEffectDone, CallID: "call", Content: `{"effectId":"effect","result":{"content":[]}}`},
+		{Kind: agentcore.EntryNativeEvent, Content: `{"type":"tool_execution_end","toolCallId":"call","toolName":"write","result":{"content":[]},"isError":false}`},
 	})
 	if !errors.Is(err, nativehost.ErrUnsettledEffect) {
 		t.Fatalf("invented native message from an execution receipt: %v", err)
 	}
 }
 
-func TestPiSessionRecoveryPreservesRejectedCallsWithoutInventingEffects(t *testing.T) {
+func TestNativeSessionRecoveryPreservesRejectedCallsWithoutInventingEffects(t *testing.T) {
 	for _, stop := range []string{"error", "aborted"} {
 		t.Run(stop, func(t *testing.T) {
 			message := `{"role":"assistant","stopReason":"` + stop + `","content":[{"type":"toolCall","id":"reused","name":"write","arguments":{"partial":true}}],"extension":{"signature":"keep"}}`
-			initial := agentcore.SessionEntry{Kind: agentcore.EntryPiState, Content: `{"messages":[` + message + `],"tools":[]}`}
+			initial := agentcore.SessionEntry{Kind: agentcore.EntryNativeState, Content: `{"messages":[` + message + `],"tools":[]}`}
 			state, err := agentcore.RecoverNativeTranscript([]agentcore.SessionEntry{initial})
 			if err != nil {
 				t.Fatal(err)
@@ -123,18 +123,18 @@ func TestPiSessionRecoveryPreservesRejectedCallsWithoutInventingEffects(t *testi
 			if len(restored.Messages) != 1 || string(restored.Messages[0]) != message {
 				t.Fatalf("rejected transcript changed: %s", state)
 			}
-			_, err = agentcore.RecoverNativeTranscript([]agentcore.SessionEntry{initial, {Kind: agentcore.EntryPiEffectStart, CallID: "reused", Content: `{"effectId":"write-effect"}`}})
+			_, err = agentcore.RecoverNativeTranscript([]agentcore.SessionEntry{initial, {Kind: agentcore.EntryNativeEffectStart, CallID: "reused", Content: `{"effectId":"write-effect"}`}})
 			if !errors.Is(err, nativehost.ErrUnsettledEffect) {
 				t.Fatalf("rejected message masked a physical effect: %v", err)
 			}
-			_, err = agentcore.RecoverNativeTranscript([]agentcore.SessionEntry{{Kind: agentcore.EntryPiState, Content: `{"messages":[{"role":"assistant","stopReason":"toolUse","content":[{"type":"toolCall","id":"reused","name":"write","arguments":{}}]},` + message + `]}`}})
+			_, err = agentcore.RecoverNativeTranscript([]agentcore.SessionEntry{{Kind: agentcore.EntryNativeState, Content: `{"messages":[{"role":"assistant","stopReason":"toolUse","content":[{"type":"toolCall","id":"reused","name":"write","arguments":{}}]},` + message + `]}`}})
 			if !errors.Is(err, nativehost.ErrUnsettledEffect) {
 				t.Fatalf("rejected message masked an earlier batch: %v", err)
 			}
 		})
 	}
 	// Unlike error/aborted, Pi emits tool-result failures for length stops.
-	_, err := agentcore.RecoverNativeTranscript([]agentcore.SessionEntry{{Kind: agentcore.EntryPiState, Content: `{"messages":[{"role":"assistant","stopReason":"length","content":[{"type":"toolCall","id":"truncated","name":"write"}]}]}`}})
+	_, err := agentcore.RecoverNativeTranscript([]agentcore.SessionEntry{{Kind: agentcore.EntryNativeState, Content: `{"messages":[{"role":"assistant","stopReason":"length","content":[{"type":"toolCall","id":"truncated","name":"write"}]}]}`}})
 	if !errors.Is(err, nativehost.ErrUnsettledEffect) {
 		t.Fatalf("length message lost its native result obligation: %v", err)
 	}

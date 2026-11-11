@@ -1,52 +1,9 @@
 package agentcore
 
 import (
-	"context"
 	"fmt"
 	"slices"
 )
-
-// Legacy stream-fixture frame bound, pending migration of the old transport tests.
-const frameBytes = 4 << 10
-
-// streamAbort is the sentinel a StreamInterceptor raises to cut a turn's
-// provider call mid-flight. It is NOT a provider failure: callRung must not
-// spend a retry on it and reason must not escalate it — the loop catches it,
-// appends the injection, and re-issues the same request itself.
-type streamAbort struct {
-	// inject is the correction the retried turn must see.
-	inject []Message
-	// usage is whatever the aborted attempt still spent: the tokens were
-	// generated and billed even though the message is discarded, so the run's
-	// accounting folds it in rather than letting a rule fire for free.
-	usage Usage
-}
-
-func (e *streamAbort) Error() string { return "stream aborted by interceptor" }
-
-// committedStreamError marks a provider stream that failed after content was
-// already delivered to the caller's sink. Retrying that request — on the same
-// model or an escalation rung — is no longer replay-safe: the replacement
-// answer would be appended to text the caller has already rendered. The cause
-// stays wrapped for errors.Is/errors.As, and usage preserves whatever the
-// failed attempt reported so a partial response is not free.
-type committedStreamError struct {
-	cause error
-	usage Usage
-}
-
-func (e *committedStreamError) Error() string {
-	return fmt.Sprintf("provider stream failed after emitting output: %v", e.cause)
-}
-
-func (e *committedStreamError) Unwrap() error { return e.cause }
-
-// maxStreamAbortsPerTurn backstops a StreamInterceptor that never stops
-// matching: past it the turn's provider call is retried once with interception
-// disabled, so the stream completes unmodified. A guard that can spin the
-// provider forever is an availability bug wearing a policy costume — the
-// plugin's own per-turn cap is the real bound; this only covers a broken one.
-const maxStreamAbortsPerTurn = 8
 
 // unknownProviderImageLimit is the portable floor for an image-capable path
 // whose vendor metadata does not publish a request-wide image cap. It matches
@@ -244,112 +201,6 @@ func withoutImageContent(messages []Message) []Message {
 		return messages
 	}
 	return out
-}
-
-// streamTurn consumes the provider's delta channel for one turn, forwarding
-// content fragments to the sink as they arrive when no interceptor is installed
-// and holding an intercepted attempt until it is accepted. It accumulates the
-// full assistant message (text + tool calls + usage) so the Act path is identical
-// to the non-streaming turn. frame, when non-nil, receives a throttled snapshot of
-// the text accumulated SO FAR — first delta, then per frameBytes — for the
-// durable partial-frame record; it is per-attempt, so a retried stream starts
-// its snapshots fresh rather than mixing two attempts' text.
-//
-// When stream interceptors are installed the provider call runs on a cancelable
-// child context: the first interceptor to abort cancels it — cutting the HTTP
-// stream mid-token — and the partial message is discarded into the streamAbort
-// sentinel. The channel is drained after cancel so a provider that does not
-// select on ctx.Done (the scripted test providers) still finishes its goroutine
-// instead of leaking it against a full buffer.
-func (a *Agent) streamTurn(ctx context.Context, provider LLMProvider, req ChatRequest, sink StreamSink, streams []StreamInterceptor, frame func(snapshot string)) (ChatResponse, error) {
-	streamCtx := ctx
-	cancel := context.CancelFunc(nil)
-	if len(streams) > 0 {
-		streamCtx, cancel = context.WithCancel(ctx)
-		defer cancel()
-	}
-	ch, err := provider.Stream(streamCtx, req)
-	if err != nil {
-		return ChatResponse{}, err
-	}
-	msg := Message{Role: RoleAssistant}
-	var resp ChatResponse
-	var heldTokens []string
-	committed := false
-	terminal := false
-	sinceFrame := 0
-	for d := range ch {
-		// Some providers attach their last known usage to the error delta. Merge
-		// it before inspecting Err so a failed partial stream is still accounted.
-		resp.Usage = mergeUsage(resp.Usage, d.Usage)
-		if d.Err != nil {
-			if committed {
-				return ChatResponse{}, &committedStreamError{cause: d.Err, usage: resp.Usage}
-			}
-			return ChatResponse{}, d.Err
-		}
-		if d.ContentDelta != "" {
-			msg.Content += d.ContentDelta
-			if len(streams) > 0 {
-				if dec := interceptStreamDelta(ctx, streams, msg.Content); dec.Abort {
-					cancel()
-					for range ch {
-					}
-					return ChatResponse{}, &streamAbort{inject: dec.Inject, usage: resp.Usage}
-				}
-			}
-			if len(streams) > 0 {
-				// A rule can match a later chunk, after earlier chunks already looked
-				// harmless. Hold the attempt until it completes so an aborted draft
-				// never leaks a prefix into the visible stream. Streams without rules
-				// retain true token-by-token delivery.
-				heldTokens = append(heldTokens, d.ContentDelta)
-			} else {
-				sink(StreamEvent{Type: StreamToken, Token: d.ContentDelta})
-				committed = true
-			}
-			if frame != nil {
-				sinceFrame += len(d.ContentDelta)
-				if msg.Content == d.ContentDelta || sinceFrame >= frameBytes {
-					frame(msg.Content)
-					sinceFrame = 0
-				}
-			}
-		}
-		if d.ToolCall != nil {
-			msg.ToolCalls = append(msg.ToolCalls, *d.ToolCall)
-		}
-		if d.ReasoningBlock != nil {
-			msg.ReasoningBlocks = append(msg.ReasoningBlocks, *d.ReasoningBlock)
-		}
-		// Usage is not the Done delta's private property: providers report it in
-		// pieces (input up front, output at the end) and as running totals, so
-		// take the newest non-zero value of each field wherever it arrives. A
-		// last-write-wins assignment on Done alone zeroes the whole turn's spend
-		// for any provider that reports early — and the run's budget gate meters
-		// on that number, so the loss is invisible until a run overshoots.
-		if d.Done {
-			resp.StopReason = d.StopReason
-			terminal = true
-		}
-	}
-	// A provider wrapper may close its channel while propagating cancellation.
-	// Never turn that closure into a successful empty assistant response. Check
-	// before releasing held interceptor output so cancelled drafts stay hidden.
-	// Once a terminal event was received, however, completion won the race: a
-	// sibling cancellation that lands a moment later must not erase a fully
-	// delivered response and make durable child work run twice on recovery.
-	if err := streamCtx.Err(); err != nil && !terminal {
-		if committed {
-			return ChatResponse{}, &committedStreamError{cause: err, usage: resp.Usage}
-		}
-		return ChatResponse{}, err
-	}
-	for _, token := range heldTokens {
-		sink(StreamEvent{Type: StreamToken, Token: token})
-	}
-	resp.Message = msg
-	return resp, nil
 }
 
 // retainedTranscript is what a completed compaction stores on its durable

@@ -23,7 +23,7 @@ func durableParent(t *testing.T, settings subagent.Plugin) *agentcore.Agent {
 	return a
 }
 
-func executeSpawn(t *testing.T, host *agentcore.PiToolHost, scope, args string) agentcore.PiToolOutcome {
+func executeSpawn(t *testing.T, host *agentcore.ToolHost, scope, args string) agentcore.ToolOutcome {
 	t.Helper()
 	ctx := agentcore.WithToolInvocationScope(context.Background(), scope)
 	params, _ := json.Marshal(map[string]any{"toolCallId": "reused-call", "toolName": subagent.ToolSpawnSubagent, "args": json.RawMessage(args)})
@@ -44,7 +44,7 @@ func TestDurableChildIdentityUsesPhysicalInvocation(t *testing.T) {
 		sessions = append(sessions, req.SessionID)
 		return agentcore.RunResult{Final: "child answer", StopReason: "stop"}, nil
 	}}
-	host, err := durableParent(t, settings).OpenPiTools(context.Background())
+	host, err := durableParent(t, settings).OpenTools(context.Background())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -99,7 +99,7 @@ func TestDurableSchemaCorrectionPassesOriginalNativeCheckpoint(t *testing.T) {
 		}
 		return agentcore.RunResult{Final: `{"fruit":"banana"}`, StopReason: "stop"}, nil
 	}}
-	host, err := durableParent(t, settings).OpenPiTools(context.Background())
+	host, err := durableParent(t, settings).OpenTools(context.Background())
 	if err != nil {
 		t.Fatal(err)
 	}

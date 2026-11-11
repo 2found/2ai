@@ -1,7 +1,8 @@
 // Package goal installs the run-level completion contract: a goal-gated run may
 // only stop when it says so.
 //
-// The condition is stated in the system prompt up front, and the model must end
+// The protocol is stated in the system prompt up front and the condition in a
+// "[run goal]" message appended to the transcript, and the model must end
 // its final answer with STATUS: DONE once the goal is met, or STATUS: BLOCKED
 // plus the reason when only the user can unblock it. A finish with neither
 // sentinel re-opens the run with a keep-going nudge.
@@ -45,7 +46,9 @@ package goal
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/2found/2ai/agentcore"
@@ -204,6 +207,7 @@ type gateRun struct {
 	// model answered every nudge with prose alone.
 	lastTools int
 	idle      int
+	sight     sightline
 }
 
 // Name identifies the extension in composition diagnostics.
@@ -213,13 +217,83 @@ func (*gateRun) Name() string { return "goal" }
 func (g *gateRun) goalText() string { return g.store.Goal() }
 
 // SystemPrompt states the completion protocol before the model's first turn.
-// Stating it once as a fixed prefix costs less than repeating it per turn, and
-// it is in front of the model before the first answer rather than after it.
+//
+// It never contains the condition itself. The system prompt is the cached
+// prefix of every request, and the condition can change mid-run (update_goal)
+// or between runs on one conversation; on a provider without mid-conversation
+// system messages any change there rewrites the whole cached prefix. The
+// condition is stated in the transcript instead, by appending (see BeforeStep),
+// and this protocol tells the model which statement is in force.
 func (g *gateRun) SystemPrompt() string {
-	return "## Goal gate\nThis run has a completion goal:\n" + strings.TrimSpace(g.goalText()) +
-		"\nDo not stop until it is satisfied. End your final answer with the line \"" + Done +
+	return "## Goal gate\nThis run has a completion goal, stated in the most recent \"" + StatementPrefix +
+		"\" message; a later statement replaces an earlier one. Do not stop until it is satisfied. End your final answer with the line \"" + Done +
 		"\" once the goal is met, or \"" + Blocked +
 		"\" plus the reason if only the user can unblock you. A finish without either line re-opens the run."
+}
+
+// StatementPrefix opens every statement of the run's completion condition.
+const StatementPrefix = "[run goal]"
+
+// statementHeader opens a statement message and nothing else: the protocol in
+// the system prompt names StatementPrefix but never carries this header.
+const statementHeader = StatementPrefix + " This run finishes when:\n"
+
+// statement is the canonical text that puts a condition in front of the model.
+func statement(goal string) string {
+	return statementHeader + strings.TrimSpace(goal)
+}
+
+// BeforeStep states the condition when the model cannot see it in force: at the
+// first step of a run, after a revision, or when a resumed or chained run holds
+// a condition the history does not show.
+// The statement is a persisted system message appended at the end of the
+// transcript, so nothing the provider already cached is rewritten: a provider
+// without mid-conversation system messages reads it as a reminder at that
+// position. It is system-role because the condition is the operator's, not the
+// user's, and because compaction keeps system messages verbatim — the goal
+// never depends on a summary remembering it.
+func (g *gateRun) BeforeStep(context.Context, agentcore.StepInfo) agentcore.StepDecision {
+	want := statement(g.goalText())
+	if g.sight.inForce(want) {
+		return agentcore.StepDecision{}
+	}
+	msg := agentcore.Message{Role: agentcore.RoleSystem, Content: want}
+	g.sight.observe(agentcore.PhaseAppend, []agentcore.Message{msg})
+	return agentcore.StepDecision{AdditionalContexts: []agentcore.Message{msg}}
+}
+
+// sightline is the transcript the model last saw: the latest full view
+// (restore, rebase, request) plus every message appended since.
+type sightline struct {
+	mu   sync.Mutex
+	seen []agentcore.Message
+}
+
+func (s *sightline) observe(phase agentcore.ObservePhase, msgs []agentcore.Message) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	switch phase {
+	case agentcore.PhaseRestore, agentcore.PhaseRebase, agentcore.PhaseRequest:
+		// Clip so a later append never writes into the caller's backing array.
+		s.seen = slices.Clip(msgs)
+	case agentcore.PhaseAppend, agentcore.PhaseExternalInput:
+		s.seen = append(s.seen, msgs...)
+	}
+}
+
+// inForce reports whether the LAST statement the model can see is want. An
+// earlier statement of the same condition does not count once a later one
+// replaced it. Only a statement message counts: text that merely quotes one (a
+// user, the model, a tool result) is not the operator stating the condition.
+func (s *sightline) inForce(want string) bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	for i := len(s.seen) - 1; i >= 0; i-- {
+		if m := s.seen[i]; m.Role == agentcore.RoleSystem && strings.HasPrefix(m.Content, statementHeader) {
+			return m.Content == want
+		}
+	}
+	return false
 }
 
 // TurnStopping holds the run to its goal.

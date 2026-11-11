@@ -4,9 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"math"
+	"slices"
 	"strings"
-	"time"
 	"unicode/utf8"
 )
 
@@ -21,42 +20,16 @@ func (e *ContextBudgetError) Error() string {
 // by a local estimate. Rewritten views invalidate older usage anchors without
 // modifying the original billable usage or signed native messages.
 func ContextTokens(raw json.RawMessage) int {
-	floor := estimateTokens(string(raw))
-	var messages []json.RawMessage
-	if json.Unmarshal(raw, &messages) != nil {
-		return floor
+	messages, err := splitMessages(raw)
+	if err != nil {
+		return max(1, estimateTokens(string(raw)))
 	}
-	var rewrittenAt int64
-	for _, raw := range messages {
-		var m struct {
-			Timestamp                int64
-			AgentrayContextSummary   string
-			AgentrayContextReducedAt int64
-		}
-		_ = json.Unmarshal(raw, &m)
-		if m.AgentrayContextSummary != "" {
-			rewrittenAt = max(rewrittenAt, m.Timestamp)
-		}
-		rewrittenAt = max(rewrittenAt, m.AgentrayContextReducedAt)
+	facts := make([]*messageFacts, len(messages))
+	for i, m := range messages {
+		f := decodeFacts(m)
+		facts[i] = &f
 	}
-	tail := 0
-	for i := len(messages) - 1; i >= 0; i-- {
-		var m struct {
-			Role, StopReason string
-			Timestamp        int64
-			Usage            *struct{ Input, Output, CacheRead, CacheWrite float64 }
-		}
-		_ = json.Unmarshal(messages[i], &m)
-		if m.Role == "assistant" && m.StopReason != "error" && m.StopReason != "aborted" && m.Usage != nil && (rewrittenAt == 0 || m.Timestamp > rewrittenAt) {
-			u := m.Usage
-			count := u.Input + u.Output + u.CacheRead + u.CacheWrite
-			if count > 0 && !math.IsNaN(count) && !math.IsInf(count, 0) && count < float64(math.MaxInt-tail) {
-				return max(floor, int(math.Ceil(count))+tail)
-			}
-		}
-		tail += estimateTokens(string(messages[i]))
-	}
-	return floor
+	return factTokens(facts)
 }
 
 // Prepare verifies the actual outgoing view after compaction. Oversized tool
@@ -64,92 +37,127 @@ func ContextTokens(raw json.RawMessage) int {
 // If the request still cannot fit, fail before sending it instead of repeatedly
 // paying for a summary over the same tail. The original transcript is untouched.
 func (c *Compactor) Prepare(ctx context.Context, raw json.RawMessage, policy CompactionPolicy) (json.RawMessage, error) {
-	view := c.TransformWithPolicy(ctx, raw, policy)
+	messages, view, _ := c.transform(ctx, raw, policy, false)
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	tokens := func(messages []json.RawMessage, raw json.RawMessage) int {
+		if messages == nil {
+			return ContextTokens(raw)
+		}
+		return factTokens(c.memo.of(messages))
+	}
 	fitBudget := policy.Budget
 	if policy.MaxInputTokens > 0 {
 		fitBudget = policy.MaxInputTokens
 	}
-	if err := ctx.Err(); err != nil {
-		return nil, err
-	}
-	if policy.Budget <= 0 || ContextTokens(view) <= policy.Budget {
+	if policy.Budget <= 0 || tokens(messages, view) <= policy.Budget {
 		return view, nil
 	}
-	var messages []json.RawMessage
-	if err := json.Unmarshal(view, &messages); err != nil {
-		return nil, err
+	if messages == nil {
+		var err error
+		if messages, err = splitMessages(view); err != nil {
+			return nil, err
+		}
 	}
 	if policy.Archive != nil {
-		// Bound each result so several parallel calls also leave useful headroom.
-		capBytes := max(256, policy.Budget*4/max(8, len(messages)))
+		// Bound each result so several parallel calls also leave useful
+		// headroom. The cap depends only on the budget, so a previewed result
+		// is the same bytes on every request and the prompt cache still reads it.
+		capBytes := max(256, policy.Budget/4)
+		facts := c.memo.of(messages)
+		var previewed []json.RawMessage
 		for i, m := range messages {
 			if err := ctx.Err(); err != nil {
 				return nil, err
 			}
-			var fields map[string]json.RawMessage
-			if json.Unmarshal(m, &fields) != nil {
+			f := facts[i]
+			if f.role != "toolResult" || f.toolName == "read_spill" || f.bytes <= capBytes {
 				continue
 			}
-			var role, name, id string
-			_ = json.Unmarshal(fields["role"], &role)
-			if role != "toolResult" {
-				continue
+			next, err := c.preview(ctx, m, f, capBytes, policy.Archive)
+			if err != nil {
+				return nil, err
 			}
-			_ = json.Unmarshal(fields["toolName"], &name)
-			_ = json.Unmarshal(fields["toolCallId"], &id)
-			var blocks []map[string]json.RawMessage
-			if json.Unmarshal(fields["content"], &blocks) != nil {
-				continue
+			if previewed == nil {
+				previewed = slices.Clone(messages)
 			}
-			changed := false
-			for _, block := range blocks {
-				var typ, text string
-				_ = json.Unmarshal(block["type"], &typ)
-				_ = json.Unmarshal(block["text"], &text)
-				if typ != "text" || len(text) <= capBytes || name == "read_spill" {
-					continue
-				}
-				locator, err := policy.Archive(ctx, name, id, text)
-				if err != nil {
-					return nil, fmt.Errorf("context archive failed: %w", err)
-				}
-				if locator == "" {
-					return nil, fmt.Errorf("context archive returned no recoverable locator")
-				}
-				notice := fmt.Sprintf("\n[Context preview: full %d bytes saved. Use read_spill with locator %q and byte offset/limit to retrieve the rest.]", len(text), locator)
-				preview := text[:min(len(text), max(0, capBytes-len(notice)))]
-				// Never split UTF-8 text at a preview boundary.
-				for len(preview) > 0 && !utf8.ValidString(preview) {
-					preview = preview[:len(preview)-1]
-				}
-				block["text"], _ = json.Marshal(preview + notice)
-				changed = true
-			}
-			if !changed {
-				continue
-			}
-			fields["content"], _ = json.Marshal(blocks)
-			fields["agentrayContextReducedAt"], _ = json.Marshal(time.Now().UnixMilli())
-			messages[i], _ = json.Marshal(fields)
+			previewed[i] = next
 		}
-		view, _ = json.Marshal(messages)
+		if previewed != nil {
+			messages, view = previewed, joinMessages(previewed)
+		}
 	}
-	if ContextTokens(view) <= fitBudget {
+	if tokens(messages, view) <= fitBudget {
 		return view, nil
 	}
 	// Usage pressure may come from a complete newest turn, not a large text
 	// result. A final fold is safe only when the original request has a completed
-	// assistant/tool batch; Transform enforces that boundary and persistence.
+	// assistant/tool batch; transform enforces that boundary and persistence.
 	policy.Force = true
-	next := c.TransformWithPolicy(ctx, raw, policy)
-	if ContextTokens(next) < ContextTokens(view) {
-		view = next
+	if next, nextRaw, _ := c.transform(ctx, raw, policy, false); tokens(next, nextRaw) < tokens(messages, view) {
+		messages, view = next, nextRaw
 	}
-	if ContextTokens(view) > fitBudget {
-		return nil, &ContextBudgetError{Estimated: ContextTokens(view), Budget: fitBudget}
+	if estimated := tokens(messages, view); estimated > fitBudget {
+		return nil, &ContextBudgetError{Estimated: estimated, Budget: fitBudget}
 	}
 	if strings.TrimSpace(string(view)) == "" {
 		return nil, fmt.Errorf("empty compacted context")
 	}
 	return view, nil
+}
+
+type previewKey struct {
+	mark     uint64
+	capBytes int
+}
+
+// preview replaces each oversized text block of a tool result with its head
+// and the archive locator of the full text. The rewrite is cached by message,
+// so the archive is asked once and every request repeats the same bytes.
+func (c *Compactor) preview(ctx context.Context, raw json.RawMessage, f *messageFacts, capBytes int, archive func(context.Context, string, string, string) (string, error)) (json.RawMessage, error) {
+	key := previewKey{mark: c.memo.mark(raw), capBytes: capBytes}
+	if cached, ok := c.previews[key]; ok {
+		return cached, nil
+	}
+	var fields map[string]json.RawMessage
+	var blocks []map[string]json.RawMessage
+	if json.Unmarshal(raw, &fields) != nil || json.Unmarshal(fields["content"], &blocks) != nil {
+		return raw, nil
+	}
+	changed := false
+	for _, block := range blocks {
+		var typ, text string
+		_ = json.Unmarshal(block["type"], &typ)
+		_ = json.Unmarshal(block["text"], &text)
+		if typ != "text" || len(text) <= capBytes {
+			continue
+		}
+		locator, err := archive(ctx, f.toolName, f.toolCallID, text)
+		if err != nil {
+			return nil, fmt.Errorf("context archive failed: %w", err)
+		}
+		if locator == "" {
+			return nil, fmt.Errorf("context archive returned no recoverable locator")
+		}
+		notice := fmt.Sprintf("\n[Context preview: full %d bytes saved. Use read_spill with locator %q and byte offset/limit to retrieve the rest.]", len(text), locator)
+		preview := text[:min(len(text), max(0, capBytes-len(notice)))]
+		// Never split UTF-8 text at a preview boundary.
+		for len(preview) > 0 && !utf8.ValidString(preview) {
+			preview = preview[:len(preview)-1]
+		}
+		block["text"], _ = json.Marshal(preview + notice)
+		changed = true
+	}
+	out := raw
+	if changed {
+		fields["content"], _ = json.Marshal(blocks)
+		fields["agentrayContextReducedAt"], _ = json.Marshal(c.clock().UnixMilli())
+		out, _ = json.Marshal(fields)
+	}
+	if c.previews == nil {
+		c.previews = map[previewKey]json.RawMessage{}
+	}
+	c.previews[key] = out
+	return out, nil
 }

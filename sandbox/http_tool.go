@@ -8,6 +8,7 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"slices"
 	"sort"
 	"strings"
 	"time"
@@ -217,6 +218,63 @@ type httpRequestArgs struct {
 	Headers map[string]string `json:"headers"`
 	Body    string            `json:"body"`
 	SaveAs  string            `json:"save_as"`
+}
+
+// NetworkHosts reports the one host a call contacts (agentcore.NetworkTool), so
+// a host-scoped credential grant can be checked before the secret is resolved.
+// It is exact because Run never follows a redirect.
+func (t *HTTPTool) NetworkHosts(args string) ([]string, error) {
+	var in httpRequestArgs
+	if err := json.Unmarshal([]byte(args), &in); err != nil {
+		return nil, fmt.Errorf("http_request: invalid arguments: %w", err)
+	}
+	u, err := parseAbsoluteURL(in.URL)
+	if err != nil {
+		return nil, fmt.Errorf("http_request: %w", err)
+	}
+	return plainHost(ToolHTTPRequest, u.Hostname())
+}
+
+// ExternalContent marks third-party API responses as untrusted
+// (agentcore.ExternalContentTool).
+func (t *HTTPTool) ExternalContent() bool { return true }
+
+// plainHost is the one host a URL-taking tool contacts. A host that is itself
+// a credential placeholder is refused: where a secret goes must not depend on
+// a secret.
+func plainHost(tool, host string) ([]string, error) {
+	host = strings.ToLower(host)
+	if host == "" || strings.ContainsAny(host, "{}") {
+		return nil, fmt.Errorf("%s: url host %q is not a plain host name", tool, host)
+	}
+	return []string{host}, nil
+}
+
+// hostWithin reports whether host is root or one of its subdomains.
+func hostWithin(host, root string) bool {
+	host, root = strings.ToLower(strings.TrimSuffix(host, ".")), strings.ToLower(strings.TrimSuffix(root, "."))
+	return root != "" && (host == root || strings.HasSuffix(host, "."+root))
+}
+
+// egressHosts is what a sandboxed tool's network can reach, for
+// agentcore.NetworkTool: the allowlisted hosts. A tool on the host machine,
+// one with open egress, or one with no network has no host list a credential
+// can be scoped to.
+func egressHosts(tool string, hosted bool, limits agentcore.SandboxLimits) ([]string, error) {
+	allow := newEgressAllow(limits.NetworkAllow)
+	switch {
+	case hosted, limits.Network && allow.unrestricted:
+		return nil, fmt.Errorf("%s can contact any host", tool)
+	case !limits.Network || len(allow.rules) == 0:
+		return nil, fmt.Errorf("%s has no network egress", tool)
+	}
+	hosts := make([]string, 0, len(allow.rules))
+	for _, rule := range allow.rules {
+		if !slices.Contains(hosts, rule.host) {
+			hosts = append(hosts, rule.host)
+		}
+	}
+	return hosts, nil
 }
 
 // Run executes the guarded request. args has already had {{cred:NAME}} resolved

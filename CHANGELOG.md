@@ -2,6 +2,69 @@
 
 ## Unreleased
 
+## 0.2.0 — 2026-11-11
+
+Baseline: v0.1.9. This release hardens the harness across security, long runs, prompt caching, telemetry and built-in tools, and removes everything the native run path never reached. It is a breaking release for hosts: see **Migration**.
+
+### Migration
+
+- **Credentials are deny-by-default.** A `{{cred:NAME}}` placeholder resolves only under an `Env.CredentialGrants` entry naming the tool (and, with `Hosts`, only for a tool that declares the hosts it contacts). `CredentialResolver.Resolve` receives one placeholder at a time.
+- **Docker network needs an allowlist.** `Network: true` with an empty `NetworkAllow` is refused; pass `sandbox.AnyHost` for open egress. An allowlist is enforced by an internal Docker network and needs a native Linux engine (it fails on Docker Desktop). `ComputerUseLimits` / `BrowserUseLimits` take the allowlist; empty is offline.
+- **Tool schemas changed.** `browser_use` takes `args` (an argv array), not `command`. `write_file` overwrites an existing file only with a matching `expected_hash`. `run_shell` / `computer_use` gain `timeout_seconds` and `run_in_background`.
+- **`llm.trace` payloads are opt-in.** Pass `telemetry.Limits{Payloads: N}` to `export.New` or `export.Options.Limits` to keep full request and response traces.
+- **`Pi*` identifiers are renamed.** `Hooks.PiContext`/`PiContextHook` → `Hooks.Context`/`ContextHook`; `PiToolHost`/`OpenPiTools`/`PiToolOutcome` → `ToolHost`/`OpenTools`/`ToolOutcome`; `PiTurnPreparation`/`PiCompletedTurn`/`PiTurnDecision` → `TurnPreparation`/`CompletedTurn`/`TurnDecision`; `PiArgumentPreparer` → `ArgumentPreparer`; `PiQuestionFromEntry`/`PiChildQuestionFromEntry` → `QuestionFromEntry`/`ChildQuestionFromEntry`; `ToolHost` methods drop `Pi` (`StartPiRun` → `StartRun`, …); `EntryPi*` → `EntryNative*`. Persisted entry values are unchanged, so existing checkpoints load.
+- **Removed (never reached by `RunNative`):** `Compactor`, `DefaultCompactor`, `CompactionRequest`, `CompactionResult`, `Registry.SetCompactor`, `CompactionUsing`, `Config.CompactionModel`, `Config.Compactor`, `CompactionSettings.MaxSummaryTokens` and `Prune*`, `ContextPruner`, `PiCompactionPolicy`, `TurnPreparation.DisableTools`, host `Transform` / `TransformWithPolicy` / `SummaryView` / `FoldSummary`, the old `ContextHook` trailer seam, `StreamInterceptor`, `StreamDecision`, `Registry.UsePolicy`, `host.ProjectMessage` / `ProjectContent` (use `ai.ProjectMessage` / `ProjectContent`), `protocol.Message.CacheAnchor` and `ContextTokenAdjustment`, `ai.EstimateTextAndImageContentTokens`, `ai.ClampThinkingLevel`, `todo.PiContextHook`, `ask.Plugin.SelfGated`, `preset.Options.Jobs` / `SessionQuery`, repeatguard `Include` / `Exclude` / `ArgumentsPreviewChars` / `DefaultExclude`, and the jobs store, launcher and option API (only `jobs.Plugin{MaxConcurrent}` remains).
+- **Changed signatures.** `Registry.AddTools` returns `error` (a duplicate tool name is an error). `Config.CompactionProvider` / `CompactionPlugin.Provider` / `Registry.SetCompactionModel` take `*ai.FallbackProvider`. The third argument of `host.CompactionPolicy.Summarize` is the summary's instructions, not the revision. `SetPolicy(nil)` installs `DenyAll`.
+
+### Security
+
+- **A broken gate refuses the call.** A panicking before-hook or policy blocks the tool call under every `HookErrorPolicy` and is reported through `OnError`. The policy is enforced inside the executor on every call, even without a `PolicyPlugin`.
+- **Credentials are scoped and redacted.** Resolved values are JSON-escaped into arguments and redacted from tool output, partial updates and errors before a hook, trace or the model sees them.
+- **Permissions can ask and rewrite.** `Decision.Ask` parks the run on an `ApprovalRequest`; `Decision.Arguments` (`AllowedWith`) rewrites arguments, which are re-validated and re-checked. `Fork(id, narrow...)` narrows a child's policy, and a run started inside a tool call never exceeds its caller's policy or any ancestor's delegation depth.
+- **External content is framed as data.** Results of network sandbox tools reach the model inside an `<external_content>` block. `web_fetch` refuses redirects to another host.
+- **Docker egress allowlists are enforced.** The container's only route out is the filtering proxy, which binds the gateway only, allows ports 80/443 unless an entry names one, and checks CONNECT targets and absolute URLs.
+- **The SSRF block list is complete.** It covers CGNAT, 198.18/15, 0/8, multicast, reserved ranges, NAT64, 6to4, Teredo and IPv4-mapped addresses.
+- **Workspace file access goes through `os.Root`,** closing a symlink-swap race on writes.
+- **Anthropic OAuth uses an independent random `state`** and rejects a mismatch.
+
+### Compaction and long runs
+
+- **A compaction summary is a structured handoff.** Nine sections after a discarded `<analysis>` scratchpad, up to 8,192 tokens, clamped on line boundaries. The summarizer reads bounded role-labelled text without thinking signatures, usage records or image bytes; a later summary extends the earlier one and keeps user corrections word for word.
+- **Old tool results are cleared before a summary is paid for.** `ToolResultClearing` (on by default) replaces old results with stable placeholders; the boundary persists in `NativeState`, so the prompt cache survives.
+- **Context is reattached after a summary.** `CompactionReattacher` lets extensions restore bounded context; skills read earlier and the todo plan are reattached by default, capped at `min(8192, budget/8)` tokens.
+- **A host can compact on demand.** `NativeRun.Compact` takes a focus; `CompactionSettings.Instructions` sets a standing one. `CompactionSettings.SharePromptCache` (off by default, scripted-provider coverage only) asks for the summary as one more turn of the live conversation.
+- **A failing summarizer stops after three consecutive failures;** a provider overflow still forces one. `Hooks.BeforeCompact` can defer a summary with `Skip`. `RunResult.Compactions` reports each compaction.
+- **Mid-run checkpoints.** `NativeRun.Checkpoint` receives a resumable state after every settled turn, and a failed or cancelled run returns its last resumable `NativeState`.
+- **Per-request compaction cost no longer grows with the transcript** (incremental prefix digest; `BenchmarkPrepareLongTranscript`). Oversized-result previews repeat byte for byte.
+- **Inline images are charged a flat estimate** (about 1,372 tokens), not a quarter of their base64 length.
+- **Job state survives a resume** through the native checkpoint; a job interrupted by the end of a run comes back as cancelled.
+
+### Tokens and prompt cache
+
+- **Plugins no longer rewrite the cached prefix.** The todo plan and the goal condition are persisted, append-only messages; a resume or goal revision appends a system message only when the text changed. Late system text on providers without mid-conversation system messages becomes an in-place reminder.
+- **Anthropic requests place up to four rolling cache breakpoints** (tools, system, previous request end, newest stable message).
+- **The wrap-up turn keeps its tools** and sends `tool_choice` none. Antigravity honors `toolChoice`.
+- **Side calls do not write cache.** Compaction, advisor and memory calls send `cacheRetention: "none"`.
+- **Usage carries reasoning tokens and 1-hour cache writes** (`protocol.Usage.ReasoningTokens`, `CacheWrite1hTokens`, `Usage.Add`); pricing bills 1-hour writes at their premium.
+- **A run returns to its primary model.** `ai.FallbackLadder` (`NativeRun.Fallback`) probes the primary after time or successes on a fallback rung.
+- **One token estimator** (`ai`, 3.5 characters per token) serves transports and compaction.
+
+### Telemetry
+
+- **Recorders are bounded** (`telemetry.Limits`) and count drops; payloads are opt-in, lazy and bounded.
+- **Spans are queryable.** Attempt events and request spans carry OpenTelemetry `gen_ai.*` attributes, cost, context window, time to first token and fallback rung. Without payload capture a plain admission failure is `provider_admission`, not `unknown`.
+- **`export.NewExporter` streams settled spans in batches without blocking,** with head sampling, heartbeats, flush on close and a standard-library OTLP/HTTP JSON sink (`export.OTLP`).
+- **`llm.FileSink` writes mode 0600** and reports write failures.
+
+### Tools and plugins
+
+- **Shell calls are bounded.** A per-call timeout (default 120 s, maximum 600 s), head-and-tail output with the full log in `.shell_logs/`, live streaming, a background mode, and a process-tree kill on timeout or cancel.
+- **`write_file` is hash-guarded and atomic,** preserving the file's mode.
+- **`browser_use` execs an argv** with an allowlisted command set instead of a shell string.
+- **Extension failures are always reported.** A panic at any dispatch point reaches `OnError` as `extension:<name>.<point>`; a failing `BeginRun` fails the run. `Registry.Unload` is order-independent.
+
+Upgrade consuming Go modules with `go get github.com/2found/2ai@v0.2.0`, apply the **Migration** notes, then run their compatibility checks.
+
 ## 0.1.9 — 2026-11-09
 
 Baseline: v0.1.8. Public API gains `Registry.SetSchemaTransform`; no configuration migration and no change for hosts that do not call it.

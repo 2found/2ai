@@ -106,7 +106,7 @@ a new kind does not touch core.
 
 | Folder | Adds | Ejecting it means |
 |---|---|---|
-| [`todo`](todo/) | run-scoped `update_plan`, pinned context and checkpoint | a long run drifts off task |
+| [`todo`](todo/) | run-scoped `update_plan`, append-only plan reminder and checkpoint | a long run drifts off task |
 | [`advisor`](advisor/) | pre-finish reviewer | the agent never gets a second opinion |
 | [`finishguard`](finishguard/) | verify-on-stop | the first answer is the answer |
 | [`jobs`](jobs/) | async tools + `job_*` | every tool blocks the run |
@@ -133,11 +133,14 @@ running?".
 so `Registry.Unload(name)` unwinds one completely: seam released, hooks
 withdrawn, extension removed, previous provider restored.
 
-**Ordering is explicit, not positional.** Hooks carry a `Priority`
-(`PriorityGate` < `PriorityDefault` < `PriorityLate`), so the permission gate is
-consulted before any consumer hook regardless of where `policy` sits in the list.
-The governance guarantee is a property of the composition, not a side effect of
-construction order.
+**Ordering is explicit, not positional.** The permission policy is not a hook:
+the governed executor consults it before every `BeforeToolCall` hook, so no
+consumer hook can observe or rewrite a call the policy refuses, wherever
+`policy` sits in the list. Hooks carry a `Priority` (`PriorityGate` <
+`PriorityDefault` < `PriorityLate`); `PriorityGate` is for hooks that also
+authorize (an injection guard) and must refuse before an ordinary hook sees the
+call. The governance guarantee is a property of the composition, not a side
+effect of construction order.
 
 **The core owns persistence.** An extension returns `AdditionalContexts`; the
 **loop** appends them (after every tool result in the batch, never interleaved —

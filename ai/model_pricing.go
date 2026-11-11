@@ -20,15 +20,20 @@ type ModelPrice struct {
 	// "derive from InputPerM" (see Cost).
 	CacheReadPerM  float64 `json:"cache_read_per_m,omitempty"`
 	CacheWritePerM float64 `json:"cache_write_per_m,omitempty"`
+	// CacheWrite1hPerM prices Anthropic's 1-hour cache writes; zero derives it
+	// from InputPerM. CacheWritePerM then prices only the 5-minute remainder.
+	CacheWrite1hPerM float64 `json:"cache_write_1h_per_m,omitempty"`
 }
 
 // Default cache multipliers applied to InputPerM when a model has no explicit
 // cache rate. A cache hit bills at a fraction of fresh input; an Anthropic cache
-// write bills at a small premium over it. List prices drift, so these are honest
-// defaults, not guarantees — override per model via CacheReadPerM/CacheWritePerM.
+// write bills at a small premium over it (5-minute TTL) or double it (1-hour
+// TTL). List prices drift, so these are honest defaults, not guarantees —
+// override per model via CacheReadPerM/CacheWritePerM/CacheWrite1hPerM.
 const (
-	defaultCacheReadMultiplier  = 0.10
-	defaultCacheWriteMultiplier = 1.25
+	defaultCacheReadMultiplier    = 0.10
+	defaultCacheWriteMultiplier   = 1.25
+	defaultCacheWrite1hMultiplier = 2.0
 )
 
 // Pricing maps a model name to its price. Lookup is exact first, then by longest
@@ -46,7 +51,8 @@ type Pricing map[string]ModelPrice
 // are priced as their own categories (so a long run whose stable prefix is
 // served from cache is billed at the discounted rate, not the full input rate);
 // absent explicit cache rates they derive from InputPerM by the standard
-// multipliers.
+// multipliers. Reasoning tokens are part of OutputTokens and bill with them;
+// 1-hour cache writes are the CacheWrite1hTokens subset of CacheWriteTokens.
 func (p Pricing) Cost(model string, u protocol.Usage) (float64, bool) {
 	mp, ok := p.lookup(model)
 	if !ok {
@@ -60,10 +66,16 @@ func (p Pricing) Cost(model string, u protocol.Usage) (float64, bool) {
 	if writePerM == 0 {
 		writePerM = mp.InputPerM * defaultCacheWriteMultiplier
 	}
+	longPerM := mp.CacheWrite1hPerM
+	if longPerM == 0 {
+		longPerM = mp.InputPerM * defaultCacheWrite1hMultiplier
+	}
+	long := min(max(u.CacheWrite1hTokens, 0), u.CacheWriteTokens)
 	return float64(u.InputTokens)/1e6*mp.InputPerM +
 		float64(u.OutputTokens)/1e6*mp.OutputPerM +
 		float64(u.CacheReadTokens)/1e6*readPerM +
-		float64(u.CacheWriteTokens)/1e6*writePerM, true
+		float64(u.CacheWriteTokens-long)/1e6*writePerM +
+		float64(long)/1e6*longPerM, true
 }
 
 // lookup resolves a model to a price: exact match, else the longest key that is

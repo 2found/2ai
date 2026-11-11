@@ -68,7 +68,7 @@ func fullConfig() agentcore.Config {
 		Session: agentcore.NewMemorySessionStore(), SessionID: "s1", ResumeSession: false,
 		SeedDisabledTools:  []string{"broken"},
 		Compaction:         &comp,
-		CompactionProvider: provider, CompactionModel: "cheap",
+		CompactionProvider: &ai.FallbackProvider{Candidates: []ai.FallbackCandidate{{Model: json.RawMessage(`{"id":"cheap"}`), Stream: ai.ScriptedStream()}}},
 
 		GetSteeringMessages: func(ctx context.Context) []agentcore.Message { return nil },
 		GetFollowUpMessages: func(ctx context.Context) []agentcore.Message { return nil },
@@ -82,7 +82,7 @@ func fullConfig() agentcore.Config {
 			repeatguard.At(3),
 			finishguard.Of(func(context.Context, finishguard.State) string { return "" }),
 			spill.To(spill.NewMemorySpillStore()),
-			jobs.Local(),
+			jobs.Plugin{},
 			sessionquery.OwnSession(),
 			subagent.SelfOnly(),
 		},
@@ -252,7 +252,7 @@ func TestFullDegradesWithoutStorage(t *testing.T) {
 // legitimate "check the same job until it finishes" chain as a stuck loop, and
 // the turn spent polling must not be charged against MaxTurns.
 func TestJobToolsAreBookkeeping(t *testing.T) {
-	ext, err := jobs.Local().BeginRun(context.Background(), agentcore.RunInfo{Owner: "run_1"})
+	ext, err := jobs.Plugin{}.BeginRun(context.Background(), agentcore.RunInfo{Owner: "run_1"})
 	if err != nil {
 		t.Fatalf("BeginRun: %v", err)
 	}
@@ -342,7 +342,7 @@ func TestEjectRemovesEveryTrace(t *testing.T) {
 		tool   string
 	}{
 		{spill.To(spill.NewMemorySpillStore()), "read_spill"},
-		{jobs.Local(), "job_status"},
+		{jobs.Plugin{}, "job_status"},
 		{sessionquery.OwnSession(), "session_query"},
 		{subagent.SelfOnly(), subagent.ToolSpawnSubagent},
 	}
@@ -506,7 +506,7 @@ func TestEveryPluginSharesOneInterface(t *testing.T) {
 		finishguard.Of(func(context.Context, finishguard.State) string { return "" }),
 		repeatguard.At(3),
 		spill.To(spill.NewMemorySpillStore()),
-		jobs.Local(),
+		jobs.Plugin{},
 		sessionquery.OwnSession(),
 		subagent.SelfOnly(),
 	}

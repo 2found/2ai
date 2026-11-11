@@ -91,7 +91,7 @@ func computerUseAgent(t *testing.T, provider *ai.FallbackProvider, model string,
 	agent, err := agentcore.New(agentcore.Config{
 		NativeProvider: provider,
 		Model:          model,
-		Tools:          agentcore.NewToolSet(NewComputerUseTool(sb, ws)),
+		Tools:          agentcore.NewToolSet(NewComputerUseTool(sb, ws, AnyHost)),
 		Policy:         agentcore.NewAllowList(ToolComputerUse),
 	})
 	if err != nil {
@@ -306,7 +306,7 @@ func TestComputerUseAgent_RealProvider_GeneratesDocument(t *testing.T) {
 	agent, err := agentcore.New(agentcore.Config{
 		NativeProvider: provider,
 		Model:          model,
-		Tools:          agentcore.NewToolSet(NewComputerUseTool(sb, ws)),
+		Tools:          agentcore.NewToolSet(NewComputerUseTool(sb, ws, AnyHost)),
 		Policy:         agentcore.NewAllowList(ToolComputerUse),
 		Definition: agentcore.AgentDefinition{
 			Agents: "You can run shell commands and code via the computer_use tool in a " +

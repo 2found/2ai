@@ -78,3 +78,28 @@ func TestFailureKindSurvivesTerminalFormattingWithoutReplay(t *testing.T) {
 		}
 	}
 }
+
+// An untyped error from opening the stream is a refused admission; typed
+// admission errors keep their structural kind.
+func TestAdmissionFailureKind(t *testing.T) {
+	for _, tc := range []struct {
+		cause error
+		want  string
+	}{
+		{errors.New("SECRET admission failed"), "provider_admission"},
+		{&protocol.ProviderError{Status: 503, Message: "SECRET"}, "provider_unavailable"},
+		{&PreparationError{Cause: errors.New("SECRET")}, "host_preparation"},
+	} {
+		var seen string
+		runner := nativeRungAttempts{
+			policy:  protocol.RetryPolicy{MaxAttempts: 1},
+			open:    func(context.Context, int) (*AssistantMessageEventStream, error) { return nil, tc.cause },
+			commit:  func(context.Context) error { return nil },
+			observe: func(_ context.Context, attempt FallbackAttempt) error { seen = attempt.FailureKind; return nil },
+		}
+		_, _ = runner.run(context.Background(), NewAssistantMessageEventStream())
+		if seen != tc.want || boundedFailureKind(seen) != tc.want {
+			t.Fatalf("admission %v: kind %q want %q", tc.cause, seen, tc.want)
+		}
+	}
+}

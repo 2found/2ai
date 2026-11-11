@@ -9,10 +9,10 @@ import (
 	"testing"
 )
 
-// TestPiContextHookRewritesRequest verifies a native context hook can rewrite
+// TestNativeContextHookRewritesRequest verifies a native context hook can rewrite
 // the message view the model reasons over, without mutating the persisted run
 // history.
-func TestPiContextHookRewritesRequest(t *testing.T) {
+func TestNativeContextHookRewritesRequest(t *testing.T) {
 	recorder := &nativeRecorder{}
 	faux := recordedNativeProvider(recorder, AssistantText("done"))
 
@@ -27,7 +27,7 @@ func TestPiContextHookRewritesRequest(t *testing.T) {
 	agent, err := New(Config{
 		NativeProvider: faux,
 		Model:          "test",
-		Hooks:          Hooks{PiContext: []PiContextHook{redact}},
+		Hooks:          Hooks{Context: []ContextHook{redact}},
 	})
 	if err != nil {
 		t.Fatalf("New: %v", err)
@@ -65,10 +65,8 @@ func TestPiContextHookRewritesRequest(t *testing.T) {
 }
 
 // (before_provider_request and before_agent_start are legacy request-pipeline
-// seams with no native counterpart; request shaping lives in PiContext hooks,
+// seams with no native counterpart; request shaping lives in Context hooks,
 // candidate StreamFns and engine admission.)
-
-
 
 // TestPanickingObserverDoesNotAbort verifies the default (continue) error policy:
 // a panicking message_end observer is attributed via OnError and the run finishes
@@ -351,4 +349,3 @@ func TestAgentEndSeesFinalResult(t *testing.T) {
 		t.Fatalf("agent_end saw %+v, caller got %+v", seen, res)
 	}
 }
-

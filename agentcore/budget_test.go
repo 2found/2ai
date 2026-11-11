@@ -2,6 +2,7 @@ package agentcore
 
 import (
 	"context"
+	"encoding/json"
 	"strings"
 	"testing"
 )
@@ -19,18 +20,16 @@ func toolCallWithCost(id, name, args string, cost float64) ChatResponse {
 }
 
 // TestBudgetGateGracefulStop proves the mid-run ceiling (#4b): a run whose own
-// turns push accumulated cost over the cap gets exactly one tool-free wrap-up
-// turn and then stops with StopReason "budget_exhausted" — it does not keep
-// spending, and the model is told to summarize (tools are stripped for that
-// turn).
+// turns push accumulated cost over the cap gets exactly one wrap-up turn and
+// then stops with StopReason "budget_exhausted" — it does not keep spending,
+// and the model is told to summarize (with tool choice "none" for that turn).
 func TestBudgetGateGracefulStop(t *testing.T) {
 	work := &echoTool{name: "do_work"}
 	faux := scriptedNativeProvider(
 		toolCallWithCost("w1", "do_work", `{"step":1}`, 0.30), // usage after: 0.30
 		toolCallWithCost("w2", "do_work", `{"step":2}`, 0.30), // usage after: 0.60 (>= cap)
-		// The finalizing turn: a well-behaved model, seeing no tools, writes a
-		// wrap-up. (Faux replays blindly; the loop having stripped schemas is what a
-		// real provider would honor.)
+		// The finalizing turn: a model asked for no tool call writes a wrap-up.
+		// (Faux replays blindly; the tool choice is what a real provider honors.)
 		AssistantText("Completed step 1 and 2; next I would do step 3."),
 		// Guard turn: must never be reached — if the run kept going it would call
 		// work a third time and the assertion on work.called would fail.
@@ -116,8 +115,8 @@ func TestBudgetGateInactiveWhenUnderCap(t *testing.T) {
 // a tool call. The caller was handed nothing after paying for every token the run
 // spent, and the chat surface rendered that as "the agent never answered".
 //
-// Every ceiling now ends the same way the budget one already did — one tool-free
-// turn where the model says what it found.
+// Every ceiling now ends the same way the budget one already did — one turn
+// without tool calls where the model says what it found.
 
 // countSteers reports how many injected wrap-up steers are in the history. The
 // steer must appear once: two ceilings tripping in one run (a tool budget that
@@ -143,7 +142,7 @@ func TestMaxTurnsEndsWithAnAnswerNotSilence(t *testing.T) {
 		AssistantToolCall("c1", "run_sql", `{"q":1}`),
 		AssistantToolCall("c2", "run_sql", `{"q":2}`),
 		AssistantToolCall("c3", "run_sql", `{"q":3}`),
-		// The borrowed turn. A model handed an empty tool list answers in text.
+		// The borrowed turn. A model asked for no tool call answers in text.
 		AssistantText("Signup to activation is the weakest step; I would check the email step next."),
 		// Never reached: a fourth work call would mean the run walked past its cap.
 		AssistantToolCall("c4", "run_sql", `{"q":4}`),
@@ -168,7 +167,7 @@ func TestMaxTurnsEndsWithAnAnswerNotSilence(t *testing.T) {
 		t.Fatalf("stop reason = %q, want max_turns — the wrap-up must not disguise which ceiling stopped the run", res.StopReason)
 	}
 	if work.called != 3 {
-		t.Fatalf("tool called %d times, want 3: the wrap-up turn is tool-free and must not buy extra work", work.called)
+		t.Fatalf("tool called %d times, want 3: the wrap-up turn must not buy extra work", work.called)
 	}
 	if n := countSteers(res.Messages); n != 1 {
 		t.Fatalf("steer injected %d times, want exactly 1", n)
@@ -265,8 +264,52 @@ func TestWrapUpIsHonestAboutHavingNothing(t *testing.T) {
 	}
 }
 
-// TestWrapUpBorrowsExactlyOneTurn is the containment guard. The wrap-up strips
-// the tool schemas, but a provider is free to ignore that; if the grant were
+// The wrap-up turn keeps its tool declarations, so the provider still reads
+// the cached prefix (removing tools invalidates all of it), and asks for no
+// tool call through the tool choice instead.
+func TestWrapUpKeepsToolsAndAsksForNoToolCall(t *testing.T) {
+	rec := &nativeRecorder{}
+	work := &echoTool{name: "run_sql"}
+	faux := recordedNativeProvider(rec, AssistantToolCall("c1", "run_sql", `{"q":1}`), AssistantToolCall("c2", "run_sql", `{"q":2}`), AssistantText("partial answer"))
+	limits := DefaultLimits()
+	limits.MaxTurns = 2
+	agent, err := New(Config{NativeProvider: faux, Model: "test", Tools: NewToolSet(work), Policy: NewAllowList("run_sql"), Limits: &limits})
+	if err != nil {
+		t.Fatal(err)
+	}
+	res, err := agent.Prompt(context.Background(), "work")
+	if err != nil || res.Final != "partial answer" {
+		t.Fatalf("final=%q err=%v", res.Final, err)
+	}
+	requests := rec.all()
+	if len(requests) != 3 {
+		t.Fatalf("%d requests, want two turns and the wrap-up", len(requests))
+	}
+	for i, request := range requests {
+		if len(request.Tools) != 1 || request.Tools[0] != "run_sql" {
+			t.Fatalf("request %d declares tools %v: the wrap-up must keep them", i, request.Tools)
+		}
+		if wrapUp := i == 2; wrapUp != (request.Options["toolChoice"] == "none") {
+			t.Fatalf("request %d tool choice %v", i, request.Options["toolChoice"])
+		}
+	}
+	onPayload, ok := requests[2].Options["onPayload"].(func(context.Context, json.RawMessage, json.RawMessage) (json.RawMessage, error))
+	if !ok {
+		t.Fatal("the wrap-up request has no payload rewrite")
+	}
+	out, err := onPayload(context.Background(), json.RawMessage(`{"tools":[{"name":"run_sql"}],"tool_choice":{"type":"auto"}}`), json.RawMessage(`{"api":"anthropic-messages"}`))
+	if err != nil || !strings.Contains(string(out), `"tool_choice":{"type":"none"}`) || !strings.Contains(string(out), `"run_sql"`) {
+		t.Fatalf("anthropic wrap-up payload %s err=%v", out, err)
+	}
+	// A payload the rewrite cannot read is sent as it was, never as null.
+	odd := json.RawMessage(`["not an object"]`)
+	if out, err := onPayload(context.Background(), odd, json.RawMessage(`{"api":"openai-responses"}`)); err != nil || string(out) != string(odd) {
+		t.Fatalf("unreadable payload became %s err=%v", out, err)
+	}
+}
+
+// TestWrapUpBorrowsExactlyOneTurn is the containment guard. The wrap-up asks
+// for no tool call, but a provider is free to ignore that; if the grant were
 // expressed against the turn budget it would renew forever under bookkeeping
 // refunds, which is a hang rather than a wasted turn.
 func TestWrapUpBorrowsExactlyOneTurn(t *testing.T) {

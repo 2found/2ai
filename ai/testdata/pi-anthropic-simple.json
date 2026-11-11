@@ -4439,7 +4439,15 @@
           "messages": [
             {
               "role": "user",
-              "content": "hello"
+              "content": [
+                {
+                  "type": "text",
+                  "text": "hello",
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
             },
             {
               "role": "assistant",
@@ -4654,7 +4662,15 @@
           "messages": [
             {
               "role": "user",
-              "content": "hello"
+              "content": [
+                {
+                  "type": "text",
+                  "text": "hello",
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
             },
             {
               "role": "assistant",
@@ -4762,7 +4778,15 @@
           "messages": [
             {
               "role": "user",
-              "content": "hello"
+              "content": [
+                {
+                  "type": "text",
+                  "text": "hello",
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
             },
             {
               "role": "assistant",
@@ -4870,7 +4894,15 @@
           "messages": [
             {
               "role": "user",
-              "content": "new summary"
+              "content": [
+                {
+                  "type": "text",
+                  "text": "new summary",
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
             },
             {
               "role": "assistant",
@@ -4969,23 +5001,31 @@
       },
       "expected": {
         "params": {
-          "model": "test",
+          "max_tokens": 94,
           "messages": [
             {
-              "role": "user",
-              "content": "summary"
-            },
-            {
-              "role": "assistant",
               "content": [
                 {
-                  "type": "text",
-                  "text": "answer"
+                  "cache_control": {
+                    "type": "ephemeral"
+                  },
+                  "text": "summary",
+                  "type": "text"
                 }
-              ]
+              ],
+              "role": "user"
+            },
+            {
+              "content": [
+                {
+                  "text": "answer",
+                  "type": "text"
+                }
+              ],
+              "role": "assistant"
             }
           ],
-          "max_tokens": 94,
+          "model": "test",
           "stream": true,
           "thinking": {
             "type": "disabled"
@@ -5375,7 +5415,15 @@
             },
             {
               "role": "user",
-              "content": "next"
+              "content": [
+                {
+                  "type": "text",
+                  "text": "next",
+                  "cache_control": {
+                    "type": "ephemeral"
+                  }
+                }
+              ]
             },
             {
               "role": "assistant",

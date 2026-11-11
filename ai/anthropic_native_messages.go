@@ -159,7 +159,18 @@ func ConvertAnthropicMessages(messages []Message, options AnthropicMessagesOptio
 	params := []map[string]any{}
 	pending := []map[string]any{}
 	levels := map[int]string{}
-	flush := func() { params = append(params, pending...); pending = nil }
+	// volatile marks messages made from system text (a per-turn reminder a
+	// later request may regenerate): a cache breakpoint ending in one may never
+	// be read back. Tool additions/removals are durable state, not reminders.
+	volatile := map[int]bool{}
+	flush := func() {
+		for _, message := range pending {
+			blocks := message["content"].([]map[string]any)
+			volatile[len(params)] = blocks[len(blocks)-1]["type"] == "text"
+			params = append(params, message)
+		}
+		pending = nil
+	}
 	nonempty := func(text string) bool { return strings.TrimFunc(text, jsWhitespace) != "" }
 	for i := 0; i < len(messages); i++ {
 		message := messages[i]
@@ -196,6 +207,7 @@ func ConvertAnthropicMessages(messages []Message, options AnthropicMessagesOptio
 				pending = append(pending, map[string]any{"role": "system", "content": blocks})
 			}
 		case "user":
+			volatile[len(params)] = message.reminder
 			if message.Content.Text != nil {
 				if nonempty(*message.Content.Text) {
 					params = append(params, map[string]any{"role": "user", "content": SanitizeSurrogates(*message.Content.Text)})
@@ -275,23 +287,52 @@ func ConvertAnthropicMessages(messages []Message, options AnthropicMessagesOptio
 	}
 	flush()
 	if samplingTruthy(options.CacheControl) && len(params) > 0 {
-		last := params[len(params)-1]
-		if last["role"] == "user" || last["role"] == "system" {
-			switch content := last["content"].(type) {
-			case string:
-				last["content"] = []map[string]any{{"type": "text", "text": content, "cache_control": options.CacheControl}}
-			case []map[string]any:
-				if len(content) > 0 {
-					block := content[len(content)-1]
-					if slices.Contains([]string{"text", "image", "tool_result", "tool_addition", "tool_removal"}, block["type"].(string)) {
-						block["cache_control"] = options.CacheControl
+		// Two rolling breakpoints: the newest stable message writes the
+		// transcript so far, and the stable message that ended the previous
+		// request (the one before the newest assistant turn) reads exactly what
+		// that request wrote. Anthropic looks back only ~20 blocks from a
+		// breakpoint, so a single moving marker misses its own cache once a turn
+		// adds more blocks (wide parallel tool calls). System reminders are
+		// skipped: a regenerated one would end an entry nobody reads again.
+		// Placement depends only on the transcript, so bytes stay deterministic.
+		anchor := func(i int) int {
+			for ; i >= 0 && (volatile[i] || params[i]["role"] == "assistant"); i-- {
+			}
+			return i
+		}
+		if last := anchor(len(params) - 1); last >= 0 {
+			markAnthropicBreakpoint(params[last], options.CacheControl)
+			for i := last - 1; i > 0; i-- {
+				if params[i]["role"] == "assistant" {
+					if previous := anchor(i - 1); previous >= 0 {
+						markAnthropicBreakpoint(params[previous], options.CacheControl)
 					}
+					break
 				}
 			}
 		}
 	}
 	encoded, err := json.Marshal(params)
 	return AnthropicConvertedMessages{Messages: encoded, AssistantLevels: levels}, err
+}
+
+// markAnthropicBreakpoint puts cache_control on a user/system message's last
+// block when Anthropic accepts a breakpoint there.
+func markAnthropicBreakpoint(message map[string]any, cache json.RawMessage) {
+	if message["role"] != "user" && message["role"] != "system" {
+		return
+	}
+	switch content := message["content"].(type) {
+	case string:
+		message["content"] = []map[string]any{{"type": "text", "text": content, "cache_control": cache}}
+	case []map[string]any:
+		if len(content) > 0 {
+			block := content[len(content)-1]
+			if slices.Contains([]string{"text", "image", "tool_result", "tool_addition", "tool_removal"}, block["type"].(string)) {
+				block["cache_control"] = cache
+			}
+		}
+	}
 }
 
 func insertAnthropicThinkingLevelMessages(converted AnthropicConvertedMessages, effort json.RawMessage) (json.RawMessage, error) {

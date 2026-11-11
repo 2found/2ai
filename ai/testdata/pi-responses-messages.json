@@ -3454,7 +3454,7 @@
         "messages": [
           {
             "role": "developer",
-            "content": "first\n\nnew\n\nlatest"
+            "content": "first\n\nlatest"
           },
           {
             "role": "user",
@@ -3462,6 +3462,15 @@
               {
                 "type": "input_text",
                 "text": "hi"
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "<system-reminder>\nnew\n</system-reminder>"
               }
             ]
           },
@@ -4074,7 +4083,7 @@
         "messages": [
           {
             "role": "developer",
-            "content": "first\n\nnew\n\nlatest"
+            "content": "first\n\nlatest"
           },
           {
             "role": "user",
@@ -4082,6 +4091,15 @@
               {
                 "type": "input_text",
                 "text": "hi"
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "<system-reminder>\nnew\n</system-reminder>"
               }
             ]
           },

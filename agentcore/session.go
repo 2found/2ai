@@ -20,32 +20,32 @@ type SessionEntryKind string
 // Native Pi records keep opaque JSON in SessionEntry.Content. The host owns
 // their persistence; legacy RecoverSession must not project this transcript.
 const (
-	EntryPiState SessionEntryKind = "pi_state"
-	// EntryPiModelSelection commits a host-owned native ladder identity without credentials.
-	EntryPiModelSelection SessionEntryKind = "pi_model_selection"
-	EntryPiEvent          SessionEntryKind = "pi_event"
-	EntryPiEffectStart    SessionEntryKind = "pi_effect_start"
-	EntryPiEffectDone     SessionEntryKind = "pi_effect_done"
-	// EntryPiAnswer is host workflow metadata. Content holds the exact native
+	EntryNativeState SessionEntryKind = "pi_state"
+	// EntryNativeModelSelection commits a host-owned native ladder identity without credentials.
+	EntryNativeModelSelection SessionEntryKind = "pi_model_selection"
+	EntryNativeEvent          SessionEntryKind = "pi_event"
+	EntryNativeEffectStart    SessionEntryKind = "pi_effect_start"
+	EntryNativeEffectDone     SessionEntryKind = "pi_effect_done"
+	// EntryNativeAnswer is host workflow metadata. Content holds the exact native
 	// user message to append; it never replaces an already emitted tool result.
-	EntryPiAnswer SessionEntryKind = "pi_answer"
-	EntryPiGoal   SessionEntryKind = "pi_goal"
-	// EntryPiGoalRevision records a committed host contract change within a
+	EntryNativeAnswer SessionEntryKind = "pi_answer"
+	EntryNativeGoal   SessionEntryKind = "pi_goal"
+	// EntryNativeGoalRevision records a committed host contract change within a
 	// physical tool effect. It never substitutes for a native tool result.
-	EntryPiGoalRevision SessionEntryKind = "pi_goal_revision"
+	EntryNativeGoalRevision SessionEntryKind = "pi_goal_revision"
 	// Invocation binds an isolated native run to its immutable request; Result
 	// records a completed child's reattachable answer without rewriting messages.
-	EntryPiInvocation  SessionEntryKind = "pi_invocation"
-	EntryPiChildResult SessionEntryKind = "pi_child_result"
-	// EntryPiDelegation records continuation of a parked delegation. It links
+	EntryNativeInvocation  SessionEntryKind = "pi_invocation"
+	EntryNativeChildResult SessionEntryKind = "pi_child_result"
+	// EntryNativeDelegation records continuation of a parked delegation. It links
 	// an answered parent question to a new child question or a final delivery,
 	// without replacing the original provider tool result.
-	EntryPiDelegation SessionEntryKind = "pi_delegation"
-	// EntryPiDelegationBatch commits the resumed batch policy and its deliveries
+	EntryNativeDelegation SessionEntryKind = "pi_delegation"
+	// EntryNativeDelegationBatch commits the resumed batch policy and its deliveries
 	// before any completion context reaches the next native model request.
-	EntryPiDelegationBatch SessionEntryKind = "pi_delegation_batch"
+	EntryNativeDelegationBatch SessionEntryKind = "pi_delegation_batch"
 	// Request-view summary metadata; never replaces native transcript messages.
-	EntryPiContextSummary SessionEntryKind = "pi_context_summary"
+	EntryNativeContextSummary SessionEntryKind = "pi_context_summary"
 )
 
 const (
@@ -339,7 +339,7 @@ func RecordSessionAnswer(ctx context.Context, store SessionStore, sessionID, cal
 		return false, err
 	}
 	for _, entry := range log {
-		if (entry.Kind != EntryAnswer && entry.Kind != EntryPiAnswer) || entry.CallID != callID {
+		if (entry.Kind != EntryAnswer && entry.Kind != EntryNativeAnswer) || entry.CallID != callID {
 			continue
 		}
 		if entry.Answer == answer {
@@ -359,13 +359,13 @@ func RecordSessionAnswer(ctx context.Context, store SessionStore, sessionID, cal
 	}
 	entry := SessionEntry{Kind: EntryAnswer, CallID: callID, Answer: answer}
 	for _, candidate := range log {
-		if id, question, native := PiQuestionFromEntry(candidate); native && id == callID {
-			if _, route, routed := PiChildQuestionFromEntry(candidate); routed {
-				if err := forwardPiChildAnswer(ctx, store, sessionID, route, answer); err != nil {
+		if id, question, native := QuestionFromEntry(candidate); native && id == callID {
+			if _, route, routed := ChildQuestionFromEntry(candidate); routed {
+				if err := forwardChildAnswer(ctx, store, sessionID, route, answer); err != nil {
 					return false, err
 				}
 			}
-			entry.Kind = EntryPiAnswer
+			entry.Kind = EntryNativeAnswer
 			message, err := json.Marshal(map[string]any{
 				"role": "user", "content": "Human answer to question " + string(question) + ":\n" + answer,
 				"timestamp": time.Now().UnixMilli(), "agentrayAnswerId": callID,
@@ -387,7 +387,7 @@ func RecordSessionAnswer(ctx context.Context, store SessionStore, sessionID, cal
 // finds the identical child answer and finishes the parent append; conflicting
 // answers cannot partially overwrite either workflow. Leases always descend
 // through the session namespace, so a forged cyclic route cannot deadlock.
-func forwardPiChildAnswer(ctx context.Context, store SessionStore, parentID string, route *ChildQuestionError, answer string) (err error) {
+func forwardChildAnswer(ctx context.Context, store SessionStore, parentID string, route *ChildQuestionError, answer string) (err error) {
 	if !strings.HasPrefix(route.SessionID, parentID+"/") {
 		return errors.New("delegated question is outside the parent session")
 	}
@@ -402,7 +402,7 @@ func forwardPiChildAnswer(ctx context.Context, store SessionStore, parentID stri
 	}
 	matched := false
 	for _, entry := range entries {
-		id, question, valid := PiQuestionFromEntry(entry)
+		id, question, valid := QuestionFromEntry(entry)
 		if !valid || id != route.QuestionID {
 			continue
 		}
@@ -985,7 +985,7 @@ func CloseDanglingCalls(messages []Message) []Message {
 
 // PendingQuestion returns the newest parked call still awaiting an answer: an
 // EntryQuestion with no matching EntryAnswer, or a settled native parked effect
-// with no EntryPiAnswer. Native IDs identify physical effects, not provider calls.
+// with no EntryNativeAnswer. Native IDs identify physical effects, not provider calls.
 // For a delegated ask, the ID belongs to this parent and the question comes
 // from the child's routed receipt; the original spawn arguments stay in audit.
 // The second return is the
@@ -995,13 +995,13 @@ func CloseDanglingCalls(messages []Message) []Message {
 func PendingQuestion(log []SessionEntry) (callID string, question json.RawMessage, found bool) {
 	answered := map[string]bool{}
 	for _, e := range log {
-		if e.Kind == EntryAnswer || e.Kind == EntryPiAnswer {
+		if e.Kind == EntryAnswer || e.Kind == EntryNativeAnswer {
 			answered[e.CallID] = true
 		}
 	}
 	for i := len(log) - 1; i >= 0; i-- {
 		e := log[i]
-		if id, question, native := PiQuestionFromEntry(e); native && !answered[id] {
+		if id, question, native := QuestionFromEntry(e); native && !answered[id] {
 			return id, question, true
 		}
 		if e.Kind == EntryQuestion && !answered[e.CallID] {

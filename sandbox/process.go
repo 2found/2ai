@@ -2,6 +2,7 @@ package sandbox
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os/exec"
@@ -35,6 +36,34 @@ type processWaitResult struct {
 	err    error
 }
 
+// startCommand wires cmd's three pipes and starts it under runCtx. On failure
+// cancel has been called; the caller owns any other cleanup.
+func startCommand(cmd *exec.Cmd, runCtx context.Context, cancel context.CancelFunc, label string) (*commandProcess, error) {
+	fail := func(what string, err error) (*commandProcess, error) {
+		cancel()
+		return nil, fmt.Errorf("sandbox: %s %s: %w", label, what, err)
+	}
+	stdin, err := cmd.StdinPipe()
+	if err != nil {
+		return fail("stdin pipe", err)
+	}
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		return fail("stdout pipe", err)
+	}
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
+		return fail("stderr pipe", err)
+	}
+	if err := cmd.Start(); err != nil {
+		return fail("start", err)
+	}
+	return &commandProcess{
+		cmd: cmd, stdin: stdin, stdout: stdout, stderr: stderr,
+		runCtx: runCtx, cancel: cancel, errLabel: label,
+	}, nil
+}
+
 func (p *commandProcess) Stdin() io.WriteCloser { return p.stdin }
 func (p *commandProcess) Stdout() io.ReadCloser { return p.stdout }
 func (p *commandProcess) Stderr() io.ReadCloser { return p.stderr }
@@ -54,11 +83,15 @@ func (p *commandProcess) Wait() (agentcore.SandboxResult, error) {
 	p.waitOnce.Do(func() {
 		runErr := p.cmd.Wait()
 		res := agentcore.SandboxResult{}
-		if p.runCtx.Err() != nil {
+		if err := p.runCtx.Err(); err != nil {
 			res.Killed = true
-			res.KillReason = p.timeout
+			res.KillReason = "cancelled"
+			if errors.Is(err, context.DeadlineExceeded) {
+				res.KillReason = p.timeout
+			}
 		} else if runErr != nil {
-			if ee, ok := runErr.(*exec.ExitError); ok {
+			var ee *exec.ExitError
+			if errors.As(runErr, &ee) {
 				res.ExitCode = ee.ExitCode()
 			} else {
 				p.waitRes.err = fmt.Errorf("sandbox: %s: %w", p.errLabel, runErr)

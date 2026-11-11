@@ -8,9 +8,10 @@ finishes, and a run that has to wait cannot also think.
 
 ### A tool goes asynchronous
 
-The tool calls `jobs.From(ctx).Start(...)` and returns immediately. What the
-model sees in the tool result is whatever that tool chose to say — this plugin
-does not dictate it; the convention is to return the job id.
+The tool calls `agentcore.LaunchBackground(ctx, tool, label, run)` and returns
+immediately with the JSON receipt (`id`, `tool`, `label`, `state`,
+`started_at`). What the model sees in the tool result is whatever that tool
+chose to say; the convention is to include the receipt.
 
 #### Token effect
 
@@ -42,9 +43,9 @@ call; a large one is named and left for `job_status`.
 
 #### Token effect
 
-**Capped.** Inline output is bounded at 2 KB per job (`jobNoticeInlineLimit`),
-and a job's stored result is bounded at `MaxResultBytes` (default: the run's
-`MaxToolResultLen`) at completion time, before it can be read at all.
+**Capped.** Inline output is bounded at 2 KB per job (`noticeInlineLimit`),
+and a job's stored result is bounded at the run's `MaxToolResultLen` (16 KB
+when unset) at completion time, before it can be read at all.
 
 #### KV cache effect
 
@@ -56,13 +57,12 @@ never rewritten.
 #### What the model sees
 
 Four tools: `job_list`, `job_status`, `job_wait`, `job_cancel`. `job_wait`
-blocks for at most `MaxWaitSeconds` (default 120s) and then returns the job's
-current state, so the model cannot park the run forever on work that never
-finishes.
+blocks for at most 120s and then returns the job's current state, so the model
+cannot park the run forever on work that never finishes.
 
 #### Token effect
 
-**Capped**, by the same `MaxResultBytes` bound applied at completion.
+**Capped**, by the same result bound applied at completion.
 
 #### KV cache effect
 
@@ -71,27 +71,32 @@ finishes.
 ## Impact on the agent
 
 - Adds four tools that bypass the permission gate. They are `SelfGated`: every
-  one is scoped to `RunInfo.Owner`, so they observe and cancel only work **this
-  run** launched — a capability the agent already exercised by starting the job.
-- Binds a `Launcher` onto the run context (`RunContext`). A tool discovers the
-  capability with `jobs.From(ctx)` and the `ok` result **is** the plugin's
-  presence, so a job-aware tool degrades to synchronous when the plugin is
-  ejected rather than failing.
+  run has its own board, so they observe and cancel only work **this run**
+  launched — a capability the agent already exercised by starting the job.
+- Binds a launcher onto the run context (`RunContext`) through
+  `agentcore.WithBackgroundLauncher`. `agentcore.LaunchBackground` fails when
+  the plugin is absent, so a background-capable tool degrades to synchronous.
 - The job's context derives from the **run's**, not the calling tool's, so work
   survives the call that started it and still dies with the run.
 - `CloseRun` cancels everything this run started. A job outliving its run would
   be unobservable and uncancellable — nothing left to look at it.
+- The board holds at most `MaxConcurrent` running jobs (15 by default, `-1` for
+  no ceiling) and 16 finished, announced records; older announced records are
+  evicted. A record no notice has carried yet is never evicted.
+- **The board survives resume** through the native plugin checkpoint
+  (`NativeState` / `RestoreNativeState`). Finished results stay readable with
+  `job_status`, unannounced completions are announced on the first resumed
+  step, and ids keep counting so a new job never reuses an id the transcript
+  names.
 
-## Known limitations and deferred work
+## Known limitations
 
-- **`LocalJobStore` dies with the process.** A restart loses running jobs and
-  their results; a durable store is the consumer's to supply.
-- **The owner fence is not authenticated.** It is a map key, not a capability
-  token. A custom `JobStore` that ignores `owner` silently removes the fence,
-  and nothing detects that.
+- **Running work does not survive the run.** A goroutine cannot be
+  checkpointed. The checkpoint is taken before `CloseRun` cancels the work, so a
+  job still running then is recorded as `cancelled` with the error
+  "interrupted: the run ended before this job finished; start it again if it is
+  still needed", and the resumed run's first step announces it. Durable host
+  tasks belong on the consumer's own task queue.
 - **No completion notice for a run that has already ended.** Jobs finishing
-  after the last turn are cancelled by `CloseRun`, so late-completing work is
-  lost rather than reported on the next run of the same session.
-- **`DrainCompleted` / `CancelAll` are discovered by type assertion**, not part
-  of `JobStore`. A store that omits them loses notices and run-scoped
-  cancellation with no build error.
+  after the last turn are cancelled by `CloseRun`; the resumed run learns they
+  were interrupted, not what they would have produced.

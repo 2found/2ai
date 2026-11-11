@@ -449,12 +449,12 @@ func TestReal_TodoPlanSurvivesLongSession(t *testing.T) {
 	limits.MaxContextTokens = 1200 // tiny: forces compaction within a few turns
 
 	agent, err := agentcore.New(agentcore.Config{
-		Provider: rec,
-		Model:    model,
-		Limits:   &limits,
-		Tools:    agentcore.NewToolSet(todo.NewTool(plan), step),
-		Policy:   agentcore.NewAllowList(todo.ToolName, "do_step"),
-		Hooks:    agentcore.Hooks{PiContext: []agentcore.PiContextHook{todo.PiContextHook(plan)}},
+		Provider:   rec,
+		Model:      model,
+		Limits:     &limits,
+		Tools:      agentcore.NewToolSet(step),
+		Policy:     agentcore.NewAllowList(todo.ToolName, "do_step"),
+		Extensions: []agentcore.ExtensionFactory{todo.With(plan)},
 		Definition: agentcore.AgentDefinition{
 			Agents: "Work methodically and ALWAYS use the tools. Your VERY FIRST action MUST be a single " +
 				"update_plan call recording a four-step plan (steps: gather, analyze, draft, review) with " +
@@ -493,8 +493,8 @@ func TestReal_TodoPlanSurvivesLongSession(t *testing.T) {
 	}
 	// The property the user cares about — "keep todo and plan during a long
 	// session": the live plan the model wrote is still pinned into the LAST
-	// request it saw (todo.PiContextHook re-injects it every turn, so it survives any
-	// compaction), and the original goal is still present too. Read the plan's own
+	// request it saw (each update_plan result carries it, and the plugin appends a
+	// "[run plan]" reminder when compaction drops it), and the original goal is still present too. Read the plan's own
 	// first step from the store rather than guessing wording, so the check tracks
 	// whatever the model actually named its steps.
 	firstStep := strings.ToLower(strings.TrimSpace(items[0].Content))

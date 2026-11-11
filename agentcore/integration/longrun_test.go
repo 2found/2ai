@@ -30,8 +30,10 @@ func TestNativeLongRunCompactionTelemetryAndResume(t *testing.T) {
 			text = "Continue the long task, preserve the goal and verified work."
 		} else {
 			calls++
-			if !strings.Contains(ai.GetCurrentSystemPrompt(view.Messages()), "Complete the long task") {
-				t.Error("compaction lost goal instructions")
+			// The goal is stated in the transcript, not the system prompt, so the
+			// cached prefix survives a revision; compaction must not drop it.
+			if raw, _ := json.Marshal(view.Messages()); !strings.Contains(string(raw), "Complete the long task") {
+				t.Errorf("request %d: compaction lost goal instructions", calls)
 			}
 			switch {
 			case calls <= target:

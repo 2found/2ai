@@ -137,8 +137,8 @@ type PolicyPlugin struct {
 // Name identifies the plugin.
 func (PolicyPlugin) Name() string { return "policy" }
 
-// Register claims the policy seam and registers the gate hook.
-func (p PolicyPlugin) Register(r *Registry) error { return r.UsePolicy(p.Policy) }
+// Register claims the policy seam.
+func (p PolicyPlugin) Register(r *Registry) error { return r.SetPolicy(p.Policy) }
 
 // PolicyAllowList creates a PolicyPlugin permitting exactly the named tools.
 func PolicyAllowList(names ...string) PolicyPlugin {
@@ -165,10 +165,7 @@ func (p ToolsPlugin) Name() string {
 }
 
 // Register adds the tools.
-func (p ToolsPlugin) Register(r *Registry) error {
-	r.AddTools(p.Tools...)
-	return nil
-}
+func (p ToolsPlugin) Register(r *Registry) error { return r.AddTools(p.Tools...) }
 
 // ToolsOf builds a ToolsPlugin from a list of tools.
 func ToolsOf(list ...Tool) ToolsPlugin { return ToolsPlugin{Tools: list} }
@@ -258,17 +255,14 @@ func (p SessionPlugin) Register(r *Registry) error {
 	return r.SetSession(p.Store, p.ID, p.Resume)
 }
 
-// CompactionPlugin installs context compaction settings and strategy into a Registry.
+// CompactionPlugin installs context compaction settings and the standalone
+// summary model into a Registry.
 type CompactionPlugin struct {
 	Settings *CompactionSettings
-	Provider LLMProvider
-	Model    string
-	Strategy Compactor
+	// Provider, when set, answers the standalone summary call instead of the
+	// run's own models.
+	Provider *ai.FallbackProvider
 }
-
-// CompactionUsing swaps the compaction strategy, keeping the default retention
-// policy.
-func CompactionUsing(c Compactor) CompactionPlugin { return CompactionPlugin{Strategy: c} }
 
 // Name identifies the plugin.
 func (CompactionPlugin) Name() string { return "compaction" }
@@ -280,13 +274,8 @@ func (p CompactionPlugin) Register(r *Registry) error {
 			return err
 		}
 	}
-	if p.Strategy != nil {
-		if err := r.SetCompactor(p.Strategy); err != nil {
-			return err
-		}
-	}
-	if p.Provider != nil && p.Model != "" {
-		return r.SetCompactionModel(p.Provider, p.Model)
+	if p.Provider != nil {
+		return r.SetCompactionModel(p.Provider)
 	}
 	return nil
 }

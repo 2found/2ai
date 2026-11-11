@@ -19,7 +19,7 @@ type routedAnswerStore struct {
 }
 
 func (s *routedAnswerStore) Append(ctx context.Context, id string, entry SessionEntry) error {
-	if s.failParent && id == "parent" && entry.Kind == EntryPiAnswer {
+	if s.failParent && id == "parent" && entry.Kind == EntryNativeAnswer {
 		return errors.New("parent answer write failed")
 	}
 	return s.MemorySessionStore.Append(ctx, id, entry)
@@ -27,7 +27,7 @@ func (s *routedAnswerStore) Append(ctx context.Context, id string, entry Session
 
 func appendRoutedQuestion(t *testing.T, store SessionStore, session, effect string, route *ChildQuestionError) {
 	t.Helper()
-	audit := PiToolOutcome{Parked: true, Executed: true, QuestionID: effect, ChildQuestion: route,
+	audit := ToolOutcome{Parked: true, Executed: true, QuestionID: effect, ChildQuestion: route,
 		Trace: ToolTrace{CallID: "provider-call", Tool: "ask", Allowed: true, Args: `{"question":"Which?","options":["one","two"]}`}}
 	if route != nil {
 		audit.Trace.Tool, audit.Trace.Args = "delegate", `{"task":"work"}`
@@ -36,7 +36,7 @@ func appendRoutedQuestion(t *testing.T, store SessionStore, session, effect stri
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := store.Append(context.Background(), session, SessionEntry{Kind: EntryPiEffectDone, CallID: "provider-call", Content: string(raw)}); err != nil {
+	if err := store.Append(context.Background(), session, SessionEntry{Kind: EntryNativeEffectDone, CallID: "provider-call", Content: string(raw)}); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -81,7 +81,7 @@ func TestRecordSessionAnswerRoutesChildAcrossParentWriteFailure(t *testing.T) {
 		}
 		answers := 0
 		for _, entry := range entries {
-			if entry.Kind == EntryPiAnswer {
+			if entry.Kind == EntryNativeAnswer {
 				answers++
 				if entry.CallID != questionID || entry.Answer != "one" {
 					t.Fatalf("answer crossed workflow identities: %+v", entry)
@@ -119,7 +119,7 @@ func TestRecordSessionAnswerRejectsInvalidChildRoutes(t *testing.T) {
 					t.Fatal(err)
 				}
 				for _, entry := range entries {
-					if entry.Kind == EntryPiAnswer {
+					if entry.Kind == EntryNativeAnswer {
 						t.Fatal("invalid route committed an answer")
 					}
 				}
@@ -146,7 +146,7 @@ func TestRecordSessionAnswerRoutesNestedChildren(t *testing.T) {
 	}
 	for _, id := range []string{"parent", "parent/child", "parent/child/grandchild"} {
 		entries, err := store.Log(ctx, id)
-		if err != nil || len(entries) != 2 || entries[1].Kind != EntryPiAnswer || entries[1].Answer != "one" {
+		if err != nil || len(entries) != 2 || entries[1].Kind != EntryNativeAnswer || entries[1].Answer != "one" {
 			t.Fatalf("nested answer lost or repeated in %s: %+v %v", id, entries, err)
 		}
 	}
@@ -288,4 +288,3 @@ func TestRecordSessionAnswerIsIdempotentAndRejectsConflict(t *testing.T) {
 		t.Fatalf("answer entries = %d, want 1", answers)
 	}
 }
-

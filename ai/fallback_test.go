@@ -169,3 +169,89 @@ func TestFallbackStreamSharesParentPayloadSynchronization(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+// A fallback used to be sticky forever: once a host fell to a lower rung,
+// every later request started there. The ladder now probes the primary again
+// after time or successes on the fallback, at the cost of one attempt.
+func TestFallbackLadderRecoversToThePrimary(t *testing.T) {
+	ctx := context.Background()
+	clock := time.Unix(0, 0)
+	ladder := &FallbackLadder{RecoverAfter: time.Minute, RecoverAfterSuccesses: 3, Now: func() time.Time { return clock }}
+	primaryUp := false
+	calls := map[int]int{}
+	final := &Message{Role: "assistant", StopReason: "stop", Content: TextContent("ok")}
+	provider := FallbackProvider{Retry: protocol.RetryPolicy{MaxAttempts: 3}, Wait: func(context.Context, time.Duration) error { return nil }}
+	request := func() (FallbackRequest, int) {
+		bound := ladder.Bind(FallbackRequest{Candidates: 2, Open: func(ctx context.Context, index, _ int) (*AssistantMessageEventStream, error) {
+			calls[index]++
+			if index == 0 && !primaryUp {
+				return nil, &protocol.ProviderError{Status: 503, Message: "busy"}
+			}
+			return attemptFixture(AssistantMessageEvent{Type: "start", Partial: final}, AssistantMessageEvent{Type: "text_delta", Delta: "ok", Partial: final}, AssistantMessageEvent{Type: "done", Reason: "stop", Message: final})(ctx)
+		}})
+		clear(calls)
+		outcome, err := provider.Run(ctx, NewAssistantMessageEventStream(), bound)
+		if err != nil || outcome.Terminal.Type != "done" {
+			t.Fatal(outcome, err)
+		}
+		return bound, ladder.Rung()
+	}
+	// The primary fails its full retry budget, so the fallback serves and sticks.
+	if bound, rung := request(); bound.Start != 0 || bound.Probe != 0 || rung != 1 || calls[0] != 3 || calls[1] != 1 {
+		t.Fatal("first fallback", bound.Start, bound.Probe, rung, calls)
+	}
+	if bound, rung := request(); bound.Start != 1 || rung != 1 || calls[0] != 0 {
+		t.Fatal("sticky rung", bound.Start, rung, calls)
+	}
+	// After RecoverAfter the next request probes the primary once (no retry
+	// budget); the probe fails and the clock restarts on the fallback.
+	clock = clock.Add(time.Minute)
+	if bound, rung := request(); bound.Start != 0 || bound.Probe != 1 || rung != 1 || calls[0] != 1 || calls[1] != 1 {
+		t.Fatal("failed probe", bound.Start, bound.Probe, rung, calls)
+	}
+	if bound, _ := request(); bound.Start != 1 {
+		t.Fatal("failed probe did not restart the clock", bound.Start)
+	}
+	// Successes on the fallback also trigger a probe (one counted above).
+	request()
+	request()
+	primaryUp = true
+	if bound, rung := request(); bound.Start != 0 || bound.Probe != 1 || rung != 0 || calls[0] != 1 || calls[1] != 0 {
+		t.Fatal("successful probe", bound.Start, bound.Probe, rung, calls)
+	}
+	if bound, _ := request(); bound.Start != 0 || bound.Probe != 0 {
+		t.Fatal("recovered primary should not probe", bound)
+	}
+	// A resumed rung beyond this request's ladder clamps to its last rung, and a
+	// host commit error records nothing.
+	ladder.Resume(5)
+	failing := ladder.Bind(FallbackRequest{Candidates: 2, Commit: func(context.Context, int) error { return errors.New("store") }})
+	if failing.Start != 1 || failing.Commit(ctx, 0) == nil || ladder.Rung() != 5 {
+		t.Fatal("resume/commit error", failing.Start, ladder.Rung())
+	}
+	if _, err := provider.Run(ctx, NewAssistantMessageEventStream(), FallbackRequest{Candidates: 1, Probe: 1, Open: func(ctx context.Context, _, _ int) (*AssistantMessageEventStream, error) {
+		return attemptFixture(AssistantMessageEvent{Type: "done", Reason: "stop", Message: final})(ctx)
+	}}); err == nil {
+		t.Fatal("a probe past the last rung must be rejected")
+	}
+}
+
+func TestFallbackAttemptCarriesRungAndFirstOutput(t *testing.T) {
+	final := &Message{Role: "assistant", StopReason: "stop", Content: TextContent("ok")}
+	var seen []FallbackAttempt
+	_, err := (FallbackProvider{Retry: protocol.RetryPolicy{MaxAttempts: 1}}).Run(context.Background(), NewAssistantMessageEventStream(), FallbackRequest{Candidates: 2,
+		Open: func(ctx context.Context, index, _ int) (*AssistantMessageEventStream, error) {
+			if index == 0 {
+				return nil, &protocol.ProviderError{Status: 503, Message: "busy"}
+			}
+			return attemptFixture(AssistantMessageEvent{Type: "start", Partial: final}, AssistantMessageEvent{Type: "text_delta", Delta: "ok", Partial: final}, AssistantMessageEvent{Type: "done", Reason: "stop", Message: final})(ctx)
+		},
+		Observe: func(_ context.Context, _ int, attempt FallbackAttempt) error {
+			seen = append(seen, attempt)
+			return nil
+		},
+	})
+	if err != nil || len(seen) != 2 || seen[0].Rung != 0 || seen[1].Rung != 1 || !seen[0].Outcome.FirstOutput.IsZero() || seen[1].Outcome.FirstOutput.IsZero() {
+		t.Fatal(err, seen)
+	}
+}

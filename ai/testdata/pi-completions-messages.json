@@ -3226,11 +3226,15 @@
         "messages": [
           {
             "role": "developer",
-            "content": "first\n\nsecond\n\nnew"
+            "content": "first\n\nnew"
           },
           {
             "role": "user",
             "content": "hi"
+          },
+          {
+            "role": "user",
+            "content": "<system-reminder>\nsecond\n</system-reminder>"
           },
           {
             "role": "user",

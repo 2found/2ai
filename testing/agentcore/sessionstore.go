@@ -308,22 +308,22 @@ func RunSessionStoreConformance(t *testing.T, harness SessionStoreHarness) {
 		ctx := context.Background()
 		initial := `{"model":{"id":"test"},"messages":[{"role":"user","content":"run both","timestamp":1},{"role":"assistant","content":[{"type":"toolCall","id":"slow-call","name":"slow","arguments":{}},{"type":"toolCall","id":"fast-call","name":"fast","arguments":{}}],"stopReason":"toolUse","timestamp":2}]}`
 		entries := []agentcore.SessionEntry{
-			{Kind: agentcore.EntryPiState, Content: initial},
-			{Kind: agentcore.EntryPiEffectStart, CallID: "slow-call", Content: `{"effectId":"slow-effect"}`},
-			{Kind: agentcore.EntryPiEffectStart, CallID: "fast-call", Content: `{"effectId":"fast-effect"}`},
+			{Kind: agentcore.EntryNativeState, Content: initial},
+			{Kind: agentcore.EntryNativeEffectStart, CallID: "slow-call", Content: `{"effectId":"slow-effect"}`},
+			{Kind: agentcore.EntryNativeEffectStart, CallID: "fast-call", Content: `{"effectId":"fast-effect"}`},
 			// Physical completion order is independent of native message order.
-			{Kind: agentcore.EntryPiEffectDone, CallID: "fast-call", Content: `{"effectId":"fast-effect"}`},
-			{Kind: agentcore.EntryPiEffectDone, CallID: "slow-call", Content: `{"effectId":"slow-effect"}`},
+			{Kind: agentcore.EntryNativeEffectDone, CallID: "fast-call", Content: `{"effectId":"fast-effect"}`},
+			{Kind: agentcore.EntryNativeEffectDone, CallID: "slow-call", Content: `{"effectId":"slow-effect"}`},
 		}
 		results := []string{
 			`{"role":"toolResult","toolCallId":"slow-call","toolName":"slow","content":[{"type":"text","text":"slow-result"}],"timestamp":3,"details":{"opaque":"9007199254740993","signature":"keep-slow"},"isError":false}`,
 			`{"role":"toolResult","toolCallId":"fast-call","toolName":"fast","content":[{"type":"text","text":"fast-result"}],"timestamp":4,"details":{"signature":"keep-fast"},"isError":false}`,
 		}
 		for i, result := range results {
-			entries = append(entries, agentcore.SessionEntry{Kind: agentcore.EntryPiEvent, Content: `{"type":"message_start","message":` + result + `}`})
+			entries = append(entries, agentcore.SessionEntry{Kind: agentcore.EntryNativeEvent, Content: `{"type":"message_start","message":` + result + `}`})
 			// Crash after the final immutable message_start, before message_end.
 			if i == 0 {
-				entries = append(entries, agentcore.SessionEntry{Kind: agentcore.EntryPiEvent, Content: `{"type":"message_end","message":` + result + `}`})
+				entries = append(entries, agentcore.SessionEntry{Kind: agentcore.EntryNativeEvent, Content: `{"type":"message_end","message":` + result + `}`})
 			}
 		}
 		for _, entry := range entries {
@@ -373,7 +373,7 @@ func RunSessionStoreConformance(t *testing.T, harness SessionStoreHarness) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if err := harness.Store.Append(ctx, id, agentcore.SessionEntry{Kind: agentcore.EntryPiState, Content: string(checkpoint)}); err != nil {
+		if err := harness.Store.Append(ctx, id, agentcore.SessionEntry{Kind: agentcore.EntryNativeState, Content: string(checkpoint)}); err != nil {
 			t.Fatal(err)
 		}
 		// Recovery is read-only and repeatable. A new checkpoint absorbs earlier

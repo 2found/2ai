@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/2found/2ai/ai/protocol"
 	"github.com/google/uuid"
 )
 
@@ -175,7 +176,8 @@ func antigravityNativePayload(model completionsModel, transcript TranscriptConte
 		inner["tools"] = []map[string]any{{"functionDeclarations": declarations}}
 	}
 	if len(tools) > 0 || claude {
-		inner["toolConfig"] = map[string]any{"functionCallingConfig": map[string]string{"mode": "VALIDATED"}}
+		mode, name := antigravityToolChoice(controls["toolChoice"])
+		inner["toolConfig"] = map[string]any{"functionCallingConfig": antigravityFunctionCalling(mode, name)}
 	}
 	return json.Marshal(map[string]any{"project": token.ProjectID, "model": model.ID, "userAgent": "antigravity", "requestType": "agent", "requestId": fmt.Sprintf("agent/%s/%d/%s/2", uuid.NewString(), now, trajectory), "request": inner})
 }
@@ -435,4 +437,58 @@ func antigravityOptionNumber(raw json.RawMessage) float64 {
 	var value float64
 	_ = json.Unmarshal(raw, &value)
 	return value
+}
+
+// antigravityToolChoice reads the transcript's toolChoice option: a mode string
+// ("auto", "none", "any" or "required") or a named function in either the
+// OpenAI ({"type":"function","function":{"name"}}) or Anthropic
+// ({"type":"tool","name"}) shape. Absent or unrecognized means the default.
+func antigravityToolChoice(raw json.RawMessage) (mode protocol.ToolChoiceMode, name string) {
+	if len(raw) == 0 {
+		return protocol.ToolChoiceDefault, ""
+	}
+	var text string
+	if json.Unmarshal(raw, &text) == nil {
+		switch text {
+		case "auto":
+			return protocol.ToolChoiceAuto, ""
+		case "none":
+			return protocol.ToolChoiceNone, ""
+		case "any", "required":
+			return protocol.ToolChoiceRequired, ""
+		}
+		return protocol.ToolChoiceDefault, ""
+	}
+	var named struct {
+		Name     string
+		Function struct{ Name string }
+	}
+	if json.Unmarshal(raw, &named) == nil {
+		if named.Function.Name != "" {
+			return protocol.ToolChoiceNamed, named.Function.Name
+		}
+		if named.Name != "" {
+			return protocol.ToolChoiceNamed, named.Name
+		}
+	}
+	return protocol.ToolChoiceDefault, ""
+}
+
+// antigravityFunctionCalling is Cloud Code Assist's functionCallingConfig for a
+// tool choice. The default is VALIDATED, the mode Antigravity itself sends.
+func antigravityFunctionCalling(mode protocol.ToolChoiceMode, name string) map[string]any {
+	value := "VALIDATED"
+	switch mode {
+	case protocol.ToolChoiceAuto:
+		value = "AUTO"
+	case protocol.ToolChoiceNone:
+		value = "NONE"
+	case protocol.ToolChoiceNamed, protocol.ToolChoiceRequired:
+		value = "ANY"
+	}
+	config := map[string]any{"mode": value}
+	if mode == protocol.ToolChoiceNamed {
+		config["allowedFunctionNames"] = []string{name}
+	}
+	return config
 }

@@ -3,6 +3,8 @@ package agentcore
 import (
 	"encoding/json"
 	"strings"
+
+	nativehost "github.com/2found/2ai/agentcore/host"
 )
 
 // This file is the AgentCore Lab read model: the single definition of "one step"
@@ -184,8 +186,8 @@ func ApplyLiveGates(records []TurnRecord, traces []ToolTrace) []TurnRecord {
 }
 
 // FoldSteps turns a run's ordered turn records into the Lab's step list. It
-// detects a compaction by the summary message the loop folds into the history
-// (a system message prefixed with summaryMarker that first appears on a given
+// detects a compaction by the summary message the request view carries (a
+// user message opening with the summary label that first appears on a given
 // turn) and emits it as its own step before that turn. Everything else is one
 // turn = one step. Pure: same input -> same steps, for live and replay alike.
 func FoldSteps(records []TurnRecord) []LabStep {
@@ -323,7 +325,7 @@ func nativeTraceGates(raw json.RawMessage) []ToolGate {
 	for _, raw := range trace.Context.Messages {
 		var message struct {
 			Role, ToolCallID string
-			Details          PiToolOutcome
+			Details          ToolOutcome
 		}
 		if json.Unmarshal(raw, &message) != nil || message.Role != "toolResult" || message.ToolCallID == "" {
 			continue
@@ -365,27 +367,24 @@ func gateOutcome(gates []ToolGate, callID string) (allowed bool, errStr string) 
 // system prompt for that turn (empty when the turn carries none).
 func systemPrompt(messages []Message) string {
 	for _, m := range messages {
-		if m.Role == RoleSystem && !strings.HasPrefix(m.Content, summaryMarker) {
+		if m.Role == RoleSystem {
 			return m.Content
 		}
 	}
 	return ""
 }
 
-// latestSummary returns the content (without the marker) of the last compaction
-// summary message in a turn's context, or "" when none is present.
+// latestSummary returns the handoff of the last compaction summary in a
+// turn's context, or "" when none is present. A native summary is a user
+// message opening with the host's summary label.
 func latestSummary(messages []Message) string {
 	out := ""
 	for _, m := range messages {
-		if m.Role != RoleSystem {
+		if m.Role != RoleUser {
 			continue
 		}
-		// A real summary (preferred) or, when summarization degraded, the elide
-		// breadcrumb — either marks that a compaction happened before this turn.
-		if strings.HasPrefix(m.Content, summaryMarker) {
-			out = strings.TrimSpace(strings.TrimPrefix(m.Content, summaryMarker))
-		} else if strings.HasPrefix(m.Content, elideMarker) {
-			out = strings.TrimSpace(m.Content)
+		if text, ok := nativehost.SummaryText(m.Content); ok {
+			out = text
 		}
 	}
 	return out

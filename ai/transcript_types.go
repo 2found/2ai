@@ -16,7 +16,10 @@ import (
 // agentcore.Message, content order, signatures, tool results, and system deltas
 // remain in their original representation. Extra retains application metadata.
 type Message struct {
-	encoding              *transcriptEncoding
+	encoding *transcriptEncoding
+	// reminder marks a user message made from a late system message by
+	// CollapseSystemMessages; it is volatile for prompt-cache placement.
+	reminder              bool
 	Role                  string          `json:"role"`
 	Content               MessageContent  `json:"content"`
 	Timestamp             int64           `json:"timestamp"`

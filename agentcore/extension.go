@@ -3,6 +3,7 @@ package agentcore
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"strings"
 )
 
@@ -103,7 +104,7 @@ type Extension interface {
 
 // NativeContextContributor transforms the outgoing native request view using
 // this run's extension state. It must not reconstruct provider messages from
-// display projections. Like Pi's transformContext, failures retain the prior
+// display projections. Like a ContextHook, a failure retains the prior
 // valid view; returned additions are not written into authoritative history.
 type NativeContextContributor interface {
 	Extension
@@ -316,7 +317,7 @@ type StepInterceptor interface {
 // holds each condition the run has held, in order, so a narrowing is visible
 // afterwards rather than silent.
 type GoalReviser interface {
-	// Native Pi integrations must call RecordGoalRevision in a governed tool
+	// Native integrations must call RecordGoalRevision in a governed tool
 	// context before publishing the condition. The drain then refreshes the
 	// prompt; durability already belongs to that tool's physical effect.
 	// ReviseGoal returns the run's new completion condition and true when one
@@ -370,47 +371,6 @@ type StopInterceptor interface {
 	TurnStopping(ctx context.Context, info StopInfo) StopDecision
 }
 
-// StreamDecision is a StreamInterceptor's answer. The zero value lets the
-// stream continue untouched.
-type StreamDecision struct {
-	// Abort cuts the in-flight assistant message: the loop cancels the
-	// provider stream, discards the partial text, appends Inject to the
-	// conversation, and retries the turn's provider call from the same point.
-	// Abort with nothing to Inject would retry against an unchanged
-	// conversation — the model would emit the same tokens and abort again — so
-	// it is treated as "no opinion" and the stream completes.
-	Abort bool
-	// Inject is the correction the retried turn must see — the rule body the
-	// matched pattern violated. The LOOP appends it to the history and persists
-	// it like a steer, so a resumed run replays the conversation the retry was
-	// actually given.
-	Inject []Message
-}
-
-// StreamInterceptor observes the assistant's output WHILE it is being produced
-// and may cut it off mid-token. It is the only extension point that fires on
-// partial output: every other interceptor sees a finished artifact (a tool
-// result, a batch, a final answer), which is too late for a rule whose whole
-// purpose is that the model must never complete the pattern — a leaked secret,
-// a forbidden phrase, a banned construct. Aborting mid-stream is what keeps
-// the completed violation out of the transcript entirely.
-//
-// The interceptor is handed the assistant text accumulated SO FAR this turn —
-// the same buffer the loop is building — once per content delta, and again once
-// on the non-streaming path with the completed response. It is called
-// synchronously inside the delta loop, so a check must be cheap: a regex over
-// the buffer, not a network call. Interceptors are consulted in registration
-// order and the FIRST abort wins; the rest are not asked.
-//
-// The loop retries the turn after an abort, so an interceptor MUST bound
-// itself (a per-turn injection cap) or it spins the provider call forever.
-// The loop backstops a runaway interceptor at maxStreamAbortsPerTurn and then
-// lets the stream complete unmodified — pass-through, not failure, because a
-// guard that can take the run down is worse than the output it was policing.
-type StreamInterceptor interface {
-	InterceptStreamDelta(ctx context.Context, accumulated string) StreamDecision
-}
-
 // --- observation ---------------------------------------------------------
 
 // RunObserver watches a run without changing it. Implement it for metering,
@@ -458,7 +418,6 @@ type extensionSet struct {
 	toolIntcp []ToolInterceptor
 	batch     []BatchInterceptor
 	steps     []StepInterceptor
-	streams   []StreamInterceptor
 	stops     []StopInterceptor
 	revisers  []GoalReviser
 	observers []RunObserver
@@ -466,6 +425,8 @@ type extensionSet struct {
 	// stopAttempts counts re-opens per extension so a StopInterceptor can bound
 	// itself without holding the count.
 	stopAttempts map[string]int
+	// report receives every extension failure (the run's Hooks.report).
+	report func(source string, err error)
 }
 
 // ToolResultArchiver is an optional durable-output seam for request-only
@@ -475,14 +436,20 @@ type ToolResultArchiver interface {
 	ArchiveToolResult(context.Context, ToolCall, string) (string, error)
 }
 
-// beginExtensions instantiates every registered factory for one run.
-func beginExtensions(ctx context.Context, factories []ExtensionFactory, info RunInfo) (*extensionSet, error) {
-	set := &extensionSet{stopAttempts: map[string]int{}}
+// beginExtensions instantiates every registered factory for one run. report
+// receives every later extension failure; a factory that fails or panics
+// aborts the run.
+func beginExtensions(ctx context.Context, factories []ExtensionFactory, info RunInfo, report func(string, error)) (*extensionSet, error) {
+	set := &extensionSet{stopAttempts: map[string]int{}, report: report}
 	for _, f := range factories {
-		ext, err := f.BeginRun(ctx, info)
+		var ext Extension
+		var err error
+		if perr := set.guard(f, "begin_run", func() { ext, err = f.BeginRun(ctx, info) }); perr != nil {
+			err = perr
+		}
 		if err != nil {
 			set.closeRun()
-			return nil, err
+			return nil, fmt.Errorf("extension %s: %w", extensionName(f), err)
 		}
 		if ext == nil {
 			// Declining this run is normal, not a failure.
@@ -491,6 +458,29 @@ func beginExtensions(ctx context.Context, factories []ExtensionFactory, info Run
 		set.add(ext)
 	}
 	return set, nil
+}
+
+// guard is the one call path into extension code. A panic degrades the
+// callback to "no opinion", is reported through the run's OnError attributed
+// as "extension:<name>.<point>", and is returned so a caller that cannot
+// degrade (BeginRun) can fail instead.
+func (s *extensionSet) guard(ext any, point string, fn func()) error {
+	err := safe(fn)
+	if err != nil && s.report != nil {
+		s.report("extension:"+extensionName(ext)+"."+point, err)
+	}
+	return err
+}
+
+// extensionName names an extension or factory for attribution; a panicking
+// Name method cannot break the report.
+func extensionName(v any) (name string) {
+	name = "extension"
+	type named interface{ Name() string }
+	if n, ok := v.(named); ok {
+		_ = safe(func() { name = n.Name() })
+	}
+	return name
 }
 
 // add classifies one extension by the optional interfaces it implements.
@@ -514,9 +504,6 @@ func (s *extensionSet) add(ext Extension) {
 	if v, ok := ext.(StepInterceptor); ok {
 		s.steps = append(s.steps, v)
 	}
-	if v, ok := ext.(StreamInterceptor); ok {
-		s.streams = append(s.streams, v)
-	}
 	if v, ok := ext.(StopInterceptor); ok {
 		s.stops = append(s.stops, v)
 	}
@@ -535,7 +522,8 @@ func (s *extensionSet) add(ext Extension) {
 func (s *extensionSet) runContext(ctx context.Context) context.Context {
 	for _, e := range s.all {
 		if c, ok := e.(ContextContributor); ok {
-			if next := c.RunContext(ctx); next != nil {
+			var next context.Context
+			if s.guard(e, "run_context", func() { next = c.RunContext(ctx) }) == nil && next != nil {
 				ctx = next
 			}
 		}
@@ -546,8 +534,7 @@ func (s *extensionSet) runContext(ctx context.Context) context.Context {
 // closeRun releases every extension's run-scoped resources.
 func (s *extensionSet) closeRun() {
 	for _, c := range s.closers {
-		closer := c
-		_ = safe(func() { closer.CloseRun() })
+		_ = s.guard(c, "close_run", c.CloseRun)
 	}
 }
 
@@ -557,7 +544,11 @@ func (s *extensionSet) contributedTools() ([]Tool, map[string]bool) {
 	var out []Tool
 	exempt := map[string]bool{}
 	for _, c := range s.tools {
-		for _, t := range c.Tools() {
+		var tools []Tool
+		if s.guard(c, "tools", func() { tools = c.Tools() }) != nil {
+			continue
+		}
+		for _, t := range tools {
 			if t == nil {
 				continue
 			}
@@ -574,7 +565,8 @@ func (s *extensionSet) contributedTools() ([]Tool, map[string]bool) {
 func (s *extensionSet) systemPrompt() []string {
 	var out []string
 	for _, p := range s.prompts {
-		if text := p.SystemPrompt(); text != "" {
+		var text string
+		if s.guard(p, "system_prompt", func() { text = p.SystemPrompt() }) == nil && text != "" {
 			out = append(out, text)
 		}
 	}
@@ -587,9 +579,7 @@ func (s *extensionSet) interceptToolResult(ctx context.Context, call ToolCall, r
 	out = result
 	for _, ic := range s.toolIntcp {
 		var d ToolResultDecision
-		// A panicking interceptor must degrade to "no opinion", not crash the
-		// run — same contract as a panicking hook.
-		if perr := safe(func() { d = ic.InterceptToolResult(ctx, call, out, runErr) }); perr != nil {
+		if s.guard(ic, "intercept_tool_result", func() { d = ic.InterceptToolResult(ctx, call, out, runErr) }) != nil {
 			continue
 		}
 		if d.Replace {
@@ -613,7 +603,7 @@ func (s *extensionSet) interceptBatch(ctx context.Context, calls []ToolCall) []M
 	var extra []Message
 	for _, ic := range s.batch {
 		var d BatchDecision
-		if perr := safe(func() { d = ic.InterceptBatch(ctx, calls) }); perr != nil {
+		if s.guard(ic, "intercept_batch", func() { d = ic.InterceptBatch(ctx, calls) }) != nil {
 			continue
 		}
 		extra = append(extra, d.AdditionalContexts...)
@@ -630,7 +620,7 @@ func (s *extensionSet) goalRevisions() []string {
 	for _, r := range s.revisers {
 		var g string
 		var ok bool
-		if perr := safe(func() { g, ok = r.ReviseGoal() }); perr != nil {
+		if s.guard(r, "revise_goal", func() { g, ok = r.ReviseGoal() }) != nil {
 			continue
 		}
 		if ok && strings.TrimSpace(g) != "" {
@@ -645,7 +635,7 @@ func (s *extensionSet) beforeStep(ctx context.Context, info StepInfo) []Message 
 	var extra []Message
 	for _, ic := range s.steps {
 		var d StepDecision
-		if perr := safe(func() { d = ic.BeforeStep(ctx, info) }); perr != nil {
+		if s.guard(ic, "before_step", func() { d = ic.BeforeStep(ctx, info) }) != nil {
 			continue
 		}
 		extra = append(extra, d.AdditionalContexts...)
@@ -657,14 +647,11 @@ func (s *extensionSet) beforeStep(ctx context.Context, info StepInfo) []Message 
 // continue wins; the rest are not asked.
 func (s *extensionSet) turnStopping(ctx context.Context, info StopInfo) (StopDecision, string) {
 	for _, ic := range s.stops {
-		name := "extension"
-		if e, ok := ic.(Extension); ok {
-			name = e.Name()
-		}
+		name := extensionName(ic)
 		in := info
 		in.Attempt = s.stopAttempts[name]
 		var d StopDecision
-		if perr := safe(func() { d = ic.TurnStopping(ctx, in) }); perr != nil {
+		if s.guard(ic, "turn_stopping", func() { d = ic.TurnStopping(ctx, in) }) != nil {
 			continue
 		}
 		// Continuing with nothing to say would re-run the same turn against an
@@ -696,29 +683,10 @@ func withAnswerReminder(d StopDecision) StopDecision {
 	return d
 }
 
-// interceptStreamDelta consults the stream interceptors over the assistant text
-// accumulated so far. The first abort wins; the rest are not asked. A panicking
-// interceptor degrades to "no opinion" — same contract as every other dispatch
-// here — and an abort with nothing to inject is ignored, because retrying
-// against an unchanged conversation would just re-emit the same tokens.
-func interceptStreamDelta(ctx context.Context, interceptors []StreamInterceptor, accumulated string) StreamDecision {
-	for _, ic := range interceptors {
-		var d StreamDecision
-		if perr := safe(func() { d = ic.InterceptStreamDelta(ctx, accumulated) }); perr != nil {
-			continue
-		}
-		if d.Abort && len(d.Inject) > 0 {
-			return d
-		}
-	}
-	return StreamDecision{}
-}
-
 // observe dispatches to the read-only observers.
 func (s *extensionSet) observe(ctx context.Context, phase ObservePhase, turn int, msgs []Message) {
 	for _, o := range s.observers {
-		obs := o
-		_ = safe(func() { obs.ObserveMessages(ctx, phase, turn, msgs) })
+		_ = s.guard(o, "observe_messages", func() { o.ObserveMessages(ctx, phase, turn, msgs) })
 	}
 }
 

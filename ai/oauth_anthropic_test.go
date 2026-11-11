@@ -144,7 +144,7 @@ func readAnthropicOAuthFixture(t *testing.T) anthropicOAuthFixture {
 }
 func fixedAnthropicOAuthOptions() AnthropicOAuthOptions {
 	host := "127.0.0.1"
-	return AnthropicOAuthOptions{CallbackHost: &host, PKCE: func() (PKCE, error) { return pkceFromBytes([32]byte{}), nil }, Now: func() float64 { return 1000000 }, ErrorStack: func(name, message string) string { return "fixed:" + name + ":" + message }}
+	return AnthropicOAuthOptions{CallbackHost: &host, PKCE: func() (PKCE, error) { return pkceFromBytes([32]byte{}), nil }, State: func() (string, error) { return pkceFromBytes([32]byte{}).Verifier, nil }, Now: func() float64 { return 1000000 }, ErrorStack: func(name, message string) string { return "fixed:" + name + ":" + message }}
 }
 func anthropicInjectedFailure() *OAuthDiagnosticError {
 	name := "TransportError"
@@ -520,5 +520,71 @@ func TestPiAnthropicOAuthBrowserHTTP(t *testing.T) {
 				t.Fatal("duplicate callback admitted")
 			}
 		})
+	}
+}
+
+// The PKCE verifier used to double as the OAuth state, so the secret that
+// redeems the code travelled in the authorize URL and the browser callback.
+func TestAnthropicOAuthStateIsIndependentOfTheVerifier(t *testing.T) {
+	verifier := pkceFromBytes([32]byte{}).Verifier
+	login := func(t *testing.T, state func() (string, error), method, manual string) (authURL, callbackState string, bodies []string, err error) {
+		options := fixedAnthropicOAuthOptions()
+		options.State = state
+		options.StartCallback = func(input *OAuthCallbackServerOptions) (*OAuthCallbackServer, error) {
+			callbackState = *input.State
+			return nil, errors.New("bind failed") // falls back to manual input
+		}
+		options.Client = &http.Client{Transport: roundTripFunc(func(request *http.Request) (*http.Response, error) {
+			body, _ := io.ReadAll(request.Body)
+			bodies = append(bodies, string(body))
+			return &http.Response{StatusCode: 200, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"access_token":"a","refresh_token":"r","expires_in":3600}`))}, nil
+		})}
+		interaction := ProviderAuthInteraction{Context: context.Background(), Notify: func(event *Object) {
+			if event.Get("type") == "auth_url" {
+				authURL, _ = event.Get("url").(string)
+			}
+		}, Prompt: func(_ context.Context, prompt *Object) (any, error) {
+			if prompt.Get("type") == "select" {
+				return method, nil
+			}
+			return manual, nil
+		}}
+		_, err = AnthropicOAuth(options).Login(interaction, nil)
+		return authURL, callbackState, bodies, err
+	}
+	issued := func() (string, error) { return "issued-state", nil }
+	for _, method := range []string{"browser", "copy_code"} {
+		authURL, callbackState, bodies, err := login(t, issued, method, "code#issued-state")
+		if err != nil || !strings.HasSuffix(authURL, "&state=issued-state") || strings.Contains(authURL, verifier) || len(bodies) != 1 {
+			t.Fatal(method, authURL, bodies, err)
+		}
+		if method == "browser" && callbackState != "issued-state" {
+			t.Fatal("callback server verifies", callbackState)
+		}
+		var body struct {
+			State        string
+			CodeVerifier string `json:"code_verifier"`
+		}
+		if json.Unmarshal([]byte(bodies[0]), &body) != nil || body.State != "issued-state" || body.CodeVerifier != verifier {
+			t.Fatal("exchange body", bodies[0])
+		}
+		// The verifier is no longer an accepted state, and nothing is exchanged.
+		if _, _, bodies, err := login(t, issued, method, "code#"+verifier); err == nil || err.Error() != "OAuth state mismatch" || len(bodies) != 0 {
+			t.Fatal("verifier accepted as state", err, bodies)
+		}
+		// A bare code still works (PKCE binds it) and sends the issued state.
+		if _, _, bodies, err := login(t, issued, method, "code"); err != nil || len(bodies) != 1 || !strings.Contains(bodies[0], `"state":"issued-state"`) {
+			t.Fatal("bare code", err, bodies)
+		}
+	}
+	if _, _, bodies, err := login(t, func() (string, error) { return "", errors.New("entropy failed") }, "copy_code", "code"); err == nil || err.Error() != "entropy failed" || len(bodies) != 0 {
+		t.Fatal("state error", err)
+	}
+	// The default state is fresh randomness, not the verifier.
+	first, _, _, _ := login(t, nil, "copy_code", "code")
+	second, _, _, _ := login(t, nil, "copy_code", "code")
+	state := func(raw string) string { parsed, _ := url.Parse(raw); return parsed.Query().Get("state") }
+	if len(state(first)) != 43 || state(first) == verifier || state(first) == state(second) {
+		t.Fatal("default state", state(first), state(second))
 	}
 }

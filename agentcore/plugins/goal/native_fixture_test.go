@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 
 	"github.com/2found/2ai/agentcore"
-	"github.com/2found/2ai/agentcore/host"
 	"github.com/2found/2ai/ai"
 )
 
@@ -37,7 +36,7 @@ func newNativeScript(replies ...ai.Message) *nativeScript {
 			if err != nil {
 				return nil, err
 			}
-			projected, err := host.ProjectMessage(raw)
+			projected, err := ai.ProjectMessage(raw)
 			if err != nil {
 				return nil, err
 			}

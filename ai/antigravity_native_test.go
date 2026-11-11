@@ -9,6 +9,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/2found/2ai/ai/protocol"
 )
 
 func TestAntigravityNativePool(t *testing.T) {
@@ -190,5 +192,61 @@ func TestAntigravitySessionKeepsTrajectory(t *testing.T) {
 	off["cacheRetention"] = json.RawMessage(`"none"`)
 	if o1, os, _ := read(off); o1 == a1 || os != "" {
 		t.Fatalf("cacheRetention none must not pin the session: %s %q", o1, os)
+	}
+}
+
+// The transcript's toolChoice reaches Cloud Code Assist: "none" is honored
+// instead of the hardcoded VALIDATED default, a named choice restricts the
+// callable functions, and an absent or unknown value keeps VALIDATED. A host
+// control left at its default does not overwrite it.
+func TestAntigravityNativeHonorsToolChoice(t *testing.T) {
+	model := completionsModel{ID: "gemini-3-pro", API: VendorGoogleAntigravity, Provider: VendorGoogleAntigravity, Input: []string{"text"}}
+	transcript := NormalizeContext(Context{Messages: []Message{{Role: "system", Content: TextContent(""), ToolsAdded: []Tool{{Name: "read", Description: "read", Parameters: json.RawMessage(`{"type":"object"}`)}}}, {Role: "user", Content: TextContent("hi")}}})
+	config := func(raw json.RawMessage) map[string]any {
+		t.Helper()
+		var body struct {
+			Request struct {
+				ToolConfig struct{ FunctionCallingConfig map[string]any } `json:"toolConfig"`
+			} `json:"request"`
+		}
+		if err := json.Unmarshal(raw, &body); err != nil {
+			t.Fatal(err)
+		}
+		return body.Request.ToolConfig.FunctionCallingConfig
+	}
+	payload := func(choice string) json.RawMessage {
+		t.Helper()
+		controls := map[string]json.RawMessage{}
+		if choice != "" {
+			controls["toolChoice"] = json.RawMessage(choice)
+		}
+		raw, err := antigravityNativePayload(model, transcript, controls, OAuthToken{ProjectID: "project"}, 1)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return raw
+	}
+	for _, tc := range []struct{ choice, mode, allowed string }{
+		{"", "VALIDATED", ""},
+		{`"none"`, "NONE", ""},
+		{`"auto"`, "AUTO", ""},
+		{`"any"`, "ANY", ""},
+		{`{"type":"function","function":{"name":"read"}}`, "ANY", "read"},
+		{`{"type":"tool","name":"read"}`, "ANY", "read"},
+		{`"sometimes"`, "VALIDATED", ""},
+	} {
+		got := config(payload(tc.choice))
+		allowed, _ := json.Marshal(got["allowedFunctionNames"])
+		if got["mode"] != tc.mode || (tc.allowed != "" && string(allowed) != `["`+tc.allowed+`"]`) || (tc.allowed == "" && got["allowedFunctionNames"] != nil) {
+			t.Fatalf("toolChoice %s → %v, want %s %s", tc.choice, got, tc.mode, tc.allowed)
+		}
+	}
+	kept, err := ApplyNativeControls(VendorGoogleAntigravity, payload(`"none"`), NativeGenerationControls{})
+	if err != nil || config(kept)["mode"] != "NONE" {
+		t.Fatalf("a default host control overwrote the transcript's tool choice: %v %s", err, kept)
+	}
+	forced, err := ApplyNativeControls(VendorGoogleAntigravity, payload(`"none"`), NativeGenerationControls{ToolChoice: protocol.ToolChoice{Mode: protocol.ToolChoiceNamed, Name: "read"}})
+	if err != nil || config(forced)["mode"] != "ANY" {
+		t.Fatalf("an explicit host control was not applied: %v %s", err, forced)
 	}
 }

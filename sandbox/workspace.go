@@ -9,8 +9,9 @@ import (
 )
 
 // Workspace guards file tools to one host directory. It accepts only relative
-// paths, cleans them, follows the root symlink once, and rejects traversal before
-// any filesystem operation happens.
+// paths, cleans them, and rejects lexical traversal up front; host I/O then
+// goes through an os.Root on the directory, which confines every path
+// component — symlinks included — at open time.
 type Workspace struct {
 	root         string
 	mu           sync.Mutex
@@ -96,6 +97,16 @@ func (w *Workspace) Resolve(rel string) (string, string, error) {
 		return "", "", fmt.Errorf("path escapes workspace")
 	}
 	return abs, clean, nil
+}
+
+// openRoot opens the workspace directory as an os.Root: every path resolved
+// through it stays inside the workspace, symlinks included. The caller closes
+// it.
+func (w *Workspace) openRoot() (*os.Root, error) {
+	if w == nil || w.root == "" {
+		return nil, fmt.Errorf("workspace is not configured")
+	}
+	return os.OpenRoot(w.root)
 }
 
 func inside(root, path string) bool {

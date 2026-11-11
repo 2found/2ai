@@ -50,6 +50,13 @@ type SearchProvider interface {
 	Search(ctx context.Context, query string, maxResults int) ([]SearchResult, error)
 }
 
+// SearchHosts is an optional SearchProvider capability naming every host a
+// search contacts. Without it web_search never receives a host-scoped
+// credential (see agentcore.CredentialGrant.Hosts).
+type SearchHosts interface {
+	Hosts() []string
+}
+
 // WebSearchTool answers a query with ranked web results (title/url/snippet).
 // It is the discovery counterpart to web_fetch: search finds the pages,
 // web_fetch reads one. There is no host allowlist — the result set is whatever
@@ -79,6 +86,18 @@ func NewWebSearchTool(p SearchProvider, maxResults int) *WebSearchTool {
 
 func (t *WebSearchTool) Name() string   { return ToolWebSearch }
 func (t *WebSearchTool) Parallel() bool { return true }
+
+// ExternalContent marks search results as untrusted (agentcore.ExternalContentTool).
+func (t *WebSearchTool) ExternalContent() bool { return true }
+
+// NetworkHosts reports the provider's hosts (agentcore.NetworkTool) when the
+// provider declares them through SearchHosts.
+func (t *WebSearchTool) NetworkHosts(string) ([]string, error) {
+	if declared, ok := t.provider.(SearchHosts); ok && len(declared.Hosts()) > 0 {
+		return declared.Hosts(), nil
+	}
+	return nil, fmt.Errorf("web_search: the search provider does not declare its hosts")
+}
 
 func (t *WebSearchTool) Schema() agentcore.ToolSchema {
 	return agentcore.ToolSchema{
@@ -177,6 +196,15 @@ func NewDuckDuckGoSearch(client *http.Client) SearchProvider {
 		client = NewGuardedClient(webSearchTimeout)
 	}
 	return &duckDuckGoSearch{client: client, endpoint: duckDuckGoEndpoint}
+}
+
+// Hosts names the one host the endpoint lives on (SearchHosts).
+func (p *duckDuckGoSearch) Hosts() []string {
+	u, err := url.Parse(p.endpoint)
+	if err != nil || u.Hostname() == "" {
+		return nil
+	}
+	return []string{strings.ToLower(u.Hostname())}
 }
 
 func (p *duckDuckGoSearch) Search(ctx context.Context, query string, maxResults int) ([]SearchResult, error) {

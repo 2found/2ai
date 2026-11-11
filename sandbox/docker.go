@@ -9,6 +9,7 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"net"
 	"os/exec"
@@ -69,9 +70,12 @@ type DockerSandbox struct {
 	mu       sync.Mutex
 	sessions map[string]string
 
-	// egress caches one host-side filtering proxy per distinct allowlist (#5b).
-	// nil until the first networked run with a NetworkAllow list.
-	egress *egressProxyPool
+	// egress caches one host-side filtering proxy per distinct allowlist;
+	// network is the internal docker network allowlisted containers join,
+	// created on first use (guarded by egressMu).
+	egress   *egressProxyPool
+	egressMu sync.Mutex
+	network  egressNetwork
 }
 
 // Option configures a DockerSandbox.
@@ -117,52 +121,108 @@ func NewDockerSandbox(opts ...Option) *DockerSandbox {
 }
 
 // egressNetworkArgs returns the docker run flags governing a container's network
-// egress for the given limits, plus any proxy env to inject (#5b):
+// egress, plus any proxy env to inject:
 //
 //   - no network → ["--network","none"], no env.
-//   - network, no allowlist → nil (default network; current behavior).
-//   - network + allowlist → route through the host-side filtering proxy: set
-//     HTTP(S)_PROXY to it (reached via the host gateway) so allowlisted hosts are
-//     reachable and everything else is hard-denied by the proxy. The container is
-//     additionally kept on the host gateway route via --add-host so the proxy is
-//     resolvable. On hosts that support an internal bridge, docker.go confines the
-//     workload further; where it cannot, the proxy still hard-denies non-listed
-//     hosts for any client that honors proxy env (pip/npm/apt/curl do by default).
+//   - network + AnyHost → nil: the default bridge, unrestricted. Only the
+//     explicit AnyHost entry gets here.
+//   - network + allowlist → the container joins this sandbox's internal egress
+//     network, which has no route off the bridge; the only peer it can reach is
+//     the filtering proxy listening on that network's gateway address, named in
+//     HTTP(S)_PROXY. A client that ignores the proxy env has nowhere to go.
+//   - network + empty allowlist → an error. Open egress is never the silent
+//     default.
 //
-// A best-effort proxy start failure falls back to no network rather than opening
-// the container to the whole internet — fail closed.
-func (s *DockerSandbox) egressNetworkArgs(lim agentcore.SandboxLimits) (netArgs []string, env map[string]string) {
+// Any failure to stand up the filter is an error, never a fallback to open
+// network.
+func (s *DockerSandbox) egressNetworkArgs(ctx context.Context, lim agentcore.SandboxLimits) ([]string, map[string]string, error) {
 	if !lim.Network {
-		return []string{"--network", "none"}, nil
+		return []string{"--network", "none"}, nil, nil
 	}
 	allow := newEgressAllow(lim.NetworkAllow)
-	if len(allow.hosts) == 0 {
-		return nil, nil // network on, no allowlist: unchanged default-network behavior
+	if allow.unrestricted {
+		return nil, nil, nil
 	}
-	proxy, err := s.egress.get(allow)
-	if err != nil || proxy == nil {
-		// Could not stand up the filter; deny all egress rather than allow all.
-		return []string{"--network", "none"}, nil
+	if len(allow.rules) == 0 {
+		return nil, nil, errNoEgressAllowlist
 	}
-	_, port, splitErr := net.SplitHostPort(proxy.Addr())
-	if splitErr != nil {
-		return []string{"--network", "none"}, nil
+	network, err := s.egressNetwork(ctx)
+	if err != nil {
+		return nil, nil, err
 	}
-	// host-gateway lets the container reach the proxy listening on the host.
-	proxyURL := "http://host.docker.internal:" + port
-	return []string{"--add-host", "host.docker.internal:host-gateway"}, map[string]string{
+	proxy, err := s.egress.get(allow, network.gateway)
+	if err != nil {
+		return nil, nil, fmt.Errorf("sandbox: egress proxy cannot listen on the egress network gateway %s "+
+			"(an allowlist needs the Docker bridge on this host, i.e. a native Linux engine): %w", network.gateway, err)
+	}
+	proxyURL := "http://" + proxy.Addr()
+	return []string{"--network", network.name}, map[string]string{
 		"HTTP_PROXY":  proxyURL,
 		"HTTPS_PROXY": proxyURL,
 		"http_proxy":  proxyURL,
 		"https_proxy": proxyURL,
 		"NO_PROXY":    "localhost,127.0.0.1",
-	}
+		"no_proxy":    "localhost,127.0.0.1",
+	}, nil
 }
 
-// StopEgress tears down every cached egress proxy. Called on sandbox shutdown.
+// errNoEgressAllowlist is returned for Network=true with no allowlist.
+var errNoEgressAllowlist = fmt.Errorf("sandbox: network granted without an egress allowlist; " +
+	"list the hosts in NetworkAllow, or pass sandbox.AnyHost for unrestricted egress")
+
+// egressNetwork is the internal docker network allowlisted containers join.
+type egressNetwork struct{ name, gateway string }
+
+// egressNetwork returns this sandbox's internal egress network, creating it on
+// first use. It is --internal (Docker installs no route or NAT off the bridge)
+// with inter-container traffic disabled, so allowlisted sessions cannot reach
+// each other either; the host-side proxy on the gateway address is the only
+// reachable peer.
+func (s *DockerSandbox) egressNetwork(ctx context.Context) (egressNetwork, error) {
+	s.egressMu.Lock()
+	defer s.egressMu.Unlock()
+	if s.network.name != "" {
+		return s.network, nil
+	}
+	c, cancel := context.WithTimeout(ctx, 30*time.Second)
+	defer cancel()
+	name := "agentray-egress-" + randHex(6)
+	if out, err := exec.CommandContext(c, s.docker, "network", "create", "--internal", "--driver", "bridge",
+		"--opt", "com.docker.network.bridge.enable_icc=false", "--label", "2ai.egress=1", name).CombinedOutput(); err != nil {
+		return egressNetwork{}, fmt.Errorf("sandbox: create egress network: %w: %s", err, strings.TrimSpace(string(out)))
+	}
+	out, err := exec.CommandContext(c, s.docker, "network", "inspect", "-f", "{{range .IPAM.Config}}{{.Gateway}} {{end}}", name).Output()
+	gateway := ""
+	for _, field := range strings.Fields(string(out)) {
+		if ip := net.ParseIP(field); ip != nil && ip.To4() != nil {
+			gateway = field
+			break
+		}
+	}
+	if err != nil || gateway == "" {
+		s.removeNetwork(name)
+		return egressNetwork{}, fmt.Errorf("sandbox: egress network %s has no IPv4 gateway (inspect: %v)", name, err)
+	}
+	s.network = egressNetwork{name: name, gateway: gateway}
+	return s.network, nil
+}
+
+func (s *DockerSandbox) removeNetwork(name string) {
+	c, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	_ = exec.CommandContext(c, s.docker, "network", "rm", name).Run()
+}
+
+// StopEgress tears down every cached egress proxy and the egress network.
+// Called on sandbox shutdown.
 func (s *DockerSandbox) StopEgress() {
-	if s.egress != nil {
-		s.egress.stopAll()
+	s.egress.stopAll()
+	s.egressMu.Lock()
+	network := s.network
+	s.network = egressNetwork{}
+	s.egressMu.Unlock()
+	if network.name != "" {
+		s.removeNetwork(network.name)
 	}
 }
 
@@ -174,32 +234,27 @@ func (s *DockerSandbox) Available(ctx context.Context) bool {
 	return exec.CommandContext(ctx, s.docker, "info").Run() == nil
 }
 
-// oneShotArgs renders the common hardened `docker run` envelope used by both
-// buffered Exec and interactive Start. Keeping one renderer is a security
-// invariant: adding streaming protocols must not silently lose a cap, mount,
-// user, network, or environment restriction.
-func (s *DockerSandbox) oneShotArgs(req agentcore.SandboxExec, lim agentcore.SandboxLimits, name string) ([]string, error) {
-	workdir := sandboxWorkdir
-	if strings.TrimSpace(req.Workdir) != "" {
-		workdir = req.Workdir
-	}
+// envelopeArgs renders the hardened isolation flags every container gets —
+// one-shot and session alike. Keeping one renderer is a security invariant:
+// a new execution path must not silently lose a cap, mount, user, network, or
+// environment restriction.
+func (s *DockerSandbox) envelopeArgs(ctx context.Context, req agentcore.SandboxExec, lim agentcore.SandboxLimits) ([]string, error) {
 	args := []string{
-		"run", "--rm", "-i",
-		"--name", name,
 		"--cap-drop", "ALL",
 		"--security-opt", "no-new-privileges",
 		"--user", sandboxUser(lim),
-		"--workdir", workdir,
-		"--tmpfs", sandboxTmpfs(lim),
 		"--memory", fmt.Sprintf("%dm", lim.MemoryMB),
 		"--memory-swap", fmt.Sprintf("%dm", lim.MemoryMB),
 		"--cpus", strconv.FormatFloat(lim.CPUs, 'f', 2, 64),
 		"--pids-limit", strconv.Itoa(lim.PidsLimit),
 	}
-	egressArgs, egressEnv := s.egressNetworkArgs(lim)
+	egressArgs, egressEnv, err := s.egressNetworkArgs(ctx, lim)
+	if err != nil {
+		return nil, err
+	}
 	args = append(args, egressArgs...)
 	if !lim.WritableFS {
-		args = append(args, "--read-only")
+		args = append(args, "--read-only", "--tmpfs", sandboxTmpfs(lim))
 	}
 	for _, m := range req.Mounts {
 		if strings.TrimSpace(m.Source) == "" || strings.TrimSpace(m.Target) == "" {
@@ -211,47 +266,121 @@ func (s *DockerSandbox) oneShotArgs(req agentcore.SandboxExec, lim agentcore.San
 		}
 		args = append(args, "--mount", spec)
 	}
-	for k, v := range req.Env {
+	args = appendEnv(args, req.Env)
+	return appendEnv(args, egressEnv), nil
+}
+
+func appendEnv(args []string, env map[string]string) []string {
+	for k, v := range env {
 		args = append(args, "--env", k+"="+v)
 	}
-	for k, v := range egressEnv {
-		args = append(args, "--env", k+"="+v)
+	return args
+}
+
+// dockerRun is one prepared docker CLI invocation: its arguments and how to
+// stop what it started. Killing the docker CLI alone does not stop the
+// workload — the container (one-shot) or the exec'd process tree (session)
+// lives in the daemon — so kill reaches into the daemon.
+type dockerRun struct {
+	args    []string
+	lim     agentcore.SandboxLimits
+	kill    func() // stops the workload; safe to call more than once
+	cleanup func() // runs after the CLI exits
+}
+
+// prepare renders req into a docker invocation: `docker run --rm` of a fresh
+// hardened container, or `docker exec` into the persistent session container
+// when req.Session is set.
+func (s *DockerSandbox) prepare(ctx context.Context, req agentcore.SandboxExec) (dockerRun, error) {
+	if len(req.Argv) == 0 {
+		return dockerRun{}, fmt.Errorf("sandbox: empty argv")
 	}
+	lim := withDefaults(req.Constraints)
+	if strings.TrimSpace(req.Session) != "" {
+		name, err := s.ensureSession(ctx, req, lim)
+		if err != nil {
+			return dockerRun{}, err
+		}
+		pidfile := sessionRunDir + "/" + randHex(8) + ".pid"
+		args := []string{"exec", "-i"}
+		if w := strings.TrimSpace(req.Workdir); w != "" {
+			args = append(args, "--workdir", w)
+		}
+		args = appendEnv(args, req.Env)
+		args = append(args, name, "/bin/sh", "-c", sessionExecWrapper, pidfile)
+		kill := func() { s.killSessionExec(name, pidfile) }
+		return dockerRun{args: append(args, req.Argv...), lim: lim, kill: kill, cleanup: func() {}}, nil
+	}
+	name := "agentray-sbx-" + randHex(8)
+	workdir := sandboxWorkdir
+	if strings.TrimSpace(req.Workdir) != "" {
+		workdir = req.Workdir
+	}
+	envelope, err := s.envelopeArgs(ctx, req, lim)
+	if err != nil {
+		return dockerRun{}, err
+	}
+	args := append([]string{"run", "--rm", "-i", "--name", name, "--workdir", workdir}, envelope...)
 	image := s.image
 	if strings.TrimSpace(req.Image) != "" {
 		image = req.Image
 	}
-	args = append(args, image)
-	args = append(args, req.Argv...)
-	return args, nil
+	args = append(append(args, image), req.Argv...)
+	remove := func() { s.removeContainer(name) }
+	return dockerRun{args: args, lim: lim, kill: remove, cleanup: remove}, nil
 }
 
-// Exec runs req to completion in a fresh hardened container and returns the
+// sessionRunDir is a small tmpfs in every session container holding the pid
+// files that let a timed-out or cancelled exec be killed inside the container.
+const sessionRunDir = "/run/2ai"
+
+// sessionExecWrapper records the shell's pid before running the command, so
+// the whole process tree under it can be killed. It does not exec: staying the
+// parent keeps one pid that every descendant hangs off.
+const sessionExecWrapper = `echo $$ > "$0" || exit 125; "$@"; s=$?; rm -f "$0"; exit $s`
+
+// sessionKillScript stops then kills the process tree rooted at the pid in
+// $0, walking /proc children so it needs no procps in the image. Each process
+// is stopped before its children are listed, so none can fork past the walk.
+const sessionKillScript = `t() { kill -STOP "$1" 2>/dev/null; for c in $(cat /proc/"$1"/task/*/children 2>/dev/null); do t "$c"; done; kill -KILL "$1" 2>/dev/null; }
+p=$(cat "$0" 2>/dev/null) && [ -n "$p" ] && t "$p"; rm -f "$0"`
+
+func (s *DockerSandbox) killSessionExec(container, pidfile string) {
+	c, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	_ = exec.CommandContext(c, s.docker, "exec", container, "/bin/sh", "-c", sessionKillScript, pidfile).Run()
+}
+
+func (s *DockerSandbox) removeContainer(name string) {
+	c, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	_ = exec.CommandContext(c, s.docker, "rm", "-f", name).Run()
+}
+
+// command builds the docker CLI process for run. When ctx ends — timeout or
+// caller cancellation — the workload is killed in the daemon, then the CLI.
+func (s *DockerSandbox) command(ctx context.Context, run dockerRun) *exec.Cmd {
+	cmd := exec.CommandContext(ctx, s.docker, run.args...)
+	cmd.Cancel = func() error {
+		run.kill()
+		return cmd.Process.Kill()
+	}
+	cmd.WaitDelay = 10 * time.Second
+	return cmd
+}
+
+// Exec runs req to completion in a fresh hardened container (or in the
+// persistent session container when req.Session is set) and returns the
 // captured output. A non-zero exit code is returned as a SandboxResult (not an
 // error); error is reserved for the backend itself failing.
 func (s *DockerSandbox) Exec(ctx context.Context, req agentcore.SandboxExec) (agentcore.SandboxResult, error) {
-	if len(req.Argv) == 0 {
-		return agentcore.SandboxResult{}, fmt.Errorf("sandbox: empty argv")
-	}
-	// A session request is served by a reused, long-lived container so installs
-	// and files persist across calls; the empty-session path below stays the
-	// fresh-container-per-call default.
-	if strings.TrimSpace(req.Session) != "" {
-		return s.execSession(ctx, req)
-	}
-	lim := withDefaults(req.Constraints)
-	name := "agentray-sbx-" + randHex(8)
-
-	timeout := time.Duration(lim.TimeoutSeconds * float64(time.Second))
-	runCtx, cancel := context.WithTimeout(ctx, timeout)
-	defer cancel()
-
-	args, err := s.oneShotArgs(req, lim, name)
+	run, err := s.prepare(ctx, req)
 	if err != nil {
 		return agentcore.SandboxResult{}, err
 	}
-
-	cmd := exec.CommandContext(runCtx, s.docker, args...)
+	runCtx, cancel := context.WithTimeout(ctx, time.Duration(run.lim.TimeoutSeconds*float64(time.Second)))
+	defer cancel()
+	cmd := s.command(runCtx, run)
 	if req.Stdin != "" {
 		cmd.Stdin = strings.NewReader(req.Stdin)
 	}
@@ -259,84 +388,52 @@ func (s *DockerSandbox) Exec(ctx context.Context, req agentcore.SandboxExec) (ag
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 	runErr := cmd.Run()
+	run.cleanup()
 
 	res := agentcore.SandboxResult{Stdout: stdout.String(), Stderr: stderr.String()}
-
-	if runCtx.Err() == context.DeadlineExceeded {
-		// Killing the docker CLI does not reliably reap the container, so force
-		// it with a short, independent context.
-		rmCtx, rmCancel := context.WithTimeout(context.Background(), 10*time.Second)
-		_ = exec.CommandContext(rmCtx, s.docker, "rm", "-f", name).Run()
-		rmCancel()
+	// A caller's cancellation is an error; only the deadline is a result.
+	if err := ctx.Err(); err != nil {
+		return res, err
+	}
+	if errors.Is(runCtx.Err(), context.DeadlineExceeded) {
 		res.Killed = true
-		res.KillReason = fmt.Sprintf("exceeded %.0fs timeout", lim.TimeoutSeconds)
+		res.KillReason = fmt.Sprintf("exceeded %gs timeout", run.lim.TimeoutSeconds)
 		return res, nil
 	}
 	if runErr != nil {
-		if ee, ok := runErr.(*exec.ExitError); ok {
-			// Non-zero exit from the sandboxed command is a normal result.
+		var ee *exec.ExitError
+		if errors.As(runErr, &ee) {
 			res.ExitCode = ee.ExitCode()
 			return res, nil
 		}
-		return res, fmt.Errorf("sandbox: docker run: %w", runErr)
+		return res, fmt.Errorf("sandbox: docker %s: %w", run.args[0], runErr)
 	}
 	return res, nil
 }
 
-// Start launches an interactive command in the same fresh hardened container
-// Exec uses, exposing protocol pipes until Wait. The container is force-removed
-// after Wait or Kill because terminating the docker CLI alone is not sufficient
-// to reap a detached child on every daemon/platform combination.
+// Start launches an interactive command — in a fresh hardened container, or in
+// the persistent session container when req.Session is set — exposing its pipes
+// until Wait. The workload is killed in the daemon on Kill, timeout, or caller
+// cancellation, because terminating the docker CLI alone does not stop it.
 func (s *DockerSandbox) Start(ctx context.Context, req agentcore.SandboxExec) (agentcore.SandboxProcess, error) {
-	if len(req.Argv) == 0 {
-		return nil, fmt.Errorf("sandbox: empty argv")
-	}
 	if req.Stdin != "" {
 		return nil, fmt.Errorf("sandbox: interactive process cannot use preloaded stdin")
 	}
-	if strings.TrimSpace(req.Session) != "" {
-		return nil, fmt.Errorf("sandbox: interactive persistent sessions are not supported")
-	}
-	lim := withDefaults(req.Constraints)
-	name := "agentray-sbx-" + randHex(8)
-	args, err := s.oneShotArgs(req, lim, name)
+	run, err := s.prepare(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	runCtx, cancel := context.WithTimeout(ctx, time.Duration(lim.TimeoutSeconds*float64(time.Second)))
-	cmd := exec.CommandContext(runCtx, s.docker, args...)
-	stdin, err := cmd.StdinPipe()
+	runCtx, cancel := context.WithTimeout(ctx, time.Duration(run.lim.TimeoutSeconds*float64(time.Second)))
+	cmd := s.command(runCtx, run)
+	proc, err := startCommand(cmd, runCtx, cancel, "docker "+run.args[0])
 	if err != nil {
-		cancel()
-		return nil, fmt.Errorf("sandbox: docker stdin pipe: %w", err)
+		run.cleanup()
+		return nil, err
 	}
-	stdout, err := cmd.StdoutPipe()
-	if err != nil {
-		cancel()
-		return nil, fmt.Errorf("sandbox: docker stdout pipe: %w", err)
-	}
-	stderr, err := cmd.StderrPipe()
-	if err != nil {
-		cancel()
-		return nil, fmt.Errorf("sandbox: docker stderr pipe: %w", err)
-	}
-	if err := cmd.Start(); err != nil {
-		cancel()
-		return nil, fmt.Errorf("sandbox: docker start: %w", err)
-	}
-	remove := func() {
-		rmCtx, rmCancel := context.WithTimeout(context.Background(), 10*time.Second)
-		_ = exec.CommandContext(rmCtx, s.docker, "rm", "-f", name).Run()
-		rmCancel()
-	}
-	return &commandProcess{
-		cmd: cmd, stdin: stdin, stdout: stdout, stderr: stderr,
-		runCtx: runCtx, cancel: cancel, killFn: func() error {
-			remove()
-			return nil
-		},
-		cleanup: remove, errLabel: "docker run", timeout: fmt.Sprintf("exceeded %.0fs timeout", lim.TimeoutSeconds),
-	}, nil
+	proc.killFn = func() error { run.kill(); return nil }
+	proc.cleanup = run.cleanup
+	proc.timeout = fmt.Sprintf("exceeded %gs timeout", run.lim.TimeoutSeconds)
+	return proc, nil
 }
 
 // sandboxUser picks the in-container UID. The locked default (read-only root)
@@ -368,58 +465,6 @@ func sandboxTmpfs(lim agentcore.SandboxLimits) string {
 	return fmt.Sprintf("%s:rw,size=%s,uid=%s,gid=%s", sandboxWorkdir, sandboxTmpfsSize, uid, gid)
 }
 
-// execSession runs req inside the persistent container for req.Session, creating
-// it on first use. The container's isolation envelope (network, mounts, user,
-// writability, resource caps) is fixed by this first call; later calls only run
-// commands inside it, so `pip install X` then a script importing X works.
-func (s *DockerSandbox) execSession(ctx context.Context, req agentcore.SandboxExec) (agentcore.SandboxResult, error) {
-	lim := withDefaults(req.Constraints)
-	name, err := s.ensureSession(ctx, req, lim)
-	if err != nil {
-		return agentcore.SandboxResult{}, err
-	}
-
-	timeout := time.Duration(lim.TimeoutSeconds * float64(time.Second))
-	runCtx, cancel := context.WithTimeout(ctx, timeout)
-	defer cancel()
-
-	args := []string{"exec", "-i"}
-	if w := strings.TrimSpace(req.Workdir); w != "" {
-		args = append(args, "--workdir", w)
-	}
-	for k, v := range req.Env {
-		args = append(args, "--env", k+"="+v)
-	}
-	args = append(args, name)
-	args = append(args, req.Argv...)
-
-	cmd := exec.CommandContext(runCtx, s.docker, args...)
-	if req.Stdin != "" {
-		cmd.Stdin = strings.NewReader(req.Stdin)
-	}
-	var stdout, stderr bytes.Buffer
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
-	runErr := cmd.Run()
-
-	res := agentcore.SandboxResult{Stdout: stdout.String(), Stderr: stderr.String()}
-	if runCtx.Err() == context.DeadlineExceeded {
-		// The command ran too long; the session container itself stays alive so
-		// the agent can retry with a smaller step. Only this exec is killed.
-		res.Killed = true
-		res.KillReason = fmt.Sprintf("exceeded %.0fs timeout", lim.TimeoutSeconds)
-		return res, nil
-	}
-	if runErr != nil {
-		if ee, ok := runErr.(*exec.ExitError); ok {
-			res.ExitCode = ee.ExitCode()
-			return res, nil
-		}
-		return res, fmt.Errorf("sandbox: docker exec: %w", runErr)
-	}
-	return res, nil
-}
-
 // ensureSession returns the running keepalive container's name for the session,
 // starting it on first use. If a previously-started container has since died
 // (its keepalive sleep expired, or it was reaped), it is transparently recreated
@@ -436,45 +481,16 @@ func (s *DockerSandbox) ensureSession(ctx context.Context, req agentcore.Sandbox
 	}
 	// Stale or never-created: clear any dead container of this name first so the
 	// run --name does not collide, then start fresh.
-	rmCtx, rmCancel := context.WithTimeout(context.Background(), 10*time.Second)
-	_ = exec.CommandContext(rmCtx, s.docker, "rm", "-f", name).Run()
-	rmCancel()
+	s.removeContainer(name)
 
-	args := []string{
-		"run", "-d",
-		"--name", name,
-		"--cap-drop", "ALL",
-		"--security-opt", "no-new-privileges",
-		"--user", sandboxUser(lim),
-		"--memory", fmt.Sprintf("%dm", lim.MemoryMB),
-		"--memory-swap", fmt.Sprintf("%dm", lim.MemoryMB),
-		"--cpus", strconv.FormatFloat(lim.CPUs, 'f', 2, 64),
-		"--pids-limit", strconv.Itoa(lim.PidsLimit),
+	envelope, err := s.envelopeArgs(ctx, req, lim)
+	if err != nil {
+		return "", err
 	}
-	egressArgs, egressEnv := s.egressNetworkArgs(lim)
-	args = append(args, egressArgs...)
+	args := append([]string{"run", "-d", "--name", name,
+		"--tmpfs", sessionRunDir + ":rw,size=1m,mode=1777"}, envelope...)
 	if !lim.WritableFS {
-		args = append(args,
-			"--read-only",
-			"--tmpfs", sandboxTmpfs(lim),
-			"--workdir", sandboxWorkdir,
-		)
-	}
-	for _, m := range req.Mounts {
-		if strings.TrimSpace(m.Source) == "" || strings.TrimSpace(m.Target) == "" {
-			return "", fmt.Errorf("sandbox: invalid mount")
-		}
-		spec := fmt.Sprintf("type=bind,src=%s,dst=%s", m.Source, m.Target)
-		if m.ReadOnly {
-			spec += ",readonly"
-		}
-		args = append(args, "--mount", spec)
-	}
-	for k, v := range req.Env {
-		args = append(args, "--env", k+"="+v)
-	}
-	for k, v := range egressEnv {
-		args = append(args, "--env", k+"="+v)
+		args = append(args, "--workdir", sandboxWorkdir)
 	}
 	// Image selection: an explicit per-exec Image wins (browser_use's Chrome
 	// image); else the configured computer-use image; else the locked default.
@@ -516,9 +532,7 @@ func (s *DockerSandbox) CloseSession(id string) error {
 	if !ok {
 		name = "agentray-ses-" + key
 	}
-	rmCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	_ = exec.CommandContext(rmCtx, s.docker, "rm", "-f", name).Run()
+	s.removeContainer(name)
 	return nil
 }
 

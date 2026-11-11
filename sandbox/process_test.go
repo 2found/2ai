@@ -39,16 +39,16 @@ func TestHostSandboxInteractiveProcessRoundTrip(t *testing.T) {
 func TestDockerInteractiveUsesHardenedOneShotEnvelope(t *testing.T) {
 	var _ agentcore.ProcessSandbox = NewDockerSandbox()
 	sb := NewDockerSandbox(WithImage("lsp-image:test"))
-	args, err := sb.oneShotArgs(agentcore.SandboxExec{
+	run, err := sb.prepare(context.Background(), agentcore.SandboxExec{
 		Argv:    []string{"gopls", "serve"},
 		Env:     map[string]string{"HOME": "/work"},
 		Mounts:  []agentcore.SandboxMount{{Source: "/host/work", Target: "/workspace", ReadOnly: true}},
 		Workdir: "/workspace",
-	}, withDefaults(agentcore.SandboxLimits{}), "lsp-test")
+	})
 	if err != nil {
-		t.Fatalf("oneShotArgs: %v", err)
+		t.Fatalf("prepare: %v", err)
 	}
-	joined := strings.Join(args, " ")
+	joined := strings.Join(run.args, " ")
 	for _, want := range []string{
 		"run --rm -i", "--cap-drop ALL", "--security-opt no-new-privileges",
 		"--network none", "--read-only", "readonly", "--workdir /workspace",
@@ -62,17 +62,18 @@ func TestDockerInteractiveUsesHardenedOneShotEnvelope(t *testing.T) {
 
 func TestDockerEvalProcessUsesHardenedWritableWorkspaceEnvelope(t *testing.T) {
 	sb := NewDockerSandbox(WithImage("fallback:test"))
-	args, err := sb.oneShotArgs(agentcore.SandboxExec{
-		Argv:    []string{"python3", "-u", "-c", "runner"},
-		Env:     map[string]string{"HOME": "/work", "PYTHONUNBUFFERED": "1"},
-		Image:   "python-eval:test",
-		Mounts:  []agentcore.SandboxMount{{Source: "/host/work", Target: "/workspace"}},
-		Workdir: "/workspace",
-	}, withDefaults(agentcore.SandboxLimits{TimeoutSeconds: 3600, RunAsHostUser: true}), "eval-test")
+	run, err := sb.prepare(context.Background(), agentcore.SandboxExec{
+		Argv:        []string{"python3", "-u", "-c", "runner"},
+		Env:         map[string]string{"HOME": "/work", "PYTHONUNBUFFERED": "1"},
+		Image:       "python-eval:test",
+		Mounts:      []agentcore.SandboxMount{{Source: "/host/work", Target: "/workspace"}},
+		Workdir:     "/workspace",
+		Constraints: agentcore.SandboxLimits{TimeoutSeconds: 3600, RunAsHostUser: true},
+	})
 	if err != nil {
-		t.Fatalf("oneShotArgs: %v", err)
+		t.Fatalf("prepare: %v", err)
 	}
-	joined := strings.Join(args, " ")
+	joined := strings.Join(run.args, " ")
 	for _, want := range []string{
 		"run --rm -i", "--cap-drop ALL", "--security-opt no-new-privileges",
 		"--network none", "--read-only", "--workdir /workspace",

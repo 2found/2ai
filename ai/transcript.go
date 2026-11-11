@@ -213,17 +213,46 @@ func GetCurrentSystemPrompt(messages []Message) string {
 	return ""
 }
 
+// CollapseSystemMessages prepares a transcript for a provider without
+// mid-conversation system messages. Named sections are the system prompt: the
+// latest value of each is folded into the head, with the current tool set.
+// Unnamed text from a system message after the first turn is volatile (a
+// per-turn plugin reminder), so it stays at its position as a user-side
+// system reminder instead of rewriting the system prompt: the provider's
+// cached prefix (tools, system, earlier turns) survives every change to it.
+// A reminder inside a tool-call/tool-result exchange waits until the results
+// end, because providers require results to follow their call.
 func CollapseSystemMessages(context TranscriptContext) TranscriptContext {
+	leading := 0
+	for leading < len(context.messages) && context.messages[leading].Role == "system" {
+		leading++
+	}
 	messages := []Message{}
 	if head := GetCurrentSystemMessage(context.messages); head != nil {
+		parts := []string{}
+		for _, message := range context.messages[:leading] {
+			if text := ContentText(message.Content); text != "" {
+				parts = append(parts, text)
+			}
+		}
+		head.Content = TextContent(strings.Join(parts, "\n\n"))
 		messages = append(messages, *head)
 	}
-	for _, message := range context.messages {
-		if message.Role != "system" {
-			messages = append(messages, message)
+	var pending []Message
+	for _, message := range context.messages[leading:] {
+		switch message.Role {
+		case "system":
+			if text := ContentText(message.Content); text != "" {
+				pending = append(pending, Message{Role: "user", Content: TextContent("<system-reminder>\n" + text + "\n</system-reminder>"), Timestamp: message.Timestamp, reminder: true})
+			}
+			continue
+		case "toolResult":
+		default:
+			messages, pending = append(messages, pending...), nil
 		}
+		messages = append(messages, message)
 	}
-	return TranscriptContext{messages: messages}
+	return TranscriptContext{messages: append(messages, pending...)}
 }
 
 func ResolveTranscript(context TranscriptContext, supportsMidConvoSystemMessages bool) TranscriptContext {

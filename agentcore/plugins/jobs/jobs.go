@@ -2,13 +2,15 @@
 //
 // Without it every tool is synchronous: a long crawl, build, render, or export
 // blocks the whole run until it finishes, and a run that has to wait cannot
-// also think. With it a tool calls jobs.From(ctx).Start(...), returns a job id
-// immediately, and the model keeps working; the built-in job_list / job_status
-// / job_wait / job_cancel tools observe and stop the work, and jobs that
-// finished since the last turn are announced at the top of the next one.
+// also think. With it a tool calls agentcore.LaunchBackground, returns a job
+// receipt immediately, and the model keeps working; the built-in job_list /
+// job_status / job_wait / job_cancel tools observe and stop the work, and jobs
+// that finished since the last turn are announced at the top of the next one.
 //
-// Every job is fenced to the run that started it and cancelled when that run
-// ends, so a job can neither outlive its owner nor be observed by another run.
+// Every run gets its own board, so a job can be neither observed nor cancelled
+// by another run, and every job is cancelled when its run ends. The board's
+// records are checkpointed: a resumed run can still read the results of jobs
+// that finished, and learns which ones the end of the previous run interrupted.
 package jobs
 
 import (
@@ -16,7 +18,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -24,103 +25,50 @@ import (
 	"github.com/2found/2ai/agentcore"
 )
 
-type JobState string
+type state string
 
 const (
-	JobRunning   JobState = "running"
-	JobSucceeded JobState = "succeeded"
-	JobFailed    JobState = "failed"
-	JobCancelled JobState = "cancelled"
+	running   state = "running"
+	succeeded state = "succeeded"
+	failed    state = "failed"
+	cancelled state = "cancelled"
 )
 
-// Done reports whether the state is terminal.
-func (s JobState) Done() bool { return s != JobRunning }
-
-// Job is one unit of background work.
-type Job struct {
-	ID    string   `json:"id"`
-	Tool  string   `json:"tool"`
-	Label string   `json:"label"`
-	State JobState `json:"state"`
-	// Result is the work's output once it succeeds, bounded by the store.
+// record is one unit of background work as the model, the receipt and the
+// checkpoint see it.
+type record struct {
+	ID    string `json:"id"`
+	Tool  string `json:"tool"`
+	Label string `json:"label"`
+	State state  `json:"state"`
+	// Result is the work's output once it succeeds, bounded by the board.
 	Result string `json:"result,omitempty"`
-	// Err is the failure message once it fails.
+	// Err is the failure message once it fails or is cancelled.
 	Err       string    `json:"error,omitempty"`
 	StartedAt time.Time `json:"started_at"`
-	EndedAt   time.Time `json:"ended_at,omitempty"`
+	EndedAt   time.Time `json:"ended_at,omitzero"`
+	// Announced is set once a completion notice carried the job.
+	Announced bool `json:"announced,omitempty"`
 }
 
-// Duration is how long the job ran (so far, if still running).
-func (j Job) Duration() time.Duration {
-	if j.EndedAt.IsZero() {
-		return time.Since(j.StartedAt)
+func (r record) done() bool { return r.State != running }
+
+// duration is how long the job ran (so far, if still running).
+func (r record) duration() time.Duration {
+	if r.EndedAt.IsZero() {
+		return time.Since(r.StartedAt)
 	}
-	return j.EndedAt.Sub(j.StartedAt)
+	return r.EndedAt.Sub(r.StartedAt)
 }
 
-// ErrJobNotFound is returned for an unknown job, and for a job owned by another
-// session — the two are deliberately indistinguishable so a job id is not an
-// existence oracle across sessions.
-var ErrJobNotFound = errors.New("agentcore: job not found")
-
-// JobStore owns background work for a run. Implementations must fence every
-// operation by owner: an id from another owner behaves exactly like an unknown
-// id. LocalJobStore is the in-process default.
-type JobStore interface {
-	// Start launches fn and returns immediately with a Running job.
-	Start(ctx context.Context, owner string, spec JobSpec) (Job, error)
-	// Get returns one job, or ErrJobNotFound.
-	Get(owner, id string) (Job, error)
-	// List returns the owner's jobs, newest first.
-	List(owner string) []Job
-	// Cancel requests cancellation. Cancelling a finished job is a no-op.
-	Cancel(owner, id string) error
-	// Wait blocks until the job is terminal or the context ends, returning the
-	// job as of that moment.
-	Wait(ctx context.Context, owner, id string) (Job, error)
-	// DrainCompleted returns jobs that reached a terminal state since the last
-	// drain for this owner, clearing the pending-notice set.
-	DrainCompleted(owner string) []Job
-	// CancelAll stops every running job for an owner. The loop calls it when a
-	// run ends so background work cannot outlive the run that started it.
-	CancelAll(owner string)
-}
-
-// JobSpec describes work to launch.
-type JobSpec struct {
-	// Tool is the tool that started the job (descriptive; used in notices).
-	Tool string
-	// Label is a short human description ("export 2.3M rows").
-	Label string
-	// Run performs the work. Its context is cancelled when the job is cancelled
-	// or the run ends. The returned string is the job's result.
-	Run func(ctx context.Context) (string, error)
-}
+// errNotFound is returned for an id this run's board does not hold.
+var errNotFound = errors.New("job not found")
 
 // Plugin installs background jobs.
 type Plugin struct {
-	// MaxConcurrent bounds running jobs per owner in the default store. Zero uses 15; -1 disables the ceiling.
+	// MaxConcurrent bounds running jobs per run. Zero uses 15; -1 disables the ceiling.
 	MaxConcurrent int
-	// Store owns the work. nil uses a fresh LocalJobStore for the run.
-	Store JobStore
-	// MaxResultBytes bounds a job result held in the store, so a completed job's
-	// output cannot blow the context when the model reads it. 0 uses the run's
-	// limits.MaxToolResultLen.
-	MaxResultBytes int
-	// MaxWaitSeconds bounds one job_wait call so the model cannot park the run
-	// forever on a job that never finishes. 0 uses defaultJobMaxWait.
-	MaxWaitSeconds int
-	// SuppressCompletionNotice turns OFF the synthetic user message that lists
-	// jobs finished since the last turn. The notice is on by default because
-	// without it the model must poll job_status, burning a turn per check — and
-	// a model that forgets to poll never learns its work finished at all.
-	SuppressCompletionNotice bool
 }
-
-// Local installs the in-process job store — the right default for a single
-// server. A custom store must preserve run ownership and cancellation; durable
-// host tasks belong on the consumer's existing task queue.
-func Local() Plugin { return Plugin{} }
 
 // Name identifies the plugin and the extension it installs.
 func (Plugin) Name() string { return "jobs" }
@@ -131,109 +79,282 @@ func (p Plugin) Register(r *agentcore.Registry) error {
 	return nil
 }
 
-// BeginRun resolves the policy and binds a launcher to THIS run.
-//
-// info.Owner is the fence: it is the session id on a durable run and a unique
-// token otherwise, so a job started here is invisible to every other run and a
-// tool cannot forge another run's owner — it never sees one.
+const (
+	defaultMaxConcurrent = 15
+	// maxWait bounds one job_wait call so the model cannot park the run forever
+	// on a job that never finishes.
+	maxWait = 120 * time.Second
+	// defaultResultBytes bounds a stored result when the run sets no tool
+	// result limit, so a completed job's output cannot blow the context.
+	defaultResultBytes = 16 * 1024
+	// keepFinished bounds the finished records a board holds. Announced ones
+	// beyond it are evicted oldest first, so a long run that starts many jobs
+	// neither grows its memory nor its checkpoint without bound.
+	keepFinished = 16
+	// stopWait bounds how long a finish waits for pending work to settle.
+	stopWait = 5 * time.Second
+	// noticeInlineLimit bounds how much of a finished job's output rides into
+	// the completion notice before the model is told to fetch it explicitly.
+	noticeInlineLimit = 2 * 1024
+)
+
+// interrupted is the error a resumed run reads for a job the end of the
+// previous run cancelled.
+const interrupted = "interrupted: the run ended before this job finished; start it again if it is still needed"
+
+// BeginRun gives the run its own board.
 func (p Plugin) BeginRun(_ context.Context, info agentcore.RunInfo) (agentcore.Extension, error) {
 	if p.MaxConcurrent < -1 {
 		return nil, fmt.Errorf("jobs: MaxConcurrent must be nonnegative or -1")
 	}
-	store := p.Store
-	if store == nil {
-		local := NewLocalJobStore()
-		local.maxConcurrent = p.MaxConcurrent
-		store = local
+	limit := p.MaxConcurrent
+	if limit == 0 {
+		limit = defaultMaxConcurrent
 	}
-	maxBytes := p.MaxResultBytes
+	maxBytes := info.Limits.MaxToolResultLen
 	if maxBytes <= 0 {
-		maxBytes = info.Limits.MaxToolResultLen
+		maxBytes = defaultResultBytes
 	}
-	if maxBytes <= 0 {
-		maxBytes = defaultJobResultBytes
-	}
-	wait := time.Duration(p.MaxWaitSeconds) * time.Second
-	if wait <= 0 {
-		wait = defaultJobMaxWait
-	}
-	return &jobsRun{
-		store:    store,
-		owner:    info.Owner,
-		maxWait:  wait,
-		notify:   !p.SuppressCompletionNotice,
-		maxBytes: maxBytes,
-	}, nil
+	return &board{maxConcurrent: limit, maxBytes: maxBytes, stopWait: stopWait}, nil
+}
+
+// board is one run's background work and the agentcore.Extension the loop
+// talks to.
+type board struct {
+	maxConcurrent int
+	maxBytes      int
+	stopWait      time.Duration
+
+	mu   sync.Mutex
+	seq  int
+	jobs []*job // oldest first
+}
+
+type job struct {
+	record
+	cancel   context.CancelFunc
+	finished chan struct{} // closed once the work has returned
 }
 
 // Name identifies the extension in composition diagnostics.
-func (*jobsRun) Name() string { return "jobs" }
+func (*board) Name() string { return "jobs" }
 
 // Tools contributes the four observation tools.
-func (p *jobsRun) Tools() []agentcore.Tool {
+func (b *board) Tools() []agentcore.Tool {
 	return []agentcore.Tool{
-		jobListTool{jobTool{policy: p, name: "job_list"}},
-		jobStatusTool{jobTool{policy: p, name: "job_status"}},
-		jobWaitTool{jobTool{policy: p, name: "job_wait"}},
-		jobCancelTool{jobTool{policy: p, name: "job_cancel"}},
+		jobListTool{jobTool{b, "job_list"}},
+		jobStatusTool{jobTool{b, "job_status"}},
+		jobWaitTool{jobTool{b, "job_wait"}},
+		jobCancelTool{jobTool{b, "job_cancel"}},
 	}
 }
-
-// SelfGated exempts the job_* tools from the permission gate. They observe and
-// cancel work THIS run launched — the owner fence makes that literal — so they
-// grant no capability the agent did not already exercise by starting the job.
-func (jobTool) SelfGated() bool { return true }
 
 // RunContext binds the launcher to the run's context, which is how a tool finds
 // it. The context is the run's, not the calling tool's, so work survives the
 // call that started it and still dies with the run.
-func (p *jobsRun) RunContext(ctx context.Context) context.Context {
-	launcher := Launcher{store: p.store, owner: p.owner, base: ctx, maxBytes: p.maxBytes}
-	ctx = withJobs(ctx, launcher)
+func (b *board) RunContext(ctx context.Context) context.Context {
 	return agentcore.WithBackgroundLauncher(ctx, func(tool, label string, run func(context.Context) (string, error)) (json.RawMessage, error) {
-		job, err := launcher.Start(tool, label, run)
+		r, err := b.start(ctx, tool, label, run)
 		if err != nil {
 			return nil, err
 		}
-		return json.Marshal(job)
+		return json.Marshal(r)
 	})
+}
+
+// start launches the work in a goroutine and records it as running.
+func (b *board) start(ctx context.Context, tool, label string, run func(context.Context) (string, error)) (record, error) {
+	if run == nil {
+		return record{}, errors.New("background job has no work to run")
+	}
+	if err := ctx.Err(); err != nil {
+		return record{}, err
+	}
+	b.mu.Lock()
+	active := 0
+	for _, j := range b.jobs {
+		if !j.done() {
+			active++
+		}
+	}
+	if b.maxConcurrent > 0 && active >= b.maxConcurrent {
+		b.mu.Unlock()
+		return record{}, fmt.Errorf("concurrent job capacity reached (%d)", b.maxConcurrent)
+	}
+	b.seq++
+	jobCtx, cancel := context.WithCancel(ctx)
+	j := &job{record: record{ID: fmt.Sprintf("job_%d", b.seq), Tool: tool, Label: label, State: running, StartedAt: time.Now()}, cancel: cancel, finished: make(chan struct{})}
+	b.jobs = append(b.jobs, j)
+	snapshot := j.record
+	b.mu.Unlock()
+
+	go func() {
+		defer close(j.finished)
+		defer cancel()
+		var out string
+		var err error
+		// A panicking job must not take the process down: it becomes a failed
+		// job, exactly like one that returned an error.
+		func() {
+			defer func() {
+				if r := recover(); r != nil {
+					err = fmt.Errorf("job panicked: %v", r)
+				}
+			}()
+			out, err = run(jobCtx)
+		}()
+		b.mu.Lock()
+		defer b.mu.Unlock()
+		j.EndedAt = time.Now()
+		switch {
+		case jobCtx.Err() != nil && err != nil:
+			j.State = cancelled
+			j.Err = jobCtx.Err().Error()
+		case err != nil:
+			j.State = failed
+			j.Err = err.Error()
+		default:
+			j.State = succeeded
+			j.Result = agentcore.TruncateMiddle(out, b.maxBytes)
+		}
+		b.evictLocked()
+	}()
+	return snapshot, nil
+}
+
+// evictLocked drops the oldest announced finished records beyond keepFinished.
+// Unannounced ones stay until a notice has carried them.
+func (b *board) evictLocked() {
+	finished := 0
+	for _, j := range b.jobs {
+		if j.done() {
+			finished++
+		}
+	}
+	kept := b.jobs[:0]
+	for _, j := range b.jobs {
+		if finished > keepFinished && j.done() && j.Announced {
+			finished--
+			continue
+		}
+		kept = append(kept, j)
+	}
+	clear(b.jobs[len(kept):])
+	b.jobs = kept
+}
+
+func (b *board) find(id string) (*job, error) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	for _, j := range b.jobs {
+		if j.ID == id {
+			return j, nil
+		}
+	}
+	return nil, errNotFound
+}
+
+func (b *board) get(id string) (record, error) {
+	j, err := b.find(id)
+	if err != nil {
+		return record{}, err
+	}
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	return j.record, nil
+}
+
+// list returns the board's records, newest first.
+func (b *board) list() []record {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	out := make([]record, 0, len(b.jobs))
+	for i := len(b.jobs) - 1; i >= 0; i-- {
+		out = append(out, b.jobs[i].record)
+	}
+	return out
+}
+
+// wait blocks until the job is terminal or ctx ends.
+func (b *board) wait(ctx context.Context, id string) (record, error) {
+	j, err := b.find(id)
+	if err != nil {
+		return record{}, err
+	}
+	select {
+	case <-j.finished:
+	case <-ctx.Done():
+	}
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	return j.record, nil
+}
+
+// drain returns the finished jobs no notice has carried yet, and marks them
+// announced.
+func (b *board) drain() []record {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	var out []record
+	for _, j := range b.jobs {
+		if j.done() && !j.Announced {
+			j.Announced = true
+			out = append(out, j.record)
+		}
+	}
+	b.evictLocked()
+	return out
 }
 
 // CloseRun cancels everything this run started. A job outliving its run would
 // be unobservable and uncancellable — nothing left to look at it.
-func (p *jobsRun) CloseRun() {
-	p.store.CancelAll(p.owner)
+func (b *board) CloseRun() {
+	b.mu.Lock()
+	pending := make([]*job, 0, len(b.jobs))
+	for _, j := range b.jobs {
+		if !j.done() {
+			pending = append(pending, j)
+		}
+	}
+	b.mu.Unlock()
+	for _, j := range pending {
+		j.cancel()
+	}
 	// Cooperative workers (including native model streams) settle before usage
 	// is folded. An arbitrary host job cannot hold shutdown forever.
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	for _, job := range p.store.List(p.owner) {
-		if !job.State.Done() {
-			_, _ = p.store.Wait(ctx, p.owner, job.ID)
+	timeout := time.NewTimer(5 * time.Second)
+	defer timeout.Stop()
+	for _, j := range pending {
+		select {
+		case <-j.finished:
+		case <-timeout.C:
+			return
 		}
 	}
 }
 
-// A normal final answer must account for the work the run launched. Wait here
-// instead of allowing a confident finish to silently cancel pending children.
-func (p *jobsRun) TurnStopping(ctx context.Context, _ agentcore.StopInfo) agentcore.StopDecision {
-	waitCtx, cancel := context.WithTimeout(ctx, min(p.maxWait, 5*time.Second))
+// TurnStopping makes a normal final answer account for the work the run
+// launched. It waits briefly instead of letting a confident finish silently
+// cancel pending work.
+func (b *board) TurnStopping(ctx context.Context, _ agentcore.StopInfo) agentcore.StopDecision {
+	waitCtx, cancel := context.WithTimeout(ctx, b.stopWait)
 	defer cancel()
-	for _, job := range p.store.List(p.owner) {
-		if !job.State.Done() {
-			if settled, err := p.store.Wait(waitCtx, p.owner, job.ID); err != nil || !settled.State.Done() {
-				if ctx.Err() != nil {
-					return agentcore.StopDecision{StopReason: "aborted"}
-				}
-				return agentcore.StopDecision{Continue: true, Inject: []agentcore.Message{{Role: agentcore.RoleUser, Content: "Background work is still pending. Use job_wait/status to collect it, or job_cancel if it is no longer needed; do not claim it completed."}}}
+	for _, r := range b.list() {
+		if r.done() {
+			continue
+		}
+		if settled, err := b.wait(waitCtx, r.ID); err != nil || !settled.done() {
+			if ctx.Err() != nil {
+				return agentcore.StopDecision{StopReason: "aborted"}
 			}
+			return agentcore.StopDecision{Continue: true, Inject: []agentcore.Message{{Role: agentcore.RoleUser, Content: "Background work is still pending. Use job_wait/status to collect it, or job_cancel if it is no longer needed; do not claim it completed."}}}
 		}
 	}
-	completed := p.store.DrainCompleted(p.owner)
+	completed := b.drain()
 	if len(completed) == 0 {
 		return agentcore.StopDecision{}
 	}
-	return agentcore.StopDecision{Continue: true, Inject: []agentcore.Message{{Role: agentcore.RoleUser, Content: completionNotice(completed, p.maxBytes)}}}
+	return agentcore.StopDecision{Continue: true, Inject: []agentcore.Message{{Role: agentcore.RoleUser, Content: completionNotice(completed, b.maxBytes)}}}
 }
 
 // BeforeStep announces jobs that finished since the last turn.
@@ -241,97 +362,86 @@ func (p *jobsRun) TurnStopping(ctx context.Context, _ agentcore.StopInfo) agentc
 // The notice is a synthetic user message the LOOP appends and persists, so the
 // model learns its background work is done without spending a turn on a poll —
 // and a resumed run replays the same conversation.
-func (p *jobsRun) BeforeStep(context.Context, agentcore.StepInfo) agentcore.StepDecision {
-	if !p.notify {
-		return agentcore.StepDecision{}
-	}
-	drainer, ok := p.store.(interface{ DrainCompleted(owner string) []Job })
-	if !ok {
-		return agentcore.StepDecision{}
-	}
-	done := drainer.DrainCompleted(p.owner)
-	text := completionNotice(done, jobNoticeInlineLimit)
+func (b *board) BeforeStep(context.Context, agentcore.StepInfo) agentcore.StepDecision {
+	text := completionNotice(b.drain(), noticeInlineLimit)
 	if text == "" {
 		return agentcore.StepDecision{}
 	}
-	return agentcore.StepDecision{
-		AdditionalContexts: []agentcore.Message{{Role: agentcore.RoleUser, Content: text}},
+	return agentcore.StepDecision{AdditionalContexts: []agentcore.Message{{Role: agentcore.RoleUser, Content: text}}}
+}
+
+type checkpoint struct {
+	Seq  int      `json:"seq"`
+	Jobs []record `json:"jobs,omitempty"`
+}
+
+// NativeState checkpoints the board. It is taken before CloseRun cancels the
+// work, so a job still running here is recorded as interrupted and not yet
+// announced: the resumed run's first step tells the model, instead of the job
+// silently vanishing. No goroutine survives a run; only its record does.
+func (b *board) NativeState() (json.RawMessage, error) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	out := checkpoint{Seq: b.seq, Jobs: make([]record, 0, len(b.jobs))}
+	for _, j := range b.jobs {
+		r := j.record
+		if !r.done() {
+			r.State, r.Err, r.EndedAt, r.Announced = cancelled, interrupted, time.Now(), false
+		}
+		out.Jobs = append(out.Jobs, r)
 	}
+	return json.Marshal(out)
 }
 
-const (
-	defaultJobMaxWait     = 120 * time.Second
-	defaultJobResultBytes = 16 * 1024
-)
-
-// jobsRun is one run's resolved jobs configuration — the agentcore.Extension
-// the loop talks to.
-type jobsRun struct {
-	store    JobStore
-	owner    string
-	maxWait  time.Duration
-	notify   bool
-	maxBytes int
-}
-
-// Launcher is what a tool receives from the run context: a store already
-// bound to this run's owner, so a tool can start background work without being
-// handed — or being able to forge — another session's owner token.
-type Launcher struct {
-	store    JobStore
-	owner    string
-	base     context.Context
-	maxBytes int
-}
-
-// Start launches background work and returns immediately. The job's context is
-// derived from the RUN's context, not the calling tool's, so the work is not
-// cancelled when the tool call that started it returns — that is the entire
-// point — but still dies with the run.
-func (l Launcher) Start(tool, label string, run func(ctx context.Context) (string, error)) (Job, error) {
-	if l.store == nil {
-		return Job{}, errors.New("agentcore: background jobs are not enabled for this run")
+// RestoreNativeState loads a checkpointed board. Ids keep counting from the
+// checkpoint so a new job never reuses the id of one the transcript names.
+func (b *board) RestoreNativeState(raw json.RawMessage) error {
+	var saved checkpoint
+	if err := json.Unmarshal(raw, &saved); err != nil {
+		return err
 	}
-	bounded := func(ctx context.Context) (string, error) {
-		out, err := run(ctx)
-		return agentcore.TruncateMiddle(out, l.maxBytes), err
+	if saved.Seq < 0 || len(saved.Jobs) > saved.Seq {
+		return errors.New("jobs: invalid checkpoint")
 	}
-	return l.store.Start(l.base, l.owner, JobSpec{Tool: tool, Label: label, Run: bounded})
-}
-
-type jobsCtxKey struct{}
-
-// withJobs puts a bound launcher on the context for tools to find.
-func withJobs(ctx context.Context, l Launcher) context.Context {
-	return context.WithValue(ctx, jobsCtxKey{}, l)
-}
-
-// From returns the background-job launcher for the current run, if this plugin
-// is installed. A tool that wants to go asynchronous calls this and degrades
-// gracefully when it is absent; a tool that does not is unaffected. That is the
-// whole ejection contract for jobs: the ok result is the plugin's presence.
-func From(ctx context.Context) (Launcher, bool) {
-	l, ok := ctx.Value(jobsCtxKey{}).(Launcher)
-	return l, ok
+	restored := make([]*job, 0, len(saved.Jobs))
+	for _, r := range saved.Jobs {
+		switch r.State {
+		case succeeded, failed, cancelled:
+		default:
+			return fmt.Errorf("jobs: invalid checkpointed state %q", r.State)
+		}
+		if r.ID == "" {
+			return errors.New("jobs: checkpointed job has no id")
+		}
+		r.Result = agentcore.TruncateMiddle(r.Result, b.maxBytes)
+		finished := make(chan struct{})
+		close(finished)
+		restored = append(restored, &job{record: r, cancel: func() {}, finished: finished})
+	}
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	b.seq, b.jobs = saved.Seq, restored
+	b.evictLocked()
+	return nil
 }
 
 // completionNotice renders the synthetic user message announcing finished jobs.
 // It carries the result inline for a small success so the common case costs the
 // model no extra tool call, and points at job_status when the payload is large.
-func completionNotice(jobs []Job, inlineLimit int) string {
+func completionNotice(jobs []record, inlineLimit int) string {
 	if len(jobs) == 0 {
 		return ""
 	}
 	var b strings.Builder
 	b.WriteString("Background job update:\n")
 	for _, j := range jobs {
-		fmt.Fprintf(&b, "- %s (%s, %s, %s)", j.ID, j.Tool, j.State, j.Duration().Round(time.Millisecond))
+		fmt.Fprintf(&b, "- %s (%s, %s, %s)", j.ID, j.Tool, j.State, j.duration().Round(time.Millisecond))
 		switch {
-		case j.State == JobFailed:
+		case j.State == failed || j.State == cancelled:
 			fmt.Fprintf(&b, ": %s", j.Err)
-		case j.State == JobSucceeded && len(j.Result) <= inlineLimit:
+		case j.State == succeeded && len(j.Result) <= inlineLimit:
 			fmt.Fprintf(&b, ":\n%s", j.Result)
-		case j.State == JobSucceeded:
+		case j.State == succeeded:
 			fmt.Fprintf(&b, ": %d bytes of output — call job_status with id %q to read it.", len(j.Result), j.ID)
 		}
 		b.WriteString("\n")
@@ -339,200 +449,20 @@ func completionNotice(jobs []Job, inlineLimit int) string {
 	return strings.TrimRight(b.String(), "\n")
 }
 
-// jobNoticeInlineLimit bounds how much of a finished job's output rides into the
-// completion notice before the model is told to fetch it explicitly.
-const jobNoticeInlineLimit = 2 * 1024
-
-// LocalJobStore runs jobs as goroutines in this process, fenced by owner.
-type LocalJobStore struct {
-	maxConcurrent int
-	mu            sync.Mutex
-	jobs          map[string]*localJob // keyed by owner + "/" + id
-	pending       map[string][]string  // owner -> ids finished but not yet drained
-	seq           int
-}
-
-type localJob struct {
-	job    Job
-	cancel context.CancelFunc
-	done   chan struct{}
-	owner  string
-}
-
-// NewLocalJobStore builds an empty in-process store.
-func NewLocalJobStore() *LocalJobStore {
-	return &LocalJobStore{jobs: make(map[string]*localJob), pending: make(map[string][]string)}
-}
-
-func jobKey(owner, id string) string { return owner + "/" + id }
-
-// Start launches the work in a goroutine and records it as Running.
-func (s *LocalJobStore) Start(ctx context.Context, owner string, spec JobSpec) (Job, error) {
-	if spec.Run == nil {
-		return Job{}, errors.New("agentcore: job spec has no work to run")
-	}
-	if err := ctx.Err(); err != nil {
-		return Job{}, err
-	}
-	s.mu.Lock()
-	active := 0
-	for _, job := range s.jobs {
-		if job.owner == owner && !job.job.State.Done() {
-			active++
-		}
-	}
-	limit := s.maxConcurrent
-	if limit == 0 {
-		limit = 15
-	}
-	if limit > 0 && active >= limit {
-		s.mu.Unlock()
-		return Job{}, fmt.Errorf("agentcore: concurrent job capacity reached (%d)", limit)
-	}
-	s.seq++
-	id := fmt.Sprintf("job_%d", s.seq)
-	jobCtx, cancel := context.WithCancel(ctx)
-	lj := &localJob{
-		job:    Job{ID: id, Tool: spec.Tool, Label: spec.Label, State: JobRunning, StartedAt: time.Now()},
-		cancel: cancel,
-		done:   make(chan struct{}),
-		owner:  owner,
-	}
-	s.jobs[jobKey(owner, id)] = lj
-	snapshot := lj.job
-	s.mu.Unlock()
-
-	go func() {
-		defer close(lj.done)
-		// A panicking job must not take the process down: it becomes a failed
-		// job, exactly like one that returned an error.
-		var out string
-		var err error
-		func() {
-			defer func() {
-				if r := recover(); r != nil {
-					err = fmt.Errorf("job panicked: %v", r)
-				}
-			}()
-			out, err = spec.Run(jobCtx)
-		}()
-
-		s.mu.Lock()
-		defer s.mu.Unlock()
-		lj.job.EndedAt = time.Now()
-		switch {
-		case jobCtx.Err() != nil && err != nil:
-			lj.job.State = JobCancelled
-			lj.job.Err = jobCtx.Err().Error()
-		case err != nil:
-			lj.job.State = JobFailed
-			lj.job.Err = err.Error()
-		default:
-			lj.job.State = JobSucceeded
-			lj.job.Result = out
-		}
-		s.pending[owner] = append(s.pending[owner], id)
-	}()
-
-	return snapshot, nil
-}
-
-// Get returns a snapshot of one job, fenced by owner.
-func (s *LocalJobStore) Get(owner, id string) (Job, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	lj, ok := s.jobs[jobKey(owner, id)]
-	if !ok {
-		return Job{}, ErrJobNotFound
-	}
-	return lj.job, nil
-}
-
-// List returns the owner's jobs, newest first.
-func (s *LocalJobStore) List(owner string) []Job {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	out := make([]Job, 0, 8)
-	for _, lj := range s.jobs {
-		if lj.owner == owner {
-			out = append(out, lj.job)
-		}
-	}
-	sort.Slice(out, func(i, j int) bool { return out[i].StartedAt.After(out[j].StartedAt) })
-	return out
-}
-
-// Cancel requests cancellation; cancelling a finished job is a no-op.
-func (s *LocalJobStore) Cancel(owner, id string) error {
-	s.mu.Lock()
-	lj, ok := s.jobs[jobKey(owner, id)]
-	s.mu.Unlock()
-	if !ok {
-		return ErrJobNotFound
-	}
-	lj.cancel()
-	return nil
-}
-
-// Wait blocks until the job is terminal or ctx ends.
-func (s *LocalJobStore) Wait(ctx context.Context, owner, id string) (Job, error) {
-	s.mu.Lock()
-	lj, ok := s.jobs[jobKey(owner, id)]
-	s.mu.Unlock()
-	if !ok {
-		return Job{}, ErrJobNotFound
-	}
-	select {
-	case <-lj.done:
-	case <-ctx.Done():
-	}
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	return lj.job, nil
-}
-
-// DrainCompleted returns and clears the owner's finished-since-last-drain set.
-func (s *LocalJobStore) DrainCompleted(owner string) []Job {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	ids := s.pending[owner]
-	if len(ids) == 0 {
-		return nil
-	}
-	delete(s.pending, owner)
-	out := make([]Job, 0, len(ids))
-	for _, id := range ids {
-		if lj, ok := s.jobs[jobKey(owner, id)]; ok {
-			out = append(out, lj.job)
-		}
-	}
-	return out
-}
-
-// CancelAll stops every running job for an owner.
-func (s *LocalJobStore) CancelAll(owner string) {
-	s.mu.Lock()
-	cancels := make([]context.CancelFunc, 0, 4)
-	for _, lj := range s.jobs {
-		if lj.owner == owner && !lj.job.State.Done() {
-			cancels = append(cancels, lj.cancel)
-		}
-	}
-	s.mu.Unlock()
-	for _, c := range cancels {
-		c()
-	}
-}
-
 // ---- model-facing tools -------------------------------------------------
 
 // jobTool is the shared base for the built-in job_* tools.
 type jobTool struct {
-	policy *jobsRun
-	name   string
+	board *board
+	name  string
 }
 
 func (t jobTool) Name() string { return t.name }
+
+// SelfGated exempts the job_* tools from the permission gate. They observe and
+// cancel work THIS run launched — the board is per run — so they grant no
+// capability the agent did not already exercise by starting the job.
+func (jobTool) SelfGated() bool { return true }
 
 // Parallel: every job tool is a bounded read or a cancel request, safe to run
 // alongside other parallel-eligible calls in the same batch.
@@ -582,13 +512,13 @@ func (t jobListTool) Schema() agentcore.ToolSchema {
 }
 
 func (t jobListTool) Run(_ context.Context, _ string) (string, error) {
-	jobs := t.policy.store.List(t.policy.owner)
+	jobs := t.board.list()
 	if len(jobs) == 0 {
 		return "No background jobs.", nil
 	}
 	var b strings.Builder
 	for _, j := range jobs {
-		fmt.Fprintf(&b, "%s\t%s\t%s\t%s\t%s\n", j.ID, j.State, j.Tool, j.Duration().Round(time.Millisecond), j.Label)
+		fmt.Fprintf(&b, "%s\t%s\t%s\t%s\t%s\n", j.ID, j.State, j.Tool, j.duration().Round(time.Millisecond), j.Label)
 	}
 	return strings.TrimRight(b.String(), "\n"), nil
 }
@@ -605,7 +535,7 @@ func (t jobStatusTool) Run(_ context.Context, args string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	j, err := t.policy.store.Get(t.policy.owner, id)
+	j, err := t.board.get(id)
 	if err != nil {
 		return "", err
 	}
@@ -637,17 +567,17 @@ func (t jobWaitTool) Run(ctx context.Context, args string) (string, error) {
 	if strings.TrimSpace(in.ID) == "" {
 		return "", errors.New("id is required")
 	}
-	wait := t.policy.maxWait
+	wait := maxWait
 	if in.Timeout > 0 && time.Duration(in.Timeout)*time.Second < wait {
 		wait = time.Duration(in.Timeout) * time.Second
 	}
 	waitCtx, cancel := context.WithTimeout(ctx, wait)
 	defer cancel()
-	j, err := t.policy.store.Wait(waitCtx, t.policy.owner, in.ID)
+	j, err := t.board.wait(waitCtx, in.ID)
 	if err != nil {
 		return "", err
 	}
-	if !j.State.Done() {
+	if !j.done() {
 		return fmt.Sprintf("Job %s is still running after %s. It was not cancelled — continue with other work and check job_status later.", j.ID, wait), nil
 	}
 	return renderJob(j), nil
@@ -664,9 +594,11 @@ func (t jobCancelTool) Run(_ context.Context, args string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if err := t.policy.store.Cancel(t.policy.owner, id); err != nil {
+	j, err := t.board.find(id)
+	if err != nil {
 		return "", err
 	}
+	j.cancel()
 	return fmt.Sprintf("Cancellation requested for %s.", id), nil
 }
 
@@ -686,21 +618,17 @@ func jobIDArg(args string) (string, error) {
 }
 
 // renderJob formats a job for the model.
-func renderJob(j Job) string {
-	head := fmt.Sprintf("job %s (%s) — %s after %s", j.ID, j.Tool, j.State, j.Duration().Round(time.Millisecond))
+func renderJob(j record) string {
+	head := fmt.Sprintf("job %s (%s) — %s after %s", j.ID, j.Tool, j.State, j.duration().Round(time.Millisecond))
 	switch j.State {
-	case JobSucceeded:
+	case succeeded:
 		if j.Result == "" {
 			return head + "\n(no output)"
 		}
 		return head + "\n" + j.Result
-	case JobFailed, JobCancelled:
+	case failed, cancelled:
 		return head + "\n" + j.Err
 	default:
 		return head
 	}
 }
-
-// ToolNames are the tools this plugin contributes, for a consumer that wants to
-// name them in a policy or a UI.
-var ToolNames = []string{"job_list", "job_status", "job_wait", "job_cancel"}

@@ -16,7 +16,23 @@ import (
 	"github.com/2found/2ai/telemetry/llm"
 )
 
+// Payload capture is opt-in: an opted-in host sees the provider's error text,
+// and one that did not still gets a bounded failure kind for the refused
+// admission instead of "unknown".
 func TestNativeTelemetryIncludesFailedFallbackAndPreservesCheckpoint(t *testing.T) {
+	for _, tc := range []struct {
+		name      string
+		limits    []telemetry.Limits
+		admission string
+	}{
+		{"payloads", []telemetry.Limits{{Payloads: 16}}, "admission failed"},
+		{"operational", nil, "provider_admission"},
+	} {
+		t.Run(tc.name, func(t *testing.T) { nativeTelemetryFallbackCase(t, tc.limits, tc.admission) })
+	}
+}
+
+func nativeTelemetryFallbackCase(t *testing.T, limits []telemetry.Limits, admission string) {
 	signature := "opaque-native-signature"
 	script := ai.ScriptedStream(
 		ai.Message{Role: "assistant", StopReason: "toolUse", Usage: &ai.Usage{Input: 3, Observation: ai.UsageObservation{UsageObserved: true, UsageSource: "explicit"}}, Content: ai.BlockContent(
@@ -54,7 +70,7 @@ func TestNativeTelemetryIncludesFailedFallbackAndPreservesCheckpoint(t *testing.
 					if number, ok := event.Attributes.Get("ai.attempt").(int); !ok || number < 1 {
 						t.Error("attempt lacks numeric identity")
 					}
-					if kind, ok := event.Attributes.Get("ai.failure_kind").(string); !ok || (kind != "none" && kind != "unknown") {
+					if kind, ok := event.Attributes.Get("ai.failure_kind").(string); !ok || (kind != "none" && kind != "unknown" && kind != "provider_admission") {
 						t.Error("attempt lacks bounded failure diagnostic")
 					}
 					if _, ok := event.Attributes.Get("ai.output_committed").(bool); !ok {
@@ -70,7 +86,7 @@ func TestNativeTelemetryIncludesFailedFallbackAndPreservesCheckpoint(t *testing.
 			}
 			panic("sink unavailable") // must not stop delivery of other attempts
 		}), llm.Metadata{TraceID: "test-run"})
-	})
+	}, limits...)
 	safe, err := telemetry.NewSafeObserver(telemetry.SafeObserverOptions{})
 	if err != nil {
 		t.Fatal(err)
@@ -87,7 +103,7 @@ func TestNativeTelemetryIncludesFailedFallbackAndPreservesCheckpoint(t *testing.
 	for _, record := range records {
 		models = append(models, record.Model)
 	}
-	if !reflect.DeepEqual(models, []string{"unavailable", "failed", "test", "test"}) || records[0].Err != "admission failed" || records[1].StopReason != "error" {
+	if !reflect.DeepEqual(models, []string{"unavailable", "failed", "test", "test"}) || records[0].Err != admission || records[1].StopReason != "error" {
 		t.Fatalf("attempts lost/duplicated: %+v", records)
 	}
 	if result.Final != "finished" || result.Usage.InputTokens != 10 || effects != 1 {

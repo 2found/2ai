@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/2found/2ai/ai/protocol"
+	"github.com/google/uuid"
 )
 
 const (
@@ -526,6 +526,7 @@ func (p *AntigravityProvider) Stream(ctx context.Context, req protocol.ChatReque
 					InputTokens:     u.PromptTokenCount - u.CachedContentTokenCount,
 					OutputTokens:    u.CandidatesTokenCount + u.ThoughtsTokenCount,
 					CacheReadTokens: u.CachedContentTokenCount,
+					ReasoningTokens: u.ThoughtsTokenCount,
 				}
 			}
 		}

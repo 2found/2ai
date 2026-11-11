@@ -9,7 +9,7 @@ import (
 )
 
 func TestCompactorCheckpointRestoreAndIsolation(t *testing.T) {
-	raw := piRequestJSON(piLongRequest())
+	raw := nativeRequestJSON(nativeLongRequest())
 	var persisted json.RawMessage
 	options := CompactorOptions{
 		Revision: "revision-a",
@@ -26,7 +26,7 @@ func TestCompactorCheckpointRestoreAndIsolation(t *testing.T) {
 	if compactor.Checkpoint() != nil {
 		t.Fatal("new compactor invented a checkpoint")
 	}
-	want := compactor.Transform(context.Background(), raw)
+	want := compactor.testTransform(context.Background(), raw)
 	checkpoint := compactor.Checkpoint()
 	if len(checkpoint) == 0 || !SameJSON(checkpoint, persisted) {
 		t.Fatal("checkpoint differs from the committed summary")
@@ -43,7 +43,7 @@ func TestCompactorCheckpointRestoreAndIsolation(t *testing.T) {
 	checkpoint[0] = '!'
 	exported := restored.Checkpoint()
 	exported[0] = '!'
-	if got := restored.Transform(context.Background(), raw); !SameJSON(got, want) {
+	if got := restored.testTransform(context.Background(), raw); !SameJSON(got, want) {
 		t.Fatal("restored view changed after caller mutated checkpoint bytes")
 	}
 	before := restored.Checkpoint()
@@ -52,7 +52,7 @@ func TestCompactorCheckpointRestoreAndIsolation(t *testing.T) {
 		t.Fatal(err)
 	}
 	foreign["revision"] = "revision-b"
-	for _, invalid := range []json.RawMessage{[]byte(`null`), []byte(`{"prefix_count":0}`), piRequestJSON(foreign)} {
+	for _, invalid := range []json.RawMessage{[]byte(`null`), []byte(`{"prefix_count":0}`), nativeRequestJSON(foreign)} {
 		if err := restored.Restore(invalid); err == nil {
 			t.Fatal("invalid or foreign checkpoint restored")
 		}

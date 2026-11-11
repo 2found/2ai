@@ -547,6 +547,9 @@ type responsesWireUsage struct {
 	InputTokensDetails *struct {
 		CachedTokens int `json:"cached_tokens"`
 	} `json:"input_tokens_details,omitempty"`
+	OutputTokensDetails *struct {
+		ReasoningTokens int `json:"reasoning_tokens"`
+	} `json:"output_tokens_details,omitempty"`
 }
 
 func (u *responsesWireUsage) usage() protocol.Usage {
@@ -560,9 +563,11 @@ func (u *responsesWireUsage) usage() protocol.Usage {
 	if cached > u.InputTokens {
 		cached = u.InputTokens
 	}
-	return protocol.Usage{
-		InputTokens: u.InputTokens - cached, OutputTokens: u.OutputTokens, CacheReadTokens: cached,
+	usage := protocol.Usage{InputTokens: u.InputTokens - cached, OutputTokens: u.OutputTokens, CacheReadTokens: cached}
+	if u.OutputTokensDetails != nil {
+		usage.ReasoningTokens = u.OutputTokensDetails.ReasoningTokens
 	}
+	return usage
 }
 
 type responsesWireResponse struct {

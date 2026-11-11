@@ -4093,6 +4093,15 @@
               "content": [
                 {
                   "type": "input_text",
+                  "text": "<system-reminder>\nnew rule\n</system-reminder>"
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
                   "text": "next"
                 }
               ]

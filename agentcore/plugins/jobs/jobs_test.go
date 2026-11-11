@@ -2,7 +2,9 @@ package jobs
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"strings"
 	"testing"
 	"time"
@@ -10,250 +12,210 @@ import (
 	"github.com/2found/2ai/agentcore"
 )
 
-func beginJobs(t *testing.T, p Plugin, owner string) *jobsRun {
+func begin(t *testing.T, p Plugin) *board {
 	t.Helper()
-	ext, err := p.BeginRun(context.Background(), agentcore.RunInfo{Owner: owner, Limits: agentcore.DefaultLimits()})
+	ext, err := p.BeginRun(context.Background(), agentcore.RunInfo{Limits: agentcore.DefaultLimits()})
 	if err != nil {
 		t.Fatalf("BeginRun: %v", err)
 	}
-	if ext == nil {
-		t.Fatal("jobs must accept every run — it needs nothing from the session")
-	}
-	return ext.(*jobsRun)
+	return ext.(*board)
 }
 
-func testJobsPolicy(t *testing.T, owner string) *jobsRun {
+func settled(t *testing.T, b *board, id string) record {
 	t.Helper()
-	p := beginJobs(t, Plugin{}, owner)
-	if p == nil {
-		t.Fatal("expected a jobs policy")
+	r, err := b.wait(context.Background(), id)
+	if err != nil {
+		t.Fatal(err)
 	}
-	return p
+	return r
+}
+
+func block(ctx context.Context) (string, error) { <-ctx.Done(); return "", ctx.Err() }
+
+func TestRejectsNegativeConcurrency(t *testing.T) {
+	if _, err := (Plugin{MaxConcurrent: -2}).BeginRun(context.Background(), agentcore.RunInfo{}); err == nil {
+		t.Fatal("MaxConcurrent below -1 accepted")
+	}
 }
 
 func TestConfiguredConcurrencyAndUnlimited(t *testing.T) {
-	for _, limit := range []int{2, -1} {
-		p := beginJobs(t, Plugin{MaxConcurrent: limit}, "configured")
+	for _, limit := range []int{0, 2, -1} {
+		b := begin(t, Plugin{MaxConcurrent: limit})
 		ctx, cancel := context.WithCancel(context.Background())
-		l := launcherFor(p, ctx)
-		count := 20
-		if limit > 0 {
-			count = limit
-		}
+		count := map[int]int{0: defaultMaxConcurrent, 2: 2, -1: 20}[limit]
 		for range count {
-			if _, err := l.Start("work", "wait", func(ctx context.Context) (string, error) { <-ctx.Done(); return "", ctx.Err() }); err != nil {
+			if _, err := b.start(ctx, "work", "wait", block); err != nil {
 				cancel()
 				t.Fatal(err)
 			}
 		}
-		if limit > 0 {
-			if _, err := l.Start("extra", "wait", func(context.Context) (string, error) { return "", nil }); err == nil {
-				t.Error("concurrency ceiling ignored")
-			}
+		_, err := b.start(ctx, "extra", "wait", block)
+		if limit >= 0 && err == nil {
+			t.Errorf("limit %d: concurrency ceiling ignored", limit)
+		}
+		if limit < 0 && err != nil {
+			t.Errorf("unlimited board refused a job: %v", err)
 		}
 		cancel()
-		waitFor(t, func() bool {
-			for _, j := range p.store.List(p.owner) {
-				if !j.State.Done() {
-					return false
-				}
-			}
-			return true
-		})
-	}
-}
-
-func launcherFor(p *jobsRun, ctx context.Context) Launcher {
-	return Launcher{store: p.store, owner: p.owner, base: ctx, maxBytes: p.maxBytes}
-}
-
-func waitFor(t *testing.T, cond func() bool) {
-	t.Helper()
-	deadline := time.Now().Add(2 * time.Second)
-	for time.Now().Before(deadline) {
-		if cond() {
-			return
+		for _, r := range b.list() {
+			settled(t, b, r.ID)
 		}
-		time.Sleep(time.Millisecond)
 	}
-	t.Fatal("condition not met within 2s")
 }
 
-func TestJobs_StartReturnsImmediatelyAndCompletes(t *testing.T) {
-	p := testJobsPolicy(t, "sess-1")
-	l := launcherFor(p, context.Background())
-
+func TestStartReturnsImmediatelyAndCompletes(t *testing.T) {
+	b := begin(t, Plugin{})
 	release := make(chan struct{})
 	started := time.Now()
-	job, err := l.Start("export", "big export", func(ctx context.Context) (string, error) {
+	r, err := b.start(context.Background(), "export", "big export", func(context.Context) (string, error) {
 		<-release
 		return "42 rows", nil
 	})
 	if err != nil {
-		t.Fatalf("Start: %v", err)
+		t.Fatal(err)
 	}
-	// The whole point: Start does not block on the work.
-	if time.Since(started) > 500*time.Millisecond {
-		t.Fatal("Start blocked on the job")
+	if time.Since(started) > 500*time.Millisecond || r.State != running {
+		t.Fatalf("start blocked on the work or returned %s", r.State)
 	}
-	if job.State != JobRunning {
-		t.Fatalf("state = %s, want running", job.State)
-	}
-
 	close(release)
-	waitFor(t, func() bool {
-		j, _ := p.store.Get(p.owner, job.ID)
-		return j.State == JobSucceeded
-	})
-	j, _ := p.store.Get(p.owner, job.ID)
-	if j.Result != "42 rows" {
-		t.Fatalf("result = %q", j.Result)
-	}
-	if j.EndedAt.IsZero() {
-		t.Fatal("a finished job must record EndedAt")
+	got := settled(t, b, r.ID)
+	if got.State != succeeded || got.Result != "42 rows" || got.EndedAt.IsZero() {
+		t.Fatalf("finished job = %+v", got)
 	}
 }
 
-func TestJobs_FailureAndPanicBothBecomeFailedJobs(t *testing.T) {
-	p := testJobsPolicy(t, "sess-1")
-	l := launcherFor(p, context.Background())
-
-	bad, _ := l.Start("t", "boom", func(context.Context) (string, error) {
-		return "", errors.New("query exploded")
-	})
-	// A panicking job must not take the process down with it.
-	panicky, _ := l.Start("t", "panic", func(context.Context) (string, error) {
-		panic("nil map write")
-	})
-
-	waitFor(t, func() bool {
-		a, _ := p.store.Get(p.owner, bad.ID)
-		b, _ := p.store.Get(p.owner, panicky.ID)
-		return a.State.Done() && b.State.Done()
-	})
-	a, _ := p.store.Get(p.owner, bad.ID)
-	if a.State != JobFailed || !strings.Contains(a.Err, "query exploded") {
-		t.Fatalf("error job = %+v", a)
+func TestFailureAndPanicBothBecomeFailedJobs(t *testing.T) {
+	b := begin(t, Plugin{})
+	bad, _ := b.start(context.Background(), "t", "boom", func(context.Context) (string, error) { return "", errors.New("query exploded") })
+	panicky, _ := b.start(context.Background(), "t", "panic", func(context.Context) (string, error) { panic("nil map write") })
+	if r := settled(t, b, bad.ID); r.State != failed || !strings.Contains(r.Err, "query exploded") {
+		t.Fatalf("error job = %+v", r)
 	}
-	b, _ := p.store.Get(p.owner, panicky.ID)
-	if b.State != JobFailed || !strings.Contains(b.Err, "panicked") {
-		t.Fatalf("panicking job = %+v", b)
+	if r := settled(t, b, panicky.ID); r.State != failed || !strings.Contains(r.Err, "panicked") {
+		t.Fatalf("panicking job = %+v", r)
 	}
 }
 
-func TestJobs_FencedByOwner(t *testing.T) {
-	store := NewLocalJobStore()
-	mine := &jobsRun{store: store, owner: "sess-1", maxWait: time.Second, maxBytes: 1024}
-	theirs := &jobsRun{store: store, owner: "sess-2", maxWait: time.Second, maxBytes: 1024}
-
-	job, err := launcherFor(mine, context.Background()).Start("t", "secret", func(context.Context) (string, error) {
-		return "sensitive output", nil
-	})
-	if err != nil {
-		t.Fatalf("Start: %v", err)
+func TestStartWithoutWorkOrOnEndedRunIsRejected(t *testing.T) {
+	b := begin(t, Plugin{})
+	if _, err := b.start(context.Background(), "t", "x", nil); err == nil {
+		t.Fatal("a job with no work was accepted")
 	}
-	waitFor(t, func() bool { j, _ := store.Get("sess-1", job.ID); return j.State.Done() })
-
-	// Another session must not be able to read, wait on, or cancel it.
-	if _, err := store.Get(theirs.owner, job.ID); !errors.Is(err, ErrJobNotFound) {
-		t.Fatalf("cross-owner Get = %v, want ErrJobNotFound", err)
-	}
-	if err := store.Cancel(theirs.owner, job.ID); !errors.Is(err, ErrJobNotFound) {
-		t.Fatalf("cross-owner Cancel = %v", err)
-	}
-	if _, err := store.Wait(context.Background(), theirs.owner, job.ID); !errors.Is(err, ErrJobNotFound) {
-		t.Fatalf("cross-owner Wait = %v", err)
-	}
-	if got := store.List(theirs.owner); len(got) != 0 {
-		t.Fatalf("cross-owner List returned %d jobs", len(got))
-	}
-	// And the notice drain is per-owner too.
-	if got := store.DrainCompleted(theirs.owner); len(got) != 0 {
-		t.Fatalf("cross-owner drain returned %d jobs", len(got))
-	}
-	if got := store.DrainCompleted("sess-1"); len(got) != 1 {
-		t.Fatalf("owner drain returned %d jobs, want 1", len(got))
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	if _, err := b.start(ctx, "t", "x", block); err == nil {
+		t.Fatal("a job was started on an ended run")
 	}
 }
 
-func TestJobs_CancelStopsTheWork(t *testing.T) {
-	p := testJobsPolicy(t, "sess-1")
-	l := launcherFor(p, context.Background())
-
-	job, _ := l.Start("t", "long", func(ctx context.Context) (string, error) {
-		<-ctx.Done()
-		return "", ctx.Err()
-	})
-	if err := p.store.Cancel(p.owner, job.ID); err != nil {
-		t.Fatalf("Cancel: %v", err)
+// Each run has its own board, so one run's ids mean nothing to another.
+func TestBoardsAreIsolatedPerRun(t *testing.T) {
+	mine, theirs := begin(t, Plugin{}), begin(t, Plugin{})
+	r, _ := mine.start(context.Background(), "t", "secret", func(context.Context) (string, error) { return "sensitive output", nil })
+	settled(t, mine, r.ID)
+	if _, err := theirs.get(r.ID); !errors.Is(err, errNotFound) {
+		t.Fatalf("other run read the job: %v", err)
 	}
-	waitFor(t, func() bool { j, _ := p.store.Get(p.owner, job.ID); return j.State.Done() })
-	j, _ := p.store.Get(p.owner, job.ID)
-	if j.State != JobCancelled {
-		t.Fatalf("state = %s, want cancelled", j.State)
+	if _, err := (jobCancelTool{jobTool{theirs, "job_cancel"}}).Run(context.Background(), `{"id":"`+r.ID+`"}`); !errors.Is(err, errNotFound) {
+		t.Fatalf("other run cancelled the job: %v", err)
 	}
-	// Cancelling again is a no-op, not an error.
-	if err := p.store.Cancel(p.owner, job.ID); err != nil {
-		t.Fatalf("second Cancel: %v", err)
+	if got := theirs.drain(); len(got) != 0 {
+		t.Fatalf("other run was notified of %d jobs", len(got))
 	}
 }
 
-func TestJobs_CancelAllStopsEverythingForAnOwner(t *testing.T) {
-	store := NewLocalJobStore()
-	mine := &jobsRun{store: store, owner: "sess-1", maxWait: time.Second, maxBytes: 1024}
-	theirs := &jobsRun{store: store, owner: "sess-2", maxWait: time.Second, maxBytes: 1024}
-
-	block := func(ctx context.Context) (string, error) { <-ctx.Done(); return "", ctx.Err() }
-	a, _ := launcherFor(mine, context.Background()).Start("t", "a", block)
-	b, _ := launcherFor(theirs, context.Background()).Start("t", "b", block)
-
-	store.CancelAll("sess-1")
-	waitFor(t, func() bool { j, _ := store.Get("sess-1", a.ID); return j.State.Done() })
-
-	// The other owner's job is untouched — CancelAll is a run boundary, not a
-	// process-wide kill switch.
-	other, _ := store.Get("sess-2", b.ID)
-	if other.State.Done() {
-		t.Fatal("CancelAll leaked across owners")
+func TestCancelStopsTheWorkAndIsIdempotent(t *testing.T) {
+	b := begin(t, Plugin{})
+	r, _ := b.start(context.Background(), "t", "long", block)
+	cancel := jobCancelTool{jobTool{b, "job_cancel"}}
+	if _, err := cancel.Run(context.Background(), `{"id":"`+r.ID+`"}`); err != nil {
+		t.Fatal(err)
 	}
-	store.CancelAll("sess-2")
+	if got := settled(t, b, r.ID); got.State != cancelled {
+		t.Fatalf("state = %s, want cancelled", got.State)
+	}
+	if _, err := cancel.Run(context.Background(), `{"id":"`+r.ID+`"}`); err != nil {
+		t.Fatalf("second cancel: %v", err)
+	}
 }
 
-func TestJobs_DrainCompletedIsOneShot(t *testing.T) {
-	p := testJobsPolicy(t, "sess-1")
-	l := launcherFor(p, context.Background())
-	job, _ := l.Start("t", "quick", func(context.Context) (string, error) { return "done", nil })
-	waitFor(t, func() bool { j, _ := p.store.Get(p.owner, job.ID); return j.State.Done() })
+func TestCloseRunCancelsRunningWork(t *testing.T) {
+	b := begin(t, Plugin{})
+	r, _ := b.start(context.Background(), "t", "long", block)
+	b.CloseRun()
+	if got, _ := b.get(r.ID); got.State != cancelled {
+		t.Fatalf("job outlived its run: %+v", got)
+	}
+}
 
-	first := p.store.DrainCompleted(p.owner)
-	if len(first) != 1 {
+func TestDrainIsOneShot(t *testing.T) {
+	b := begin(t, Plugin{})
+	r, _ := b.start(context.Background(), "t", "quick", func(context.Context) (string, error) { return "done", nil })
+	settled(t, b, r.ID)
+	if first := b.drain(); len(first) != 1 {
 		t.Fatalf("first drain returned %d, want 1", len(first))
 	}
 	// A notice must be delivered exactly once, or every later turn re-announces
 	// the same finished job.
-	if second := p.store.DrainCompleted(p.owner); len(second) != 0 {
+	if second := b.drain(); len(second) != 0 {
 		t.Fatalf("second drain returned %d, want 0", len(second))
 	}
-}
-
-func TestJobs_ResultIsBoundedBeforeItReachesTheModel(t *testing.T) {
-	p := beginJobs(t, Plugin{MaxResultBytes: 200}, "sess-1")
-	l := launcherFor(p, context.Background())
-	job, _ := l.Start("t", "huge", func(context.Context) (string, error) {
-		return strings.Repeat("x", 100_000), nil
-	})
-	waitFor(t, func() bool { j, _ := p.store.Get(p.owner, job.ID); return j.State.Done() })
-	j, _ := p.store.Get(p.owner, job.ID)
-	if len(j.Result) > 200 {
-		t.Fatalf("stored result is %d bytes — an unbounded job result blows the context", len(j.Result))
+	if d := b.BeforeStep(context.Background(), agentcore.StepInfo{}); len(d.AdditionalContexts) != 0 {
+		t.Fatalf("announced job re-announced: %+v", d)
 	}
 }
 
-func TestJobs_WaitReturnsWhileStillRunningWithoutCancelling(t *testing.T) {
-	p := beginJobs(t, Plugin{MaxWaitSeconds: 1}, "sess-1")
-	l := launcherFor(p, context.Background())
+func TestResultIsBoundedBeforeItReachesTheModel(t *testing.T) {
+	ext, err := (Plugin{}).BeginRun(context.Background(), agentcore.RunInfo{Limits: agentcore.Limits{MaxToolResultLen: 200}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	b := ext.(*board)
+	r, _ := b.start(context.Background(), "t", "huge", func(context.Context) (string, error) { return strings.Repeat("x", 100_000), nil })
+	if got := settled(t, b, r.ID); len(got.Result) > 200 {
+		t.Fatalf("stored result is %d bytes", len(got.Result))
+	}
+}
+
+// A long run that starts many jobs must not keep every record forever: finished
+// and announced ones beyond the cap are evicted oldest first, and an
+// unannounced one is kept until a notice carries it.
+func TestFinishedRecordsAreBounded(t *testing.T) {
+	b := begin(t, Plugin{MaxConcurrent: -1})
+	quick := func(context.Context) (string, error) { return "ok", nil }
+	var ids []string
+	for range keepFinished * 3 {
+		r, err := b.start(context.Background(), "t", "quick", quick)
+		if err != nil {
+			t.Fatal(err)
+		}
+		settled(t, b, r.ID)
+		ids = append(ids, r.ID)
+		b.drain()
+	}
+	unannounced, _ := b.start(context.Background(), "t", "late", quick)
+	settled(t, b, unannounced.ID)
+	if n := len(b.list()); n > keepFinished+1 {
+		t.Fatalf("board holds %d records, want at most %d", n, keepFinished+1)
+	}
+	if _, err := b.get(ids[0]); !errors.Is(err, errNotFound) {
+		t.Fatal("oldest announced record was not evicted")
+	}
+	if _, err := b.get(ids[len(ids)-1]); err != nil {
+		t.Fatal("newest announced record was evicted")
+	}
+	if _, err := b.get(unannounced.ID); err != nil {
+		t.Fatal("an unannounced record was evicted before a notice carried it")
+	}
+	if got := b.drain(); len(got) != 1 || got[0].ID != unannounced.ID {
+		t.Fatalf("drain after eviction = %+v", got)
+	}
+}
+
+func TestWaitReturnsWhileStillRunningWithoutCancelling(t *testing.T) {
+	b := begin(t, Plugin{})
 	release := make(chan struct{})
-	job, _ := l.Start("t", "slow", func(ctx context.Context) (string, error) {
+	r, _ := b.start(context.Background(), "t", "slow", func(ctx context.Context) (string, error) {
 		select {
 		case <-release:
 			return "eventually", nil
@@ -261,177 +223,190 @@ func TestJobs_WaitReturnsWhileStillRunningWithoutCancelling(t *testing.T) {
 			return "", ctx.Err()
 		}
 	})
-
-	tool := jobWaitTool{jobTool{policy: p, name: "job_wait"}}
-	out, err := tool.Run(context.Background(), `{"id":"`+job.ID+`","timeout_seconds":1}`)
-	if err != nil {
-		t.Fatalf("job_wait: %v", err)
+	out, err := (jobWaitTool{jobTool{b, "job_wait"}}).Run(context.Background(), `{"id":"`+r.ID+`","timeout_seconds":1}`)
+	if err != nil || !strings.Contains(out, "still running") {
+		t.Fatalf("job_wait = %q, %v", out, err)
 	}
-	if !strings.Contains(out, "still running") {
-		t.Fatalf("expected a still-running answer, got %q", out)
-	}
-	// Timing out the wait must NOT cancel the job — that would silently destroy
-	// work the model merely got impatient about.
-	j, _ := p.store.Get(p.owner, job.ID)
-	if j.State != JobRunning {
-		t.Fatalf("wait timeout cancelled the job (state=%s)", j.State)
+	// Timing out the wait must NOT cancel the job.
+	if got, _ := b.get(r.ID); got.State != running {
+		t.Fatalf("wait timeout cancelled the job (state=%s)", got.State)
 	}
 	close(release)
-	waitFor(t, func() bool { j, _ := p.store.Get(p.owner, job.ID); return j.State == JobSucceeded })
+	if got := settled(t, b, r.ID); got.State != succeeded {
+		t.Fatalf("state = %s", got.State)
+	}
 }
 
-func TestJobs_ToolsRenderStateAndRejectUnknownIDs(t *testing.T) {
-	p := testJobsPolicy(t, "sess-1")
-	l := launcherFor(p, context.Background())
-	job, _ := l.Start("run_sql", "count rows", func(context.Context) (string, error) { return "1234", nil })
-	waitFor(t, func() bool { j, _ := p.store.Get(p.owner, job.ID); return j.State.Done() })
-
-	list := jobListTool{jobTool{policy: p, name: "job_list"}}
-	out, err := list.Run(context.Background(), `{}`)
-	if err != nil || !strings.Contains(out, job.ID) || !strings.Contains(out, "succeeded") {
+func TestToolsRenderStateAndRejectUnknownIDs(t *testing.T) {
+	b := begin(t, Plugin{})
+	list := jobListTool{jobTool{b, "job_list"}}
+	if out, err := list.Run(context.Background(), `{}`); err != nil || !strings.Contains(out, "No background jobs") {
+		t.Fatalf("job_list on empty = %q, %v", out, err)
+	}
+	r, _ := b.start(context.Background(), "run_sql", "count rows", func(context.Context) (string, error) { return "1234", nil })
+	settled(t, b, r.ID)
+	if out, err := list.Run(context.Background(), `{}`); err != nil || !strings.Contains(out, r.ID) || !strings.Contains(out, "succeeded") {
 		t.Fatalf("job_list = %q, %v", out, err)
 	}
-
-	status := jobStatusTool{jobTool{policy: p, name: "job_status"}}
-	out, err = status.Run(context.Background(), `{"id":"`+job.ID+`"}`)
-	if err != nil || !strings.Contains(out, "1234") {
+	status := jobStatusTool{jobTool{b, "job_status"}}
+	if out, err := status.Run(context.Background(), `{"id":"`+r.ID+`"}`); err != nil || !strings.Contains(out, "1234") {
 		t.Fatalf("job_status = %q, %v", out, err)
 	}
-	if _, err := status.Run(context.Background(), `{"id":"job_nope"}`); !errors.Is(err, ErrJobNotFound) {
-		t.Fatalf("unknown id = %v, want ErrJobNotFound", err)
+	if _, err := status.Run(context.Background(), `{"id":"job_nope"}`); !errors.Is(err, errNotFound) {
+		t.Fatalf("unknown id = %v", err)
 	}
 	if _, err := status.Run(context.Background(), `{}`); err == nil {
 		t.Fatal("missing id must be an error")
 	}
-
-	cancel := jobCancelTool{jobTool{policy: p, name: "job_cancel"}}
-	if _, err := cancel.Run(context.Background(), `{"id":"job_nope"}`); !errors.Is(err, ErrJobNotFound) {
-		t.Fatalf("cancel unknown = %v", err)
+	if _, err := (jobWaitTool{jobTool{b, "job_wait"}}).Run(context.Background(), `{"id":"job_nope"}`); !errors.Is(err, errNotFound) {
+		t.Fatalf("wait unknown = %v", err)
 	}
 }
 
-func TestJobs_EmptyListIsExplicit(t *testing.T) {
-	p := testJobsPolicy(t, "sess-1")
-	out, err := jobListTool{jobTool{policy: p, name: "job_list"}}.Run(context.Background(), `{}`)
-	if err != nil || !strings.Contains(out, "No background jobs") {
-		t.Fatalf("job_list on empty = %q, %v", out, err)
-	}
-}
-
-func TestJobs_CompletionNoticeInlinesSmallResultsAndDefersLargeOnes(t *testing.T) {
-	small := Job{ID: "job_1", Tool: "run_sql", State: JobSucceeded, Result: "7 rows",
-		StartedAt: time.Now().Add(-time.Second), EndedAt: time.Now()}
-	large := Job{ID: "job_2", Tool: "export", State: JobSucceeded, Result: strings.Repeat("y", 5000),
-		StartedAt: time.Now().Add(-time.Second), EndedAt: time.Now()}
-	failed := Job{ID: "job_3", Tool: "crawl", State: JobFailed, Err: "host unreachable",
-		StartedAt: time.Now().Add(-time.Second), EndedAt: time.Now()}
-
-	notice := completionNotice([]Job{small, large, failed}, 2048)
-	if !strings.Contains(notice, "7 rows") {
-		t.Fatal("a small result should ride inline — otherwise the model spends a turn fetching it")
+func TestCompletionNoticeInlinesSmallResultsAndDefersLargeOnes(t *testing.T) {
+	now := time.Now()
+	notice := completionNotice([]record{
+		{ID: "job_1", Tool: "run_sql", State: succeeded, Result: "7 rows", StartedAt: now.Add(-time.Second), EndedAt: now},
+		{ID: "job_2", Tool: "export", State: succeeded, Result: strings.Repeat("y", 5000), StartedAt: now.Add(-time.Second), EndedAt: now},
+		{ID: "job_3", Tool: "crawl", State: failed, Err: "host unreachable", StartedAt: now.Add(-time.Second), EndedAt: now},
+		{ID: "job_4", Tool: "crawl", State: cancelled, Err: interrupted, StartedAt: now.Add(-time.Second), EndedAt: now},
+	}, 2048)
+	for _, want := range []string{"7 rows", "job_status", "host unreachable", interrupted} {
+		if !strings.Contains(notice, want) {
+			t.Fatalf("notice missing %q:\n%s", want, notice)
+		}
 	}
 	if strings.Contains(notice, strings.Repeat("y", 100)) {
 		t.Fatal("a large result must not ride inline")
-	}
-	if !strings.Contains(notice, "job_status") {
-		t.Fatal("a deferred result must tell the model how to fetch it")
-	}
-	if !strings.Contains(notice, "host unreachable") {
-		t.Fatal("a failure must state why")
 	}
 	if completionNotice(nil, 2048) != "" {
 		t.Fatal("no finished jobs means no notice")
 	}
 }
 
-func TestJobs_LauncherWithoutStoreFailsLoud(t *testing.T) {
-	var l Launcher
-	if _, err := l.Start("t", "x", func(context.Context) (string, error) { return "", nil }); err == nil {
-		t.Fatal("a tool starting a job on a run without the jobs seam must get an error")
-	}
-}
-
-func TestJobs_SpecWithoutWorkIsRejected(t *testing.T) {
-	store := NewLocalJobStore()
-	if _, err := store.Start(context.Background(), "o", JobSpec{Tool: "t"}); err == nil {
-		t.Fatal("a job with no work must be rejected")
-	}
-}
-
-func TestJobs_FromContext(t *testing.T) {
-	if _, ok := From(context.Background()); ok {
-		t.Fatal("a run without jobs must not expose a launcher")
-	}
-	p := testJobsPolicy(t, "sess-1")
-	ctx := withJobs(context.Background(), launcherFor(p, context.Background()))
-	l, ok := From(ctx)
-	if !ok {
-		t.Fatal("expected a launcher on the context")
-	}
-	if l.owner != "sess-1" {
-		t.Fatalf("launcher owner = %q — a tool must not be able to address another session", l.owner)
-	}
-}
-
-func TestJobs_NilSettingsDisableTheSeam(t *testing.T) {
-	if p := beginJobs(t, Plugin{}, "sess-1"); p == nil {
-		t.Fatal("nil settings must leave jobs off")
-	}
-}
-
-func TestJobs_NoticeOnByDefault(t *testing.T) {
-	if p := beginJobs(t, Plugin{}, "s"); !p.notify {
-		t.Fatal("completion notices must be on by default — polling is a turn tax")
-	}
-	if p := beginJobs(t, Plugin{SuppressCompletionNotice: true}, "s"); p.notify {
-		t.Fatal("SuppressCompletionNotice must turn notices off")
-	}
-}
-
-func TestLocalJobsBoundConcurrentWorkAndFenceOwners(t *testing.T) {
-	store := NewLocalJobStore()
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	work := JobSpec{Tool: "test", Run: func(ctx context.Context) (string, error) { <-ctx.Done(); return "", ctx.Err() }}
-	for range 15 {
-		if _, err := store.Start(ctx, "owner", work); err != nil {
-			t.Fatal(err)
-		}
-	}
-	if _, err := store.Start(ctx, "owner", work); err == nil {
-		t.Fatal("concurrent capacity not enforced")
-	}
-	other, err := store.Start(ctx, "other", work)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if _, err := store.Get("owner", other.ID); err == nil {
-		t.Fatal("foreign job visible")
-	}
-	store.CancelAll("owner")
-	for _, job := range store.List("owner") {
-		if _, err := store.Wait(context.Background(), "owner", job.ID); err != nil {
-			t.Fatal(err)
-		}
-	}
-	got, err := store.Get("other", other.ID)
-	if err != nil || got.State != JobRunning {
-		t.Fatal("cancellation crossed ownership")
-	}
-	store.CancelAll("other")
-	_, _ = store.Wait(context.Background(), "other", other.ID)
-}
-
 func TestFinishWithPendingJobReturnsControlAfterBoundedWait(t *testing.T) {
-	run := beginJobs(t, Plugin{}, "owner")
-	run.maxWait = time.Millisecond
-	defer run.CloseRun()
-	_, err := run.store.Start(context.Background(), run.owner, JobSpec{Run: func(ctx context.Context) (string, error) { <-ctx.Done(); return "", ctx.Err() }})
+	b := begin(t, Plugin{})
+	defer b.CloseRun()
+	if _, err := b.start(context.Background(), "t", "pending", block); err != nil {
+		t.Fatal(err)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	defer cancel()
+	// The parent ctx ending means the run is aborting, not that the model may
+	// claim the work done.
+	if d := b.TurnStopping(ctx, agentcore.StopInfo{}); d.Continue || d.StopReason != "aborted" {
+		t.Fatalf("aborted finish = %+v", d)
+	}
+	// A live run gets control back with the work still pending.
+	b.stopWait = time.Millisecond
+	if d := b.TurnStopping(context.Background(), agentcore.StopInfo{}); !d.Continue || d.StopReason != "" || len(d.Inject) != 1 || !strings.Contains(d.Inject[0].Content, "still pending") {
+		t.Fatalf("pending work accepted as final: %+v", d)
+	}
+}
+
+func TestFinishAnnouncesWorkThatSettled(t *testing.T) {
+	b := begin(t, Plugin{})
+	r, _ := b.start(context.Background(), "t", "quick", func(context.Context) (string, error) { return "found it", nil })
+	settled(t, b, r.ID)
+	d := b.TurnStopping(context.Background(), agentcore.StopInfo{})
+	if !d.Continue || len(d.Inject) != 1 || !strings.Contains(d.Inject[0].Content, "found it") {
+		t.Fatalf("settled work not announced before the finish: %+v", d)
+	}
+	if again := b.TurnStopping(context.Background(), agentcore.StopInfo{}); again.Continue {
+		t.Fatalf("announced work re-opened the finish: %+v", again)
+	}
+}
+
+// The board survives resume through the native plugin checkpoint: finished
+// results stay readable, an unannounced one is announced on the first resumed
+// step, a job the end of the run interrupted is reported as interrupted rather
+// than vanishing, and new ids never collide with ids the transcript names.
+func TestBoardSurvivesResume(t *testing.T) {
+	first := begin(t, Plugin{})
+	announced, _ := first.start(context.Background(), "run_sql", "count", func(context.Context) (string, error) { return "1234", nil })
+	settled(t, first, announced.ID)
+	first.drain()
+	unannounced, _ := first.start(context.Background(), "export", "export", func(context.Context) (string, error) { return "exported", nil })
+	settled(t, first, unannounced.ID)
+	interruptedJob, _ := first.start(context.Background(), "crawl", "crawl", block)
+	raw, err := first.NativeState()
 	if err != nil {
 		t.Fatal(err)
 	}
-	decision := run.TurnStopping(context.Background(), agentcore.StopInfo{})
-	if !decision.Continue || decision.StopReason != "" || len(decision.Inject) != 1 {
-		t.Fatalf("pending work accepted as final: %+v", decision)
+	first.CloseRun()
+
+	second := begin(t, Plugin{})
+	if err := second.RestoreNativeState(raw); err != nil {
+		t.Fatal(err)
+	}
+	if out, err := (jobStatusTool{jobTool{second, "job_status"}}).Run(context.Background(), `{"id":"`+announced.ID+`"}`); err != nil || !strings.Contains(out, "1234") {
+		t.Fatalf("finished result lost across resume: %q %v", out, err)
+	}
+	notice := second.BeforeStep(context.Background(), agentcore.StepInfo{}).AdditionalContexts
+	if len(notice) != 1 {
+		t.Fatalf("resumed run announced %d messages, want 1", len(notice))
+	}
+	text := notice[0].Content
+	if !strings.Contains(text, unannounced.ID) || !strings.Contains(text, "exported") || !strings.Contains(text, interruptedJob.ID) || !strings.Contains(text, "interrupted") || strings.Contains(text, announced.ID) {
+		t.Fatalf("resumed notice = %q", text)
+	}
+	// Restored records have no goroutine: waiting returns at once.
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	if got, err := second.wait(ctx, interruptedJob.ID); err != nil || got.State != cancelled {
+		t.Fatalf("restored interrupted job = %+v %v", got, err)
+	}
+	next, err := second.start(context.Background(), "t", "new", func(context.Context) (string, error) { return "", nil })
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, id := range []string{announced.ID, unannounced.ID, interruptedJob.ID} {
+		if next.ID == id {
+			t.Fatalf("new job reused checkpointed id %s", id)
+		}
+	}
+	settled(t, second, next.ID)
+}
+
+func TestRestoreRejectsInvalidCheckpoints(t *testing.T) {
+	for name, raw := range map[string]string{
+		"not json":           `{`,
+		"negative seq":       `{"seq":-1}`,
+		"more jobs than seq": `{"seq":0,"jobs":[{"id":"job_1","state":"succeeded"}]}`,
+		"running job":        `{"seq":1,"jobs":[{"id":"job_1","state":"running"}]}`,
+		"unknown state":      `{"seq":1,"jobs":[{"id":"job_1","state":"paused"}]}`,
+		"missing id":         `{"seq":1,"jobs":[{"state":"failed"}]}`,
+	} {
+		t.Run(name, func(t *testing.T) {
+			if err := begin(t, Plugin{}).RestoreNativeState(json.RawMessage(raw)); err == nil {
+				t.Fatal("invalid checkpoint accepted")
+			}
+		})
+	}
+	// A checkpoint is bounded on the way in too: an oversized result is clipped.
+	b := begin(t, Plugin{})
+	if err := b.RestoreNativeState(json.RawMessage(fmt.Sprintf(`{"seq":1,"jobs":[{"id":"job_1","state":"succeeded","result":%q}]}`, strings.Repeat("z", 1_000_000)))); err != nil {
+		t.Fatal(err)
+	}
+	if r, _ := b.get("job_1"); len(r.Result) > agentcore.DefaultLimits().MaxToolResultLen {
+		t.Fatalf("restored result is %d bytes", len(r.Result))
+	}
+}
+
+// The receipt a tool gets back from agentcore.LaunchBackground names the job.
+func TestLaunchBackgroundReceipt(t *testing.T) {
+	b := begin(t, Plugin{})
+	ctx := b.RunContext(context.Background())
+	raw, err := agentcore.LaunchBackground(ctx, "shell", "make", func(context.Context) (string, error) { return "built", nil })
+	if err != nil {
+		t.Fatal(err)
+	}
+	var receipt struct{ ID, Tool, Label, State string }
+	if err := json.Unmarshal(raw, &receipt); err != nil || receipt.ID == "" || receipt.Tool != "shell" || receipt.State != string(running) {
+		t.Fatalf("receipt = %s %v", raw, err)
+	}
+	settled(t, b, receipt.ID)
+	if _, err := agentcore.LaunchBackground(context.Background(), "shell", "make", block); err == nil {
+		t.Fatal("a run without the plugin launched background work")
 	}
 }

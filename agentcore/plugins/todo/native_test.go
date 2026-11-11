@@ -10,7 +10,7 @@ import (
 	"github.com/2found/2ai/agentcore/plugins/todo"
 )
 
-func TestPiPlanRecoveryRequiresSuccessfulExecution(t *testing.T) {
+func TestNativePlanRecoveryRequiresSuccessfulExecution(t *testing.T) {
 	ctx := context.Background()
 	for _, kind := range []string{"denied", "not-executed", "error", "invalid-arguments", "nested-denied", "nested-not-executed", "nested-error", "nested-success"} {
 		t.Run(kind, func(t *testing.T) {
@@ -19,13 +19,13 @@ func TestPiPlanRecoveryRequiresSuccessfulExecution(t *testing.T) {
 				b, _ := json.Marshal(map[string]any{"items": []any{map[string]string{"content": text, "status": "in_progress"}}})
 				return string(b)
 			}
-			appendOutcome := func(audit agentcore.PiToolOutcome) {
+			appendOutcome := func(audit agentcore.ToolOutcome) {
 				payload, _ := json.Marshal(map[string]any{"effectId": "effect", "result": map[string]any{"details": audit}})
-				if err := log.Append(ctx, "plan", agentcore.SessionEntry{Kind: agentcore.EntryPiEffectDone, CallID: "plan-call", Content: string(payload)}); err != nil {
+				if err := log.Append(ctx, "plan", agentcore.SessionEntry{Kind: agentcore.EntryNativeEffectDone, CallID: "plan-call", Content: string(payload)}); err != nil {
 					t.Fatal(err)
 				}
 			}
-			good := agentcore.PiToolOutcome{Executed: true, Trace: agentcore.ToolTrace{Tool: todo.ToolName, Allowed: true, Args: args("original plan")}}
+			good := agentcore.ToolOutcome{Executed: true, Trace: agentcore.ToolTrace{Tool: todo.ToolName, Allowed: true, Args: args("original plan")}}
 			appendOutcome(good)
 			next := good
 			next.Trace.Args = args("replacement plan")
@@ -40,7 +40,7 @@ func TestPiPlanRecoveryRequiresSuccessfulExecution(t *testing.T) {
 				next.Trace.Args = `{"items":[{"content":"","status":"pending"}]}`
 			}
 			if strings.HasPrefix(kind, "nested-") {
-				next = agentcore.PiToolOutcome{Executed: true, Trace: agentcore.ToolTrace{Tool: "eval", Allowed: true}, Invocations: []agentcore.ToolInvocation{{Executed: next.Executed, Trace: next.Trace}}}
+				next = agentcore.ToolOutcome{Executed: true, Trace: agentcore.ToolTrace{Tool: "eval", Allowed: true}, Invocations: []agentcore.ToolInvocation{{Executed: next.Executed, Trace: next.Trace}}}
 			}
 			appendOutcome(next)
 			plan := todo.NewStore()
@@ -58,13 +58,13 @@ func TestPiPlanRecoveryRequiresSuccessfulExecution(t *testing.T) {
 	}
 }
 
-func TestPiPlanIgnoresRequestedCallsAndClearsOnLeaf(t *testing.T) {
+func TestNativePlanIgnoresRequestedCallsAndClearsOnLeaf(t *testing.T) {
 	ctx := context.Background()
 	log := agentcore.NewMemorySessionStore()
-	accepted := agentcore.PiToolOutcome{Executed: true, Trace: agentcore.ToolTrace{Tool: todo.ToolName, Allowed: true, Args: `{"items":[{"content":"accepted plan","status":"pending"}]}`}}
+	accepted := agentcore.ToolOutcome{Executed: true, Trace: agentcore.ToolTrace{Tool: todo.ToolName, Allowed: true, Args: `{"items":[{"content":"accepted plan","status":"pending"}]}`}}
 	payload, _ := json.Marshal(map[string]any{"result": map[string]any{"details": accepted}})
 	for _, entry := range []agentcore.SessionEntry{
-		{Kind: agentcore.EntryPiEffectDone, Content: string(payload)},
+		{Kind: agentcore.EntryNativeEffectDone, Content: string(payload)},
 		{Kind: agentcore.EntryMessage, Message: &agentcore.Message{Role: agentcore.RoleAssistant, ToolCalls: []agentcore.ToolCall{{ID: "requested", Name: todo.ToolName, Arguments: resumePlanArgs}}}},
 	} {
 		if err := log.Append(ctx, "plan", entry); err != nil {

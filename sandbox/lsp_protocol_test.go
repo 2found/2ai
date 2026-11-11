@@ -89,7 +89,7 @@ func TestLSPConnServicesIdleServerRequestsAndNotificationBursts(t *testing.T) {
 
 	select {
 	case msg := <-response:
-		if !wireIDEqual(msg.ID, 41) || !strings.Contains(string(msg.Result), `"mode":"strict"`) {
+		if strings.TrimSpace(string(msg.ID)) != "41" || !strings.Contains(string(msg.Result), `"mode":"strict"`) {
 			t.Fatalf("configuration response = %+v", msg)
 		}
 	case <-time.After(2 * time.Second):
@@ -307,7 +307,7 @@ func TestLSPConnRejectsDiagnosticsFromPriorDocumentVersion(t *testing.T) {
 	c := &lspConn{diagnostics: map[string]lspDiagnosticPublication{
 		"file:///workspace/main.go": {items: []lspDiagnostic{{Message: "stale"}}, version: &old},
 	}}
-	if diagnostics, ok := c.currentDiagnostics("file:///workspace/main.go", 4); ok || diagnostics != nil {
+	if diagnostics, ok, _ := c.diagnosticsStatus("file:///workspace/main.go", 4); ok || diagnostics != nil {
 		t.Fatalf("accepted stale diagnostics: %+v", diagnostics)
 	}
 }
@@ -323,7 +323,7 @@ func TestLSPConnDoesNotRegressPublishedDiagnosticVersion(t *testing.T) {
 	if err := c.handleIncoming(publishedDiagnosticsMessage(t, uri, 1, "stale")); err != nil {
 		t.Fatal(err)
 	}
-	diagnostics, ok := c.currentDiagnostics(uri, 2)
+	diagnostics, ok, _ := c.diagnosticsStatus(uri, 2)
 	if !ok || len(diagnostics) != 1 || diagnostics[0].Message != "fresh" {
 		t.Fatalf("diagnostics = %+v, known=%v; want version 2 publication", diagnostics, ok)
 	}
@@ -343,7 +343,7 @@ func TestLSPConnRejectsMalformedPublishedDiagnostics(t *testing.T) {
 			t.Fatalf("accepted malformed diagnostics params %s", params)
 		}
 	}
-	if diagnostics, ok := c.currentDiagnostics("file:///workspace/main.go", 1); ok || diagnostics != nil {
+	if diagnostics, ok, _ := c.diagnosticsStatus("file:///workspace/main.go", 1); ok || diagnostics != nil {
 		t.Fatalf("malformed publication became known clean: %+v", diagnostics)
 	}
 }
@@ -362,7 +362,7 @@ func TestLSPConnSettlesOnLatestUnversionedDiagnostics(t *testing.T) {
 	}
 	resultC := make(chan result, 1)
 	go func() {
-		diagnostics, known, err := c.waitForDiagnostics(ctx, uri, 7)
+		diagnostics, known, _, err := c.waitForDiagnosticsOrCapability(ctx, uri, 7, "")
 		resultC <- result{diagnostics: diagnostics, known: known, err: err}
 	}()
 

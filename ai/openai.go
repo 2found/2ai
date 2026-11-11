@@ -236,6 +236,9 @@ type oaiUsage struct {
 	PromptTokensDetails struct {
 		CachedTokens int `json:"cached_tokens"`
 	} `json:"prompt_tokens_details"`
+	CompletionTokensDetails struct {
+		ReasoningTokens int `json:"reasoning_tokens"`
+	} `json:"completion_tokens_details"`
 }
 
 // usage normalizes an OpenAI usage block: cached tokens are pulled out of the
@@ -249,6 +252,7 @@ func (u oaiUsage) usage() protocol.Usage {
 		InputTokens:     u.PromptTokens - cached,
 		OutputTokens:    u.CompletionTokens,
 		CacheReadTokens: cached,
+		ReasoningTokens: u.CompletionTokensDetails.ReasoningTokens,
 	}
 }
 

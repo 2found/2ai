@@ -46,39 +46,17 @@ type Plugin struct {
 	// defaults), but a value below 2 or a duplicate is a configuration error, not
 	// a silent fallback.
 	Thresholds []int
-	// Include limits tracking to matching tool names ('*' wildcards allowed).
-	// Empty tracks every tool.
-	Include []string
-	// Exclude makes matching tools transparent to the chain ('*' wildcards
-	// allowed) — they neither increment nor reset the counter. This is what makes
-	// exclusion useful: a bookkeeping call interleaved into a loop must not
-	// launder it, so `run_sql X → update_plan → run_sql X` still counts as two
-	// consecutive run_sql X. nil uses DefaultExclude.
-	Exclude []string
-	// ArgumentsPreviewChars caps how much of the canonical argument string the
-	// detailed reminder quotes, so a looping write-shaped payload cannot ride
-	// unbounded into every subsequent request. The chain key always compares the
-	// FULL canonical string; this bounds only the reminder text. 0 uses
-	// defaultArgumentsPreviewChars.
-	ArgumentsPreviewChars int
 }
 
 // DefaultThresholds is the escalation ladder: a gentle nudge at 3, then
 // progressively louder ones. Below 3 would fire on an ordinary retry-after-error.
 var DefaultThresholds = []int{3, 5, 8}
 
-// DefaultExclude is empty, and deliberately so: this plugin names no other
-// capability's tools.
-//
-// Bookkeeping tools are the case that used to live here as a hardcoded
-// update_plan exclusion. They are now handled generically — the run tells the
-// guard which tools are administrative (agentcore.BookkeepingTool), so a
-// planner from any package is transparent to the chain and this plugin depends
-// on none of them. Exclude remains for domain-specific patterns a composition
-// knows about.
-var DefaultExclude []string
-
-const defaultArgumentsPreviewChars = 500
+// argumentsPreviewChars caps how much of the canonical argument string the
+// detailed reminder quotes, so a looping write-shaped payload cannot ride
+// unbounded into every subsequent request. The chain key always compares the
+// FULL canonical string; this bounds only the reminder text.
+const argumentsPreviewChars = 500
 
 // guardRun is one run's chain state. The counters are per-RUN, which is why the
 // plugin is a factory and not the guard itself: a fresh run must always start
@@ -86,13 +64,10 @@ const defaultArgumentsPreviewChars = 500
 // a finished loop into an unrelated task.
 type guardRun struct {
 	thresholds []int
-	include    []string
-	exclude    []string
-	// bookkeeping asks the run whether a tool is administrative. It replaces
-	// what used to be a hardcoded exclusion of the plan tool by name: any
-	// bookkeeping tool, from any package, is transparent to the chain.
+	// bookkeeping asks the run whether a tool is administrative: any
+	// bookkeeping tool, from any package, is transparent to the chain, so this
+	// plugin names no other capability's tools.
 	bookkeeping   func(string) bool
-	previewChars  int
 	lastKey       string
 	count         int
 	firedAtCounts map[int]bool
@@ -151,22 +126,7 @@ func (s Plugin) resolve() (*guardRun, error) {
 		normalized = append(normalized, t)
 	}
 	sort.Ints(normalized)
-
-	exclude := s.Exclude
-	if exclude == nil {
-		exclude = DefaultExclude
-	}
-	preview := s.ArgumentsPreviewChars
-	if preview <= 0 {
-		preview = defaultArgumentsPreviewChars
-	}
-	return &guardRun{
-		thresholds:    normalized,
-		include:       s.Include,
-		exclude:       exclude,
-		previewChars:  preview,
-		firedAtCounts: map[int]bool{},
-	}, nil
+	return &guardRun{thresholds: normalized, firedAtCounts: map[int]bool{}}, nil
 }
 
 // Name identifies the extension in composition diagnostics.
@@ -241,28 +201,13 @@ func (g *guardRun) reset() {
 }
 
 // tracks reports whether a tool participates in the chain at all.
+//
+// A bookkeeping tool repeats by design — a plan updater is called again every
+// time the plan changes — so counting it would fire a loop warning at an agent
+// doing exactly what it was asked to do. It is transparent, not a reset: a
+// stuck agent cannot launder a real loop behind interleaved plan updates.
 func (g *guardRun) tracks(name string) bool {
-	// A bookkeeping tool repeats by design — a plan updater is called again
-	// every time the plan changes — so counting it would fire a loop warning at
-	// an agent doing exactly what it was asked to do, and would let a real loop
-	// launder itself behind interleaved plan updates.
-	if g.bookkeeping != nil && g.bookkeeping(name) {
-		return false
-	}
-	for _, pat := range g.exclude {
-		if matchToolPattern(pat, name) {
-			return false
-		}
-	}
-	if len(g.include) == 0 {
-		return true
-	}
-	for _, pat := range g.include {
-		if matchToolPattern(pat, name) {
-			return true
-		}
-	}
-	return false
+	return g.bookkeeping == nil || !g.bookkeeping(name)
 }
 
 // reminderFor returns the reminder text when the current count has just reached
@@ -282,7 +227,7 @@ func (g *guardRun) reminderFor(call agentcore.ToolCall) string {
 	if hit == 0 {
 		return repeatReminderShort
 	}
-	return fmt.Sprintf(repeatReminderDetailed, call.Name, g.count, headClamp(canonicalArgs(call.Arguments), g.previewChars))
+	return fmt.Sprintf(repeatReminderDetailed, call.Name, g.count, headClamp(canonicalArgs(call.Arguments), argumentsPreviewChars))
 }
 
 const repeatReminderShort = "You are repeating the exact same tool call with identical arguments. " +
@@ -345,36 +290,4 @@ func headClamp(s string, n int) string {
 		return s
 	}
 	return string(runes[:n]) + fmt.Sprintf("… (+%d more chars)", len(runes)-n)
-}
-
-// matchToolPattern reports whether a tool name matches a pattern that may
-// contain '*' wildcards. A pattern matching no currently registered tool is not
-// an error: `mcp_*` must stay valid in a deployment that loads no MCP tools.
-func matchToolPattern(pattern, name string) bool {
-	if pattern == name {
-		return true
-	}
-	if !strings.Contains(pattern, "*") {
-		return false
-	}
-	parts := strings.Split(pattern, "*")
-	pos := 0
-	for i, part := range parts {
-		if part == "" {
-			continue
-		}
-		idx := strings.Index(name[pos:], part)
-		if idx < 0 {
-			return false
-		}
-		if i == 0 && idx != 0 {
-			return false // a pattern not starting with '*' must match at the head
-		}
-		pos += idx + len(part)
-	}
-	// A pattern not ending in '*' must consume the whole name.
-	if last := parts[len(parts)-1]; last != "" && !strings.HasSuffix(name, last) {
-		return false
-	}
-	return true
 }

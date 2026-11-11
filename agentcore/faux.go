@@ -103,8 +103,6 @@ func AssistantToolCall(id, name, args string) ChatResponse {
 // Ignored, because they are not the history and are legitimately
 // nondeterministic or unrecorded:
 //
-//   - Message.CacheAnchor — request-scoped, json:"-", dropped on any
-//     persistence round-trip of the trace.
 //   - Message.Usage — provider-reported accounting, not part of rebuild.
 //   - Model, Temperature, MaxTokens, CacheKey, CacheRetention,
 //     ReasoningEffort, OutputSchema — not on TurnRecord.
@@ -161,10 +159,10 @@ func (r *ReplayProvider) Chat(_ context.Context, req ChatRequest) (ChatResponse,
 	return resp, nil
 }
 
-// Stream adapts Chat into a delta channel, matching FauxProvider's shape so
-// the loop's streamTurn path is exercised. Unlike FauxProvider it must not
-// swallow Chat's error: a mismatch or recorded failure has to reach streamTurn
-// as ChatDelta.Err, or a drifting loop would look like a silent empty turn.
+// Stream adapts Chat into a delta channel, matching FauxProvider's shape.
+// Unlike FauxProvider it must not swallow Chat's error: a mismatch or recorded
+// failure has to reach the consumer as ChatDelta.Err, or a drifting loop would
+// look like a silent empty turn.
 func (r *ReplayProvider) Stream(ctx context.Context, req ChatRequest) (<-chan ChatDelta, error) {
 	ch := make(chan ChatDelta, 8)
 	go func() {

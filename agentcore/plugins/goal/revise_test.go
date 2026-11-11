@@ -16,6 +16,7 @@ package goal_test
 // reviewable afterwards.
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -32,11 +33,77 @@ import (
 // --- harness ------------------------------------------------------------------
 
 type scriptProvider struct {
-	mu      sync.Mutex
-	turns   int
-	systems []string   // the system message shown on each turn
-	tools   [][]string // the tool names offered to the model on each turn
-	script  func(turn int) ai.Message
+	mu         sync.Mutex
+	turns      int
+	systems    []string   // the system prompt a provider receives on each turn
+	statements []string   // the goal statement in force on each turn
+	collapsed  [][]byte   // each request as a provider without mid-conversation system messages sees it
+	tools      [][]string // the tool names offered to the model on each turn
+	sysCount   []int      // system messages in each native request
+	script     func(turn int) ai.Message
+}
+
+// collapse is a request as a provider without mid-conversation system messages
+// receives it: the stricter rendering, where a statement placed wrong would
+// rewrite the cached head.
+func collapse(view ai.TranscriptContext) []ai.Message {
+	return ai.ResolveTranscript(view, false).Messages()
+}
+
+// headOf is the system prompt the provider receives.
+func headOf(messages []ai.Message) string {
+	if len(messages) == 0 || messages[0].Role != "system" {
+		return ""
+	}
+	return ai.ContentText(messages[0].Content)
+}
+
+// latestStatement is the condition the model reads as in force: the last
+// statement outside the model's own messages, without its reminder wrapper.
+func latestStatement(messages []ai.Message) string {
+	header := goal.StatementPrefix + " This run finishes when:\n"
+	for i := len(messages) - 1; i >= 0; i-- {
+		if messages[i].Role == "assistant" {
+			continue
+		}
+		text := ai.ContentText(messages[i].Content)
+		if at := strings.LastIndex(text, header); at >= 0 {
+			text = text[at:]
+			if end := strings.Index(text, "\n</system-reminder>"); end >= 0 {
+				text = text[:end]
+			}
+			return text
+		}
+	}
+	return ""
+}
+
+// systemMessages counts the system-prompt messages (the host's "agentray"
+// section) a native request carries; tool declarations and goal statements are
+// separate system messages. A revision or resume that leaves the system prompt
+// unchanged must not append another.
+func systemMessages(messages []ai.Message) int {
+	n := 0
+	for _, message := range messages {
+		for _, section := range message.Sections {
+			if message.Role == "system" && section.Name == "agentray" {
+				n++
+			}
+		}
+	}
+	return n
+}
+
+// assertPrefixStable fails unless every request is a strict byte prefix of the
+// next: nothing already sent (and cached) was rewritten.
+func assertPrefixStable(t *testing.T, requests [][]byte) {
+	t.Helper()
+	for i := 1; i < len(requests); i++ {
+		earlier := bytes.TrimSuffix(requests[i-1], []byte("]"))
+		if len(requests[i]) <= len(requests[i-1]) || !bytes.HasPrefix(requests[i], earlier) {
+			t.Fatalf("request %d rewrote request %d's prefix:\nbefore: %s\nafter:  %s", i+1, i, requests[i-1], requests[i])
+		}
+	}
 }
 
 // offered reports whether the model was ever shown a schema by this name. It is
@@ -58,12 +125,17 @@ func (p *scriptProvider) offered(name string) bool {
 func (p *scriptProvider) Stream(ctx context.Context, model json.RawMessage, view ai.TranscriptContext, options map[string]any) (*ai.AssistantMessageEventStream, error) {
 	p.mu.Lock()
 	p.turns++
-	p.systems = append(p.systems, ai.GetCurrentSystemPrompt(view.Messages()))
+	messages := collapse(view)
+	p.systems = append(p.systems, headOf(messages))
+	p.statements = append(p.statements, latestStatement(messages))
+	collapsed, _ := json.Marshal(messages)
+	p.collapsed = append(p.collapsed, collapsed)
 	var names []string
 	for _, tool := range ai.GetCurrentTools(view.Messages()) {
 		names = append(names, tool.Name)
 	}
 	p.tools = append(p.tools, names)
+	p.sysCount = append(p.sysCount, systemMessages(view.Messages()))
 	message := p.script(p.turns)
 	p.mu.Unlock()
 	return ai.ScriptedStream(message)(ctx, model, view, options)
@@ -122,31 +194,37 @@ func TestRevisedGoalIsWhatTheModelReadsAndTheGateEnforces(t *testing.T) {
 	}
 
 	prov.mu.Lock()
-	systems := prov.systems
+	systems, statements, collapsed, sysCount := prov.systems, prov.statements, prov.collapsed, prov.sysCount
 	prov.mu.Unlock()
+	for i, n := range sysCount {
+		if n != 1 {
+			t.Fatalf("turn %d carries %d system messages: a revision that leaves the prompt unchanged appended another", i+1, n)
+		}
+	}
 
 	if len(systems) < 3 {
 		t.Fatalf("want at least 3 turns, got %d — the gate never re-opened the sentinel-free finish", len(systems))
 	}
 
-	// Turn 1 read the original contract; the revision had not happened yet.
-	if !strings.Contains(systems[0], origGoal) {
-		t.Fatalf("the first turn did not state the original condition:\n%s", systems[0])
+	// Turn 1 reads the original condition; the revision had not happened yet.
+	if want := goal.StatementPrefix + " This run finishes when:\n" + origGoal; statements[0] != want {
+		t.Fatalf("the first turn did not state the original condition: %q", statements[0])
 	}
-
-	// Every turn after the revision reads the NEW contract, and only it. Both
-	// halves matter: a prompt that gained the new condition while keeping the old
-	// one hands the model a contradiction to resolve on its own.
-	for i, sys := range systems[1:] {
-		if !strings.Contains(sys, newGoal) {
-			t.Fatalf("turn %d still states the superseded condition — the system prompt was not "+
-				"rebuilt, so the model is working to a contract the gate no longer enforces:\n%s", i+2, sys)
-		}
-		if strings.Contains(sys, origGoal) {
-			t.Fatalf("turn %d states BOTH conditions: the revision was appended rather than "+
-				"replacing, leaving the model to guess which one counts:\n%s", i+2, sys)
+	// Every turn after the revision reads the NEW condition as the one in force.
+	for i, st := range statements[1:] {
+		if !strings.HasPrefix(st, goal.StatementPrefix+" This run finishes when:\n"+newGoal) {
+			t.Fatalf("turn %d reads a superseded condition as in force — the model is working "+
+				"to a contract the gate no longer enforces: %q", i+2, st)
 		}
 	}
+	// The system prompt is the cached prefix: the condition and its revision
+	// never touch it, and a collapsing provider sees only appended bytes.
+	for i, sys := range systems {
+		if sys != systems[0] || strings.Contains(sys, origGoal) || strings.Contains(sys, newGoal) {
+			t.Fatalf("turn %d system prompt carries the condition or changed:\n%s", i+1, sys)
+		}
+	}
+	assertPrefixStable(t, collapsed)
 
 	// The gate was still armed after the revision: the sentinel-free finish on
 	// turn 2 was rejected and the run continued.
@@ -185,7 +263,16 @@ func TestRevisedGoalIsDurable(t *testing.T) {
 		}
 		return a
 	}
-	result, err := makeAgent(ai.ScriptedStream(reviseCall("r1"), nativeAnswer("done\n"+goal.Done))).Prompt(context.Background(), "Audit the ledger corpus.")
+	var requests [][]byte
+	record := func(view ai.TranscriptContext) {
+		raw, _ := json.Marshal(collapse(view))
+		requests = append(requests, raw)
+	}
+	first := ai.ScriptedStream(reviseCall("r1"), nativeAnswer("done\n"+goal.Done))
+	result, err := makeAgent(func(ctx context.Context, model json.RawMessage, view ai.TranscriptContext, options map[string]any) (*ai.AssistantMessageEventStream, error) {
+		record(view)
+		return first(ctx, model, view, options)
+	}).Prompt(context.Background(), "Audit the ledger corpus.")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -201,10 +288,16 @@ func TestRevisedGoalIsDurable(t *testing.T) {
 		t.Fatalf("revision not checkpointed: %+v", saved)
 	}
 	resumed := makeAgent(func(ctx context.Context, model json.RawMessage, view ai.TranscriptContext, options map[string]any) (*ai.AssistantMessageEventStream, error) {
-		prompt := ai.GetCurrentSystemPrompt(view.Messages())
-		if !strings.Contains(prompt, newGoal) || strings.Contains(prompt, origGoal) {
-			t.Errorf("resumed stale condition: %s", prompt)
+		if st := latestStatement(collapse(view)); !strings.HasPrefix(st, goal.StatementPrefix+" This run finishes when:\n"+newGoal) {
+			t.Errorf("resumed stale condition: %q", st)
 		}
+		if prompt := headOf(collapse(view)); strings.Contains(prompt, newGoal) || strings.Contains(prompt, origGoal) {
+			t.Errorf("resumed system prompt carries the condition: %s", prompt)
+		}
+		if n := systemMessages(view.Messages()); n != 1 {
+			t.Errorf("resume appended an unchanged system prompt: %d system messages", n)
+		}
+		record(view)
 		return ai.ScriptedStream(nativeAnswer("still done\n"+goal.Done))(ctx, model, view, options)
 	})
 	next, err := resumed.RunNative(context.Background(), agentcore.NativeRun{State: result.NativeState, Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: "continue"}}})
@@ -216,6 +309,14 @@ func TestRevisedGoalIsDurable(t *testing.T) {
 	}
 	if saved.Goal != newGoal || !reflect.DeepEqual(saved.GoalRevisions, want) {
 		t.Fatalf("resume added a revision: %+v", saved)
+	}
+	// Across the revision AND the resume, nothing already sent was rewritten.
+	if len(requests) != 3 {
+		t.Fatalf("requests = %d, want 3", len(requests))
+	}
+	assertPrefixStable(t, requests)
+	if n := strings.Count(string(requests[2]), goal.StatementPrefix+" This run finishes when"); n != 2 {
+		t.Fatalf("want the original statement and the revision only, got %d statements: %s", n, requests[2])
 	}
 }
 
@@ -343,9 +444,8 @@ func TestRevisionRequiresAReason(t *testing.T) {
 }
 
 // Restating the same condition is not a change. Letting it through would write
-// an EntryGoal and rebuild the system prompt — invalidating the provider's cache
-// for the whole prefix — in exchange for nothing, once per attempt, on a model
-// prone to repeating itself.
+// an EntryGoal and a new statement in exchange for nothing, once per attempt,
+// on a model prone to repeating itself.
 func TestRestatingTheSameGoalChangesNothing(t *testing.T) {
 	st := goal.NewStore(origGoal)
 	if st.Update(origGoal, "no real change") {

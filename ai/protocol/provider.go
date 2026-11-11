@@ -135,12 +135,6 @@ type Message struct {
 	// reported it. Compaction prefers this over a byte heuristic to decide when
 	// the context window is filling (pi's usage-based estimateContextTokens).
 	Usage *Usage `json:"usage,omitempty"`
-	// ContextTokenAdjustment corrects a provider Usage observation after a
-	// deterministic, shape-preserving transcript rewrite. Usage remains the
-	// immutable billable fact the provider reported; this signed estimate is
-	// applied only by the future compaction-pressure heuristic. A fresh provider
-	// response starts at zero.
-	ContextTokenAdjustment int `json:"context_token_adjustment,omitempty"`
 	// ResultRef is an opaque handle for recovering content omitted from a tool
 	// result (for example a spill artifact). Providers do not serialize this
 	// field directly; pruning preserves it and includes it in any replacement
@@ -171,13 +165,6 @@ type Message struct {
 	// an older log predates the field; compaction falls back to the first user
 	// message there, which is what it always did.
 	Directive bool `json:"directive,omitempty"`
-	// CacheAnchor marks this message as a prompt-cache breakpoint candidate:
-	// "the prefix ending here is stable — cache it". Placement is decided by the
-	// loop (markCacheAnchors), never by a provider; each provider maps anchors
-	// onto its native mechanism (Anthropic: cache_control on the message's last
-	// block) or ignores them (OpenAI/Gemini cache implicitly by prefix). Request-
-	// scoped only — never persisted, so it is excluded from JSON.
-	CacheAnchor bool `json:"-"`
 }
 
 // ReasoningBlock is opaque provider replay state, not user-visible chain of
@@ -311,12 +298,20 @@ func (c ToolChoice) Validate() error {
 // creation). Each provider normalizes its own wire format onto these fields — e.g.
 // OpenAI reports prompt_tokens *including* cached, so its adapter subtracts the
 // cached portion to keep InputTokens full-price-only.
+//
+// ReasoningTokens and CacheWrite1hTokens are subsets, never additions:
+// reasoning is already counted in OutputTokens (it bills at the output rate),
+// and the 1-hour cache writes are already counted in CacheWriteTokens (they
+// bill at a higher premium than the default 5-minute writes, which are
+// CacheWriteTokens-CacheWrite1hTokens). Summing all fields double-counts.
 type Usage struct {
-	InputTokens      int     `json:"input_tokens"`
-	OutputTokens     int     `json:"output_tokens"`
-	CacheReadTokens  int     `json:"cache_read_tokens,omitempty"`
-	CacheWriteTokens int     `json:"cache_write_tokens,omitempty"`
-	CostUSD          float64 `json:"cost_usd"`
+	InputTokens        int     `json:"input_tokens"`
+	OutputTokens       int     `json:"output_tokens"`
+	CacheReadTokens    int     `json:"cache_read_tokens,omitempty"`
+	CacheWriteTokens   int     `json:"cache_write_tokens,omitempty"`
+	CacheWrite1hTokens int     `json:"cache_write_1h_tokens,omitempty"`
+	ReasoningTokens    int     `json:"reasoning_tokens,omitempty"`
+	CostUSD            float64 `json:"cost_usd"`
 	// CostUnpriced is true when CostUSD is NOT a real total — some or all of the
 	// tokens above were billed by a model with no entry in the price table, so
 	// the price lookup returned "unknown" rather than "zero". Zero-value default
@@ -327,6 +322,21 @@ type Usage struct {
 	// figure — "$0.00" and "we don't know" must never look the same to a reader
 	// deciding whether to trust the number.
 	CostUnpriced bool `json:"cost_unpriced,omitempty"`
+}
+
+// Add returns u plus v across every field. Each subset is summed with its
+// total, so the sum keeps the subset invariant; an unpriced operand makes the
+// sum unpriced.
+func (u Usage) Add(v Usage) Usage {
+	u.InputTokens += v.InputTokens
+	u.OutputTokens += v.OutputTokens
+	u.CacheReadTokens += v.CacheReadTokens
+	u.CacheWriteTokens += v.CacheWriteTokens
+	u.CacheWrite1hTokens += v.CacheWrite1hTokens
+	u.ReasoningTokens += v.ReasoningTokens
+	u.CostUSD += v.CostUSD
+	u.CostUnpriced = u.CostUnpriced || v.CostUnpriced
+	return u
 }
 
 // ChatRequest is one provider call: the message history plus the tool schemas

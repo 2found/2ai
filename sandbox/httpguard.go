@@ -10,6 +10,7 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"net/netip"
 	"net/url"
 	"strings"
 )
@@ -68,22 +69,59 @@ func guardedDialFunc(dialer *net.Dialer, ipBlocked func(net.IP) (bool, string)) 
 	}
 }
 
+// blockedRanges is every address range an outbound agent tool must never
+// reach: anything that is not ordinary public unicast. IPv4-mapped IPv6
+// (::ffff:a.b.c.d) is unmapped before the lookup, so it is checked as the IPv4
+// address it is. Transition prefixes that embed or tunnel to an IPv4 address
+// (NAT64, 6to4, Teredo, IPv4-compatible) are refused whole: the embedded
+// address is attacker-chosen and may be private.
+var blockedRanges = []struct {
+	prefix netip.Prefix
+	why    string
+}{
+	{netip.MustParsePrefix("0.0.0.0/8"), "this-network"},
+	{netip.MustParsePrefix("10.0.0.0/8"), "private network"},
+	{netip.MustParsePrefix("100.64.0.0/10"), "carrier-grade NAT"},
+	{netip.MustParsePrefix("127.0.0.0/8"), "loopback"},
+	{netip.MustParsePrefix("169.254.0.0/16"), "link-local"}, // cloud metadata
+	{netip.MustParsePrefix("172.16.0.0/12"), "private network"},
+	{netip.MustParsePrefix("192.0.0.0/24"), "IETF protocol assignment"},
+	{netip.MustParsePrefix("192.0.2.0/24"), "documentation"},
+	{netip.MustParsePrefix("192.88.99.0/24"), "6to4 relay"},
+	{netip.MustParsePrefix("192.168.0.0/16"), "private network"},
+	{netip.MustParsePrefix("198.18.0.0/15"), "benchmarking"},
+	{netip.MustParsePrefix("198.51.100.0/24"), "documentation"},
+	{netip.MustParsePrefix("203.0.113.0/24"), "documentation"},
+	{netip.MustParsePrefix("224.0.0.0/4"), "multicast"},
+	{netip.MustParsePrefix("240.0.0.0/4"), "reserved"}, // includes 255.255.255.255
+	{netip.MustParsePrefix("::/128"), "unspecified"},
+	{netip.MustParsePrefix("::1/128"), "loopback"},
+	{netip.MustParsePrefix("::/96"), "IPv4-compatible"},
+	{netip.MustParsePrefix("64:ff9b::/96"), "NAT64"},
+	{netip.MustParsePrefix("64:ff9b:1::/48"), "NAT64"},
+	{netip.MustParsePrefix("100::/64"), "discard"},
+	{netip.MustParsePrefix("2001::/32"), "Teredo"},
+	{netip.MustParsePrefix("2001:db8::/32"), "documentation"},
+	{netip.MustParsePrefix("2002::/16"), "6to4"},
+	{netip.MustParsePrefix("fc00::/7"), "private network"},
+	{netip.MustParsePrefix("fe80::/10"), "link-local"},
+	{netip.MustParsePrefix("fec0::/10"), "site-local"},
+	{netip.MustParsePrefix("ff00::/8"), "multicast"},
+}
+
 // blockedIP reports whether ip is one an outbound agent tool must never reach,
-// with a human-readable reason for the model/audit.
+// with a human-readable reason for the model/audit. An unparseable address is
+// blocked.
 func blockedIP(ip net.IP) (bool, string) {
-	switch {
-	case ip.IsLoopback():
-		return true, "loopback"
-	case ip.IsLinkLocalUnicast(), ip.IsLinkLocalMulticast():
-		// 169.254.0.0/16 and fe80::/10 — covers the cloud-metadata endpoint.
-		return true, "link-local"
-	case ip.IsPrivate():
-		return true, "private network"
-	case ip.IsUnspecified():
-		return true, "unspecified"
-	case ip.IsMulticast():
-		return true, "multicast"
-	default:
-		return false, ""
+	addr, ok := netip.AddrFromSlice(ip)
+	if !ok {
+		return true, "invalid address"
 	}
+	addr = addr.Unmap()
+	for _, r := range blockedRanges {
+		if r.prefix.Contains(addr) {
+			return true, r.why
+		}
+	}
+	return false, ""
 }

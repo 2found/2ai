@@ -1,27 +1,31 @@
 // Package todo contributes a live run plan: a checklist the model writes for
-// itself and that the loop pins into every request.
+// itself and that the run keeps in front of it.
 //
-// The plan is deliberately NOT part of the transcript. It lives in a Store the
-// tool writes and a context hook reads, so compaction can never trim it — even
-// after the original task and all early turns are summarized away, the freshly
-// rendered checklist is right there in front of the model. That is the whole
-// point of the capability: it is what keeps a long autonomous run on its
-// original objective.
+// The plan is owned by a Store, not by the transcript, so compaction can never
+// lose it. It reaches the model through the transcript, though, and only by
+// appending: every update_plan result carries the rendered plan, and when the
+// current plan is no longer visible (a summary replaced the turn that wrote it,
+// or a resumed run restored it from a checkpoint) the run appends one
+// "[run plan]" user message before the next step. A summary that folds away the
+// plan the model saw carries it after the summary text instead
+// (agentcore.CompactionReattacher). Nothing is ever rewritten in place, so each
+// request's bytes are a prefix of the next one's and provider prompt caches
+// keep hitting.
 //
-// Tools and request hooks share a run-bound store. Native checkpoints preserve
-// its bounded plan state; forks get a fresh store so child plans cannot replace
-// the parent's checklist.
+// Native checkpoints preserve the bounded plan; forks get a fresh store so
+// child plans cannot replace the parent's checklist.
 package todo
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"slices"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/2found/2ai/agentcore"
+	"github.com/2found/2ai/ai"
 )
 
 // ToolName is the stable name the model calls, and the name a policy must
@@ -76,12 +80,11 @@ const (
 
 // Store holds a single run's live plan. It is the out-of-band state that
 // makes a long run goal-stable: the plan is owned here, not in the transcript,
-// so compaction can never trim it. The loop re-injects a rendering of it before
-// every native provider request (PiContextHook), so the model always sees its own
-// up-to-date checklist regardless of how much history was summarized away.
+// so compaction can never trim it. When the model can no longer see the current
+// rendering, the run appends it again (see Plugin), so the model always has its
+// own up-to-date checklist regardless of how much history was summarized away.
 //
-// A Store is safe for concurrent use; the tool writes it while a context
-// hook reads it.
+// A Store is safe for concurrent use; the tools write it while the run reads it.
 type Store struct {
 	mutation sync.Mutex
 	mu       sync.RWMutex
@@ -171,8 +174,8 @@ func (s *Store) List() []Item {
 }
 
 // Render formats the plan as a compact checklist for the model. It returns the
-// empty string when there is no plan yet, so the context hook injects nothing
-// until the agent has actually written one.
+// empty string when there is no plan yet, so nothing is injected until the
+// agent has actually written one.
 func (s *Store) Render() string {
 	s.mu.RLock()
 	items := make([]Item, len(s.items))
@@ -271,28 +274,9 @@ func statusBox(status string) string {
 	}
 }
 
-// ContextPrefix marks the injected plan reminder so it is recognizable in a
+// ContextPrefix marks the appended plan reminder so it is recognizable in a
 // transcript and never confused with model-authored content.
 const ContextPrefix = "[run plan]"
-
-// PiContextHook pins the bounded plan into Pi's outgoing native view.
-// Raw provider messages pass through untouched, and the reminder never becomes
-// another persisted conversation message on each turn.
-func PiContextHook(store *Store) agentcore.PiContextHook {
-	return func(ctx context.Context, messages []json.RawMessage) ([]json.RawMessage, error) {
-		rendered := store.Render()
-		if rendered == "" {
-			return messages, nil
-		}
-		reminder, err := json.Marshal(map[string]any{"role": "system", "content": ContextPrefix + "\n" + rendered, "timestamp": time.Now().UnixMilli()})
-		if err != nil {
-			return nil, err
-		}
-		out := make([]json.RawMessage, 0, len(messages)+1)
-		out = append(out, messages...)
-		return append(out, reminder), nil
-	}
-}
 
 // planTool is the model-facing tool that writes the run plan.
 type planTool struct {
@@ -301,7 +285,8 @@ type planTool struct {
 
 // NewTool returns the built-in update_plan tool bound to a run's plan store.
 // The model calls it to record and revise its checklist for a multi-step task;
-// the stored plan is then pinned into every later native request by PiContextHook.
+// its result carries the rendered plan, so the update itself is what the model
+// reads next.
 func NewTool(store *Store) agentcore.Tool { return &planTool{store: store} }
 
 func (t *planTool) Name() string { return ToolName }
@@ -411,8 +396,8 @@ func parseItems(args string) ([]Item, error) {
 // The MaxToolCalls budget still bounds a runaway planning loop.
 func (*planTool) Bookkeeping() bool { return true }
 
-// Plugin contributes the run plan: the update_plan tool and the context hook
-// that pins the plan into every request.
+// Plugin contributes the run plan: the update_plan and patch_plan tools, and
+// the reminder that re-appends the plan when the model can no longer see it.
 type Plugin struct {
 	// Store holds this run's plan. Required — a plan with nowhere to live is a
 	// tool that silently forgets, which is worse for the model than no tool at
@@ -433,8 +418,8 @@ func With(s *Store) Plugin { return Plugin{Store: s} }
 // Name identifies the plugin.
 func (Plugin) Name() string { return "todo" }
 
-// Register installs a run-scoped extension. Its tools, native context transform
-// and checkpoint all use the same isolated plan, including on child forks.
+// Register installs a run-scoped extension. Its tools, reminder and checkpoint
+// all use the same isolated plan, including on child forks.
 func (p Plugin) Register(r *agentcore.Registry) error {
 	if p.Store == nil {
 		return errNoStore
@@ -447,6 +432,80 @@ type runPlan struct {
 	store               *Store
 	checkCompletion     bool
 	maxCompletionNudges int
+	sight               sightline
+}
+
+// ObserveMessages tracks what the model has in front of it, so BeforeStep can
+// tell whether the current plan is still visible.
+func (r *runPlan) ObserveMessages(_ context.Context, phase agentcore.ObservePhase, _ int, msgs []agentcore.Message) {
+	r.sight.observe(phase, msgs)
+}
+
+// BeforeStep appends the plan when the model cannot see its current rendering:
+// a summary folded away the turn that wrote it, or a resumed run restored it
+// from a checkpoint. An update_plan result already carries the rendering, so a
+// run that only edits its plan never gets a reminder. The reminder is a
+// persisted user message at the end of the transcript, never a system message:
+// providers without mid-conversation system messages merge those into the
+// system prompt, which would rewrite the cached prefix of every request.
+func (r *runPlan) BeforeStep(context.Context, agentcore.StepInfo) agentcore.StepDecision {
+	rendered := r.store.Render()
+	if rendered == "" || r.sight.shows(rendered) {
+		return agentcore.StepDecision{}
+	}
+	reminder := agentcore.Message{Role: agentcore.RoleUser, Content: ContextPrefix + "\n" + rendered}
+	r.sight.observe(agentcore.PhaseAppend, []agentcore.Message{reminder})
+	return agentcore.StepDecision{AdditionalContexts: []agentcore.Message{reminder}}
+}
+
+// ReattachAfterCompaction carries the current plan into a new summary when the
+// summarized messages showed it: the request the summary is made for then
+// already has the plan, where a reminder could only land a step later. A plan
+// the summarized messages did not show is still in the retained tail, or was
+// never visible and BeforeStep appends it; one that does not fit in maxTokens
+// is left to BeforeStep too, rather than reattached cut in the middle.
+func (r *runPlan) ReattachAfterCompaction(_ context.Context, dropped []json.RawMessage, maxTokens int) string {
+	rendered := r.store.Render()
+	text := ContextPrefix + "\n" + rendered
+	if rendered == "" || len(text) > maxTokens*4 {
+		return ""
+	}
+	for _, raw := range dropped {
+		if message, err := ai.ProjectMessage(raw); err == nil && strings.Contains(message.Content, rendered) {
+			return text
+		}
+	}
+	return ""
+}
+
+// sightline is the transcript the model last saw: the latest full view
+// (restore, rebase, request) plus every message appended since.
+type sightline struct {
+	mu   sync.Mutex
+	seen []agentcore.Message
+}
+
+func (s *sightline) observe(phase agentcore.ObservePhase, msgs []agentcore.Message) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	switch phase {
+	case agentcore.PhaseRestore, agentcore.PhaseRebase, agentcore.PhaseRequest:
+		// Clip so a later append never writes into the caller's backing array.
+		s.seen = slices.Clip(msgs)
+	case agentcore.PhaseAppend, agentcore.PhaseExternalInput:
+		s.seen = append(s.seen, msgs...)
+	}
+}
+
+func (s *sightline) shows(text string) bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	for _, m := range s.seen {
+		if strings.Contains(m.Content, text) {
+			return true
+		}
+	}
+	return false
 }
 
 func (r *runPlan) TurnStopping(_ context.Context, info agentcore.StopInfo) agentcore.StopDecision {
@@ -476,9 +535,6 @@ func (r *runPlan) TurnStopping(_ context.Context, info agentcore.StopInfo) agent
 func (*runPlan) Name() string { return "todo" }
 func (r *runPlan) Tools() []agentcore.Tool {
 	return []agentcore.Tool{NewTool(r.store), &patchTool{r.store}}
-}
-func (r *runPlan) TransformNativeContext(ctx context.Context, messages []json.RawMessage) ([]json.RawMessage, error) {
-	return PiContextHook(r.store)(ctx, messages)
 }
 func (r *runPlan) NativeState() (json.RawMessage, error) {
 	r.store.mu.RLock()
@@ -559,12 +615,12 @@ func planFromLog(entries []agentcore.SessionEntry) ([]Item, bool) {
 			}
 		}
 		switch e.Kind {
-		case agentcore.EntryPiEffectDone:
+		case agentcore.EntryNativeEffectDone:
 			// Only a settled, successful execution can update the native plan.
 			// An assistant's requested arguments are not proof of execution.
 			var receipt struct {
 				Error  string
-				Result struct{ Details agentcore.PiToolOutcome }
+				Result struct{ Details agentcore.ToolOutcome }
 			}
 			if json.Unmarshal([]byte(e.Content), &receipt) != nil || receipt.Error != "" {
 				continue

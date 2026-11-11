@@ -6,10 +6,12 @@ import (
 	"fmt"
 )
 
-// BeforeToolCall fires after a tool's arguments are schema-validated and before
-// execution. Returning a blocked Decision stops the call; the reason is fed
-// back to the model. The permission gate is itself a BeforeToolCall hook;
-// consumers may add more (PII redaction, cost ceilings, human-approval gates).
+// BeforeToolCall fires after a tool's arguments are schema-validated, after the
+// permission policy has allowed the call, and before execution. It answers
+// like a Policy: refuse (the reason is fed back to the model), park the call
+// on a human approval, or allow it, optionally with rewritten arguments. A
+// hook that panics refuses the call. Consumers use it for PII redaction, cost
+// ceilings and approval gates.
 type BeforeToolCall func(ctx context.Context, call ToolCall) Decision
 
 // AfterToolCall fires after a tool executes. It may annotate or rewrite the
@@ -17,30 +19,24 @@ type BeforeToolCall func(ctx context.Context, call ToolCall) Decision
 // such as submit_recommendation/finish).
 type AfterToolCall func(ctx context.Context, call ToolCall, result string, runErr error) (rewritten string, terminate bool)
 
-// ContextHook transforms the message list immediately before a provider request
-// (pi's `context` event). It sees a copy of the live history and returns the
-// view the model should reason over — e.g. redaction, trimming, injecting a
-// reminder. Returning nil keeps the input unchanged. It does not mutate the
-// persisted run history; only the outgoing request is affected.
-type ContextHook func(ctx context.Context, msgs []Message) []Message
-
-// PiContextHook transforms only the outgoing native message view. Provider
-// messages retain their original JSON, including signed and custom content.
-// Returning nil keeps the input. Failures are reported and retain the last
-// valid view, as Pi requires transformContext to resolve without throwing.
-type PiContextHook func(context.Context, []json.RawMessage) ([]json.RawMessage, error)
+// ContextHook transforms the outgoing native message view immediately before
+// every provider request (redaction, trimming, a reminder). Provider messages
+// retain their original JSON, including signed and custom content; persisted
+// history is never changed. Returning nil keeps the input. A failure is
+// reported and the last valid view is kept.
+type ContextHook func(context.Context, []json.RawMessage) ([]json.RawMessage, error)
 
 // ProviderRequestHook inspects the assembled ChatRequest right before it is
-// sent (pi's `before_provider_request`): use it to tee the request to a logger
+// sent: use it to tee the request to a logger
 // or measure its prompt. Native runs hand it a read-only projection (model,
 // visible messages with the system prompt first, tool schemas, cache key);
 // returning a different request is reported as a hook failure, since the
 // native request keeps its provider JSON — reshape messages with a
-// PiContextHook instead. Returning a zero-value request (no messages) is
+// ContextHook instead. Returning a zero-value request (no messages) is
 // treated as "no change".
 type ProviderRequestHook func(ctx context.Context, req ChatRequest) ChatRequest
 
-// MessageEndHook observes a completed assistant message (pi's `message_end`).
+// MessageEndHook observes a completed assistant message.
 // It is read-only: a return value is not threaded back. Use it for metrics,
 // audit, or surfacing the turn to an external sink.
 type MessageEndHook func(ctx context.Context, msg Message)
@@ -62,8 +58,7 @@ type RunStart struct {
 	Task string
 }
 
-// BeforeAgentStartHook shapes a run before its first provider request (pi's
-// before_agent_start). Return the input with your edits: an empty System keeps
+// BeforeAgentStartHook shapes a run before its first provider request. Return the input with your edits: an empty System keeps
 // the assembled prompt, and nil Messages keep the seeds, so a hook that only
 // wants to append a reminder can return RunStart{Messages: append(...)} without
 // restating the prompt. Runs before the seed messages are persisted to the
@@ -71,8 +66,7 @@ type RunStart struct {
 // survives resume.
 type BeforeAgentStartHook func(ctx context.Context, start RunStart) RunStart
 
-// TurnInfo describes one reasoning turn at its boundary (pi's turn_start /
-// turn_end). Usage is the run total accumulated so far, not this turn's slice.
+// TurnInfo describes one reasoning turn at its boundary. Usage is the run total accumulated so far, not this turn's slice.
 type TurnInfo struct {
 	Turn int
 	// Model is the rung actually in use for this turn.
@@ -114,26 +108,36 @@ type CompactDecision struct {
 	// defer (e.g. mid-tool-sequence), not to disable compaction.
 	Skip bool
 	// Messages, when non-nil, replaces the transcript with a consumer-supplied
-	// compaction and suppresses the built-in one. The loop persists the same
-	// compaction bracket either way, but no summarization call is billed.
+	// compaction and suppresses the built-in one — in the legacy loop only. A
+	// native run (RunNative) keeps its opaque transcript and honors only Skip:
+	// a non-nil Messages is reported through OnError("before_compact") and the
+	// built-in summary runs; shape it with CompactionSettings.Instructions.
 	Messages []Message
 }
 
 // BeforeCompactHook is consulted immediately before the loop rewrites a
-// transcript for pruning or summary compaction (pi's session_before_compact).
+// transcript for pruning or summary compaction.
 // The first hook that returns Skip, or a non-nil Messages, decides; later hooks
 // are not consulted. Use it to pin content the default policy would drop, or
 // to swap in a domain-specific reducer.
+//
+// A native run (RunNative) consults it before each summary and honors Skip
+// only: the native transcript is never rewritten, so replacement Messages are
+// reported through OnError("before_compact") and the built-in summary runs. A
+// recovery compaction after a provider context overflow is not deferrable and
+// does not ask.
 type BeforeCompactHook func(ctx context.Context, req CompactRequest) CompactDecision
 
-// AgentEndHook observes a finished run (pi's agent_end), after sub-agent usage is
+// AgentEndHook observes a finished run, after sub-agent usage is
 // folded in and any synthesized failure turn is appended — so res is exactly what
 // the caller receives. Read-only, fires on every exit path including error and
 // abort.
 type AgentEndHook func(ctx context.Context, res RunResult)
 
-// HookErrorPolicy governs what happens when a hook handler panics or returns an
-// error. The default (continue) keeps a single bad hook from taking down a run.
+// HookErrorPolicy governs what happens when an observing or shaping hook panics
+// or returns an error. The default (continue) keeps a single bad observer from
+// taking down a run. It never applies to a gate: a panicking policy or
+// BeforeToolCall hook always refuses its call.
 type HookErrorPolicy string
 
 const (
@@ -148,7 +152,8 @@ const (
 // Hooks is the ordered set of lifecycle interceptors for a run. The tool hooks
 // (Before/After) gate and rewrite tool execution; the typed event hooks
 // (Context/BeforeProviderRequest/MessageEnd) participate in or observe the
-// reasoning turn. All handlers are panic-hardened per ErrorPolicy.
+// reasoning turn. Every handler is panic-hardened: gates fail closed, the rest
+// follow ErrorPolicy.
 type Hooks struct {
 	Before []BeforeToolCall
 	After  []AfterToolCall
@@ -168,11 +173,9 @@ type Hooks struct {
 	// AgentEnd observers run in order as the run returns, on every exit path.
 	AgentEnd []AgentEndHook
 
-	// Context runs in order before every provider request, each transforming the
-	// message view the next one sees (a reducer over the message list).
+	// Context runs in order before every provider request, each transforming
+	// the native message view the next one sees.
 	Context []ContextHook
-	// PiContext is the native counterpart of Context, used by the Pi host.
-	PiContext []PiContextHook
 	// BeforeProviderRequest runs in order on the assembled request of every
 	// provider attempt, each seeing the previous one's output (read-only on
 	// native runs; see ProviderRequestHook).
@@ -195,13 +198,19 @@ func (h Hooks) emitErr(source string, err error) error {
 	if err == nil {
 		return nil
 	}
-	if h.OnError != nil {
-		h.OnError(source, err)
-	}
+	h.report(source, err)
 	if h.ErrorPolicy == HookThrow {
 		return fmt.Errorf("hook %s: %w", source, err)
 	}
 	return nil
+}
+
+// report hands one attributed failure to OnError. A panicking OnError is
+// dropped: the reporter must never become a second failure.
+func (h Hooks) report(source string, err error) {
+	if h.OnError != nil && err != nil {
+		_ = safe(func() { h.OnError(source, err) })
+	}
 }
 
 // safe runs fn, converting a panic into an error so one reckless handler cannot
@@ -216,24 +225,23 @@ func safe(fn func()) (err error) {
 	return nil
 }
 
-// runBefore evaluates the before-hooks in order, short-circuiting on the first
-// block. A panicking before-hook is attributed and skipped (treated as
-// non-blocking under HookContinue); under HookThrow it propagates as a block so
-// the call is refused rather than silently executed.
-func (h Hooks) runBefore(ctx context.Context, call ToolCall) Decision {
-	for i, hook := range h.Before {
-		var d Decision = Allowed()
-		if perr := safe(func() { d = hook(ctx, call) }); perr != nil {
-			if e := h.emitErr(fmt.Sprintf("before_tool_call[%d]", i), perr); e != nil {
-				return Blocked(e.Error())
-			}
-			continue
+// decide folds a list of gates into the decision so far, stopping at the first
+// refusal. A gate that panics refuses the call whatever the error policy — a
+// broken gate must never let a call through — and the failure is reported
+// through OnError. source names the list for attribution.
+func (h Hooks) decide(ctx context.Context, source string, gates []BeforeToolCall, d Decision, call ToolCall) (Decision, ToolCall) {
+	for i, gate := range gates {
+		var next Decision
+		if perr := safe(func() { next = gate(ctx, call) }); perr != nil {
+			name := fmt.Sprintf("%s[%d]", source, i)
+			h.report(name, perr)
+			return Blocked(name + " failed: " + perr.Error()), call
 		}
-		if !d.Allow {
-			return d
+		if d, call = mergeDecision(d, next, call); d.refused() {
+			return d, call
 		}
 	}
-	return Allowed()
+	return d, call
 }
 
 // runAfter threads the result through the after-hooks in order; terminate is
@@ -254,26 +262,6 @@ func (h Hooks) runAfter(ctx context.Context, call ToolCall, result string, runEr
 		terminate = terminate || t
 	}
 	return result, terminate
-}
-
-// runContext folds the context hooks over the message list, each seeing the
-// previous one's output. A panicking hook is attributed and skipped (its input
-// is passed through). Under HookThrow a failure aborts via a returned error.
-func (h Hooks) runContext(ctx context.Context, msgs []Message) ([]Message, error) {
-	for i, hook := range h.Context {
-		var out []Message
-		source := fmt.Sprintf("context[%d]", i)
-		if perr := safe(func() { out = hook(ctx, msgs) }); perr != nil {
-			if e := h.emitErr(source, perr); e != nil {
-				return msgs, e
-			}
-			continue
-		}
-		if out != nil {
-			msgs = out
-		}
-	}
-	return msgs, nil
 }
 
 // runBeforeProviderRequest folds the request hooks over the assembled request.

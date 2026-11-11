@@ -3,6 +3,8 @@ package ai
 import (
 	"bytes"
 	"context"
+	"crypto/rand"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"io"
@@ -29,8 +31,11 @@ const anthropicOAuthScopes = "org:create_api_key user:profile user:inference use
 // ErrorStack controls stacks for errors created by this flow; the default is a
 // native Go stack. Supplied OAuthDiagnosticError values retain their own stacks.
 type AnthropicOAuthOptions struct {
-	Client         *http.Client
-	PKCE           func() (PKCE, error)
+	Client *http.Client
+	PKCE   func() (PKCE, error)
+	// State makes the OAuth state, independent of the PKCE verifier so the
+	// verifier never travels in a URL. Nil uses 32 random bytes, base64url.
+	State          func() (string, error)
 	StartCallback  func(*OAuthCallbackServerOptions) (*OAuthCallbackServer, error)
 	CallbackHost   *string
 	Now            func() float64
@@ -48,6 +53,15 @@ func AnthropicOAuth(settings ...AnthropicOAuthOptions) *OAuthAuth {
 	}
 	if options.PKCE == nil {
 		options.PKCE = GeneratePKCE
+	}
+	if options.State == nil {
+		options.State = func() (string, error) {
+			var b [32]byte
+			if _, err := rand.Read(b[:]); err != nil {
+				return "", err
+			}
+			return base64.RawURLEncoding.EncodeToString(b[:]), nil
+		}
 	}
 	if options.StartCallback == nil {
 		options.StartCallback = StartOAuthCallbackServer
@@ -113,6 +127,10 @@ func loginAnthropic(interaction ProviderAuthInteraction, copyCode bool, options 
 	if err != nil {
 		return nil, err
 	}
+	state, err := options.State()
+	if err != nil {
+		return nil, err
+	}
 	ctx := interaction.Context
 	if ctx == nil {
 		ctx = context.Background()
@@ -125,7 +143,7 @@ func loginAnthropic(interaction ProviderAuthInteraction, copyCode bool, options 
 		// Pi falls back to manual input for every callback-start rejection,
 		// including an occupied port and an already-aborted interaction.
 		started, startErr := invokeAuth(func() (any, error) {
-			return options.StartCallback(&OAuthCallbackServerOptions{ProviderName: "Anthropic", Host: *options.CallbackHost, Port: 53692, Path: "/callback", State: &pkce.Verifier, Context: ctx, Complete: func(code string) (any, error) { return code, nil }})
+			return options.StartCallback(&OAuthCallbackServerOptions{ProviderName: "Anthropic", Host: *options.CallbackHost, Port: 53692, Path: "/callback", State: &state, Context: ctx, Complete: func(code string) (any, error) { return code, nil }})
 		})
 		if startErr == nil {
 			callback, _ = started.(*OAuthCallbackServer)
@@ -137,7 +155,7 @@ func loginAnthropic(interaction ProviderAuthInteraction, copyCode bool, options 
 	encode := func(value string) string {
 		return strings.NewReplacer("%2A", "*", "~", "%7E").Replace(url.QueryEscape(value))
 	}
-	authURL := "https://claude.ai/oauth/authorize?code=true&client_id=" + anthropicOAuthClientID + "&response_type=code&redirect_uri=" + encode(redirectURI) + "&scope=" + encode(anthropicOAuthScopes) + "&code_challenge=" + encode(pkce.Challenge) + "&code_challenge_method=S256&state=" + encode(pkce.Verifier)
+	authURL := "https://claude.ai/oauth/authorize?code=true&client_id=" + anthropicOAuthClientID + "&response_type=code&redirect_uri=" + encode(redirectURI) + "&scope=" + encode(anthropicOAuthScopes) + "&code_challenge=" + encode(pkce.Challenge) + "&code_challenge_method=S256&state=" + encode(state)
 	instructions := "Complete login in your browser. If the browser is on another machine, paste the final redirect URL here."
 	if copyCode {
 		instructions = "Complete login in your browser, then copy the code Anthropic shows and paste it here."
@@ -154,7 +172,7 @@ func loginAnthropic(interaction ProviderAuthInteraction, copyCode bool, options 
 			if code == "" {
 				return nil, errors.New("Missing authorization code")
 			}
-			return exchangeAnthropicCode(ctx, code, pkce.Verifier, pkce.Verifier, redirectURI, interaction, options)
+			return exchangeAnthropicCode(ctx, code, state, pkce.Verifier, redirectURI, interaction, options)
 		}
 		if err == nil {
 			input = result.Get("input")
@@ -170,18 +188,16 @@ func loginAnthropic(interaction ProviderAuthInteraction, copyCode bool, options 
 		}
 		return nil, errors.New("input.trim is not a function. (In 'input.trim()', 'input.trim' is undefined)")
 	}
-	code, state := parseOAuthAuthorizationInput(text)
-	if state != nil && *state != "" && *state != pkce.Verifier {
+	// A pasted state must be ours; a bare code is allowed because PKCE binds
+	// it to this flow. The exchange always sends the state this flow issued.
+	code, pasted := parseOAuthAuthorizationInput(text)
+	if pasted != nil && *pasted != "" && *pasted != state {
 		return nil, errors.New("OAuth state mismatch")
 	}
 	if code == "" {
 		return nil, errors.New("Missing authorization code")
 	}
-	stateValue := pkce.Verifier
-	if state != nil {
-		stateValue = *state
-	}
-	return exchangeAnthropicCode(ctx, code, stateValue, pkce.Verifier, redirectURI, interaction, options)
+	return exchangeAnthropicCode(ctx, code, state, pkce.Verifier, redirectURI, interaction, options)
 }
 
 func exchangeAnthropicCode(ctx context.Context, code, state, verifier, redirectURI string, interaction ProviderAuthInteraction, options AnthropicOAuthOptions) (any, error) {

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
 	"sync"
 	"unicode/utf8"
 )
@@ -120,17 +121,16 @@ func boundToolContentParts(parts []ContentPart, maxTextBytes int) ([]ContentPart
 // instead of re-parking.
 var ErrParked = errors.New("tool parked the run awaiting a human answer")
 
-// ArgPreparer is an optional Tool capability (pi's prepareArguments): it
-// normalizes the raw JSON argument string before validation and execution —
-// defaulting fields, coercing shapes the model commonly gets wrong. A tool that
-// does not implement it runs with the model's arguments verbatim.
+// ArgPreparer is an optional Tool capability: it normalizes the raw JSON
+// argument string before validation and execution — defaulting fields,
+// coercing shapes the model commonly gets wrong. A tool that does not
+// implement it runs with the model's arguments verbatim.
 type ArgPreparer interface {
 	PrepareArguments(raw string) string
 }
 
-// StreamingTool is an optional Tool capability (pi's tool_execution_update): a
-// long-running tool may emit partial output as it works via the supplied emit
-// callback, which the loop forwards to the stream sink so a viewer sees progress
+// StreamingTool is an optional Tool capability: a long-running tool may emit
+// partial output as it works via the supplied emit callback, which the loop forwards to the stream sink so a viewer sees progress
 // before the tool finishes. The returned string is still the authoritative final
 // result (identical to Run's), and a tool that does not implement this runs
 // through Run unchanged. emit is a no-op on a non-streaming run.
@@ -140,7 +140,7 @@ type StreamingTool interface {
 
 // ParallelTool is an optional Tool capability: a tool whose Parallel() returns
 // true may be executed concurrently with the other parallel-eligible tool calls
-// in the same assistant turn (pi's executionMode). The safe default is
+// in the same assistant turn. The safe default is
 // sequential — tools that mutate state or depend on call ordering must NOT
 // implement this, so concurrency is opt-in per read-only tool.
 type ParallelTool interface {
@@ -193,6 +193,35 @@ func (ts *ToolSet) With(tools ...Tool) *ToolSet {
 		clone.Add(t)
 	}
 	return clone
+}
+
+// withNew is With for composition: a name the set (or an earlier tool in the
+// list) already has is an error instead of a silent overwrite, so two plugins
+// can never shadow each other's tool.
+func (ts *ToolSet) withNew(tools ...Tool) (*ToolSet, error) {
+	out := ts.With()
+	for _, t := range tools {
+		if t == nil {
+			continue
+		}
+		if _, taken := out.byKey[t.Name()]; taken {
+			return nil, fmt.Errorf("agentcore: tool %q is registered twice", t.Name())
+		}
+		out.Add(t)
+	}
+	return out, nil
+}
+
+// without returns a copy of the set minus the named tools.
+func (ts *ToolSet) without(names ...string) *ToolSet {
+	out := ts.With()
+	for _, name := range names {
+		if _, ok := out.byKey[name]; ok {
+			delete(out.byKey, name)
+			out.order = slices.DeleteFunc(out.order, func(n string) bool { return n == name })
+		}
+	}
+	return out
 }
 
 // toolValidatorCache is shared by ToolSet.With clones. It stores at most one
@@ -248,7 +277,7 @@ var gateExemptTools = map[string]bool{
 }
 
 // defaultMaxToolResultBytes bounds a tool result before it reaches the LLM —
-// token + safety guard (pi harness truncate.ts, rebuilt UTF-8-safe).
+// token + safety guard (UTF-8-safe).
 const defaultMaxToolResultBytes = 24 * 1024
 
 // truncateBytes trims s to at most maxBytes without splitting a UTF-8 rune,

@@ -78,6 +78,14 @@ selection. `ParseFallbackSelection` validates transition generations and record
 shape; the host also checks the selected provider/model against its configured
 candidates before resuming.
 
+`FallbackLadder` keeps a host on the rung that worked without making it
+permanent: after `RecoverAfter` (default 5m) or `RecoverAfterSuccesses`
+(default 8) on a fallback rung, `Bind` makes the next request probe the rungs
+above it once (`FallbackRequest.Probe`: one attempt each, no retry budget)
+before the known-good rung serves. A failed probe restarts both counts;
+`Resume` restores a checkpointed rung. `agentcore.RunNative` binds every main
+request through one (`NativeRun.Fallback`).
+
 Thinking-level sampling defaults follow upstream
 `200387122ca450d6387f033949423114a270b96c`: model defaults are overridden by
 `samplingParamsByThinkingLevel` at the clamped level, then by request values.

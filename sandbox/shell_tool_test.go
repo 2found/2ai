@@ -74,7 +74,7 @@ func TestComputerUseToolThreadsSessionAndLimits(t *testing.T) {
 		t.Fatalf("NewWorkspace: %v", err)
 	}
 	stub := &stubSandbox{result: agentcore.SandboxResult{ExitCode: 0, Stdout: "ok\n"}}
-	tool := NewComputerUseTool(stub, ws)
+	tool := NewComputerUseTool(stub, ws, "pypi.org", "files.pythonhosted.org")
 
 	if tool.Name() != ToolComputerUse {
 		t.Fatalf("name = %q, want %q", tool.Name(), ToolComputerUse)
@@ -89,8 +89,15 @@ func TestComputerUseToolThreadsSessionAndLimits(t *testing.T) {
 	}
 	// The computer-use envelope is the opposite of run_shell's lock: network on,
 	// writable fs, so installs work.
-	if !stub.last.Constraints.Network || !stub.last.Constraints.WritableFS {
-		t.Fatalf("expected networked writable constraints, got %+v", stub.last.Constraints)
+	if c := stub.last.Constraints; !c.Network || !c.WritableFS || strings.Join(c.NetworkAllow, ",") != "pypi.org,files.pythonhosted.org" {
+		t.Fatalf("expected allowlisted networked writable constraints, got %+v", c)
+	}
+	// Without an allowlist the session is offline, never silently open.
+	if _, err := NewComputerUseTool(stub, ws).Run(ctx, `{"command":"true"}`); err != nil {
+		t.Fatal(err)
+	}
+	if stub.last.Constraints.Network {
+		t.Fatalf("computer_use with no allowlist must be offline, got %+v", stub.last.Constraints)
 	}
 	// Workspace is mounted read-write so produced files persist on the host.
 	if len(stub.last.Mounts) != 1 || stub.last.Mounts[0].ReadOnly {
@@ -128,18 +135,24 @@ func TestShellToolSpillsOversizedOutput(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run: %v", err)
 	}
-	if !strings.Contains(out, "full output saved to "+shellLogDir+"/") {
+	if !strings.Contains(out, "[... ") || !strings.Contains(out, "bytes omitted ...]") {
+		t.Fatalf("expected an omitted-bytes marker: %q", out)
+	}
+	if len(out) > shellHeadBytes+shellTailBytes+1024 {
+		t.Fatalf("visible output is %d bytes, want bounded by head+tail", len(out))
+	}
+	if !strings.Contains(out, "is saved to "+shellLogDir+"/") || !strings.Contains(out, "final error: it broke") {
 		t.Fatalf("expected spill note in output tail: %q", out[len(out)-300:])
 	}
 	// The note names a real, readable file containing the complete output.
 	start := strings.Index(out, shellLogDir+"/")
 	rel := out[start:]
 	rel = rel[:strings.IndexAny(rel, "; ")]
-	logOut, rerr := NewReadFileTool(nil, ws).Run(context.Background(), `{"path":"`+rel+`","offset":1,"limit":2}`)
+	logOut, rerr := NewReadFileTool(nil, ws).Run(context.Background(), `{"path":"`+rel+`","offset":4001,"limit":2}`)
 	if rerr != nil {
 		t.Fatalf("spilled log not readable via read_file: %v", rerr)
 	}
-	if !strings.Contains(logOut, "exit_code: 1") {
+	if !strings.Contains(logOut, "final error: it broke") {
 		t.Fatalf("spilled log missing content: %q", logOut)
 	}
 }
@@ -154,7 +167,7 @@ func TestShellToolSmallOutputDoesNotSpill(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run: %v", err)
 	}
-	if strings.Contains(out, "full output saved") {
+	if strings.Contains(out, "truncated") || strings.Contains(out, "omitted") {
 		t.Fatalf("small output must not spill: %q", out)
 	}
 }

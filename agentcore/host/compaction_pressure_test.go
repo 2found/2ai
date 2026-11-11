@@ -11,7 +11,7 @@ import (
 )
 
 func TestSummaryAllowanceReservesHostToolsAndVerbatimTask(t *testing.T) {
-	prefix := piRequestJSON([]any{map[string]any{"role": "system", "content": strings.Repeat("host tools ", 1900)}, map[string]any{"role": "user", "content": "original input"}})
+	prefix := nativeRequestJSON([]any{map[string]any{"role": "system", "content": strings.Repeat("host tools ", 1700)}, map[string]any{"role": "user", "content": "original input"}})
 	task := "Write exact.json and verify the schema"
 	allowance, err := SummaryAllowance(prefix, task, 6144)
 	if err != nil || allowance >= 6144/4 || allowance < 128 {
@@ -19,8 +19,8 @@ func TestSummaryAllowanceReservesHostToolsAndVerbatimTask(t *testing.T) {
 	}
 	var messages []json.RawMessage
 	_ = json.Unmarshal(prefix, &messages)
-	summary := piRequestJSON(map[string]any{"role": "user", "content": strings.Repeat("x", allowance*4)})
-	view := piRequestJSON(summaryViewWithTask(messages, len(messages), summary, task))
+	summary := nativeRequestJSON(map[string]any{"role": "user", "content": strings.Repeat("x", tokenBytes(allowance))})
+	view := nativeRequestJSON(summaryViewWithTask(messages, new(transcriptMemo).of(messages), len(messages), summary, task))
 	if ContextTokens(view) > 6144 {
 		t.Fatal("summary allowance does not fit", ContextTokens(view))
 	}
@@ -30,7 +30,7 @@ func TestSummaryAllowanceReservesHostToolsAndVerbatimTask(t *testing.T) {
 }
 
 func TestCompactionTargetIsDistinctFromModelInputCeiling(t *testing.T) {
-	raw := piRequestJSON([]any{map[string]any{"role": "system", "content": strings.Repeat("immutable tools ", 1800)}, map[string]any{"role": "user", "content": "current task"}})
+	raw := nativeRequestJSON([]any{map[string]any{"role": "system", "content": strings.Repeat("immutable tools ", 1800)}, map[string]any{"role": "user", "content": "current task"}})
 	policy := CompactionPolicy{Budget: 1024}.ForWindow(32000)
 	view, err := NewCompactor(CompactorOptions{Revision: "test", Policy: policy}).Prepare(context.Background(), raw, policy)
 	if err != nil || !SameJSON(raw, view) || ContextTokens(view) <= policy.Budget || ContextTokens(view) > policy.MaxInputTokens {
@@ -43,7 +43,7 @@ func TestCompactionTargetIsDistinctFromModelInputCeiling(t *testing.T) {
 }
 
 func TestSoftTargetDoesNotForceCompactARecentToolBatchEveryTurn(t *testing.T) {
-	raw := piRequestJSON([]any{map[string]any{"role": "system", "content": strings.Repeat("immutable tools ", 1200)}, map[string]any{"role": "user", "content": "current task"}, map[string]any{"role": "assistant", "content": []any{map[string]any{"type": "toolCall", "id": "one", "name": "read", "arguments": map[string]any{}}}}, map[string]any{"role": "toolResult", "toolCallId": "one", "toolName": "read", "content": []any{map[string]any{"type": "text", "text": "recent exact evidence"}}}})
+	raw := nativeRequestJSON([]any{map[string]any{"role": "system", "content": strings.Repeat("immutable tools ", 1200)}, map[string]any{"role": "user", "content": "current task"}, map[string]any{"role": "assistant", "content": []any{map[string]any{"type": "toolCall", "id": "one", "name": "read", "arguments": map[string]any{}}}}, map[string]any{"role": "toolResult", "toolCallId": "one", "toolName": "read", "content": []any{map[string]any{"type": "text", "text": "recent exact evidence"}}}})
 	summaries := 0
 	policy := CompactionPolicy{Budget: 1024, KeepRecent: 512, Summarize: func(context.Context, json.RawMessage, string) (string, protocol.Usage, error) {
 		summaries++
@@ -56,13 +56,13 @@ func TestSoftTargetDoesNotForceCompactARecentToolBatchEveryTurn(t *testing.T) {
 }
 
 func TestPrepareRecoversOversizedFirstToolBatch(t *testing.T) {
-	messages := piLongRequest()[:4]
+	messages := nativeLongRequest()[:4]
 	var result map[string]json.RawMessage
 	_ = json.Unmarshal(messages[3], &result)
 	full := strings.Repeat("bằng chứng ", 10000)
-	result["content"] = piRequestJSON([]any{map[string]any{"type": "text", "text": full}})
-	messages[3] = piRequestJSON(result)
-	original := piRequestJSON(messages)
+	result["content"] = nativeRequestJSON([]any{map[string]any{"type": "text", "text": full}})
+	messages[3] = nativeRequestJSON(result)
+	original := nativeRequestJSON(messages)
 	archives := map[string]string{}
 	policy := CompactionPolicy{Budget: 4096, KeepRecent: 2048, Task: "Write exact.json", Archive: func(_ context.Context, name, id, text string) (string, error) {
 		archives[id] = text
@@ -81,12 +81,18 @@ func TestPrepareRecoversOversizedFirstToolBatch(t *testing.T) {
 	if !SameJSON(messages[2], after[2]) {
 		t.Fatal("opaque assistant/signature changed")
 	}
-	if !SameJSON(original, piRequestJSON(messages)) {
+	if !SameJSON(original, nativeRequestJSON(messages)) {
 		t.Fatal("source transcript rewritten")
 	}
 	policy.Archive = func(context.Context, string, string, string) (string, error) {
 		return "", errors.New("disk unavailable")
 	}
+	// A result the archive already saved keeps its locator; a fresh run whose
+	// archive fails must not present lost evidence as compacted.
+	if again, err := c.Prepare(context.Background(), original, policy); err != nil || !SameJSON(again, view) {
+		t.Fatal("an archived preview was not reused", err)
+	}
+	c = NewCompactor(CompactorOptions{Revision: "test", Policy: policy})
 	if _, err = c.Prepare(context.Background(), original, policy); err == nil {
 		t.Fatal("lost evidence presented as compacted")
 	}
@@ -105,28 +111,10 @@ func TestContextTokensUsageAndRewriteAnchors(t *testing.T) {
 				m = append(m, map[string]any{"role": "user", "content": "summary", "agentrayContextSummary": "id", "timestamp": 2})
 			}
 			m = append(m, map[string]any{"role": tc.role, "stopReason": tc.stop, "timestamp": 1, "content": []any{map[string]any{"type": "text", "text": "short"}}, "usage": map[string]any{"input": 5000, "cacheRead": 200, "output": 10}}, map[string]any{"role": "user", "content": "tail"})
-			n := ContextTokens(piRequestJSON(m))
+			n := ContextTokens(nativeRequestJSON(m))
 			if (n >= 5210) != tc.wantHigh {
 				t.Fatal("incorrect usage anchor", n)
 			}
 		})
-	}
-}
-
-func TestSummaryFoldsInsideInputBudget(t *testing.T) {
-	prefix := piRequestJSON(strings.Repeat("evidence🙂 ", 2000))
-	calls := 0
-	text, usage, err := FoldSummary(context.Background(), prefix, 512, "r", func(_ context.Context, raw json.RawMessage, _ string) (string, protocol.Usage, error) {
-		calls++
-		if estimateTokens(string(raw)) > 512 || !json.Valid(raw) {
-			t.Fatal("summary input overflow", len(raw))
-		}
-		if calls > 1 && !strings.Contains(string(raw), "earlier facts") {
-			t.Fatal("previous fold missing")
-		}
-		return "earlier facts", protocol.Usage{InputTokens: 7}, nil
-	})
-	if err != nil || calls < 2 || text != "earlier facts" || usage.InputTokens != calls*7 {
-		t.Fatal("fold failed", calls, usage, err)
 	}
 }

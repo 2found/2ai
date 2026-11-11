@@ -355,39 +355,6 @@ func (t *GlobTool) Run(ctx context.Context, args string) (string, error) {
 	return out, nil
 }
 
-// searchRoot resolves an optional relative subdirectory to an absolute path
-// inside the workspace, defaulting to the workspace root. It is the host
-// substrate's half of scoping a search; the sandbox substrate scopes with the
-// same relative path inside the mount.
-func searchRoot(ws *Workspace, sub string) (string, error) {
-	if strings.TrimSpace(sub) == "" || filepath.Clean(sub) == "." {
-		if ws.Root() == "" {
-			return "", fmt.Errorf("workspace is not configured")
-		}
-		return ws.Root(), nil
-	}
-	abs, _, err := ws.Resolve(sub)
-	if err != nil {
-		return "", err
-	}
-	resolved, err := filepath.EvalSymlinks(abs)
-	if err != nil {
-		return "", err
-	}
-	if !inside(ws.Root(), resolved) {
-		return "", fmt.Errorf("path escapes workspace")
-	}
-	return resolved, nil
-}
-
-func workspaceRel(ws *Workspace, abs string) string {
-	rel, err := filepath.Rel(ws.Root(), abs)
-	if err != nil {
-		return abs
-	}
-	return filepath.ToSlash(rel)
-}
-
 func clampLine(s string) string {
 	s = strings.TrimRight(s, "\r")
 	if len(s) > maxGrepLineLength {

@@ -44,7 +44,8 @@ func TestPlanComesBackOnResume(t *testing.T) {
 	requests := 0
 	resumed := newPlanAgent(t, second, func(ctx context.Context, model json.RawMessage, view ai.TranscriptContext, options map[string]any) (*ai.AssistantMessageEventStream, error) {
 		requests++
-		prompt := ai.GetCurrentSystemPrompt(view.Messages())
+		raw, _ := json.Marshal(view.Messages())
+		prompt := string(raw)
 		for _, want := range []string{"[x] " + planStepA, "[~] " + planStepB, "[ ] " + planStepC} {
 			if !strings.Contains(prompt, want) {
 				t.Errorf("restored request lost %q", want)
@@ -73,7 +74,7 @@ func TestFinishedRunsPlanIsNotInherited(t *testing.T) {
 	}
 	next := todo.NewStore()
 	chained := newPlanAgent(t, next, func(ctx context.Context, model json.RawMessage, view ai.TranscriptContext, options map[string]any) (*ai.AssistantMessageEventStream, error) {
-		if strings.Contains(ai.GetCurrentSystemPrompt(view.Messages()), todo.ContextPrefix) {
+		if raw, _ := json.Marshal(view.Messages()); strings.Contains(string(raw), todo.ContextPrefix) || strings.Contains(string(raw), planStepB) {
 			t.Error("a new task inherited the previous checklist")
 		}
 		return ai.ScriptedStream(nativePlanAnswer("on it"))(ctx, model, view, options)

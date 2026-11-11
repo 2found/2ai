@@ -6,72 +6,108 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"slices"
 	"sort"
 	"strings"
 	"sync"
 	"time"
 )
 
-// Egress allowlist (#5b). When a session is granted network AND a non-empty
+// Egress allowlist. When a session is granted network AND a non-empty
 // NetworkAllow list, its container must reach only the listed hosts. The
 // enforcement has two halves:
 //
-//  1. This host-side filtering forward-proxy, which hard-denies any host not on
-//     the allowlist for both CONNECT (HTTPS) and plain HTTP — the security core,
-//     unit-tested independently of Docker.
-//  2. docker.go routes the container's traffic through this proxy (HTTP(S)_PROXY
-//     env) and, on hosts where it is available, confines the container to an
-//     internal network whose only reachable peer is the proxy, so a client that
-//     ignores the proxy env still cannot reach the open internet.
+//  1. This host-side filtering forward-proxy, which hard-denies any host or port
+//     not on the allowlist for both CONNECT (HTTPS) and plain HTTP — the
+//     security core, unit-tested independently of Docker.
+//  2. docker.go attaches the container to an internal network (no route off the
+//     bridge) whose gateway address is the only place this proxy listens, so
+//     the proxy is the container's one way out. A client that ignores the proxy
+//     env has no route at all.
 //
 // The allowlist match is suffix-based on the DNS name: an entry "pypi.org"
 // matches "pypi.org" and "sub.pypi.org" but never "notpypi.org" (the boundary is
 // a dot or the whole string), and never an IP literal unless the entry is that
-// exact IP. This is deliberately strict — egress is the blast-radius control for
-// a compromised tool.
+// exact IP. An entry without a port permits 80 and 443; "host:8443" permits that
+// port only. This is deliberately strict — egress is the blast-radius control
+// for a compromised tool.
+
+// AnyHost is the NetworkAllow entry that grants unrestricted egress. Network
+// with an empty allowlist is refused rather than silently opened, so open
+// internet access is always this explicit, greppable choice.
+const AnyHost = "*"
+
+// egressDefaultPorts are what an allowlist entry without a port permits.
+var egressDefaultPorts = []string{"80", "443"}
+
+// egressRule is one compiled allowlist entry.
+type egressRule struct {
+	host string // lower-cased, no trailing dot
+	port string // "" = egressDefaultPorts
+}
 
 // egressAllow is a compiled, immutable allowlist checked per-request.
 type egressAllow struct {
-	hosts []string // lower-cased, deduped, sorted (for a stable cache key)
+	rules        []egressRule // deduped, sorted (for a stable cache key)
+	unrestricted bool         // AnyHost was listed
 }
 
 func newEgressAllow(entries []string) egressAllow {
-	seen := map[string]struct{}{}
-	var hosts []string
+	seen := map[egressRule]struct{}{}
+	var allow egressAllow
 	for _, e := range entries {
-		h := strings.ToLower(strings.TrimSpace(e))
-		if h == "" {
+		e = strings.ToLower(strings.TrimSpace(e))
+		if e == "" {
 			continue
 		}
-		if _, ok := seen[h]; ok {
+		if e == AnyHost {
+			allow.unrestricted = true
 			continue
 		}
-		seen[h] = struct{}{}
-		hosts = append(hosts, h)
+		rule := egressRule{host: e}
+		if h, p, err := net.SplitHostPort(e); err == nil {
+			rule = egressRule{host: h, port: p}
+		}
+		rule.host = strings.TrimSuffix(rule.host, ".")
+		if _, ok := seen[rule]; ok || rule.host == "" {
+			continue
+		}
+		seen[rule] = struct{}{}
+		allow.rules = append(allow.rules, rule)
 	}
-	sort.Strings(hosts)
-	return egressAllow{hosts: hosts}
+	sort.Slice(allow.rules, func(i, j int) bool { return allow.rules[i].key() < allow.rules[j].key() })
+	return allow
+}
+
+func (r egressRule) key() string {
+	if r.port == "" {
+		return r.host
+	}
+	return net.JoinHostPort(r.host, r.port)
 }
 
 // key is a stable identifier for this allowlist (used to cache one proxy per
-// distinct set of hosts).
-func (a egressAllow) key() string { return strings.Join(a.hosts, ",") }
+// distinct set of rules).
+func (a egressAllow) key() string {
+	keys := make([]string, len(a.rules))
+	for i, r := range a.rules {
+		keys[i] = r.key()
+	}
+	return strings.Join(keys, ",")
+}
 
-// permits reports whether host (a bare hostname, no port) is allowed. Matching is
-// case-insensitive and boundary-safe: an allow entry matches the host itself or
-// any subdomain of it.
-func (a egressAllow) permits(host string) bool {
+// permits reports whether host:port is allowed. Matching is case-insensitive
+// and boundary-safe: an entry matches the host itself or any subdomain of it.
+func (a egressAllow) permits(host, port string) bool {
 	host = strings.ToLower(strings.TrimSuffix(strings.TrimSpace(host), "."))
-	if host == "" {
+	if host == "" || port == "" {
 		return false
 	}
-	for _, allowed := range a.hosts {
-		if host == allowed {
-			return true
+	for _, r := range a.rules {
+		if host != r.host && !strings.HasSuffix(host, "."+r.host) {
+			continue
 		}
-		// Subdomain: host ends with "."+allowed so "notpypi.org" does not match
-		// "pypi.org" but "files.pypi.org" does.
-		if strings.HasSuffix(host, "."+allowed) {
+		if r.port == port || (r.port == "" && slices.Contains(egressDefaultPorts, port)) {
 			return true
 		}
 	}
@@ -87,8 +123,8 @@ type egressProxy struct {
 	dialer   *net.Dialer
 }
 
-// newEgressProxy binds a proxy on addr (":0" for an ephemeral port) enforcing
-// allow. Call Addr() after Start to learn the bound port.
+// newEgressProxy builds a proxy enforcing allow. Start binds it; Addr then
+// reports the bound port.
 func newEgressProxy(allow egressAllow) *egressProxy {
 	return &egressProxy{allow: allow, dialer: &net.Dialer{Timeout: 10 * time.Second}}
 }
@@ -130,18 +166,20 @@ func (p *egressProxy) handle(w http.ResponseWriter, r *http.Request) {
 	p.handleHTTP(w, r)
 }
 
-// hostOnly strips any :port from an authority.
-func hostOnly(authority string) string {
-	if h, _, err := net.SplitHostPort(authority); err == nil {
-		return h
-	}
-	return authority
+func (p *egressProxy) deny(w http.ResponseWriter, host, port string) {
+	http.Error(w, fmt.Sprintf("egress to %s is not on the allowlist", net.JoinHostPort(host, port)), http.StatusForbidden)
 }
 
 func (p *egressProxy) handleConnect(w http.ResponseWriter, r *http.Request) {
-	host := hostOnly(r.Host)
-	if !p.allow.permits(host) {
-		http.Error(w, fmt.Sprintf("egress to %q is not on the allowlist", host), http.StatusForbidden)
+	// A CONNECT target is always host:port; anything else is not a tunnel
+	// request this proxy can check.
+	host, port, err := net.SplitHostPort(r.Host)
+	if err != nil {
+		http.Error(w, "CONNECT target must be host:port", http.StatusBadRequest)
+		return
+	}
+	if !p.allow.permits(host, port) {
+		p.deny(w, host, port)
 		return
 	}
 	// The name is allowlisted; the address it resolves to still has to pass the
@@ -149,7 +187,7 @@ func (p *egressProxy) handleConnect(w http.ResponseWriter, r *http.Request) {
 	// 169.254.169.254 (or the host's private network) would tunnel straight
 	// through. This is also what lets http_request and web_fetch run inside the
 	// sandbox without giving up their SSRF backstop.
-	dst, err := guardedDialFunc(p.dialer, blockedIP)(r.Context(), "tcp", r.Host)
+	dst, err := guardedDialFunc(p.dialer, blockedIP)(r.Context(), "tcp", net.JoinHostPort(host, port))
 	if err != nil {
 		http.Error(w, "upstream dial failed", http.StatusBadGateway)
 		return
@@ -170,22 +208,33 @@ func (p *egressProxy) handleConnect(w http.ResponseWriter, r *http.Request) {
 	go func() { _, _ = io.Copy(client, dst); _ = client.Close() }()
 }
 
+// hopHeaders are connection-scoped and never forwarded (RFC 9110 §7.6.1), plus
+// Proxy-Authorization, which is for this proxy and must not reach upstream.
+var hopHeaders = []string{"Connection", "Keep-Alive", "Proxy-Authorization", "Proxy-Connection", "Te", "Trailer", "Transfer-Encoding", "Upgrade"}
+
 func (p *egressProxy) handleHTTP(w http.ResponseWriter, r *http.Request) {
-	host := hostOnly(r.Host)
-	if !p.allow.permits(host) {
-		http.Error(w, fmt.Sprintf("egress to %q is not on the allowlist", host), http.StatusForbidden)
+	// A proxied request carries an absolute URI. Check the host the request will
+	// actually be sent to (the URL), not a Host header that may disagree.
+	if !r.URL.IsAbs() || r.URL.Scheme != "http" || r.URL.Hostname() == "" {
+		http.Error(w, "only absolute http:// URLs are proxied; use CONNECT for https", http.StatusBadRequest)
 		return
 	}
-	// Rebuild an outbound request; proxied requests carry an absolute URI.
+	host, port := r.URL.Hostname(), r.URL.Port()
+	if port == "" {
+		port = "80"
+	}
+	if !p.allow.permits(host, port) {
+		p.deny(w, host, port)
+		return
+	}
 	outReq, err := http.NewRequestWithContext(r.Context(), r.Method, r.URL.String(), r.Body)
 	if err != nil {
 		http.Error(w, "bad proxied request", http.StatusBadRequest)
 		return
 	}
-	for k, vs := range r.Header {
-		for _, v := range vs {
-			outReq.Header.Add(k, v)
-		}
+	outReq.Header = r.Header.Clone()
+	for _, h := range hopHeaders {
+		outReq.Header.Del(h)
 	}
 	client := &http.Client{
 		Timeout:       30 * time.Second,
@@ -209,9 +258,9 @@ func (p *egressProxy) handleHTTP(w http.ResponseWriter, r *http.Request) {
 	_, _ = io.Copy(w, resp.Body)
 }
 
-// egressProxyPool caches one running proxy per distinct allowlist so repeated
-// sessions with the same grants reuse a single listener instead of leaking one
-// per run.
+// egressProxyPool caches one running proxy per (listen address, allowlist) so
+// repeated sessions with the same grants reuse a single listener instead of
+// leaking one per run.
 type egressProxyPool struct {
 	mu      sync.Mutex
 	proxies map[string]*egressProxy
@@ -221,24 +270,27 @@ func newEgressProxyPool() *egressProxyPool {
 	return &egressProxyPool{proxies: map[string]*egressProxy{}}
 }
 
-// get returns a running proxy for allow, starting one bound to the loopback host
-// on an ephemeral port if none exists yet. An empty allowlist returns (nil, nil)
-// — the caller keeps the current no-allowlist behavior.
-func (pl *egressProxyPool) get(allow egressAllow) (*egressProxy, error) {
-	if len(allow.hosts) == 0 {
-		return nil, nil
+// get returns a running proxy for allow listening on bindIP (an ephemeral
+// port), starting one if none exists yet. bindIP is the narrowest address the
+// container can reach — the egress network's gateway — never a wildcard.
+func (pl *egressProxyPool) get(allow egressAllow, bindIP string) (*egressProxy, error) {
+	if len(allow.rules) == 0 {
+		return nil, fmt.Errorf("sandbox: egress proxy needs a non-empty allowlist")
 	}
+	if ip := net.ParseIP(bindIP); ip == nil || ip.IsUnspecified() {
+		return nil, fmt.Errorf("sandbox: egress proxy needs a concrete listen address, got %q", bindIP)
+	}
+	key := bindIP + "|" + allow.key()
 	pl.mu.Lock()
 	defer pl.mu.Unlock()
-	if p, ok := pl.proxies[allow.key()]; ok {
+	if p, ok := pl.proxies[key]; ok {
 		return p, nil
 	}
 	p := newEgressProxy(allow)
-	// Bind on all interfaces so the container can reach it via the host gateway.
-	if err := p.Start("0.0.0.0:0"); err != nil {
+	if err := p.Start(net.JoinHostPort(bindIP, "0")); err != nil {
 		return nil, err
 	}
-	pl.proxies[allow.key()] = p
+	pl.proxies[key] = p
 	return p, nil
 }
 

@@ -1,8 +1,17 @@
 package agentcore
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
+	"fmt"
 	"io"
+	"net"
+	"net/url"
+	"regexp"
+	"slices"
+	"sort"
+	"strings"
 )
 
 // Env describes host-owned tool execution infrastructure. It is executor
@@ -15,28 +24,30 @@ type Env struct {
 	// backend for diagnostics; the host must also bind it to each tool that uses
 	// it. Setting this field alone does not sandbox a tool.
 	Sandbox Sandbox
-	// Credentials is the optional secret resolver. When set, tool arguments are
-	// passed through it at the trust boundary — after the call has been traced
-	// and gated, immediately before the tool executes — so opaque {{cred:NAME}}
-	// placeholders the model emits become real secret values the tool can use
-	// (an API key, a scoped DB DSN) without the model, the persisted trace, or
-	// the before-hooks ever seeing the literal. nil = no resolution; arguments
+	// Credentials is the optional secret resolver. When set, {{cred:NAME}}
+	// placeholders in a call's arguments are resolved at the trust boundary —
+	// after the call has been traced and gated, immediately before the tool
+	// executes — for the tools CredentialGrants allows, and every resolved value
+	// is redacted from what the tool returns. nil = no resolution; arguments
 	// reach the tool unchanged.
 	Credentials CredentialResolver
+	// CredentialGrants say which tools (and, for network tools, which hosts)
+	// may receive each credential. Default deny: a placeholder no grant covers
+	// blocks the call.
+	CredentialGrants []CredentialGrant
 }
 
-// CredentialResolver substitutes opaque {{cred:NAME}} placeholders in a tool's
-// argument JSON with real secret values. It runs at the trust boundary inside
-// the tool loop: the call is traced and permission-gated in placeholder form
-// first, so neither the model nor the persisted trace ever observes the literal
-// secret — it exists only in the string handed to the executing tool.
+// CredentialResolver returns the secret value for one {{cred:NAME}}
+// placeholder. The executor calls Resolve with exactly one placeholder and no
+// other text, after the grant for that credential has been checked, so the
+// literal secret exists only in the arguments handed to the executing tool —
+// never in the model's view, the persisted trace, or the before-hooks.
 //
-// agentcore defines the contract only; the concrete vault (which holds the
-// secrets and decides which the agent may resolve) is injected by the host via
-// Env.Credentials, keeping this package a leaf with no infrastructure imports.
-// Resolve MUST fail closed: an unknown or disallowed placeholder returns an
-// error, which blocks the call and feeds the reason back to the model rather
-// than silently leaving the placeholder in place.
+// agentcore defines the contract only; the concrete vault is injected by the
+// host via Env.Credentials, keeping this package a leaf with no
+// infrastructure imports. Resolve MUST fail closed: an unknown placeholder
+// returns an error, which blocks the call and feeds the reason back to the
+// model rather than silently leaving the placeholder in place.
 type CredentialResolver interface {
 	Resolve(ctx context.Context, args string) (string, error)
 }
@@ -180,9 +191,13 @@ type SandboxMount struct {
 // The zero value is fail-closed: no network, read-only root filesystem, and the
 // default resource caps applied by the backend.
 type SandboxLimits struct {
-	Network      bool     // false (default) = no network egress at all
-	NetworkAllow []string // when Network is true and non-empty, egress is confined to these hosts (+subdomains) via the sandbox filtering proxy; empty = open network
-	WritableFS   bool     // false (default) = read-only root + small writable workdir
+	Network bool // false (default) = no network egress at all
+	// NetworkAllow confines egress, when Network is true, to these hosts
+	// (+subdomains) via the sandbox filtering proxy. It is never "empty = open":
+	// Network true with an empty list is refused, and unrestricted egress is the
+	// explicit sandbox.AnyHost ("*") entry.
+	NetworkAllow []string
+	WritableFS   bool // false (default) = read-only root + small writable workdir
 	// RunAsHostUser requests the host process UID/GID inside a container while
 	// preserving a read-only root. It is for writable bind-mounted workspaces:
 	// nobody often cannot modify a 0755 host directory, while container-root
@@ -202,4 +217,170 @@ type SandboxResult struct {
 	Stderr     string
 	Killed     bool   // true if the timeout fired and the command was killed
 	KillReason string // human-readable kill cause, set when Killed
+}
+
+// Credentials at the trust boundary.
+//
+// The model writes {{cred:NAME}} where a secret belongs. The call is validated,
+// traced and gated in that placeholder form; only the argument string handed
+// to the executing tool carries the value. Three rules keep a prompt-injected
+// model from turning that into exfiltration:
+//
+//  1. Default deny. A credential reaches a tool only under a CredentialGrant
+//     naming that tool, and for a network tool only when every host the call
+//     contacts is one the grant names.
+//  2. Redaction. Every resolved value (raw, JSON-escaped and URL-escaped) is
+//     replaced in the tool's output, partial updates and error text before an
+//     interceptor, hook, trace or the model sees it.
+//  3. Escaping. A value substituted into JSON arguments is JSON-escaped, so a
+//     secret containing a quote cannot change the shape of the call.
+
+// credentialPlaceholder matches {{cred:NAME}}; NAME is the only capture.
+var credentialPlaceholder = regexp.MustCompile(`\{\{\s*cred:([A-Za-z0-9_.\-]{1,128})\s*\}\}`)
+
+// CredentialGrant lets the named tools receive one credential. A placeholder
+// no grant covers blocks the call.
+type CredentialGrant struct {
+	// Name is the credential as written in {{cred:NAME}}.
+	Name string
+	// Tools are the tool names that may receive it.
+	Tools []string
+	// Hosts, when non-empty, confines the credential to calls whose every
+	// contacted host is one of these or a subdomain of one. It requires the
+	// tool to implement NetworkTool; a tool that cannot say where it connects
+	// never receives a host-scoped credential. Leave it empty only for a tool
+	// that cannot reach arbitrary hosts.
+	Hosts []string
+}
+
+// NetworkTool is an optional Tool capability: it reports the hosts one call
+// will contact, from the call's placeholder-form arguments. Host-scoped
+// credential grants rely on it, so the tool must also refuse to contact any
+// other host (redirects included) once it is running.
+type NetworkTool interface {
+	NetworkHosts(args string) ([]string, error)
+}
+
+// resolveCredentials checks every placeholder in args against the grants,
+// resolves the granted values, and returns the arguments the tool runs with
+// plus a redactor for its output. With no resolver configured, args pass
+// through unchanged and nothing is redacted.
+func (e Env) resolveCredentials(ctx context.Context, tool Tool, args string) (string, *strings.Replacer, error) {
+	if e.Credentials == nil {
+		return args, nil, nil
+	}
+	matches := credentialPlaceholder.FindAllStringSubmatch(args, -1)
+	if len(matches) == 0 {
+		return args, nil, nil
+	}
+	values := map[string]string{}
+	for _, m := range matches {
+		name := m[1]
+		if _, done := values[name]; done {
+			continue
+		}
+		if err := e.checkGrant(name, tool, args); err != nil {
+			return "", nil, err
+		}
+		value, err := e.Credentials.Resolve(ctx, "{{cred:"+name+"}}")
+		if err != nil {
+			return "", nil, err
+		}
+		if value == "" || credentialPlaceholder.MatchString(value) {
+			return "", nil, fmt.Errorf("credential %q did not resolve", name)
+		}
+		values[name] = value
+	}
+	resolved := credentialPlaceholder.ReplaceAllStringFunc(args, func(token string) string {
+		return jsonStringBody(values[credentialPlaceholder.FindStringSubmatch(token)[1]])
+	})
+	return resolved, secretRedactor(values), nil
+}
+
+// checkGrant reports why name may not reach tool on this call, or nil.
+func (e Env) checkGrant(name string, tool Tool, args string) error {
+	refusal := fmt.Errorf("credential %q is not granted to tool %q", name, tool.Name())
+	for _, grant := range e.CredentialGrants {
+		if grant.Name != name || !slices.Contains(grant.Tools, tool.Name()) {
+			continue
+		}
+		if len(grant.Hosts) == 0 {
+			return nil
+		}
+		network, ok := tool.(NetworkTool)
+		if !ok {
+			refusal = fmt.Errorf("credential %q is host-scoped and tool %q does not declare the hosts it contacts", name, tool.Name())
+			continue
+		}
+		hosts, err := network.NetworkHosts(args)
+		if err != nil || len(hosts) == 0 {
+			refusal = fmt.Errorf("credential %q is host-scoped and the hosts of this %q call are unknown", name, tool.Name())
+			continue
+		}
+		if allHostsGranted(hosts, grant.Hosts) {
+			return nil
+		}
+		refusal = fmt.Errorf("credential %q is not granted for the hosts this %q call contacts", name, tool.Name())
+	}
+	return refusal
+}
+
+func allHostsGranted(hosts, granted []string) bool {
+	for _, host := range hosts {
+		host = normalizeHost(host)
+		ok := false
+		for _, allowed := range granted {
+			allowed = normalizeHost(allowed)
+			if allowed != "" && (host == allowed || strings.HasSuffix(host, "."+allowed)) {
+				ok = true
+				break
+			}
+		}
+		if !ok {
+			return false
+		}
+	}
+	return true
+}
+
+func normalizeHost(host string) string {
+	host = strings.TrimSpace(host)
+	if h, _, err := net.SplitHostPort(host); err == nil {
+		host = h
+	}
+	return strings.TrimSuffix(strings.ToLower(host), ".")
+}
+
+// jsonStringBody escapes s for insertion inside a JSON string literal.
+func jsonStringBody(s string) string {
+	var b bytes.Buffer
+	enc := json.NewEncoder(&b)
+	enc.SetEscapeHTML(false)
+	_ = enc.Encode(s)
+	out := strings.TrimSuffix(b.String(), "\n")
+	return out[1 : len(out)-1]
+}
+
+// secretRedactor replaces every spelling of each resolved value a tool is
+// likely to echo with a marker naming the credential. Longer spellings are
+// matched first so one secret that contains another is redacted whole.
+func secretRedactor(values map[string]string) *strings.Replacer {
+	type pair struct{ old, marker string }
+	var pairs []pair
+	for name, value := range values {
+		marker := "[redacted cred:" + name + "]"
+		seen := map[string]bool{}
+		for _, spelling := range []string{value, jsonStringBody(value), url.QueryEscape(value), url.PathEscape(value)} {
+			if spelling != "" && !seen[spelling] {
+				seen[spelling] = true
+				pairs = append(pairs, pair{spelling, marker})
+			}
+		}
+	}
+	sort.SliceStable(pairs, func(i, j int) bool { return len(pairs[i].old) > len(pairs[j].old) })
+	args := make([]string, 0, 2*len(pairs))
+	for _, p := range pairs {
+		args = append(args, p.old, p.marker)
+	}
+	return strings.NewReplacer(args...)
 }

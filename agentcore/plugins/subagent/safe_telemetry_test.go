@@ -123,7 +123,7 @@ func TestSafeDurableReattachMakesNoSyntheticAttempt(t *testing.T) {
 		completed = true
 		return agentcore.RunResult{Final: "recorded child answer", StopReason: "stop"}, err
 	}}
-	host, err := durableParent(t, settings).OpenPiTools(ctx)
+	host, err := durableParent(t, settings).OpenTools(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -176,7 +176,7 @@ func TestSafeDurableCorrectionCreatesFreshPhysicalAttempts(t *testing.T) {
 		}})
 		return agentcore.RunResult{Final: answer, NativeState: json.RawMessage(checkpoint), StopReason: "stop"}, err
 	}}
-	host, err := durableParent(t, settings).OpenPiTools(ctx)
+	host, err := durableParent(t, settings).OpenTools(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}

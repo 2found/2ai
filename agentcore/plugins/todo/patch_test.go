@@ -55,8 +55,8 @@ func TestPatchReceiptRecoveryIgnoresRejectedDeltas(t *testing.T) {
 		{Tool: PatchToolName, Allowed: true, Args: `{"operations":[{"action":"replace","id":"a","item":{"content":"verified","phase":"verify","status":"completed"}}]}`},
 		{Tool: PatchToolName, Allowed: false, Args: `{"operations":[{"action":"remove","id":"a"}]}`},
 	} {
-		raw, _ := json.Marshal(map[string]any{"result": map[string]any{"details": agentcore.PiToolOutcome{Executed: true, Trace: trace}}})
-		if err := log.Append(ctx, "plan", agentcore.SessionEntry{Kind: agentcore.EntryPiEffectDone, Content: string(raw)}); err != nil {
+		raw, _ := json.Marshal(map[string]any{"result": map[string]any{"details": agentcore.ToolOutcome{Executed: true, Trace: trace}}})
+		if err := log.Append(ctx, "plan", agentcore.SessionEntry{Kind: agentcore.EntryNativeEffectDone, Content: string(raw)}); err != nil {
 			t.Fatal(err)
 		}
 	}

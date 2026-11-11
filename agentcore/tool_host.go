@@ -11,25 +11,28 @@ import (
 	"sync/atomic"
 )
 
-// PiArgumentPreparer identifies a bundled native implementation of a tool's
+// ArgumentPreparer identifies a bundled native implementation of a tool's
 // synchronous preparation hook. The worker rejects unknown identifiers; Go
 // functions cannot be transported as synchronous JavaScript callbacks.
-type PiArgumentPreparer interface {
-	PiArgumentPreparation() string
+type ArgumentPreparer interface {
+	ArgumentPreparation() string
 }
 
-// PiToolOutcome is host audit/control data from one governed tool invocation.
-// Pi owns the native transcript; these projections are for the server's traces,
+// ToolOutcome is host audit/control data from one governed tool invocation.
+// The engine owns the native transcript; these projections are for the server's traces,
 // auxiliary context, and human-input workflow, not provider message replay.
-type PiToolOutcome struct {
-	Trace              ToolTrace           `json:"trace"`
-	Invocations        []ToolInvocation    `json:"invocations,omitempty"`
-	AdditionalContexts []Message           `json:"additionalContexts,omitempty"`
-	Parked             bool                `json:"parked,omitempty"`
-	QuestionID         string              `json:"questionId,omitempty"`
-	ChildQuestion      *ChildQuestionError `json:"childQuestion,omitempty"`
-	Executed           bool                `json:"executed"`
-	Terminate          bool                `json:"terminate,omitempty"`
+type ToolOutcome struct {
+	Trace              ToolTrace        `json:"trace"`
+	Invocations        []ToolInvocation `json:"invocations,omitempty"`
+	AdditionalContexts []Message        `json:"additionalContexts,omitempty"`
+	Parked             bool             `json:"parked,omitempty"`
+	// Approval marks a park requested by a permission gate (Decision.Ask): the
+	// call did not run, and Trace.Args holds the approval question.
+	Approval      bool                `json:"approval,omitempty"`
+	QuestionID    string              `json:"questionId,omitempty"`
+	ChildQuestion *ChildQuestionError `json:"childQuestion,omitempty"`
+	Executed      bool                `json:"executed"`
+	Terminate     bool                `json:"terminate,omitempty"`
 }
 
 // ChildQuestionError identifies a delegated run waiting for human input.
@@ -57,10 +60,10 @@ func copyChildQuestion(question *ChildQuestionError) *ChildQuestionError {
 	return &copy
 }
 
-// PiToolHost exposes a composed Agent's governed tools to the original Pi loop.
+// ToolHost exposes a composed Agent's governed tools to the native model loop.
 // It owns the Agent's busy slot and extension resources until Close. The native
-// run adapter connects its turn policies through the methods in pi_lifecycle.go.
-type PiToolHost struct {
+// run adapter connects its turn policies through the methods in native_lifecycle.go.
+type ToolHost struct {
 	agent         *Agent
 	tools         *ToolSet
 	exts          *extensionSet
@@ -79,13 +82,13 @@ type PiToolHost struct {
 	completed     atomic.Bool
 }
 
-// OpenPiTools creates the run's effective tool registry without entering the Go
-// model loop. The Pi host must close the worker before closing this host.
-func (a *Agent) OpenPiTools(ctx context.Context) (*PiToolHost, error) {
-	return a.openPiTools(ctx, true)
+// OpenTools creates the run's effective tool registry without entering the Go
+// model loop. The native host must close the worker before closing this host.
+func (a *Agent) OpenTools(ctx context.Context) (*ToolHost, error) {
+	return a.openTools(ctx, true)
 }
 
-func (a *Agent) openPiTools(ctx context.Context, jsonBindings bool, restoredGoal ...string) (*PiToolHost, error) {
+func (a *Agent) openTools(ctx context.Context, jsonBindings bool, restoredGoal ...string) (*ToolHost, error) {
 	if !a.tryAcquire() {
 		return nil, ErrBusy
 	}
@@ -94,7 +97,7 @@ func (a *Agent) openPiTools(ctx context.Context, jsonBindings bool, restoredGoal
 		goal = restoredGoal[0]
 	}
 	ctx, cancel := context.WithCancel(ctx)
-	h := &PiToolHost{agent: a, ctx: ctx, cancel: cancel, goal: goal, committedGoal: goal, budget: newToolExecutionBudget(a.limits.MaxToolCalls)}
+	h := &ToolHost{agent: a, ctx: ctx, cancel: cancel, goal: goal, committedGoal: goal, budget: newToolExecutionBudget(a.limits.MaxToolCalls)}
 	ok := false
 	defer func() {
 		if !ok {
@@ -117,24 +120,26 @@ func (a *Agent) openPiTools(ctx context.Context, jsonBindings bool, restoredGoal
 		Limits: a.limits, Depth: DelegationDepth(ctx), Durable: a.session != nil && a.sessionID != "",
 		Session: a.session, Agent: a, Goal: goal,
 		Bookkeeping: func(name string) bool { return isBookkeeping(registry.Load(), name) },
-	})
+	}, a.hooks.report)
 	if err != nil {
 		return nil, err
 	}
-	h.tools = a.tools.With()
-	if len(a.def.enabledSkills()) > 0 {
-		h.tools = withReadSkill(h.tools, a.def)
-		h.budget.skill = newReadSkillTool(a.def).reads
-	}
 	contributed, exempt := h.exts.contributedTools()
-	h.tools = h.tools.With(contributed...)
+	if len(a.def.enabledSkills()) > 0 {
+		skill := newReadSkillTool(a.def)
+		contributed = append([]Tool{skill}, contributed...)
+		h.budget.skill = skill.reads
+	}
+	if h.tools, err = a.tools.withNew(contributed...); err != nil {
+		return nil, err
+	}
 	registry.Store(h.tools)
 	h.exempt = exempt
 	for _, name := range h.tools.Names() {
 		tool, _ := h.tools.Get(name)
 		if _, prepares := tool.(ArgPreparer); jsonBindings && prepares {
-			if native, ok := tool.(PiArgumentPreparer); !ok || native.PiArgumentPreparation() == "" {
-				return nil, fmt.Errorf("tool %q requires synchronous prepareArguments; supply a native Pi tool implementation", name)
+			if native, ok := tool.(ArgumentPreparer); !ok || native.ArgumentPreparation() == "" {
+				return nil, fmt.Errorf("tool %q requires synchronous prepareArguments; supply a native tool implementation", name)
 			}
 		}
 	}
@@ -151,15 +156,15 @@ func (a *Agent) openPiTools(ctx context.Context, jsonBindings bool, restoredGoal
 	return h, nil
 }
 
-// Definitions returns policy-filtered native AgentTool definitions. Native Pi
-// applies its own batch scheduling; unmarked Go tools request sequential mode.
-func (h *PiToolHost) Definitions(ctx context.Context) (json.RawMessage, error) {
+// Definitions returns policy-filtered native AgentTool definitions. The native
+// engine applies its own batch scheduling; unmarked Go tools request sequential mode.
+func (h *ToolHost) Definitions(ctx context.Context) (json.RawMessage, error) {
 	h.gate.RLock()
 	defer h.gate.RUnlock()
 	if h.closed {
-		return nil, errors.New("Pi tool host is closed")
+		return nil, errors.New("tool host is closed")
 	}
-	permitted := h.agent.policy.PermittedTools(ctx, h.tools.Names())
+	permitted := h.agent.effectivePolicy(ctx).PermittedTools(ctx, h.tools.Names())
 	definitions := make([]map[string]any, 0)
 	for _, schema := range h.tools.Schemas() {
 		if slices.Contains(h.agent.seedDisabledTools, schema.Name) {
@@ -186,22 +191,22 @@ func (h *PiToolHost) Definitions(ctx context.Context) (json.RawMessage, error) {
 			"parameters": parameters, "executionMode": mode,
 		}
 		tool, _ := h.tools.Get(schema.Name)
-		if native, ok := tool.(PiArgumentPreparer); ok {
-			definition["agentrayPrepareArguments"] = native.PiArgumentPreparation()
+		if native, ok := tool.(ArgumentPreparer); ok {
+			definition["agentrayPrepareArguments"] = native.ArgumentPreparation()
 		}
 		definitions = append(definitions, definition)
 	}
 	return json.Marshal(definitions)
 }
 
-// Execute is the tool branch of a PiCallback. The second result carries host
+// Execute runs one native tool call through governed dispatch. The second result carries host
 // workflow data that the enclosing server must handle at its event boundary.
 // No provider message is decoded or reconstructed here.
-func (h *PiToolHost) Execute(ctx context.Context, params json.RawMessage, emit func(json.RawMessage) error) (json.RawMessage, PiToolOutcome, error) {
+func (h *ToolHost) Execute(ctx context.Context, params json.RawMessage, emit func(json.RawMessage) error) (json.RawMessage, ToolOutcome, error) {
 	h.gate.RLock()
 	defer h.gate.RUnlock()
 	if h.closed {
-		return nil, PiToolOutcome{}, errors.New("Pi tool host is closed")
+		return nil, ToolOutcome{}, errors.New("tool host is closed")
 	}
 	var input struct {
 		ID   string          `json:"toolCallId"`
@@ -209,24 +214,24 @@ func (h *PiToolHost) Execute(ctx context.Context, params json.RawMessage, emit f
 		Args json.RawMessage `json:"args"`
 	}
 	if err := json.Unmarshal(params, &input); err != nil {
-		return nil, PiToolOutcome{}, err
+		return nil, ToolOutcome{}, err
 	}
 	if input.ID == "" || input.Name == "" || !json.Valid(input.Args) {
-		return nil, PiToolOutcome{}, errors.New("invalid Pi tool invocation")
+		return nil, ToolOutcome{}, errors.New("invalid native tool invocation")
 	}
 	ctx, cancel := context.WithCancel(ctx)
 	stop := context.AfterFunc(h.ctx, cancel)
 	defer func() { stop(); cancel() }()
 	if h.ctx.Err() != nil {
-		return nil, PiToolOutcome{}, h.ctx.Err()
+		return nil, ToolOutcome{}, h.ctx.Err()
 	}
 	if err := ctx.Err(); err != nil {
-		return nil, PiToolOutcome{}, err
+		return nil, ToolOutcome{}, err
 	}
 	if h.agent.sessionID != "" && toolInvocationScope(ctx) == "" {
-		return nil, PiToolOutcome{}, errors.New("durable Pi tool execution requires a recorded invocation scope")
+		return nil, ToolOutcome{}, errors.New("durable native tool execution requires a recorded invocation scope")
 	}
-	ctx = WithRunSession(piToolContext{Context: ctx, values: h.ctx}, h.agent.sessionID)
+	ctx = WithRunSession(toolCallContext{Context: ctx, values: h.ctx}, h.agent.sessionID)
 	record, _ := ctx.Value(goalRevisionRecorderKey{}).(goalRevisionRecorder)
 	ctx = WithGoalRevisionRecorder(ctx, func(revisionCtx context.Context, revision GoalRevision) error {
 		h.revisionMu.Lock()
@@ -288,9 +293,9 @@ func (h *PiToolHost) Execute(ctx context.Context, params json.RawMessage, emit f
 		outcome.trace.Error = ""
 		outcome.trace.ResultMeta = "waiting for child answer"
 	}
-	audit := PiToolOutcome{Trace: outcome.trace, Invocations: outcome.invocations,
-		AdditionalContexts: outcome.extra, Parked: outcome.parked, Executed: outcome.executed, Terminate: outcome.terminate,
-		ChildQuestion: outcome.childQuestion}
+	audit := ToolOutcome{Trace: outcome.trace, Invocations: outcome.invocations,
+		AdditionalContexts: outcome.extra, Parked: outcome.parked, Approval: outcome.approval, Executed: outcome.executed,
+		Terminate: outcome.terminate, ChildQuestion: outcome.childQuestion}
 	if outcome.parked {
 		audit.QuestionID = toolInvocationScope(ctx)
 		if audit.QuestionID == "" {
@@ -317,26 +322,27 @@ func (h *PiToolHost) Execute(ctx context.Context, params json.RawMessage, emit f
 		}
 	}
 	value, err := json.Marshal(map[string]any{"content": content, "details": audit,
-		"isError": outcome.trace.Error != "" || !outcome.trace.Allowed, "terminate": audit.Terminate})
+		"isError": !outcome.parked && (outcome.trace.Error != "" || !outcome.trace.Allowed), "terminate": audit.Terminate})
 	return value, audit, err
 }
 
-// PiQuestionFromEntry recognizes only a successfully settled governed parked
+// QuestionFromEntry recognizes only a successfully settled governed parked
 // effect. The physical effect ID is the workflow ID: provider call IDs may be
 // reused by a later assistant turn and must not reuse a previous human answer.
-func PiQuestionFromEntry(entry SessionEntry) (string, json.RawMessage, bool) {
-	if entry.Kind != EntryPiEffectDone && entry.Kind != EntryPiDelegation {
+func QuestionFromEntry(entry SessionEntry) (string, json.RawMessage, bool) {
+	if entry.Kind != EntryNativeEffectDone && entry.Kind != EntryNativeDelegation {
 		return "", nil, false
 	}
 	var receipt struct {
 		ID     string `json:"effectId"`
-		Result struct{ Details PiToolOutcome }
+		Result struct{ Details ToolOutcome }
 	}
 	if json.Unmarshal([]byte(entry.Content), &receipt) != nil {
 		return "", nil, false
 	}
 	audit := receipt.Result.Details
-	if receipt.ID == "" || audit.QuestionID != receipt.ID || !audit.Parked || !audit.Executed || !audit.Trace.Allowed || audit.Trace.Error != "" || audit.Trace.CallID != entry.CallID || !json.Valid([]byte(audit.Trace.Args)) {
+	asked := audit.Approval || (audit.Executed && audit.Trace.Allowed)
+	if receipt.ID == "" || audit.QuestionID != receipt.ID || !audit.Parked || !asked || audit.Trace.Error != "" || audit.Trace.CallID != entry.CallID || !json.Valid([]byte(audit.Trace.Args)) {
 		return "", nil, false
 	}
 	if audit.ChildQuestion != nil {
@@ -352,34 +358,34 @@ func PiQuestionFromEntry(entry SessionEntry) (string, json.RawMessage, bool) {
 // ResumeDelegation re-enters a retry-safe governed call with its original
 // physical identity. Self-delegation then reattaches the original child,
 // including any output-schema retry, instead of creating a new session.
-func (h *PiToolHost) ResumeDelegation(ctx context.Context, effectID string, original PiToolOutcome, emit func(json.RawMessage) error) (json.RawMessage, PiToolOutcome, error) {
+func (h *ToolHost) ResumeDelegation(ctx context.Context, effectID string, original ToolOutcome, emit func(json.RawMessage) error) (json.RawMessage, ToolOutcome, error) {
 	if effectID == "" || copyChildQuestion(original.ChildQuestion) == nil || !original.Parked || !original.Executed || !original.Trace.Allowed || original.Trace.Error != "" {
-		return nil, PiToolOutcome{}, errors.New("invalid parked delegation")
+		return nil, ToolOutcome{}, errors.New("invalid parked delegation")
 	}
 	call := ToolCall{ID: original.Trace.CallID, Name: original.Trace.Tool, Arguments: original.Trace.Args}
 	h.gate.RLock()
 	safe := !h.closed && isRetrySafe(h.tools, call)
 	h.gate.RUnlock()
 	if !safe {
-		return nil, PiToolOutcome{}, errors.New("parked delegation is not retry-safe under the current tool contract")
+		return nil, ToolOutcome{}, errors.New("parked delegation is not retry-safe under the current tool contract")
 	}
 	params, err := json.Marshal(map[string]any{"toolCallId": call.ID, "toolName": call.Name, "args": json.RawMessage(call.Arguments)})
 	if err != nil {
-		return nil, PiToolOutcome{}, err
+		return nil, ToolOutcome{}, err
 	}
 	return h.Execute(WithToolInvocationScope(ctx, effectID), params, emit)
 }
 
-// PiChildQuestionFromEntry returns the route only for a settled, governed
+// ChildQuestionFromEntry returns the route only for a settled, governed
 // question receipt. Its first ID belongs to the parent; the route's ID belongs
 // to the child and must never be substituted into the parent's answer ledger.
-func PiChildQuestionFromEntry(entry SessionEntry) (string, *ChildQuestionError, bool) {
-	id, _, valid := PiQuestionFromEntry(entry)
+func ChildQuestionFromEntry(entry SessionEntry) (string, *ChildQuestionError, bool) {
+	id, _, valid := QuestionFromEntry(entry)
 	if !valid {
 		return "", nil, false
 	}
 	var receipt struct {
-		Result struct{ Details PiToolOutcome }
+		Result struct{ Details ToolOutcome }
 	}
 	if json.Unmarshal([]byte(entry.Content), &receipt) != nil {
 		return "", nil, false
@@ -391,12 +397,12 @@ func PiChildQuestionFromEntry(entry SessionEntry) (string, *ChildQuestionError, 
 // Keep per-call cancellation and fencing values while inheriting extensions
 // from the long-lived run context. Rebuilding RunContext per tool would tie
 // background jobs to a callback that ends as soon as their launch returns.
-type piToolContext struct {
+type toolCallContext struct {
 	context.Context
 	values context.Context
 }
 
-func (c piToolContext) Value(key any) any {
+func (c toolCallContext) Value(key any) any {
 	if value := c.Context.Value(key); value != nil {
 		return value
 	}
@@ -405,7 +411,7 @@ func (c piToolContext) Value(key any) any {
 
 // Close cancels host work and waits for admitted tool callbacks before releasing
 // extension resources and the Agent's busy slot. It is safe to call repeatedly.
-func (h *PiToolHost) Close() error {
+func (h *ToolHost) Close() error {
 	h.cancel()
 	h.gate.Lock()
 	defer h.gate.Unlock()

@@ -170,12 +170,8 @@ func (p *DevinProvider) Stream(ctx context.Context, req protocol.ChatRequest) (<
 			case "done":
 				usage := protocol.Usage{}
 				if event.Message != nil && event.Message.Usage != nil {
-					usage = protocol.Usage{
-						InputTokens:      int(event.Message.Usage.Input),
-						OutputTokens:     int(event.Message.Usage.Output),
-						CacheReadTokens:  int(event.Message.Usage.CacheRead),
-						CacheWriteTokens: int(event.Message.Usage.CacheWrite),
-					}
+					usage = event.Message.Usage.Protocol()
+					usage.CostUSD = 0 // the legacy client contract leaves pricing to the host
 				}
 				out <- protocol.ChatDelta{Done: true, StopReason: event.Reason, Usage: usage}
 				return

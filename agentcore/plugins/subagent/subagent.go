@@ -133,12 +133,34 @@ func (p Plugin) Register(r *agentcore.Registry) error {
 // never offered the tool, so the cap is enforced by absence rather than by a
 // refusal the model would have to read, reason about, and work around. The
 // depth rides the context, so it survives crossing into another agent's run.
-func (p Plugin) BeginRun(_ context.Context, info agentcore.RunInfo) (agentcore.Extension, error) {
+//
+// The cap is the TIGHTEST MaxDepth of every delegating ancestor, not this
+// plugin's own: a named delegate composed with a larger MaxDepth than the agent
+// that handed it the task must not delegate deeper than that agent allows.
+func (p Plugin) BeginRun(ctx context.Context, info agentcore.RunInfo) (agentcore.Extension, error) {
 	settings := p.normalized(info.Limits)
+	settings.MaxDepth = depthCeiling(ctx, settings.MaxDepth)
 	if info.Depth >= settings.MaxDepth {
 		return nil, nil
 	}
 	return &subagentTool{parent: info.Agent, settings: settings, durable: info.Durable}, nil
+}
+
+type depthCeilingKey struct{}
+
+// depthCeiling narrows own by the cap a delegating ancestor put on ctx.
+// Delegation can only tighten it: nothing in a child's composition raises it.
+func depthCeiling(ctx context.Context, own int) int {
+	if inherited, ok := ctx.Value(depthCeilingKey{}).(int); ok && inherited < own {
+		return inherited
+	}
+	return own
+}
+
+// delegated is the context a child runs under: one level deeper, and capped by
+// this run's effective MaxDepth.
+func (t *subagentTool) delegated(ctx context.Context, depth int) context.Context {
+	return context.WithValue(agentcore.WithDelegationDepth(ctx, depth+1), depthCeilingKey{}, t.settings.MaxDepth)
 }
 
 // normalized fills zero fields with the defaults, sizing the spawn budget to
@@ -320,9 +342,11 @@ func (t *subagentTool) RunStreaming(ctx context.Context, args string, emit func(
 		return "", err
 	}
 	// Defense in depth: the loop already stops advertising the tool at MaxDepth,
-	// but the ctx check also protects consumers that seed a depth floor.
+	// but the ctx check also protects consumers that seed a depth floor. The
+	// ceiling is re-read because a tool call's ctx may carry a tighter one than
+	// the run started with.
 	depth := agentcore.DelegationDepth(ctx)
-	if depth >= t.settings.MaxDepth {
+	if depth >= depthCeiling(ctx, t.settings.MaxDepth) {
 		return "", fmt.Errorf("delegation depth exhausted (max %d) — finish the work yourself", t.settings.MaxDepth)
 	}
 	if n := atomic.AddInt32(&t.spawned, 1); int(n) > t.settings.MaxPerRun {
@@ -343,7 +367,7 @@ func (t *subagentTool) RunStreaming(ctx context.Context, args string, emit func(
 			if run := telemetry.FromContext(runCtx); !run.IsZero() {
 				childCtx = telemetry.WithRecordingParent(childCtx, run)
 			}
-			childCtx = agentcore.WithDelegationDepth(childCtx, depth+1)
+			childCtx = t.delegated(childCtx, depth)
 			return t.execute(childCtx, in, task, schema, func(note string) {
 				agentcore.ReportProgress(childCtx, note)
 			})
@@ -353,8 +377,7 @@ func (t *subagentTool) RunStreaming(ctx context.Context, args string, emit func(
 		}
 		return string(receipt), nil
 	}
-	ctx = agentcore.WithDelegationDepth(ctx, depth+1)
-	return t.execute(ctx, in, task, schema, emit)
+	return t.execute(t.delegated(ctx, depth), in, task, schema, emit)
 }
 
 type asyncContext struct {

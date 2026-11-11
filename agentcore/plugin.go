@@ -54,13 +54,14 @@ type Plugin interface {
 }
 
 // Priority orders listeners on an extension point. Lower runs first. The
-// permission gate uses PriorityGate so it is always consulted before any
-// consumer hook, whatever order plugins were listed in.
+// permission policy itself is not a hook: the executor consults it before every
+// BeforeToolCall hook. PriorityGate is for hooks that also authorize (an
+// injection guard), so they refuse a call before an ordinary hook observes it.
 type Priority int
 
 const (
-	// PriorityGate is for authorization: it must run before anything that could
-	// observe or rewrite a call it would have blocked.
+	// PriorityGate is for authorizing hooks: they run before anything that could
+	// observe or rewrite a call they would have blocked.
 	PriorityGate Priority = -100
 	// PriorityDefault is ordinary consumer behavior.
 	PriorityDefault Priority = 0
@@ -102,8 +103,7 @@ type Registry struct {
 	env               Env
 	definition        AgentDefinition
 	compaction        CompactionSettings
-	compactionRung    ModelRung
-	compactor         Compactor
+	compactionModel   *ai.FallbackProvider
 	escalation        []ModelRung
 	contextWindow     int
 	modelCapabilities ModelCapabilities
@@ -125,11 +125,36 @@ type Registry struct {
 	prepareNextTurn func(ctx context.Context, state TurnState) TurnState
 	getSteering     func(ctx context.Context) []Message
 	getFollowUp     func(ctx context.Context) []Message
-	extensions      []ExtensionFactory
+	extensions      []registered[ExtensionFactory]
 	refreshKey      func(ctx context.Context, provider string) (string, error)
+	// toolOwners names the plugin that added each tool, for collision errors.
+	toolOwners map[string]string
 
 	// --- extension points: many listeners, explicitly ordered --------------
 	hooks []prioritizedHooks
+	// nextSeq numbers additive registrations so each undo removes exactly its
+	// own entry, whatever order plugins are unloaded in.
+	nextSeq int
+}
+
+// registered is one additive contribution tagged with its registration number.
+type registered[T any] struct {
+	seq   int
+	value T
+}
+
+func values[T any](list []registered[T]) []T {
+	out := make([]T, len(list))
+	for i, r := range list {
+		out[i] = r.value
+	}
+	return out
+}
+
+// seq returns the next registration number.
+func (r *Registry) seq() int {
+	r.nextSeq++
+	return r.nextSeq
 }
 
 // prioritizedHooks is one plugin's hook contribution with its ordering key.
@@ -150,9 +175,9 @@ func newRegistry() *Registry {
 		limits:     DefaultLimits(),
 		env:        DefaultEnv(),
 		compaction: DefaultCompactionSettings(),
-		compactor:  DefaultCompactor(),
 		retry:      DefaultRetryPolicy(),
 		policy:     DenyAll{},
+		toolOwners: map[string]string{},
 	}
 }
 
@@ -295,9 +320,15 @@ func (r *Registry) SetEnv(e Env) error { return setSeam(r, "env", &r.env, e) }
 
 // --- governance ---
 
-// SetPolicy installs the permission gate. The gate hook itself is contributed
-// separately (at PriorityGate) by whichever plugin owns governance.
-func (r *Registry) SetPolicy(p Policy) error { return setSeam(r, "policy", &r.policy, p) }
+// SetPolicy installs the permission policy. The executor consults it for every
+// gated call before any BeforeToolCall hook, so no composition can install a
+// policy and forget to enforce it. nil installs DenyAll.
+func (r *Registry) SetPolicy(p Policy) error {
+	if p == nil {
+		p = DenyAll{}
+	}
+	return setSeam(r, "policy", &r.policy, p)
+}
 
 // SetGoal declares the condition under which the run may stop.
 func (r *Registry) SetGoal(goal string) error { return setSeam(r, "goal", &r.goal, goal) }
@@ -365,27 +396,20 @@ func (r *Registry) SetSchemaTransform(fn func(ToolSchema) ToolSchema) error {
 // SetMemory installs the working-memory store.
 func (r *Registry) SetMemory(m MemoryStore) error { return setSeam(r, "memory", &r.memory, m) }
 
-// SetCompaction installs the transcript-shrinking retention policy (how much
-// recent context survives). WHAT replaces the older span is SetCompactor.
+// SetCompaction installs the compaction settings of a native run.
 func (r *Registry) SetCompaction(s CompactionSettings) error {
-	s.PruneProtectedTools = slices.Clone(s.PruneProtectedTools)
+	s.ClearToolResults.ExcludeTools = slices.Clone(s.ClearToolResults.ExcludeTools)
 	return setSeam(r, "compaction", &r.compaction, s)
 }
 
-// SetCompactor installs the compaction strategy. Unclaimed leaves
-// DefaultCompactor (summarize the older span with a model call), so a
-// composition only names this seam when it wants a different strategy.
-func (r *Registry) SetCompactor(c Compactor) error {
-	if c == nil {
-		return fmt.Errorf("agentcore: plugin %q cannot install a nil compactor", r.current)
+// SetCompactionModel gives the standalone summary call its own, usually
+// cheaper, models instead of the run's. A shared-cache summary
+// (SharePromptCache) still asks the run's model: only it holds the cache.
+func (r *Registry) SetCompactionModel(p *ai.FallbackProvider) error {
+	if p == nil || len(p.Candidates) == 0 {
+		return fmt.Errorf("agentcore: plugin %q cannot install a compaction model without candidates", r.current)
 	}
-	return setSeam(r, "compactor", &r.compactor, c)
-}
-
-// SetCompactionModel pins the compaction summary call to a dedicated tier
-// instead of borrowing whichever rung the run has escalated to.
-func (r *Registry) SetCompactionModel(p LLMProvider, model string) error {
-	return setSeam(r, "compaction_model", &r.compactionRung, ModelRung{Provider: p, Model: model})
+	return setSeam(r, "compaction_model", &r.compactionModel, p)
 }
 
 // --- steering and delegation ---
@@ -420,32 +444,54 @@ func (r *Registry) AddExtension(f ExtensionFactory) {
 	if f == nil {
 		return
 	}
-	prev := append([]ExtensionFactory(nil), r.extensions...)
-	r.extensions = append(r.extensions, f)
-	r.onUnload(func() { r.extensions = prev })
+	seq := r.seq()
+	r.extensions = append(r.extensions, registered[ExtensionFactory]{seq: seq, value: f})
+	r.onUnload(func() {
+		r.extensions = slices.DeleteFunc(r.extensions, func(e registered[ExtensionFactory]) bool { return e.seq == seq })
+	})
 }
 
 // AddTools contributes tools to the run's registry. Unlike a seam this is
-// additive: many plugins may each contribute capabilities.
-func (r *Registry) AddTools(tools ...Tool) {
-	prev := r.tools
-	r.tools = r.tools.With(tools...)
-	r.onUnload(func() { r.tools = prev })
+// additive: many plugins may each contribute capabilities. A tool name another
+// registration already provides is an error naming both owners.
+func (r *Registry) AddTools(tools ...Tool) error {
+	next, err := r.tools.withNew(tools...)
+	if err != nil {
+		for _, t := range tools {
+			if t == nil {
+				continue
+			}
+			if owner, taken := r.toolOwners[t.Name()]; taken {
+				return fmt.Errorf("agentcore: plugin %q cannot add tool %q — plugin %q already does", r.current, t.Name(), owner)
+			}
+		}
+		return fmt.Errorf("agentcore: plugin %q: %w", r.current, err)
+	}
+	var names []string
+	for _, t := range tools {
+		if t != nil {
+			names = append(names, t.Name())
+			r.toolOwners[t.Name()] = r.current
+		}
+	}
+	r.tools = next
+	r.onUnload(func() {
+		r.tools = r.tools.without(names...)
+		for _, name := range names {
+			delete(r.toolOwners, name)
+		}
+	})
+	return nil
 }
 
 // AddHooks contributes lifecycle listeners at the given priority. Listeners run
 // in priority order, ties broken by registration order, so behavior never
 // depends on how the plugin list happened to be sorted.
 func (r *Registry) AddHooks(p Priority, h Hooks) {
-	idx := len(r.hooks)
-	r.hooks = append(r.hooks, prioritizedHooks{plugin: r.current, priority: p, seq: idx, hooks: h})
+	seq := r.seq()
+	r.hooks = append(r.hooks, prioritizedHooks{plugin: r.current, priority: p, seq: seq, hooks: h})
 	r.onUnload(func() {
-		for i := range r.hooks {
-			if r.hooks[i].seq == idx {
-				r.hooks = append(r.hooks[:i], r.hooks[i+1:]...)
-				return
-			}
-		}
+		r.hooks = slices.DeleteFunc(r.hooks, func(e prioritizedHooks) bool { return e.seq == seq })
 	})
 }
 
@@ -455,8 +501,10 @@ func (r *Registry) Plugins() []string { return append([]string{}, r.order...) }
 // Provider returns the seam owner for diagnostics ("" when unclaimed).
 func (r *Registry) Provider(seam string) string { return r.seams[seam] }
 
-// Unload reverses everything a plugin registered. It is the property that makes
-// a plugin composable: a plugin you can add but not remove is a patch.
+// Unload reverses everything a plugin registered, in any order relative to
+// other plugins: every undo removes exactly its own contribution. It is the
+// property that makes a plugin composable: a plugin you can add but not remove
+// is a patch.
 func (r *Registry) Unload(name string) error {
 	undos, ok := r.effects[name]
 	if !ok {
@@ -519,7 +567,6 @@ func (r *Registry) mergedHooks() Hooks {
 		out.BeforeCompact = append(out.BeforeCompact, h.BeforeCompact...)
 		out.AgentEnd = append(out.AgentEnd, h.AgentEnd...)
 		out.Context = append(out.Context, h.Context...)
-		out.PiContext = append(out.PiContext, h.PiContext...)
 		out.BeforeProviderRequest = append(out.BeforeProviderRequest, h.BeforeProviderRequest...)
 		out.MessageEnd = append(out.MessageEnd, h.MessageEnd...)
 		// The strictest policy any plugin asked for wins: a plugin that treats a
@@ -558,7 +605,7 @@ func (r *Registry) Describe() string {
 	// Extensions are listed in composition order, which is also the order they
 	// intercept in — for an unkeyed, additive registration that ordering IS the
 	// diagnostic, the way seam ownership is for a keyed one.
-	fmt.Fprintf(&b, "extensions: %s\n", strings.Join(extensionNames(r.extensions), ", "))
+	fmt.Fprintf(&b, "extensions: %s\n", strings.Join(extensionNames(values(r.extensions)), ", "))
 	h := r.mergedHooks()
 	fmt.Fprintf(&b, "tools: %s\n", strings.Join(r.tools.Names(), ", "))
 	fmt.Fprintf(&b, "hooks: before=%d after=%d context=%d turn_start=%d turn_end=%d agent_end=%d\n",

@@ -103,8 +103,10 @@ func (t updateGoalTool) Run(ctx context.Context, args string) (string, error) {
 		// plainly stops it retrying, which an error would invite.
 		return "The completion condition is already:\n" + t.store.Goal() + "\nNothing changed.", nil
 	}
-	return "Completion condition updated. This run now finishes when:\n" + t.store.Goal() +
-		"\nThe change is recorded with your reason. The user's original requirement is unchanged — " +
+	// The next step states the new condition as a "[run goal]" message; the
+	// result only confirms the change, so the statement has one durable source.
+	return "Goal updated. The run now finishes when:\n" + t.store.Goal() +
+		"\n\nThe change is recorded with your reason. The user's original requirement is unchanged — " +
 		"keep serving it.", nil
 }
 
@@ -126,8 +128,9 @@ func (g *gateRun) Tools() []agentcore.Tool {
 	return tools
 }
 
-// ReviseGoal publishes a committed revision to the native host so it can
-// rebuild the system prompt between turns. The tool commits through the run
+// ReviseGoal publishes a committed revision to the native host, which records
+// it as the condition in force. The system prompt does not carry the condition,
+// so the revision does not change it. The tool commits through the run
 // owner before changing its store; draining never writes another revision.
 func (g *gateRun) ReviseGoal() (string, bool) {
 	if g.store == nil {
