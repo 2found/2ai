@@ -173,6 +173,7 @@ func TestSafeProactiveCompactionRetainsMainAttempts(t *testing.T) {
 	limits.MaxTurns, limits.MaxToolCalls, limits.MaxContextTokens = 30, 30, 4000
 	compact := agentcore.DefaultCompactionSettings()
 	compact.KeepRecentTokens = 1500
+	compact.StandaloneSummary = true // the scripted provider answers only the standalone request
 	a, err := agentcore.New(agentcore.Config{Model: "fixture", NativeProvider: &ai.FallbackProvider{Candidates: []ai.FallbackCandidate{{Model: json.RawMessage(`{"id":"fixture"}`), Stream: stream}}}, Limits: &limits, Compaction: &compact,
 		Tools: agentcore.NewToolSet(agentcore.StringTool{ToolName: "work", Properties: agentcore.StringProperties(), Required: []string{}, Execute: func(context.Context, map[string]string) (string, error) {
 			effects++

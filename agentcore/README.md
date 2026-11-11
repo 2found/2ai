@@ -115,9 +115,11 @@ summaries to a cheaper `ai.FallbackProvider` than the run's own.
 turn; an error or a cancellation still returns the last resumable state in
 `RunResult.NativeState`. The wrap-up turn after a budget stop keeps its tools
 in the request and sends `tool_choice` none, so the cached prefix survives.
-`CompactionSettings.SharePromptCache` (off by default) asks for the summary as
-one more turn of the live conversation so the call reads the run's prompt
-cache, and falls back to the standalone call when the reply is not a summary.
+The summary is asked for as one more turn of the live conversation, so the
+call reads the run's prompt cache; it falls back to the standalone call when
+the reply is not a summary, and a run with a forced tool choice, an output
+schema or a compaction model always uses the standalone call.
+`CompactionSettings.StandaloneSummary` turns the shared call off.
 `Hooks.BeforeCompact` can defer a summary with `Skip`. After three consecutive
 failed summaries the run stops asking until a provider overflow forces one.
 `RunResult.Compactions` reports each compaction's trigger, mode, token counts

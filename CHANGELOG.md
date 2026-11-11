@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- **The summary call shares the run's prompt cache by default.** A compaction first asks for the handoff as one more turn of the live conversation and falls back to the standalone call when the reply is not a summary block. `CompactionSettings.StandaloneSummary` turns this off; a run with a forced tool choice, an output schema or a compaction model (`Registry.SetCompactionModel`) keeps the standalone call. `CompactionSettings.SharePromptCache` is deprecated and ignored. A scripted provider that recognizes only the standalone request (by `SummarySystemPrompt`) now sees one extra conversation request per compaction: set `StandaloneSummary` in such a test, or answer the request that ends with the compaction instruction.
+
 ## 0.2.0 — 2026-11-11
 
 Baseline: v0.1.9. This release hardens the harness across security, long runs, prompt caching, telemetry and built-in tools, and removes everything the native run path never reached. It is a breaking release for hosts: see **Migration**.

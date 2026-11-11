@@ -206,8 +206,10 @@ func TestCompactionFiresWhenBulkIsInToolCallArguments(t *testing.T) {
 		Tools:          NewToolSet(&sinkTool{}),
 		Policy:         NewAllowList("write_file"),
 		Limits:         &limits,
-		// No Compaction override: the default 20k keep-recent window must be
-		// clamped to the 4k budget or this run wedges (the pre-fix behavior).
+		// No keep-recent override: the default 20k window must be clamped to
+		// the 4k budget or this run wedges (the pre-fix behavior). The
+		// scripted provider answers only the standalone summary request.
+		Compaction: &CompactionSettings{StandaloneSummary: true},
 	})
 	if err != nil {
 		t.Fatalf("New: %v", err)
@@ -393,7 +395,7 @@ func TestDefaultCompactionIsDescribed(t *testing.T) {
 		t.Fatalf("New: %v", err)
 	}
 	desc := agent.Describe()
-	for _, want := range []string{"keep_recent=20000", "clear_tool_results=on", "shared_cache=false"} {
+	for _, want := range []string{"keep_recent=20000", "clear_tool_results=on", "shared_cache=true"} {
 		if !strings.Contains(desc, want) {
 			t.Fatalf("Describe lacks %q:\n%s", want, desc)
 		}

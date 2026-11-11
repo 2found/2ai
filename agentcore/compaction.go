@@ -77,13 +77,23 @@ type CompactionSettings struct {
 	// the run: the host's or the user's standing focus, such as "keep every
 	// SQL statement and its row count".
 	Instructions string
-	// SharePromptCache asks for the summary as one more turn of the live
-	// conversation, so the provider reads the transcript from its prompt cache
-	// and one call replaces a chain of folds over a re-sent copy. The reply is
-	// used only when it is a text-only summary block; anything else, and any
-	// run with a forced tool choice or an output schema, uses the standalone
-	// summarizer. Off by default: the summary request then reaches the
-	// provider as an ordinary conversation request.
+	// StandaloneSummary turns off the shared summary call. By default the
+	// summary is asked for as one more turn of the live conversation, so the
+	// provider reads the transcript from its prompt cache and one call
+	// replaces a chain of folds over a re-sent copy. The reply is used only
+	// when it is a text-only summary block; anything else, and any run with a
+	// forced tool choice, an output schema, a compaction model
+	// (Registry.SetCompactionModel) or a live request too large to take the
+	// instruction, uses the standalone summarizer: a separate request that
+	// re-sends a rendered copy of the transcript under its own system prompt.
+	// Set this for a provider that bills cached input at the full rate, or
+	// when a summary request must not reach the provider as a conversation
+	// turn.
+	StandaloneSummary bool
+	// SharePromptCache is ignored.
+	//
+	// Deprecated: sharing the prompt cache is the default; set
+	// StandaloneSummary to turn it off.
 	SharePromptCache bool
 	// ClearToolResults clears old tool results from the request view before a
 	// summary is needed. The zero value clears with the defaults; read_skill

@@ -67,6 +67,7 @@ func TestNativeSummaryRequestIsRenderedTextWithAStructuredHandoff(t *testing.T) 
 	summaries := 0
 	settings := agentcore.DefaultCompactionSettings()
 	settings.Instructions = "Keep every evidence number."
+	settings.StandaloneSummary = true
 	result, calls, effects, views := compactionRun(t, 21, settings, agentcore.Hooks{}, func(view ai.TranscriptContext, options map[string]any) *ai.Message {
 		if !strings.HasPrefix(ai.GetCurrentSystemPrompt(view.Messages()), "Summarize the conversation") {
 			return nil
@@ -121,7 +122,6 @@ func TestNativeSharedCacheSummaryContinuesTheLiveConversation(t *testing.T) {
 			shared, standalone := 0, 0
 			var mainSystem string
 			settings := agentcore.DefaultCompactionSettings()
-			settings.SharePromptCache = true
 			result, calls, effects, views := compactionRun(t, 21, settings, agentcore.Hooks{}, func(view ai.TranscriptContext, options map[string]any) *ai.Message {
 				system := ai.GetCurrentSystemPrompt(view.Messages())
 				if strings.HasPrefix(system, "Summarize the conversation") {
@@ -182,7 +182,7 @@ func TestNativeBeforeCompactHookCanDeferASummary(t *testing.T) {
 			return agentcore.CompactDecision{Messages: []agentcore.Message{{Role: agentcore.RoleUser, Content: "replacement"}}}
 		}},
 	}
-	result, calls, effects, views := compactionRun(t, 21, agentcore.DefaultCompactionSettings(), hooks, func(view ai.TranscriptContext, _ map[string]any) *ai.Message {
+	result, calls, effects, views := compactionRun(t, 21, agentcore.CompactionSettings{StandaloneSummary: true}, hooks, func(view ai.TranscriptContext, _ map[string]any) *ai.Message {
 		if !strings.HasPrefix(ai.GetCurrentSystemPrompt(view.Messages()), "Summarize the conversation") {
 			return nil
 		}

@@ -65,6 +65,7 @@ func TestNativeLongRunCompactionTelemetryAndResume(t *testing.T) {
 	limits.MaxTurns, limits.MaxToolCalls, limits.MaxContextTokens = 120, 120, 4000
 	compact := agentcore.DefaultCompactionSettings()
 	compact.KeepRecentTokens = 1500
+	compact.StandaloneSummary = true // the scripted provider answers only the standalone request
 	provider := &ai.FallbackProvider{Candidates: []ai.FallbackCandidate{{Model: json.RawMessage(`{"id":"longrun","provider":"fixture"}`), Stream: stream}}}
 	build := func(condition string) *agentcore.Agent {
 		a, err := agentcore.Build(agentcore.ConfigPlugin(agentcore.Config{NativeProvider: provider, Model: "longrun", Tools: tools, Policy: agentcore.NewAllowList("work"), Limits: &limits, Compaction: &compact}), goal.Until(condition))
