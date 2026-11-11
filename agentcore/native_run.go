@@ -485,10 +485,9 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 		// Unless StandaloneSummary is set the summary is first asked for as one more turn
 		// of the live conversation: the provider reads the whole transcript from
 		// its prompt cache, and one call replaces a chain of folds. A forced
-		// tool choice or an output schema would shape the reply, and a
-		// compaction model is the host choosing who summarizes, so those runs
+		// tool choice or an output schema would shape the reply, so those runs
 		// keep the standalone summarizer.
-		if !a.compaction.StandaloneSummary && a.compactionModel == nil && policy.SummarizeView == nil && a.toolChoice.Mode == ToolChoiceDefault && a.outputSchema == nil {
+		if !a.compaction.StandaloneSummary && policy.SummarizeView == nil && a.toolChoice.Mode == ToolChoiceDefault && a.outputSchema == nil {
 			policy.SummarizeView = func(ctx context.Context, request nativehost.SummaryRequest) (string, Usage, error) {
 				if !shared.ok {
 					return "", Usage{}, errors.New("no live request to share")

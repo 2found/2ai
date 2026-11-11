@@ -564,7 +564,7 @@ func (a *Agent) Describe() string {
 		clearing = "off"
 	}
 	line("compaction", fmt.Sprintf("keep_recent=%d budget=%d clear_tool_results=%s shared_cache=%t",
-		a.compaction.keepRecent(budget), budget, clearing, !a.compaction.StandaloneSummary && a.compactionModel == nil))
+		a.compaction.keepRecent(budget), budget, clearing, !a.compaction.StandaloneSummary))
 	line("compaction_model", orDash(fallbackModelIDs(a.compactionModel)))
 
 	// Extensions — the capabilities this agent has beyond the core loop. Named

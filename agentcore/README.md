@@ -117,8 +117,9 @@ turn; an error or a cancellation still returns the last resumable state in
 in the request and sends `tool_choice` none, so the cached prefix survives.
 The summary is asked for as one more turn of the live conversation, so the
 call reads the run's prompt cache; it falls back to the standalone call when
-the reply is not a summary, and a run with a forced tool choice, an output
-schema or a compaction model always uses the standalone call.
+the reply is not a summary, and a run with a forced tool choice or an output
+schema always uses the standalone call. A compaction model serves the
+standalone call only.
 `CompactionSettings.StandaloneSummary` turns the shared call off.
 `Hooks.BeforeCompact` can defer a summary with `Skip`. After three consecutive
 failed summaries the run stops asking until a provider overflow forces one.

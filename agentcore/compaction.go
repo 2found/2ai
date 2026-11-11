@@ -82,13 +82,13 @@ type CompactionSettings struct {
 	// provider reads the transcript from its prompt cache and one call
 	// replaces a chain of folds over a re-sent copy. The reply is used only
 	// when it is a text-only summary block; anything else, and any run with a
-	// forced tool choice, an output schema, a compaction model
-	// (Registry.SetCompactionModel) or a live request too large to take the
-	// instruction, uses the standalone summarizer: a separate request that
+	// forced tool choice, an output schema or a live request too large to take
+	// the instruction, uses the standalone summarizer: a separate request that
 	// re-sends a rendered copy of the transcript under its own system prompt.
-	// Set this for a provider that bills cached input at the full rate, or
-	// when a summary request must not reach the provider as a conversation
-	// turn.
+	// Set this for a provider that bills cached input at the full rate, to
+	// have a compaction model (Registry.SetCompactionModel) write every
+	// summary instead of only the fallback, or when a summary request must not
+	// reach the provider as a conversation turn.
 	StandaloneSummary bool
 	// SharePromptCache is ignored.
 	//

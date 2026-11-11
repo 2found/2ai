@@ -403,8 +403,9 @@ func (r *Registry) SetCompaction(s CompactionSettings) error {
 }
 
 // SetCompactionModel gives the standalone summary call its own, usually
-// cheaper, models instead of the run's. It also turns off the shared-cache
-// summary, which only the run's model can serve: only it holds the cache.
+// cheaper, models instead of the run's. The shared-cache summary still asks
+// the run's model first, since only it holds the cache; set
+// CompactionSettings.StandaloneSummary to send every summary here.
 func (r *Registry) SetCompactionModel(p *ai.FallbackProvider) error {
 	if p == nil || len(p.Candidates) == 0 {
 		return fmt.Errorf("agentcore: plugin %q cannot install a compaction model without candidates", r.current)
