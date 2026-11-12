@@ -5,9 +5,9 @@
 [English](README.md) · [Tiếng Việt](README.vi.md) · [2found](https://2found.dev)
 
 2ai là thư viện Go để xây ứng dụng AI trên cùng hợp đồng provider, vòng lặp
-agent native và telemetry. Đây là nền tảng dùng bởi
-[2agent / Soot](https://github.com/2found/2agent) và AgentRay. Ứng dụng sử dụng
-thư viện sở hữu cấu hình, credential, quyền truy cập và dữ liệu bền vững.
+agent native và telemetry. Đây là nền tảng của
+[2agent / Soot](https://github.com/2found/2agent) và AgentRay. Ứng dụng dùng
+thư viện tự giữ cấu hình, credential, quyền truy cập và dữ liệu lâu dài.
 
 ## Bắt đầu trong một phút
 
@@ -75,7 +75,7 @@ lịch chạy, pack và app của Soot.
 - Checkpoint native và identity của value có quy tắc sở hữu. Đọc tài liệu
   package trước khi sao chép state hoặc xử lý event đồng thời.
 
-Các transport native được cấu hình gồm Codex, Claude Code, Antigravity, Devin
+Các transport native đã cấu hình sẵn gồm Codex, Claude Code, Antigravity, Devin
 và endpoint tương thích OpenAI, bao gồm Gemini. Mức hỗ trợ tùy provider;
 [tài liệu AI](ai/README.md) là hợp đồng, không phải cam kết hỗ trợ mọi model
 trong catalog.
@@ -91,7 +91,7 @@ go run ./examples/scripted
 Kiểm tra thông thường dùng fixture ghi sẵn, provider giả lập và HTTP server local.
 Cài Node.js 22.15+ và Python 3 để chạy test eval tùy chọn của sandbox;
 bản thân thư viện Go không phụ thuộc JavaScript runtime.
-Test gọi provider thật hoặc Docker được bỏ qua khi chưa cung cấp điều kiện chạy
+Test gọi provider thật hoặc Docker bị bỏ qua khi chưa cung cấp điều kiện chạy
 rõ ràng. Suite kiểm tra lỗi, cancellation, quyền, usage khi retry và concurrency.
 Không cần checkout repo bên cạnh hay `replace` local. Khi sửa nhiều repo cùng
 lúc, dùng Go workspace không commit.
@@ -101,7 +101,7 @@ lúc, dùng Go workspace không commit.
 Push `VERSION` mới lên `main` chỉ phát hành sau khi CI đạt. Mỗi tag cung cấp
 source Go module, tài liệu cùng phiên bản và danh sách tải có checksum.
 [Quy tắc release](docs/release.md) · [Release và tải về](https://github.com/2found/2ai/releases).
-Pin tag `v<version>` đã phát hành khi sử dụng; `@main` ở trên dành cho phát triển.
+Pin tag `v<version>` đã phát hành khi dùng; `@main` ở trên dành cho phát triển.
 
 ## Dành cho coding agent
 
