@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -130,7 +131,7 @@ func NewShellTool(sb agentcore.Sandbox, limits agentcore.SandboxLimits, ws *Work
 	if hosted {
 		desc = "Run a shell command on this machine, in the agent workspace " +
 			"directory. The command does not inherit this process's environment " +
-			"variables. Returns the combined exit code, stdout, and stderr."
+			"variables, only its PATH and locale. Returns the combined exit code, stdout, and stderr."
 		sb = NewHostSandbox()
 	}
 	return &ShellTool{
@@ -321,7 +322,25 @@ func (t *ShellTool) request(ctx context.Context, command string, timeout float64
 		req.Mounts = []agentcore.SandboxMount{{Source: t.workspace.Root(), Target: shellWorkdir}}
 		req.Workdir = shellWorkdir
 	}
+	if t.hosted {
+		req.Env = hostShellEnv()
+	}
 	return req
+}
+
+// hostShellEnv is what a command on the host substrate sees of this process's
+// environment: where its programs are and its locale, nothing else. Without
+// PATH /bin/sh falls back to its built-in search path, so the operator's tools
+// (a Homebrew ffmpeg, a pyenv python) are not found and a model goes on to
+// install its own copies. A sandbox image brings its own PATH instead.
+func hostShellEnv() map[string]string {
+	env := map[string]string{}
+	for _, key := range []string{"PATH", "LANG", "LC_ALL"} {
+		if value := os.Getenv(key); value != "" {
+			env[key] = value
+		}
+	}
+	return env
 }
 
 // background launches req as a run-owned background job. With a workspace the

@@ -351,3 +351,35 @@ func TestShellBackgroundPublishesLiveOutputToTheJob(t *testing.T) {
 		t.Fatal("a foreground command published to a job")
 	}
 }
+
+// A command that prints without end must not fill the disk: the log keeps its
+// first shellLogMaxBytes, notes the cut once, and the result says what was not
+// saved while the model still sees the true tail.
+func TestShellLogIsCapped(t *testing.T) {
+	skipOnWindows(t)
+	old := shellLogMaxBytes
+	shellLogMaxBytes = 100 << 10
+	t.Cleanup(func() { shellLogMaxBytes = old })
+	ws := mustWorkspace(t)
+	out, err := NewShellTool(nil, agentcore.SandboxLimits{}, ws).Run(context.Background(), `{"command":"yes 0123456789 | head -c 1000000; echo the-end"}`)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(out, "the-end") || !strings.Contains(out, "were not saved") {
+		t.Fatalf("result does not keep the tail and name the cut:\n%s", out[max(0, len(out)-600):])
+	}
+	entries, err := os.ReadDir(filepath.Join(ws.Root(), shellLogDir))
+	if err != nil || len(entries) != 1 {
+		t.Fatalf("log files = %v (%v), want 1", entries, err)
+	}
+	raw, err := os.ReadFile(filepath.Join(ws.Root(), shellLogDir, entries[0].Name()))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if int64(len(raw)) > shellLogMaxBytes+200 || !strings.Contains(string(raw), "log capped at") {
+		t.Fatalf("log is %d bytes (cap %d), cap note present: %v", len(raw), shellLogMaxBytes, strings.Contains(string(raw), "log capped at"))
+	}
+	if strings.Contains(string(raw), "the-end") {
+		t.Fatal("output past the cap was saved")
+	}
+}

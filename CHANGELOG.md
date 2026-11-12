@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.4 — 2026-11-12
+
+Baseline: v0.2.3. Bug fixes in `sandbox`; no API change and no migration.
+
+- **`run_shell` and `computer_use` on the host see the server's `PATH` and locale.** With no sandbox injected the command ran with an empty environment, so `/bin/sh` searched only its built-in path: a tool the operator installed (a Homebrew `ffmpeg`, a pyenv `python3`) was not found by name and a model went on to `pip install` its own copies into another interpreter. The host substrate now passes `PATH`, `LANG` and `LC_ALL`, as the `eval` and LSP tools already did on the host; every other variable (credentials, database URLs) stays hidden. A command inside a sandbox is unchanged: its image brings its own environment. The host description says so.
+- **A shell's full-output log is capped at 64 MiB.** The `.shell_logs` file of one command kept every byte, so a chatty command left running in the background (a kept job may live an hour) could fill the disk. Past the cap the log notes the cut once and stops growing; the result says how much was saved and how much was not, and the bounded head and tail the model sees are unchanged.
+
 ## 0.2.3 — 2026-11-12
 
 Baseline: v0.2.2. Bug fix; no API change and no migration.

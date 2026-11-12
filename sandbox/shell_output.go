@@ -78,9 +78,17 @@ func trailingPartialRune(p []byte) int {
 	return 0
 }
 
+// shellLogMaxBytes bounds one command's full-output log. A chatty command kept
+// running in the background (job_keep lets one outlive its run by up to an
+// hour) would otherwise fill the disk with a log nobody reads past its tail.
+// A variable only so a test can lower it.
+var shellLogMaxBytes int64 = 64 << 20
+
 // shellLog is the full-output file in the workspace. With a threshold it is
 // created only once that many bytes have arrived (held in memory until then),
 // so a short command leaves no file behind; threshold 0 creates it up front.
+// It keeps the first shellLogMaxBytes; past them it notes the cut once and
+// counts the rest, which the model still sees in the bounded tail.
 type shellLog struct {
 	ws        *Workspace
 	threshold int
@@ -88,6 +96,8 @@ type shellLog struct {
 	f         *os.File
 	pending   []byte
 	failed    bool
+	written   int64
+	dropped   int64
 }
 
 func (l *shellLog) open() error {
@@ -123,8 +133,22 @@ func (l *shellLog) write(p []byte) {
 		}
 		p, l.pending = l.pending, nil
 	}
-	if _, err := l.f.Write(p); err != nil {
+	if l.dropped > 0 {
+		l.dropped += int64(len(p))
+		return
+	}
+	if room := shellLogMaxBytes - l.written; int64(len(p)) > room {
+		l.dropped = int64(len(p)) - room
+		p = p[:room]
+	}
+	n, err := l.f.Write(p)
+	l.written += int64(n)
+	if err != nil {
 		l.failed = true
+		return
+	}
+	if l.dropped > 0 {
+		_, _ = fmt.Fprintf(l.f, "\n[... log capped at %d bytes; later output is not saved ...]\n", shellLogMaxBytes)
 	}
 }
 
@@ -256,6 +280,8 @@ func (o *shellOutput) format(res agentcore.SandboxResult) string {
 	}
 	if o.truncated() {
 		switch {
+		case o.log != nil && o.log.f != nil && !o.log.failed && o.log.dropped > 0:
+			fmt.Fprintf(&b, "[output truncated — the first %d bytes of the output (stdout and stderr interleaved) are saved to %s, the last %d bytes were not saved; the tail above is the end]\n", o.log.written, o.log.rel, o.log.dropped)
 		case o.log != nil && o.log.f != nil && !o.log.failed:
 			fmt.Fprintf(&b, "[output truncated — the full output (stdout and stderr interleaved) is saved to %s; read it with read_file or grep]\n", o.log.rel)
 		default:

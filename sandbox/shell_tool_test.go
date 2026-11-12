@@ -315,3 +315,35 @@ func TestShellToolHostModeKillsBackgroundedChildren(t *testing.T) {
 		t.Fatalf("run took %s — the backgrounded child outlived the timeout", elapsed)
 	}
 }
+
+// The host substrate hides the server's environment but not where its programs
+// are: a tool on the operator's PATH (a Homebrew ffmpeg) runs by name, and the
+// locale carries over, while every other variable stays out.
+func TestShellToolHostModeKeepsPathAndLocale(t *testing.T) {
+	skipOnWindows(t)
+	bin := t.TempDir()
+	if err := os.WriteFile(filepath.Join(bin, "soot-path-probe"), []byte("#!/bin/sh\necho probe-ran\n"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("PATH", bin+string(os.PathListSeparator)+os.Getenv("PATH"))
+	t.Setenv("LANG", "vi_VN.UTF-8")
+	t.Setenv("AGENTRAY_TEST_SECRET", "leaked-db-password")
+	out, err := NewShellTool(nil, agentcore.SandboxLimits{}, mustWorkspace(t)).Run(context.Background(), `{"command":"soot-path-probe; echo \"lang=$LANG\"; env"}`)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(out, "probe-ran") || !strings.Contains(out, "lang=vi_VN.UTF-8") {
+		t.Fatalf("PATH or locale not passed to the host shell:\n%s", out)
+	}
+	if strings.Contains(out, "leaked-db-password") {
+		t.Fatalf("host shell leaked a host env var:\n%s", out)
+	}
+	// A sandbox brings its own environment: nothing of the host's is added.
+	stub := &stubSandbox{}
+	if _, err := NewShellTool(stub, agentcore.SandboxLimits{}, nil).Run(context.Background(), `{"command":"true"}`); err != nil {
+		t.Fatal(err)
+	}
+	if len(stub.last.Env) != 0 {
+		t.Fatalf("sandboxed shell got host env %v", stub.last.Env)
+	}
+}
