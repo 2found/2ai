@@ -599,3 +599,108 @@ func TestCallbackPanicIsContained(t *testing.T) {
 	close(finish)
 	<-called
 }
+
+// heldConversations is how many conversations the Hold still keeps anything for.
+func heldConversations(h *Hold) int {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	return len(h.convs)
+}
+
+// Once the run the host started for a kept job's notice has read it and closed,
+// the Hold keeps nothing for that conversation: the run's checkpoint carries the
+// record. Before, the finished record and the conversation's entry stayed in the
+// Hold until the process exited unless a later run came back after MaxAge.
+func TestHoldForgetsAKeptJobOnceItsNoticeRunCloses(t *testing.T) {
+	c := newEnds()
+	h := NewHold(c.record)
+	s := &Survival{Hold: h}
+	b, _ := run(t, s, "conv-forget")
+	finish := make(chan struct{})
+	r, _ := b.start(context.Background(), "run_shell", "build", func(context.Context) (string, error) {
+		<-finish
+		return "build ok", nil
+	})
+	keepJob(t, b, r.ID)
+	b.CloseRun()
+	close(finish)
+	c.next(t)
+
+	notice, _ := run(t, s, "conv-forget")
+	if out := status(t, notice, `{"id":"`+r.ID+`"}`); !strings.Contains(out, "build ok") {
+		t.Fatalf("the notice run cannot read the result: %q", out)
+	}
+	notice.CloseRun()
+	if n := heldConversations(h); n != 0 {
+		t.Fatalf("the Hold still keeps %d conversation(s) after the notice run closed", n)
+	}
+}
+
+// A kept job that ends while its own run is attached is announced by that run
+// and not handed to the Hold when the run closes.
+func TestHoldDoesNotKeepAJobItsRunAnnounced(t *testing.T) {
+	h := NewHold(func(Ended) { t.Error("the callback fired for a job its run announced") })
+	s := &Survival{Hold: h}
+	b, _ := run(t, s, "conv-own")
+	r, _ := b.start(context.Background(), "run_shell", "x", func(context.Context) (string, error) { return "ok", nil })
+	keepJob(t, b, r.ID)
+	if _, err := b.wait(context.Background(), r.ID); err != nil {
+		t.Fatal(err)
+	}
+	if got := b.drain(); len(got) != 1 {
+		t.Fatalf("drain = %d records", len(got))
+	}
+	b.CloseRun()
+	if n := heldConversations(h); n != 0 {
+		t.Fatalf("the Hold keeps %d conversation(s) for a job its run announced", n)
+	}
+}
+
+// A kept job announced through the callback that no run ever comes back for
+// (the host could not deliver the notice, the conversation is gone) leaves the
+// Hold once it is older than MaxAge.
+func TestHoldExpiresAFinishedJobNoRunCollects(t *testing.T) {
+	c := newEnds()
+	h := NewHold(c.record)
+	s := &Survival{Hold: h, MaxAge: 50 * time.Millisecond}
+	for _, conv := range []string{"conv-a", "conv-b", "conv-c"} {
+		b, _ := run(t, s, conv)
+		finish := make(chan struct{})
+		r, _ := b.start(context.Background(), "run_shell", "x", func(context.Context) (string, error) { <-finish; return "ok", nil })
+		keepJob(t, b, r.ID)
+		b.CloseRun()
+		close(finish)
+		c.next(t)
+	}
+	if n := heldConversations(h); n != 3 {
+		t.Fatalf("held = %d right after the callbacks, want 3 (the notice run must still find them)", n)
+	}
+	deadline := time.Now().Add(2 * time.Second)
+	for heldConversations(h) != 0 {
+		if time.Now().After(deadline) {
+			t.Fatalf("the Hold still keeps %d expired conversation(s)", heldConversations(h))
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
+}
+
+// A run that adopts a finished job before its expiry keeps it: the expiry does
+// not pull the record out from under the attached run.
+func TestExpiryLeavesAnAdoptedRecordAlone(t *testing.T) {
+	c := newEnds()
+	h := NewHold(c.record)
+	s := &Survival{Hold: h, MaxAge: 40 * time.Millisecond}
+	b, _ := run(t, s, "conv-adopt")
+	finish := make(chan struct{})
+	r, _ := b.start(context.Background(), "run_shell", "x", func(context.Context) (string, error) { <-finish; return "kept result", nil })
+	keepJob(t, b, r.ID)
+	b.CloseRun()
+	close(finish)
+	c.next(t)
+	next, _ := run(t, s, "conv-adopt")
+	defer next.CloseRun()
+	time.Sleep(150 * time.Millisecond)
+	if out := status(t, next, `{"id":"`+r.ID+`"}`); !strings.Contains(out, "kept result") {
+		t.Fatalf("the adopted record vanished: %q", out)
+	}
+}

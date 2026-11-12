@@ -177,9 +177,12 @@ type job struct {
 	owner *board
 	hold  *Hold
 	conv  string
-	// timer expires a kept job at its max age; expired is the reason.
+	// timer expires a kept job at its max age; expired is the reason. Once a
+	// kept job ended detached, it expires the record in the Hold instead.
+	// keepFor is the max age the job was kept with.
 	timer   *time.Timer
 	expired string
+	keepFor time.Duration
 }
 
 // Name identifies the extension in composition diagnostics.

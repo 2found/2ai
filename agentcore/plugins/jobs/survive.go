@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"slices"
 	"strings"
 	"sync"
 	"time"
@@ -203,6 +204,9 @@ func (b *board) attach(ctx context.Context, info agentcore.RunInfo, cfg *Surviva
 		if j.done() && j.Announced && now.Sub(j.EndedAt) > s.maxAge {
 			continue
 		}
+		if j.done() && j.timer != nil {
+			j.timer.Stop() // its expiry: this run takes the record now
+		}
 		j.owner = b
 		b.jobs = append(b.jobs, j)
 	}
@@ -226,13 +230,17 @@ func (b *board) detach() {
 	}
 	var ends []*Ended
 	for _, j := range b.jobs {
-		if !j.Keep {
+		// A kept job that ended and was announced has nothing left to keep:
+		// the run's checkpoint carries its record to later runs. Holding it
+		// would keep it, and the conversation's entry, until the process exits.
+		if !j.Keep || j.done() && j.Announced {
 			continue
 		}
 		j.owner = nil
 		c.jobs = append(c.jobs, j)
-		if j.done() && !j.Announced {
+		if j.done() {
 			ends = append(ends, j.endedLocked())
+			h.expireLocked(b.conv, j)
 		}
 	}
 	c.attached, c.seq = nil, max(c.seq, b.seq)
@@ -253,7 +261,31 @@ func (j *job) endedDetachedLocked() *Ended {
 	if c := j.hold.convs[j.conv]; c != nil {
 		j.hold.evictLocked(j.conv, c)
 	}
+	j.hold.expireLocked(j.conv, j)
 	return e
+}
+
+// expireLocked drops a finished detached job from the Hold once it is older
+// than its max age. The callback announced it and the run the host starts for
+// it adopts it; this only bounds a job no run of its conversation ever comes
+// back for (a notice the host could not deliver, a conversation gone).
+func (h *Hold) expireLocked(conv string, j *job) {
+	age := j.keepFor
+	if age <= 0 {
+		age = defaultMaxAge
+	}
+	j.timer = time.AfterFunc(max(age-time.Since(j.EndedAt), 0), func() {
+		h.mu.Lock()
+		defer h.mu.Unlock()
+		c := h.convs[conv]
+		if c == nil || j.owner != nil {
+			return
+		}
+		if i := slices.Index(c.jobs, j); i >= 0 {
+			c.jobs = slices.Delete(c.jobs, i, i+1)
+		}
+		h.evictLocked(conv, c)
+	})
 }
 
 // endedLocked marks the job announced and describes it for the host.
@@ -321,7 +353,7 @@ func (b *board) keep(id string) (string, error) {
 	if kept >= s.maxJobs {
 		return "", fmt.Errorf("this conversation already keeps %d running jobs (the maximum); cancel one with job_cancel first", kept)
 	}
-	j.Keep = true
+	j.Keep, j.keepFor = true, s.maxAge
 	wait := max(s.maxAge-time.Since(j.StartedAt), 0)
 	j.timer = time.AfterFunc(wait, func() {
 		b.mu.Lock()

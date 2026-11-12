@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.3 — 2026-11-12
+
+Baseline: v0.2.2. Bug fix; no API change and no migration.
+
+- **The Hold no longer keeps finished kept jobs forever.** A kept job that had ended and been announced went back into the `Hold` when the run carrying its notice closed, and stayed there with its result, output buffer and context until a later run of the same conversation began after `MaxAge`. A conversation nobody returned to kept its entry until the process exited, so memory grew with every conversation that ever kept a job (200 such conversations held 200 records and 4 MB of results). Now a finished, announced job leaves the Hold when its run closes (the run's checkpoint carries the record, so later runs still read it), and a job announced through the callback that no run comes back for leaves `MaxAge` after it ended. Running kept jobs, the callback and its exactly-once delivery are unchanged.
+
 ## 0.2.2 — 2026-11-12
 
 Baseline: v0.2.1. Every change below is additive; a host that sets none of the new options sees no change in behavior, tool list or tool-result text, except that the `job_list` description and the `job_status` schema (a new optional `output_bytes`) changed, and a running job that publishes output now shows it.

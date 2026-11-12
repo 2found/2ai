@@ -113,8 +113,14 @@ detached --next run of the same conversation begins--> running(kept) on that boa
 running/running(kept) --work returns / job_cancel / MaxAge--> succeeded | failed | cancelled
 ended while a run is attached --> announced by that run's next step, once
 ended while detached          --> announced through Hold's callback, once (the next run then lists it as announced)
+ended and announced, run closes --> leaves the Hold; the run's checkpoint carries the record
+announced, no run comes back  --> leaves the Hold MaxAge after it ended
 process restart               --> Hold is empty; the restored checkpoint reports it interrupted
 ```
+
+The Hold keeps only what a later run still needs: running kept jobs, and a
+finished one until the run its notice starts adopts it. Nothing finished stays
+in process memory for a conversation nobody returns to.
 
 The job's context is detached from the run's cancellation but keeps the run's
 values, so it runs under the policy of the run that started it; a later run only
