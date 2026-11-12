@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.2 — 2026-11-12
 
 Baseline: v0.2.1. Every change below is additive; a host that sets none of the new options sees no change in behavior, tool list or tool-result text, except that the `job_list` description and the `job_status` schema (a new optional `output_bytes`) changed, and a running job that publishes output now shows it.
 
