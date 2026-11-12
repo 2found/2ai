@@ -101,7 +101,7 @@ func (c *NativeClient) Candidate(id string, contextWindow int) (FallbackCandidat
 	if maxTokens <= 0 {
 		maxTokens = 16384
 	}
-	model, err := json.Marshal(map[string]any{"id": id, "name": id, "agentrayProviderId": c.spec.SessionScope, "provider": c.provider, "api": c.api, "baseUrl": c.endpoint, "contextWindow": contextWindow, "maxTokens": maxTokens, "reasoning": true, "input": []string{"text", "image"}, "cost": map[string]float64{}, "compat": c.compat})
+	model, err := json.Marshal(map[string]any{"id": id, "name": id, "agentrayProviderId": c.spec.SessionScope, "provider": c.provider, "api": c.api, "baseUrl": c.endpoint, "contextWindow": contextWindow, "maxTokens": maxTokens, "reasoning": true, "input": []string{"text", "image"}, "cost": listCost(c.provider, id), "compat": c.compat})
 	if err != nil {
 		return FallbackCandidate{}, err
 	}

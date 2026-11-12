@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.5 — 2026-11-12
+
+Baseline: v0.2.4. Bug fixes in `agentcore/host` and `ai`; no API change and no migration.
+
+- **Compaction no longer rewrites the cached system prompt.** A system message from later in the transcript, such as the goal plugin's `[run goal]` statement, was moved ahead of the summary when compaction folded its position. A provider without mid-conversation system messages then merged it into the leading system prompt, so the system+tools head that every request caches changed once per compaction. Only the leading system messages (the system prompt) now stay ahead of the summary; every later one follows the summary, in order, and still reaches such a provider as a reminder at its position. The goal stays in force after compaction as before.
+- **A native candidate on a first-party API is priced.** `NativeClient.Candidate` always sent empty cost metadata, so every run was reported unpriced and a host ledger showed $0. A model served by the OpenAI, Anthropic, Google or DeepSeek API now carries its `DefaultPricing` list rates, and usage is priced with `PricingSource` `model`. A gateway, router or OAuth subscription account serving the same model id stays unpriced. `DefaultPricing` adds DeepSeek: `deepseek-flash` (with its legacy `deepseek-v4-flash` names and `deepseek-v4.1-flash`) and `deepseek-v4-pro`, at the peak rates (off-peak bills at half), with no cache-write premium. The candidate metadata is part of a native checkpoint, so a conversation checkpointed by 0.2.4 on a priced fallback candidate resumes once on the primary, as after any model change.
+
 ## 0.2.4 — 2026-11-12
 
 Baseline: v0.2.3. Bug fixes in `sandbox`; no API change and no migration.

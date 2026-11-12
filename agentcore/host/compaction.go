@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"slices"
 	"strings"
 	"time"
 
@@ -342,14 +343,26 @@ func (c *Compactor) transform(ctx context.Context, raw json.RawMessage, policy C
 
 // summaryView replaces a validated prefix while preserving its system messages.
 // The caller must supply a cut within the message slice and outside a tool batch.
+//
+// Each kept system message keeps its side of the summary. The leading run is
+// the system prompt and stays ahead of it; a system message from later in the
+// prefix (a goal statement, a plugin reminder, a later run's opening) follows
+// the summary. A provider without mid-conversation system messages folds the
+// leading run into its system prompt and renders the rest as reminders at
+// their position, so hoisting a later one ahead of the summary would rewrite
+// the system+tools head every request caches, once per compaction.
 func summaryView(messages []json.RawMessage, facts []*messageFacts, cut int, summary json.RawMessage) []json.RawMessage {
-	kept := []json.RawMessage{}
-	for i, raw := range messages[:cut] {
+	leading := 0
+	for leading < cut && facts[leading].role == "system" {
+		leading++
+	}
+	kept := slices.Clone(messages[:leading])
+	kept = append(kept, summary)
+	for i := leading; i < cut; i++ {
 		if facts[i].role == "system" {
-			kept = append(kept, raw)
+			kept = append(kept, messages[i])
 		}
 	}
-	kept = append(kept, summary)
 	return append(kept, messages[cut:]...)
 }
 

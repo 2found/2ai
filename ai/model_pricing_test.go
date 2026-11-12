@@ -51,3 +51,23 @@ func TestPricingCost(t *testing.T) {
 		t.Fatalf("unknown: got %v priced=%v want 0 false", got, priced)
 	}
 }
+
+// DeepSeek's flash alias and its legacy names are priced, so a DeepSeek run's
+// ledger reports what it spent instead of an unpriced $0.
+func TestDefaultPricingCoversDeepSeek(t *testing.T) {
+	p := DefaultPricing()
+	usage := protocol.Usage{InputTokens: 1_000_000, CacheReadTokens: 1_000_000, OutputTokens: 1_000_000}
+	for _, model := range []string{"deepseek-flash", "deepseek-v4-flash", "deepseek-v4-flash-vision-exp", "deepseek-v4.1-flash"} {
+		got, priced := p.Cost(model, usage)
+		if want := 0.30 + 0.006 + 1.20; !priced || got < want-1e-9 || got > want+1e-9 {
+			t.Fatalf("%s: cost %v priced=%v, want %v true", model, got, priced, want)
+		}
+	}
+	if got, priced := p.Cost("deepseek-v4-pro", protocol.Usage{OutputTokens: 1_000_000}); !priced || got != 3.96 {
+		t.Fatalf("deepseek-v4-pro: cost %v priced=%v, want 3.96 true", got, priced)
+	}
+	// No cache-write premium: DeepSeek bills a miss as plain input.
+	if got, _ := p.Cost("deepseek-flash", protocol.Usage{CacheWriteTokens: 1_000_000}); got != 0.30 {
+		t.Fatalf("deepseek-flash cache write = %v, want 0.30", got)
+	}
+}

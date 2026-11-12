@@ -58,14 +58,7 @@ func (p Pricing) Cost(model string, u protocol.Usage) (float64, bool) {
 	if !ok {
 		return 0, false
 	}
-	readPerM := mp.CacheReadPerM
-	if readPerM == 0 {
-		readPerM = mp.InputPerM * defaultCacheReadMultiplier
-	}
-	writePerM := mp.CacheWritePerM
-	if writePerM == 0 {
-		writePerM = mp.InputPerM * defaultCacheWriteMultiplier
-	}
+	readPerM, writePerM := mp.cacheRates()
 	longPerM := mp.CacheWrite1hPerM
 	if longPerM == 0 {
 		longPerM = mp.InputPerM * defaultCacheWrite1hMultiplier
@@ -76,6 +69,39 @@ func (p Pricing) Cost(model string, u protocol.Usage) (float64, bool) {
 		float64(u.CacheReadTokens)/1e6*readPerM +
 		float64(u.CacheWriteTokens-long)/1e6*writePerM +
 		float64(long)/1e6*longPerM, true
+}
+
+// cacheRates resolves the cache-read and 5-minute cache-write rates, deriving
+// an unset one from InputPerM by the default multipliers.
+func (mp ModelPrice) cacheRates() (read, write float64) {
+	read, write = mp.CacheReadPerM, mp.CacheWritePerM
+	if read == 0 {
+		read = mp.InputPerM * defaultCacheReadMultiplier
+	}
+	if write == 0 {
+		write = mp.InputPerM * defaultCacheWriteMultiplier
+	}
+	return read, write
+}
+
+// listPricedVendors are the first-party APIs that bill the DefaultPricing list
+// rates. A gateway, router or subscription account serving the same model id
+// bills on its own terms, so its models stay unpriced rather than guessed.
+var listPricedVendors = map[string]bool{"openai": true, VendorOpenAIResponses: true, "anthropic": true, "google": true, "deepseek": true}
+
+// listCost is the native model "cost" metadata for a model a first-party API
+// serves: its DefaultPricing rates, or empty (unpriced) when the vendor or the
+// model has no list price.
+func listCost(vendor, model string) map[string]float64 {
+	if !listPricedVendors[vendor] {
+		return map[string]float64{}
+	}
+	mp, ok := DefaultPricing().lookup(model)
+	if !ok {
+		return map[string]float64{}
+	}
+	read, write := mp.cacheRates()
+	return map[string]float64{"input": mp.InputPerM, "output": mp.OutputPerM, "cacheRead": read, "cacheWrite": write}
 }
 
 // lookup resolves a model to a price: exact match, else the longest key that is
@@ -100,8 +126,10 @@ func (p Pricing) lookup(model string) (ModelPrice, bool) {
 
 // DefaultPricing is the built-in price table (USD per 1M tokens), keyed by model
 // family so dated variants resolve by prefix. These are list prices and drift;
-// they are a code-defined default, overridable per Runner via WithPricing. Keep
-// entries sorted by family for easy auditing.
+// they are a code-defined default. A native candidate on a first-party API
+// carries them as its model cost (see listCost); a host that bills differently
+// supplies its own model metadata. Keep entries sorted by family for easy
+// auditing.
 func DefaultPricing() Pricing {
 	return Pricing{
 		// OpenAI
@@ -141,6 +169,17 @@ func DefaultPricing() Pricing {
 		"claude-opus-5":   {InputPerM: 5.00, OutputPerM: 25.00},
 		"claude-fable-5":  {InputPerM: 10.00, OutputPerM: 50.00},
 		"claude-mythos-5": {InputPerM: 10.00, OutputPerM: 50.00},
+		// DeepSeek — verified against api-docs.deepseek.com/quick_start/pricing on
+		// 2026-11-12. These are the PEAK rates (01:00-04:00 and 06:00-10:00 UTC on
+		// weekdays); every other hour bills at half, so a table that cannot see the
+		// clock prices at the ceiling rather than under-reporting spend. DeepSeek
+		// bills a cache miss as plain input and has no cache-write premium.
+		// "deepseek-flash" is the current alias (DeepSeek-V4.1-Flash-1017); the
+		// legacy "deepseek-v4-flash" names, vision-exp included, still resolve.
+		"deepseek-flash":      {InputPerM: 0.30, OutputPerM: 1.20, CacheReadPerM: 0.006, CacheWritePerM: 0.30},
+		"deepseek-v4-flash":   {InputPerM: 0.30, OutputPerM: 1.20, CacheReadPerM: 0.006, CacheWritePerM: 0.30},
+		"deepseek-v4.1-flash": {InputPerM: 0.30, OutputPerM: 1.20, CacheReadPerM: 0.006, CacheWritePerM: 0.30},
+		"deepseek-v4-pro":     {InputPerM: 1.32, OutputPerM: 3.96, CacheReadPerM: 0.044, CacheWritePerM: 1.32},
 		// Google Gemini (OpenAI-compat routers)
 		"gemini-2.0-flash": {InputPerM: 0.10, OutputPerM: 0.40},
 		"gemini-2.5-flash": {InputPerM: 0.30, OutputPerM: 2.50},
