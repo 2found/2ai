@@ -10,6 +10,8 @@ import (
 	"strings"
 	"unicode/utf16"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -52,17 +54,17 @@ func ConvertOpenAICompletionsMessages(rawModel json.RawMessage, context Transcri
 				text = RenderSystemMessageUpdate(message)
 			}
 			if text != "" {
-				params = append(params, map[string]any{"role": role, "content": SanitizeSurrogates(text)})
+				params = append(params, map[string]any{"role": role, "content": jscompat.SanitizeSurrogates(text)})
 			}
 		case "user":
 			if message.Content.Text != nil {
-				params = append(params, map[string]any{"role": "user", "content": SanitizeSurrogates(*message.Content.Text)})
+				params = append(params, map[string]any{"role": "user", "content": jscompat.SanitizeSurrogates(*message.Content.Text)})
 			} else {
 				content := []map[string]any{}
 				for _, block := range message.Content.Blocks.Values() {
 					if block.Type == "text" {
 						if block.Text != "" {
-							content = append(content, map[string]any{"type": "text", "text": SanitizeSurrogates(block.Text)})
+							content = append(content, map[string]any{"type": "text", "text": jscompat.SanitizeSurrogates(block.Text)})
 						}
 					} else {
 						content = append(content, completionsImage(block))
@@ -85,9 +87,9 @@ func ConvertOpenAICompletionsMessages(rawModel json.RawMessage, context Transcri
 			for _, block := range message.Content.Blocks.Values() {
 				switch block.Type {
 				case "text":
-					if strings.TrimFunc(block.Text, jsWhitespace) != "" {
-						parts = append(parts, map[string]any{"type": "text", "text": SanitizeSurrogates(block.Text)})
-						texts = append(texts, SanitizeSurrogates(block.Text))
+					if strings.TrimFunc(block.Text, jscompat.IsWhitespace) != "" {
+						parts = append(parts, map[string]any{"type": "text", "text": jscompat.SanitizeSurrogates(block.Text)})
+						texts = append(texts, jscompat.SanitizeSurrogates(block.Text))
 					}
 				case "thinking":
 					thinking = append(thinking, block)
@@ -121,7 +123,7 @@ func ConvertOpenAICompletionsMessages(rawModel json.RawMessage, context Transcri
 			nonempty := []*ContentBlock{}
 			thinkingText := []string{}
 			for _, block := range thinking {
-				if strings.TrimFunc(block.Thinking, jsWhitespace) != "" {
+				if strings.TrimFunc(block.Thinking, jscompat.IsWhitespace) != "" {
 					nonempty = append(nonempty, block)
 					thinkingText = append(thinkingText, block.Thinking)
 				}
@@ -129,7 +131,7 @@ func ConvertOpenAICompletionsMessages(rawModel json.RawMessage, context Transcri
 			text := strings.Join(texts, "")
 			if len(nonempty) > 0 {
 				if compat.RequiresThinkingAsText {
-					assistant["content"] = append([]map[string]any{{"type": "text", "text": SanitizeSurrogates(strings.Join(thinkingText, "\n\n"))}}, parts...)
+					assistant["content"] = append([]map[string]any{{"type": "text", "text": jscompat.SanitizeSurrogates(strings.Join(thinkingText, "\n\n"))}}, parts...)
 				} else {
 					if text != "" {
 						assistant["content"] = text
@@ -155,7 +157,7 @@ func ConvertOpenAICompletionsMessages(rawModel json.RawMessage, context Transcri
 						if err != nil {
 							return nil, err
 						}
-						output = append(output, map[string]any{"id": call.ID, "type": "custom", "custom": map[string]any{"name": call.Name, "input": SanitizeSurrogates(input)}})
+						output = append(output, map[string]any{"id": call.ID, "type": "custom", "custom": map[string]any{"name": call.Name, "input": jscompat.SanitizeSurrogates(input)}})
 					} else {
 						arguments, err := stringifyCompletionsJSON(call.Arguments)
 						if err != nil {
@@ -210,7 +212,7 @@ func ConvertOpenAICompletionsMessages(rawModel json.RawMessage, context Transcri
 						text = "(no tool output)"
 					}
 				}
-				result := map[string]any{"role": "tool", "content": SanitizeSurrogates(text), "tool_call_id": tool.ToolCallID}
+				result := map[string]any{"role": "tool", "content": jscompat.SanitizeSurrogates(text), "tool_call_id": tool.ToolCallID}
 				if compat.RequiresToolResultName && tool.ToolName != "" {
 					result["name"] = tool.ToolName
 				}

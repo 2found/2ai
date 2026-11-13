@@ -8,6 +8,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	whatwg "github.com/nationallibraryofnorway/whatwg-url/url"
 )
 
@@ -33,12 +35,12 @@ func azureDeployment(model completionsModel, options map[string]json.RawMessage)
 	}
 	mapping := map[string]string{}
 	for _, entry := range strings.Split(azureEnv(options, "AZURE_OPENAI_DEPLOYMENT_NAME_MAP"), ",") {
-		entry = strings.TrimFunc(entry, jsWhitespace)
+		entry = strings.TrimFunc(entry, jscompat.IsWhitespace)
 		parts := strings.SplitN(entry, "=", 3)
 		if len(parts) < 2 || parts[0] == "" || parts[1] == "" {
 			continue
 		}
-		mapping[strings.TrimFunc(parts[0], jsWhitespace)] = strings.TrimFunc(parts[1], jsWhitespace)
+		mapping[strings.TrimFunc(parts[0], jscompat.IsWhitespace)] = strings.TrimFunc(parts[1], jscompat.IsWhitespace)
 	}
 	if value := mapping[model.ID]; value != "" {
 		return value
@@ -64,9 +66,9 @@ func ResolveAzureResponsesConfig(rawModel, rawOptions json.RawMessage) (AzureRes
 	if version == "" {
 		version = "v1"
 	}
-	base := strings.TrimFunc(samplingString(options["azureBaseUrl"]), jsWhitespace)
+	base := strings.TrimFunc(samplingString(options["azureBaseUrl"]), jscompat.IsWhitespace)
 	if base == "" {
-		base = strings.TrimFunc(azureEnv(options, "AZURE_OPENAI_BASE_URL"), jsWhitespace)
+		base = strings.TrimFunc(azureEnv(options, "AZURE_OPENAI_BASE_URL"), jscompat.IsWhitespace)
 	}
 	resource := samplingString(options["azureResourceName"])
 	if resource == "" {
@@ -81,7 +83,7 @@ func ResolveAzureResponsesConfig(rawModel, rawOptions json.RawMessage) (AzureRes
 	if base == "" {
 		return AzureResponsesConfig{}, errors.New("Azure OpenAI base URL is required. Set AZURE_OPENAI_BASE_URL or AZURE_OPENAI_RESOURCE_NAME, or pass azureBaseUrl, azureResourceName, or model.baseUrl.")
 	}
-	url, err := whatwg.Parse(strings.TrimRight(strings.TrimFunc(base, jsWhitespace), "/"))
+	url, err := whatwg.Parse(strings.TrimRight(strings.TrimFunc(base, jscompat.IsWhitespace), "/"))
 	if err != nil {
 		return AzureResponsesConfig{}, fmt.Errorf("Invalid Azure OpenAI base URL: %s", base)
 	}

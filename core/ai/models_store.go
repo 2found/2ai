@@ -2,9 +2,10 @@ package ai
 
 import (
 	"context"
-	"math"
 	"reflect"
 	"sync"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 
 	"github.com/2found/2ai/core/jsonjs"
 )
@@ -35,7 +36,7 @@ func (s *InMemoryModelsStore) Read(ctx context.Context, providerID string) (any,
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 	entry := s.entries[providerID]
-	if !catalogEntryTruthy(entry) {
+	if !jscompat.Truthy(entry) {
 		return Undefined, nil
 	}
 	var cloner jsonjs.ValueCloner
@@ -68,28 +69,6 @@ func (s *InMemoryModelsStore) Delete(ctx context.Context, providerID string) err
 	defer s.mu.Unlock()
 	delete(s.entries, providerID)
 	return nil
-}
-
-func catalogEntryTruthy(value any) bool {
-	if jsonjs.IsNullish(value) {
-		return false
-	}
-	v := reflect.ValueOf(value)
-	switch v.Kind() {
-	case reflect.Bool:
-		return v.Bool()
-	case reflect.String:
-		return v.Len() != 0
-	case reflect.Float32, reflect.Float64:
-		return v.Float() != 0 && !math.IsNaN(v.Float())
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return v.Int() != 0
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		return v.Uint() != 0
-	case reflect.Pointer:
-		return !v.IsNil()
-	}
-	return true
 }
 
 // structuredClone rejects functions even when they are serializer hooks. Do

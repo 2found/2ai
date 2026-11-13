@@ -1,6 +1,10 @@
 package ai
 
-import "context"
+import (
+	"context"
+
+	"github.com/2found/2ai/core/ai/jscompat"
+)
 
 // AuthContext is the concrete environment boundary for provider-owned auth.
 // Env returns Undefined when absent. The callback is read on every resolution.
@@ -51,10 +55,10 @@ func EnvAPIKeyAuth(name string, envVars *Array) *APIKeyAuth {
 			if err := context.Cause(input.Context); err != nil {
 				return nil, err
 			}
-			if key := catalogProperty(input.Credential, "key"); catalogEntryTruthy(key) {
+			if key := jscompat.ReadProperty(input.Credential, "key"); jscompat.Truthy(key) {
 				return NewObject(
 					Property{Name: "auth", Value: NewObject(Property{Name: "apiKey", Value: key})},
-					Property{Name: "env", Value: catalogProperty(input.Credential, "env")},
+					Property{Name: "env", Value: jscompat.ReadProperty(input.Credential, "env")},
 					Property{Name: "source", Value: "stored credential"},
 				), nil
 			}
@@ -67,7 +71,7 @@ func EnvAPIKeyAuth(name string, envVars *Array) *APIKeyAuth {
 				if err := context.Cause(input.Context); err != nil {
 					return nil, err
 				}
-				if catalogEntryTruthy(value) {
+				if jscompat.Truthy(value) {
 					return NewObject(Property{Name: "auth", Value: NewObject(Property{Name: "apiKey", Value: value})}, Property{Name: "source", Value: name}), nil
 				}
 			}

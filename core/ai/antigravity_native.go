@@ -12,6 +12,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/ai/protocol"
 	"github.com/google/uuid"
 )
@@ -75,7 +77,7 @@ func antigravityNativePayload(model completionsModel, transcript TranscriptConte
 			if message.IsError {
 				field = "error"
 			}
-			parts = append(parts, map[string]any{"functionResponse": map[string]any{"name": message.ToolName, "id": message.ToolCallID, "response": map[string]string{field: SanitizeSurrogates(strings.Join(texts, "\n"))}}})
+			parts = append(parts, map[string]any{"functionResponse": map[string]any{"name": message.ToolName, "id": message.ToolCallID, "response": map[string]string{field: jscompat.SanitizeSurrogates(strings.Join(texts, "\n"))}}})
 		} else {
 			for _, block := range blocks {
 				if block == nil || block.IsNull() {
@@ -85,10 +87,10 @@ func antigravityNativePayload(model completionsModel, transcript TranscriptConte
 				var signature *string
 				switch block.Type {
 				case "text":
-					part["text"] = SanitizeSurrogates(block.Text)
+					part["text"] = jscompat.SanitizeSurrogates(block.Text)
 					signature = block.TextSignature
 				case "thinking":
-					part["text"] = SanitizeSurrogates(block.Thinking)
+					part["text"] = jscompat.SanitizeSurrogates(block.Thinking)
 					if same {
 						part["thought"] = true
 					}
@@ -161,7 +163,7 @@ func antigravityNativePayload(model completionsModel, transcript TranscriptConte
 		inner["sessionId"] = session
 	}
 	if prompt := GetCurrentSystemPrompt(transcript.Messages()); prompt != "" {
-		inner["systemInstruction"] = map[string]any{"role": "user", "parts": []map[string]string{{"text": SanitizeSurrogates(prompt)}}}
+		inner["systemInstruction"] = map[string]any{"role": "user", "parts": []map[string]string{{"text": jscompat.SanitizeSurrogates(prompt)}}}
 	}
 	tools := GetCurrentTools(transcript.Messages())
 	if len(tools) > 0 {

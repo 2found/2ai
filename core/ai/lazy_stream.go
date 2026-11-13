@@ -6,6 +6,8 @@ import (
 	"errors"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -41,7 +43,7 @@ func LazyStream(ctx context.Context, model any, setup func(context.Context) (*Pr
 	outer := NewAssistantMessageEventStreamFor(ctx)
 	setupContext := WithAssistantStreamSynchronization(ctx, outer)
 	go func() {
-		_, err := invokeAuth(func() (any, error) {
+		_, err := jscompat.Invoke(func() (any, error) {
 			source, err := setup(setupContext)
 			if err != nil {
 				return nil, err
@@ -89,7 +91,7 @@ func LazyStream(ctx context.Context, model any, setup func(context.Context) (*Pr
 }
 
 func lazySetupErrorMessage(model any, failure error, now func() int64) (*Message, error) {
-	api, err := modelProperty(model, "api")
+	api, err := jscompat.ReadModelProperty(model, "api")
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +99,7 @@ func lazySetupErrorMessage(model any, failure error, now func() int64) (*Message
 		now = func() int64 { return time.Now().UnixMilli() }
 	}
 	usage := NewObject(Property{Name: "input", Value: 0}, Property{Name: "output", Value: 0}, Property{Name: "cacheRead", Value: 0}, Property{Name: "cacheWrite", Value: 0}, Property{Name: "totalTokens", Value: 0}, Property{Name: "cost", Value: NewObject(Property{Name: "input", Value: 0}, Property{Name: "output", Value: 0}, Property{Name: "cacheRead", Value: 0}, Property{Name: "cacheWrite", Value: 0}, Property{Name: "total", Value: 0})})
-	value := NewObject(Property{Name: "role", Value: "assistant"}, Property{Name: "content", Value: NewArray()}, Property{Name: "api", Value: api}, Property{Name: "provider", Value: catalogProperty(model, "provider")}, Property{Name: "model", Value: catalogProperty(model, "id")}, Property{Name: "usage", Value: usage}, Property{Name: "stopReason", Value: "error"}, Property{Name: "errorMessage", Value: failure.Error()}, Property{Name: "timestamp", Value: now()})
+	value := NewObject(Property{Name: "role", Value: "assistant"}, Property{Name: "content", Value: NewArray()}, Property{Name: "api", Value: api}, Property{Name: "provider", Value: jscompat.ReadProperty(model, "provider")}, Property{Name: "model", Value: jscompat.ReadProperty(model, "id")}, Property{Name: "usage", Value: usage}, Property{Name: "stopReason", Value: "error"}, Property{Name: "errorMessage", Value: failure.Error()}, Property{Name: "timestamp", Value: now()})
 	raw, err := jsonjs.MarshalValue(value)
 	if err != nil {
 		return nil, err
@@ -145,7 +147,7 @@ func LazyAPI(load func(context.Context) (*ProviderStreams, error), capabilities 
 	}
 	if capabilities.CancelDeferred {
 		api.CancelDeferred = func(ctx context.Context, model, handle any, options *Object) error {
-			_, err := invokeAuth(func() (any, error) {
+			_, err := jscompat.Invoke(func() (any, error) {
 				implementation, err := load(ctx)
 				if err != nil {
 					return nil, err

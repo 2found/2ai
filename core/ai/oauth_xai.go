@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	whatwg "github.com/nationallibraryofnorway/whatwg-url/url"
 	"golang.org/x/text/encoding/unicode"
@@ -43,14 +45,14 @@ func XaiOAuth(settings ...XaiOAuthOptions) *OAuthAuth {
 	subscription, label := true, "Sign in with SuperGrok or X Premium"
 	return &OAuthAuth{Name: "xAI (Grok/X subscription)", IsSubscription: &subscription, LoginLabel: &label,
 		Login: func(interaction ProviderAuthInteraction, _ *OAuthLoginOptions) (any, error) {
-			return invokeAuth(func() (any, error) { return loginXaiOAuth(interaction, options) })
+			return jscompat.Invoke(func() (any, error) { return loginXaiOAuth(interaction, options) })
 		},
 		Refresh: func(ctx context.Context, credential any) (any, error) {
-			return invokeAuth(func() (any, error) {
+			return jscompat.Invoke(func() (any, error) {
 				if jsonjs.IsNullish(credential) {
 					return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.refresh")
 				}
-				refresh := catalogProperty(credential, "refresh")
+				refresh := jscompat.ReadProperty(credential, "refresh")
 				response, err := postXaiOAuthForm(ctx, xaiOAuthTokenURL, options, Property{Name: "grant_type", Value: "refresh_token"}, Property{Name: "client_id", Value: xaiOAuthClientID}, Property{Name: "refresh_token", Value: refresh})
 				if err != nil {
 					return nil, err
@@ -65,7 +67,7 @@ func XaiOAuth(settings ...XaiOAuthOptions) *OAuthAuth {
 			if jsonjs.IsNullish(credential) {
 				return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.access")
 			}
-			return NewObject(Property{Name: "apiKey", Value: catalogProperty(credential, "access")}), nil
+			return NewObject(Property{Name: "apiKey", Value: jscompat.ReadProperty(credential, "access")}), nil
 		},
 	}
 }
@@ -164,7 +166,7 @@ func xaiOAuthCredentials(body *Object, previousRefresh any, now func() float64) 
 		return nil, err
 	}
 	var refresh any
-	if jsonjs.IsUndefined(catalogProperty(body, "refresh_token")) && catalogEntryTruthy(previousRefresh) {
+	if jsonjs.IsUndefined(jscompat.ReadProperty(body, "refresh_token")) && jscompat.Truthy(previousRefresh) {
 		refresh = previousRefresh
 	} else {
 		refresh, err = xaiOAuthRequiredString(body, "refresh_token")
@@ -173,7 +175,7 @@ func xaiOAuthCredentials(body *Object, previousRefresh any, now func() float64) 
 		}
 	}
 	expiry := float64(3600)
-	if !jsonjs.IsUndefined(catalogProperty(body, "expires_in")) {
+	if !jsonjs.IsUndefined(jscompat.ReadProperty(body, "expires_in")) {
 		expiry, err = xaiOAuthPositiveNumber(body, "expires_in")
 		if err != nil {
 			return nil, err

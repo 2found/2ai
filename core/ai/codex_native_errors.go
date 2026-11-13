@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 var codexTerminalRateLimit = regexp.MustCompile(`(?i)GoUsageLimitError|FreeUsageLimitError|Monthly usage limit reached|available balance|insufficient_quota|out of budget|quota exceeded|billing`)
@@ -28,7 +30,7 @@ func codexRetryableError(status int, text string) bool {
 
 func codexRetryAfter(headers http.Header, now time.Time) (float64, bool) {
 	if values, exists := headers[http.CanonicalHeaderKey("retry-after-ms")]; exists {
-		millis := ParseJSNumber(strings.Join(values, ", "))
+		millis := jscompat.ParseJSNumber(strings.Join(values, ", "))
 		if !math.IsNaN(millis) && !math.IsInf(millis, 0) {
 			return math.Max(0, millis), true
 		}
@@ -37,7 +39,7 @@ func codexRetryAfter(headers http.Header, now time.Time) (float64, bool) {
 	if raw == "" {
 		return 0, false
 	}
-	seconds := ParseJSNumber(raw)
+	seconds := jscompat.ParseJSNumber(raw)
 	if !math.IsNaN(seconds) && !math.IsInf(seconds, 0) {
 		return math.Max(0, seconds*1000), true
 	}
@@ -100,7 +102,7 @@ func codexParseErrorResponse(raw, statusText string, status int, now time.Time) 
 		}
 		when := ""
 		if samplingTruthy(failure["resets_at"]) {
-			reset := ParseJSNumber(completionsErrorString(failure["resets_at"]))
+			reset := jscompat.ParseJSNumber(completionsErrorString(failure["resets_at"]))
 			minutes := math.Max(0, math.Floor((reset*1000-float64(now.UnixMilli()))/60000+0.5))
 			when = " Try again in ~" + strconv.FormatFloat(minutes, 'f', -1, 64) + " min."
 		}

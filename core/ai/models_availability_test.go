@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"os"
 	"testing"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 type modelsAvailabilityFixture struct {
@@ -91,7 +93,7 @@ func TestPiModelsAvailability(t *testing.T) {
 			if handlers == "oauth" || handlers == "both" || handlers == "resolve" {
 				provider.Auth.OAuth = &OAuthAuth{Refresh: func(context.Context, any) (any, error) { return nil, errors.New("unexpected refresh") }, ToAuth: func(c any) (any, error) {
 					log.Append(NewObject(Property{Name: "toAuth", Value: c}))
-					return NewObject(Property{Name: "apiKey", Value: catalogProperty(c, "access")}), nil
+					return NewObject(Property{Name: "apiKey", Value: jscompat.ReadProperty(c, "access")}), nil
 				}}
 			}
 			model := func(id, kind string) *Object {
@@ -137,7 +139,7 @@ func TestPiModelsAvailability(t *testing.T) {
 						result.Set(2, c1)
 						return result, nil
 					}
-					if catalogProperty(c, "type") == "oauth" {
+					if jscompat.ReadProperty(c, "type") == "oauth" {
 						return NewArray(c2), nil
 					}
 					return NewArray(c1), nil

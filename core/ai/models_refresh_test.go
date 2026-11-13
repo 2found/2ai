@@ -8,6 +8,8 @@ import (
 	"os"
 	"testing"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -124,11 +126,11 @@ func TestPiModelsRefresh(t *testing.T) {
 						}
 						return boxed.Get("value"), nil
 					}
-					key := catalogProperty(args.Credential, "key")
+					key := jscompat.ReadProperty(args.Credential, "key")
 					if jsonjs.IsNullish(key) {
 						key = "ambient"
 					}
-					return NewObject(Property{Name: "auth", Value: NewObject(Property{Name: "apiKey", Value: key})}, Property{Name: "env", Value: catalogProperty(args.Credential, "env")}), nil
+					return NewObject(Property{Name: "auth", Value: NewObject(Property{Name: "apiKey", Value: key})}, Property{Name: "env", Value: jscompat.ReadProperty(args.Credential, "env")}), nil
 				}}
 			}
 			if handlers == "oauth" || handlers == "both" {

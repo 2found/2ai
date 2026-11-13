@@ -15,6 +15,8 @@ import (
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 type codexOAuthCase struct {
@@ -256,7 +258,7 @@ func TestPiCodexOAuthMetadataAndToAuth(t *testing.T) {
 	for i, tc := range f.Helpers {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			credential := catalogDecode(t, tc.Credential)
-			if catalogProperty(credential, "absent") == true {
+			if jscompat.ReadProperty(credential, "absent") == true {
 				credential = Undefined
 			}
 			value, err := auth.ToAuth(credential)
@@ -286,7 +288,7 @@ func TestPiCodexOAuthBrowserHTTP(t *testing.T) {
 				body := NewObject()
 				for _, part := range strings.Split(string(raw), "&") {
 					key, value, _ := strings.Cut(part, "=")
-					body.Set(urlQueryComponent(key), urlQueryComponent(value))
+					body.Set(jscompat.QueryComponent(key), jscompat.QueryComponent(value))
 				}
 				mu.Lock()
 				calls++

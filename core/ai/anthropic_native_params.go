@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"os"
 	"strings"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 type AnthropicCompat struct {
@@ -88,7 +90,7 @@ func anthropicBetaFeatures(rawModel json.RawMessage, model completionsModel, con
 			return result
 		}
 		for _, feature := range strings.Split(samplingString(configured), ",") {
-			if value := strings.TrimFunc(feature, jsWhitespace); value != "" {
+			if value := strings.TrimFunc(feature, jscompat.IsWhitespace); value != "" {
 				add(value)
 			}
 		}
@@ -193,7 +195,7 @@ func BuildAnthropicParams(rawModel json.RawMessage, context TranscriptContext, o
 		systemBlocks = append(systemBlocks, map[string]any{"type": "text", "text": "You are Claude Code, Anthropic's official CLI for Claude."})
 	}
 	if system != "" {
-		systemBlocks = append(systemBlocks, map[string]any{"type": "text", "text": SanitizeSurrogates(system)})
+		systemBlocks = append(systemBlocks, map[string]any{"type": "text", "text": jscompat.SanitizeSurrogates(system)})
 	}
 	if len(systemBlocks) > 0 {
 		// One breakpoint closes the stable prefix (tools + system). Marking each

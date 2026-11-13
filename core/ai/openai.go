@@ -12,6 +12,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/ai/protocol"
 )
 
@@ -383,7 +385,7 @@ func (p *OpenAIProvider) chatOnce(ctx context.Context, req protocol.ChatRequest,
 	msg := protocol.Message{Role: protocol.RoleAssistant, Content: choice.Message.Content}
 	for _, tc := range choice.Message.ToolCalls {
 		msg.ToolCalls = append(msg.ToolCalls, protocol.ToolCall{
-			ID: tc.ID, Name: names.fromWire(tc.Function.Name), Arguments: string(ParseStreamingJSON(tc.Function.Arguments)),
+			ID: tc.ID, Name: names.fromWire(tc.Function.Name), Arguments: string(jscompat.ParseStreamingJSON(tc.Function.Arguments)),
 		})
 	}
 	return protocol.ChatResponse{
@@ -482,7 +484,7 @@ func decodeSSEResponse(p *OpenAIProvider, resp *http.Response, data []byte) (pro
 	msg := protocol.Message{Role: protocol.RoleAssistant, Content: content.String()}
 	for _, idx := range order {
 		call := *toolAcc[idx]
-		call.Arguments = string(ParseStreamingJSON(call.Arguments))
+		call.Arguments = string(jscompat.ParseStreamingJSON(call.Arguments))
 		msg.ToolCalls = append(msg.ToolCalls, call)
 	}
 	return protocol.ChatResponse{Message: msg, StopReason: stopReason, Usage: usage}, nil
@@ -665,7 +667,7 @@ func (p *OpenAIProvider) streamOnce(ctx context.Context, req protocol.ChatReques
 		for _, idx := range order {
 			tc := *toolAcc[idx]
 			tc.Name = names.fromWire(tc.Name)
-			tc.Arguments = string(ParseStreamingJSON(tc.Arguments))
+			tc.Arguments = string(jscompat.ParseStreamingJSON(tc.Arguments))
 			ch <- protocol.ChatDelta{ToolCall: &tc}
 		}
 		ch <- protocol.ChatDelta{Done: true, StopReason: stopReason, Usage: usage}

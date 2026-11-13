@@ -8,6 +8,8 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	whatwg "github.com/nationallibraryofnorway/whatwg-url/url"
 )
@@ -59,7 +61,7 @@ func sanitizeRadiusGatewayConfig(value any) *Object {
 	for _, index := range models.Keys() {
 		model := models.Get(index)
 		if isRadiusGatewayModel(model) {
-			valid.Append(authSpread(model))
+			valid.Append(jscompat.Spread(model))
 		}
 	}
 	return NewObject(Property{Name: "baseUrl", Value: base}, Property{Name: "models", Value: valid})
@@ -67,14 +69,14 @@ func sanitizeRadiusGatewayConfig(value any) *Object {
 
 // A nil result corresponds to the source's undefined configuration.
 func GetRadiusCredentialConfig(credential any) *Object {
-	return sanitizeRadiusGatewayConfig(catalogProperty(credential, "gatewayConfig"))
+	return sanitizeRadiusGatewayConfig(jscompat.ReadProperty(credential, "gatewayConfig"))
 }
 
 func GetRadiusModelsFromConfig(providerID string, config *Object) (*Array, error) {
 	if config == nil {
 		return nil, jsonjs.PropertyReadError(true, "config.models")
 	}
-	value := catalogProperty(config, "models")
+	value := jscompat.ReadProperty(config, "models")
 	models, ok := value.(*Array)
 	if !ok {
 		if jsonjs.IsNullish(value) {
@@ -85,10 +87,10 @@ func GetRadiusModelsFromConfig(providerID string, config *Object) (*Array, error
 	result := NewArray()
 	result.SetLength(models.Len())
 	for _, index := range models.Keys() {
-		model := authSpread(models.Get(index))
+		model := jscompat.Spread(models.Get(index))
 		model.Set("api", "pi-messages")
 		model.Set("provider", providerID)
-		model.Set("baseUrl", catalogProperty(config, "baseUrl"))
+		model.Set("baseUrl", jscompat.ReadProperty(config, "baseUrl"))
 		result.Set(index, model)
 	}
 	return result, nil
@@ -104,7 +106,7 @@ func GetRadiusModels(providerID string, credential any) *Array {
 }
 
 func truncateRadiusHTTPBody(body string) string {
-	trimmed := strings.TrimFunc(body, jsWhitespace)
+	trimmed := strings.TrimFunc(body, jscompat.IsWhitespace)
 	points := jsonjs.StringCodePoints(trimmed)
 	var result strings.Builder
 	units := 0
@@ -114,12 +116,12 @@ func truncateRadiusHTTPBody(body string) string {
 		}
 		if point > 0xffff {
 			if units == 511 {
-				return result.String() + catalogCodeUnit(0xd800+(point-0x10000)>>10) + "…"
+				return result.String() + jscompat.CodeUnit(0xd800+(point-0x10000)>>10) + "…"
 			}
 			result.WriteRune(point)
 			units += 2
 		} else {
-			result.WriteString(catalogCodeUnit(point))
+			result.WriteString(jscompat.CodeUnit(point))
 			units++
 		}
 		if index == len(points)-1 {
@@ -135,8 +137,8 @@ func LoadRadiusGatewayConfig(ctx context.Context, gateway string, apiKey any, cl
 		client = clients[0]
 	}
 	headers := http.Header{"Accept": {"application/json"}}
-	if catalogEntryTruthy(apiKey) {
-		key, err := catalogKey(apiKey, make(map[*Array]bool))
+	if jscompat.Truthy(apiKey) {
+		key, err := jscompat.ToPropertyKey(apiKey, make(map[*Array]bool))
 		if err != nil {
 			return nil, err
 		}

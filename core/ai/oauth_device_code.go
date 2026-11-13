@@ -7,6 +7,8 @@ import (
 	"reflect"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -74,7 +76,7 @@ func deviceCodeNumber(value any) (float64, bool) {
 }
 
 func PollOAuthDeviceCodeFlow(options *OAuthDeviceCodePollOptions) (any, error) {
-	return invokeAuth(func() (any, error) {
+	return jscompat.Invoke(func() (any, error) {
 		now, sleep := options.Now, options.Sleep
 		if now == nil {
 			now = func() float64 { return float64(time.Now().UnixMilli()) }
@@ -96,7 +98,7 @@ func PollOAuthDeviceCodeFlow(options *OAuthDeviceCodePollOptions) (any, error) {
 		if jsonjs.IsNullish(intervalSeconds) {
 			intervalSeconds = 5
 		}
-		interval, err := authNumber(intervalSeconds)
+		interval, err := jscompat.ToNumber(intervalSeconds)
 		if err != nil {
 			return nil, err
 		}

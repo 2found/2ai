@@ -12,6 +12,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 // UnsupportedStrictSchemaKeywordCheck adds a provider-specific strict-schema
@@ -257,10 +259,10 @@ func ResolveGrammarConstrainedSampling(tool Tool, supported bool) (*GrammarConst
 	variants, _ := samplingObject(config["variants"])
 	lark, regex := samplingString(variants["openai_lark"]), samplingString(variants["openai_regex"])
 	format, definition := "lark", lark
-	if strings.TrimFunc(lark, jsWhitespace) == "" {
+	if strings.TrimFunc(lark, jscompat.IsWhitespace) == "" {
 		format, definition = "regex", regex
 	}
-	if strings.TrimFunc(definition, jsWhitespace) == "" {
+	if strings.TrimFunc(definition, jscompat.IsWhitespace) == "" {
 		return nil, fmt.Errorf("Tool \"%s\" cannot use grammar constrained sampling: no supported grammar variant was provided.", tool.Name)
 	}
 	property, err := inferGrammarInputProperty(tool.Parameters)

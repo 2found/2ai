@@ -9,6 +9,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -135,7 +137,7 @@ func TestPiProviderAuthResolution(t *testing.T) {
 					}
 					log.Append(NewObject(Property{Name: "region", Value: region}, Property{Name: "file", Value: file}))
 					result, err := helper.Resolve(args)
-					if err == nil && catalogEntryTruthy(result) && catalogEntryTruthy(input.Get("authHeaders")) {
+					if err == nil && jscompat.Truthy(result) && jscompat.Truthy(input.Get("authHeaders")) {
 						result.(*Object).Get("auth").(*Object).Set("headers", input.Get("authHeaders"))
 					}
 					if replacement, exists := input.Lookup("authResult"); exists {
@@ -165,7 +167,7 @@ func TestPiProviderAuthResolution(t *testing.T) {
 					if input.Get("failure") == "toAuth" {
 						return nil, errors.New("derive failed")
 					}
-					return NewObject(Property{Name: "apiKey", Value: catalogProperty(credential, "access")}, Property{Name: "baseUrl", Value: "https://example.invalid/oauth"}), nil
+					return NewObject(Property{Name: "apiKey", Value: jscompat.ReadProperty(credential, "access")}, Property{Name: "baseUrl", Value: "https://example.invalid/oauth"}), nil
 				}}
 			}
 			models := NewModels(ModelsOptions{Credentials: store, AuthContext: authContext})

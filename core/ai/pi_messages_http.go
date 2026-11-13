@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	whatwg "github.com/nationallibraryofnorway/whatwg-url/url"
 	"golang.org/x/text/encoding/unicode"
@@ -92,13 +94,13 @@ func PiMessagesAPI(defaults PiMessagesStreamOptions) *ProviderStreams {
 		}
 		options := defaults
 		options.Values = values
-		if callback, ok := catalogProperty(values, "onPayload").(func(context.Context, any, *Object) (any, error)); ok {
+		if callback, ok := jscompat.ReadProperty(values, "onPayload").(func(context.Context, any, *Object) (any, error)); ok {
 			options.OnPayload = callback
 		}
-		if callback, ok := catalogProperty(values, "onResponse").(func(context.Context, CompletionsResponse, *Object) error); ok {
+		if callback, ok := jscompat.ReadProperty(values, "onResponse").(func(context.Context, CompletionsResponse, *Object) error); ok {
 			options.OnResponse = callback
 		}
-		if callback, ok := catalogProperty(values, "onProviderStreamEvent").(func(context.Context, any, *Object) error); ok {
+		if callback, ok := jscompat.ReadProperty(values, "onProviderStreamEvent").(func(context.Context, any, *Object) error); ok {
 			options.OnProviderStreamEvent = callback
 		}
 		return SourceFromAssistantStream(StreamPiMessages(ctx, object, transcript, options)), nil
@@ -113,9 +115,9 @@ func PiMessagesAPI(defaults PiMessagesStreamOptions) *ProviderStreams {
 
 func producePiMessages(ctx context.Context, model *Object, transcript any, options PiMessagesStreamOptions, converter *piMessagesEventConverter, prepareErr error, yield func(*Object) error) {
 	callbackFailure := false
-	provider, _ := catalogKey(catalogProperty(model, "provider"), make(map[*Array]bool))
+	provider, _ := jscompat.ToPropertyKey(jscompat.ReadProperty(model, "provider"), make(map[*Array]bool))
 	recordNativeFailure(ctx, provider, nil, false)
-	_, err := invokeAuth(func() (any, error) {
+	_, err := jscompat.Invoke(func() (any, error) {
 		if prepareErr != nil {
 			return nil, prepareErr
 		}
@@ -150,15 +152,15 @@ func producePiMessages(ctx context.Context, model *Object, transcript any, optio
 
 func runPiMessagesHTTP(ctx context.Context, model *Object, transcript any, options PiMessagesStreamOptions, converter *piMessagesEventConverter, callbackFailure *bool, yield func(*Object) error) error {
 	controls := options.Values
-	key := catalogProperty(controls, "apiKey")
-	provider, err := catalogKey(catalogProperty(model, "provider"), make(map[*Array]bool))
+	key := jscompat.ReadProperty(controls, "apiKey")
+	provider, err := jscompat.ToPropertyKey(jscompat.ReadProperty(model, "provider"), make(map[*Array]bool))
 	if err != nil {
 		return err
 	}
-	if !catalogEntryTruthy(key) {
+	if !jscompat.Truthy(key) {
 		return errors.New("No API key provided for provider \"" + provider + "\"")
 	}
-	base := catalogProperty(model, "baseUrl")
+	base := jscompat.ReadProperty(model, "baseUrl")
 	baseURL, ok := base.(string)
 	if !ok {
 		if jsonjs.IsNullish(base) {
@@ -170,7 +172,7 @@ func runPiMessagesHTTP(ctx context.Context, model *Object, transcript any, optio
 	if err != nil {
 		return errors.New("\"" + strings.TrimRight(baseURL, "/") + "/messages\" cannot be parsed as a URL.")
 	}
-	if catalogEntryTruthy(catalogProperty(controls, "debug")) {
+	if jscompat.Truthy(jscompat.ReadProperty(controls, "debug")) {
 		fields := []Property{}
 		found := false
 		for _, pair := range strings.Split(strings.TrimPrefix(endpoint.Search(), "?"), "&") {
@@ -178,7 +180,7 @@ func runPiMessagesHTTP(ctx context.Context, model *Object, transcript any, optio
 				continue
 			}
 			name, value, _ := strings.Cut(pair, "=")
-			name, value = urlQueryComponent(name), urlQueryComponent(value)
+			name, value = jscompat.QueryComponent(name), jscompat.QueryComponent(value)
 			if name == "debug" {
 				if found {
 					continue
@@ -197,10 +199,10 @@ func runPiMessagesHTTP(ctx context.Context, model *Object, transcript any, optio
 		}
 		endpoint.SetSearch(query)
 	}
-	cache := catalogProperty(controls, "cacheRetention")
-	if !catalogEntryTruthy(cache) {
-		env := catalogProperty(catalogProperty(controls, "env"), "PI_CACHE_RETENTION")
-		if !catalogEntryTruthy(env) {
+	cache := jscompat.ReadProperty(controls, "cacheRetention")
+	if !jscompat.Truthy(cache) {
+		env := jscompat.ReadProperty(jscompat.ReadProperty(controls, "env"), "PI_CACHE_RETENTION")
+		if !jscompat.Truthy(env) {
 			env = os.Getenv("PI_CACHE_RETENTION")
 		}
 		cache = Undefined
@@ -210,13 +212,13 @@ func runPiMessagesHTTP(ctx context.Context, model *Object, transcript any, optio
 	}
 	projected := NewObject()
 	for _, name := range []string{"temperature", "maxTokens", "reasoning", "cacheRetention", "sessionId", "toolChoice"} {
-		value := catalogProperty(controls, name)
+		value := jscompat.ReadProperty(controls, name)
 		if name == "cacheRetention" {
 			value = cache
 		}
 		projected.Set(name, value)
 	}
-	var payload any = NewObject(Property{Name: "model", Value: catalogProperty(model, "id")}, Property{Name: "context", Value: transcript}, Property{Name: "options", Value: projected})
+	var payload any = NewObject(Property{Name: "model", Value: jscompat.ReadProperty(model, "id")}, Property{Name: "context", Value: transcript}, Property{Name: "options", Value: projected})
 	if options.OnPayload != nil {
 		*callbackFailure = true
 		replacement, err := options.OnPayload(ctx, payload, model)
@@ -228,11 +230,11 @@ func runPiMessagesHTTP(ctx context.Context, model *Object, transcript any, optio
 			payload = replacement
 		}
 	}
-	bearer, err := catalogKey(key, make(map[*Array]bool))
+	bearer, err := jscompat.ToPropertyKey(key, make(map[*Array]bool))
 	if err != nil {
 		return err
 	}
-	headers, err := piMessagesHeaders(bearer, catalogProperty(controls, "headers"))
+	headers, err := piMessagesHeaders(bearer, jscompat.ReadProperty(controls, "headers"))
 	if err != nil {
 		return err
 	}
@@ -319,9 +321,9 @@ func piMessagesHeaders(key string, input any) (http.Header, error) {
 	// Source deduplication is case-insensitive but preserves the last spelling;
 	// object spread then overrides defaults only when that spelling is identical.
 	entries := []Property{}
-	for _, entry := range authSpread(input).Entries() {
+	for _, entry := range jscompat.Spread(input).Entries() {
 		for i := 0; i < len(entries); i++ {
-			if authHeaderName(entries[i].Name) == authHeaderName(entry.Name) {
+			if jscompat.LowerHeaderName(entries[i].Name) == jscompat.LowerHeaderName(entry.Name) {
 				entries = append(entries[:i], entries[i+1:]...)
 				break
 			}
@@ -336,7 +338,7 @@ func piMessagesHeaders(key string, input any) (http.Header, error) {
 	}
 	headers := make(http.Header)
 	for _, entry := range fields.Entries() {
-		value, err := catalogKey(entry.Value, make(map[*Array]bool))
+		value, err := jscompat.ToPropertyKey(entry.Value, make(map[*Array]bool))
 		if err != nil {
 			return nil, err
 		}
@@ -358,7 +360,7 @@ func piMessagesResponseFailure(model *Object, endpoint string, response *http.Re
 	}
 	var errorBody *Object
 	if parsed, err := jsonjs.DecodeValue([]byte(body)); err == nil {
-		errorBody, _ = catalogProperty(parsed, "error").(*Object)
+		errorBody, _ = jscompat.ReadProperty(parsed, "error").(*Object)
 	}
 	message := body
 	var code *string
@@ -374,7 +376,7 @@ func piMessagesResponseFailure(model *Object, endpoint string, response *http.Re
 	if code != nil && *code != "" {
 		message += " (" + *code + ")"
 	}
-	details := NewObject(Property{Name: "version", Value: 1}, Property{Name: "provider", Value: catalogProperty(model, "provider")}, Property{Name: "model", Value: catalogProperty(model, "id")}, Property{Name: "url", Value: endpoint}, Property{Name: "status", Value: response.StatusCode}, Property{Name: "statusText", Value: statusText})
+	details := NewObject(Property{Name: "version", Value: 1}, Property{Name: "provider", Value: jscompat.ReadProperty(model, "provider")}, Property{Name: "model", Value: jscompat.ReadProperty(model, "id")}, Property{Name: "url", Value: endpoint}, Property{Name: "status", Value: response.StatusCode}, Property{Name: "statusText", Value: statusText})
 	if errorBody != nil {
 		details.Set("error", errorBody)
 	} else {
@@ -389,7 +391,7 @@ func piMessagesResponseFailure(model *Object, endpoint string, response *http.Re
 		if len(units) > 8192 {
 			var text strings.Builder
 			for _, unit := range units[:8192] {
-				text.WriteString(catalogCodeUnit(rune(unit)))
+				text.WriteString(jscompat.CodeUnit(rune(unit)))
 			}
 			body = text.String() + "…"
 		}

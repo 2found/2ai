@@ -6,6 +6,8 @@ import (
 	"maps"
 	"strings"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -271,7 +273,7 @@ func ToToolDeclaration(tool Tool) Tool {
 // Keep the existing Go handling of absent/malformed RawMessage inputs: retain
 // a detached value so callers can report their existing validation errors.
 func cloneDeclarationJSON(raw json.RawMessage) json.RawMessage {
-	if normalized, err := StringifyJSON(raw); err == nil {
+	if normalized, err := jscompat.StringifyJSON(raw); err == nil {
 		return normalized
 	}
 	return bytes.Clone(raw)
@@ -290,11 +292,11 @@ func declarationJSONEqual(left, right json.RawMessage) bool {
 	if len(left) == 0 || len(right) == 0 {
 		return len(left) == len(right)
 	}
-	l, err := StringifyJSON(left)
+	l, err := jscompat.StringifyJSON(left)
 	if err != nil {
 		return false
 	}
-	r, err := StringifyJSON(right)
+	r, err := jscompat.StringifyJSON(right)
 	return err == nil && bytes.Equal(l, r)
 }
 

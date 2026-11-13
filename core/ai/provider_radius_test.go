@@ -12,6 +12,8 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -45,7 +47,7 @@ func TestPiRadiusProvider(t *testing.T) {
 				if mode == "fetch-abort" {
 					cancel()
 				}
-				first, second := authSpread(model), authSpread(model)
+				first, second := jscompat.Spread(model), jscompat.Spread(model)
 				first.Set("name", "Online")
 				second.Set("id", "online")
 				raw, _ := jsonjs.MarshalValue(NewObject(Property{Name: "baseUrl", Value: "https://online.test"}, Property{Name: "models", Value: NewArray(first, second)}))
@@ -66,7 +68,7 @@ func TestPiRadiusProvider(t *testing.T) {
 			}
 			var stored *Object
 			if strings.Contains(mode, "stored") {
-				row := authSpread(model)
+				row := jscompat.Spread(model)
 				row.Set("provider", id)
 				row.Set("name", "Stored")
 				if mode == "stored-other" {
@@ -81,7 +83,7 @@ func TestPiRadiusProvider(t *testing.T) {
 			if mode == "duplicates" {
 				rows := NewArray()
 				for _, name := range []string{"first", "last", "Model A"} {
-					row := authSpread(model)
+					row := jscompat.Spread(model)
 					row.Set("provider", id)
 					row.Set("name", name)
 					if name == "Model A" {
@@ -139,9 +141,9 @@ func TestPiRadiusProviderWiring(t *testing.T) {
 		loads++
 		loadedOptions = map[string]any{"name": input.Name, "gateway": input.Gateway}
 		return &OAuthAuth{ToAuth: func(c any) (any, error) {
-			return NewObject(Property{Name: "apiKey", Value: catalogProperty(c, "access")}), nil
+			return NewObject(Property{Name: "apiKey", Value: jscompat.ReadProperty(c, "access")}), nil
 		}, Refresh: func(_ context.Context, c any) (any, error) {
-			copy := authSpread(c)
+			copy := jscompat.Spread(c)
 			copy.Set("access", "rotated")
 			return copy, nil
 		}}, nil
@@ -196,7 +198,7 @@ func TestPiRadiusProviderModelsHTTP(t *testing.T) {
 	model.Delete("api")
 	model.Delete("provider")
 	model.Delete("baseUrl")
-	cached := authSpread(model)
+	cached := jscompat.Spread(model)
 	cached.Set("id", "cached")
 	cached.Set("provider", "custom")
 	cached.Set("api", "pi-messages")
@@ -228,7 +230,7 @@ func TestPiRadiusProviderModelsHTTP(t *testing.T) {
 			_, _ = io.WriteString(w, " unavailable ")
 			return
 		}
-		row := authSpread(model)
+		row := jscompat.Spread(model)
 		row.Set("id", "fresh")
 		if n == 1 {
 			row.Set("id", "stale")

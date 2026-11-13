@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	whatwg "github.com/nationallibraryofnorway/whatwg-url/url"
 	"golang.org/x/text/encoding/unicode"
@@ -63,22 +65,22 @@ func KimiCodingOAuth(settings ...KimiCodingOAuthOptions) *OAuthAuth {
 	subscription, label := true, "Sign in with Kimi Code"
 	return &OAuthAuth{Name: "Kimi Code (subscription)", IsSubscription: &subscription, LoginLabel: &label,
 		Login: func(interaction ProviderAuthInteraction, _ *OAuthLoginOptions) (any, error) {
-			return invokeAuth(func() (any, error) { return loginKimiOAuth(host(), interaction, options) })
+			return jscompat.Invoke(func() (any, error) { return loginKimiOAuth(host(), interaction, options) })
 		},
 		Refresh: func(ctx context.Context, credential any) (any, error) {
-			return invokeAuth(func() (any, error) {
+			return jscompat.Invoke(func() (any, error) {
 				endpoint := host()
 				if jsonjs.IsNullish(credential) {
 					return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.refresh")
 				}
-				return refreshKimiOAuth(endpoint, catalogProperty(credential, "refresh"), ctx, options)
+				return refreshKimiOAuth(endpoint, jscompat.ReadProperty(credential, "refresh"), ctx, options)
 			})
 		},
 		ToAuth: func(credential any) (any, error) {
 			if jsonjs.IsNullish(credential) {
 				return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.access")
 			}
-			access, err := catalogKey(catalogProperty(credential, "access"), make(map[*Array]bool))
+			access, err := jscompat.ToPropertyKey(jscompat.ReadProperty(credential, "access"), make(map[*Array]bool))
 			if err != nil {
 				return nil, err
 			}
@@ -128,9 +130,9 @@ func kimiOAuthTrustedURI(value any) bool {
 	return err == nil && (parsed.Protocol() == "http:" || parsed.Protocol() == "https:")
 }
 func kimiOAuthCredentials(body any, operation string, options KimiCodingOAuthOptions) (any, error) {
-	access, accessOK := catalogProperty(body, "access_token").(string)
-	refresh, refreshOK := catalogProperty(body, "refresh_token").(string)
-	expiry := catalogProperty(body, "expires_in")
+	access, accessOK := jscompat.ReadProperty(body, "access_token").(string)
+	refresh, refreshOK := jscompat.ReadProperty(body, "refresh_token").(string)
+	expiry := jscompat.ReadProperty(body, "expires_in")
 	if !accessOK || access == "" || !refreshOK || refresh == "" || !oauthPositiveNumber(expiry) {
 		return nil, fmt.Errorf("Kimi Code token %s response missing fields: %s", operation, kimiOAuthJSON(body))
 	}
@@ -158,13 +160,13 @@ func loginKimiOAuth(host string, interaction ProviderAuthInteraction, options Ki
 		return nil, kimiOAuthStatusError("Kimi Code device authorization failed", response)
 	}
 	body := oauthReadObjectJSON(response)
-	code, codeOK := catalogProperty(body, "device_code").(string)
-	user, userOK := catalogProperty(body, "user_code").(string)
-	uri, complete := catalogProperty(body, "verification_uri"), catalogProperty(body, "verification_uri_complete")
+	code, codeOK := jscompat.ReadProperty(body, "device_code").(string)
+	user, userOK := jscompat.ReadProperty(body, "user_code").(string)
+	uri, complete := jscompat.ReadProperty(body, "verification_uri"), jscompat.ReadProperty(body, "verification_uri_complete")
 	if !codeOK || !userOK || !kimiOAuthTrustedURI(complete) || !kimiOAuthTrustedURI(uri) {
 		return nil, errors.New("Invalid Kimi Code device authorization response: " + kimiOAuthJSON(body))
 	}
-	interval, expires := catalogProperty(body, "interval"), catalogProperty(body, "expires_in")
+	interval, expires := jscompat.ReadProperty(body, "interval"), jscompat.ReadProperty(body, "expires_in")
 	if !oauthPositiveNumber(interval) {
 		interval = 5
 	}
@@ -181,20 +183,20 @@ func loginKimiOAuth(host string, interaction ProviderAuthInteraction, options Ki
 			return OAuthDeviceCodePollResult{Status: "failed", Message: kimiOAuthStatusError("Kimi Code device token request failed", response).Error()}, nil
 		}
 		body := oauthReadObjectJSON(response)
-		if _, ok := catalogProperty(body, "access_token").(string); ok && response.StatusCode >= 200 && response.StatusCode < 300 {
+		if _, ok := jscompat.ReadProperty(body, "access_token").(string); ok && response.StatusCode >= 200 && response.StatusCode < 300 {
 			value, err := kimiOAuthCredentials(body, "poll", options)
 			if err != nil {
 				return OAuthDeviceCodePollResult{Status: "failed", Message: err.Error()}, nil
 			}
 			return OAuthDeviceCodePollResult{Status: "complete", Value: value}, nil
 		}
-		kind, isString := catalogProperty(body, "error").(string)
+		kind, isString := jscompat.ReadProperty(body, "error").(string)
 		switch kind {
 		case "authorization_pending":
 			return OAuthDeviceCodePollResult{Status: "pending"}, nil
 		case "slow_down":
 			var interval any = Undefined
-			if number, ok := deviceCodeNumber(catalogProperty(body, "interval")); ok && number > 0 {
+			if number, ok := deviceCodeNumber(jscompat.ReadProperty(body, "interval")); ok && number > 0 {
 				interval = number
 			}
 			return OAuthDeviceCodePollResult{Status: "slow_down", IntervalSeconds: interval}, nil
@@ -206,7 +208,7 @@ func loginKimiOAuth(host string, interaction ProviderAuthInteraction, options Ki
 		message := fmt.Sprintf("Kimi Code device token request failed (status %d)", response.StatusCode)
 		if isString {
 			message += ": " + kind
-			if description, ok := catalogProperty(body, "error_description").(string); ok {
+			if description, ok := jscompat.ReadProperty(body, "error_description").(string); ok {
 				message += ": " + description
 			}
 		}
@@ -236,10 +238,10 @@ func refreshKimiOAuth(host string, refresh any, ctx context.Context, options Kim
 		if response.StatusCode >= 200 && response.StatusCode < 300 {
 			return kimiOAuthCredentials(body, "refresh", options)
 		}
-		kind, _ := catalogProperty(body, "error").(string)
+		kind, _ := jscompat.ReadProperty(body, "error").(string)
 		if response.StatusCode == 401 || response.StatusCode == 403 || kind == "invalid_grant" {
 			message := fmt.Sprintf("Kimi Code token refresh unauthorized (status %d)", response.StatusCode)
-			if description, ok := catalogProperty(body, "error_description").(string); ok {
+			if description, ok := jscompat.ReadProperty(body, "error_description").(string); ok {
 				message += ": " + description
 			}
 			return nil, errors.New(message)

@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/ai/protocol"
 )
 
@@ -357,7 +359,7 @@ func (p *CodexProvider) Stream(ctx context.Context, req protocol.ChatRequest) (<
 				}
 			case "response.output_item.done":
 				if ev.Item != nil && ev.Item.Type == "function_call" {
-					args := string(ParseStreamingJSON(ev.Item.Arguments))
+					args := string(jscompat.ParseStreamingJSON(ev.Item.Arguments))
 					ch <- protocol.ChatDelta{ToolCall: &protocol.ToolCall{
 						ID: ev.Item.CallID, Name: ev.Item.Name, Arguments: args,
 					}}

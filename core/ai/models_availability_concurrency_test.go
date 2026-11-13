@@ -6,6 +6,8 @@ import (
 	"math"
 	"sync"
 	"testing"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 func availableCheck() any {
@@ -90,7 +92,7 @@ func TestPiModelsAvailabilityIDSet(t *testing.T) {
 	}
 	labels := NewArray()
 	for _, index := range result.Keys() {
-		labels.Append(catalogProperty(result.Get(index), "label"))
+		labels.Append(jscompat.ReadProperty(result.Get(index), "label"))
 	}
 	catalogCompare(t, map[string]any{"labels": labels, "sharedModel": result.Get(3) == all.Get(3), "newUnion": result != all}, readModelsAvailabilityFixture(t).IDs)
 }

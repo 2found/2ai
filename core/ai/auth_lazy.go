@@ -3,6 +3,8 @@ package ai
 import (
 	"context"
 	"sync"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 // LazyOAuthOptions advertises auth metadata without loading the flow. Load is
@@ -38,7 +40,7 @@ func LazyOAuth(input *LazyOAuthOptions) *OAuthAuth {
 		mu.Unlock()
 		if first {
 			returned := false
-			value, err := invokeAuth(func() (any, error) {
+			value, err := jscompat.Invoke(func() (any, error) {
 				auth, err := input.Load()
 				returned = true
 				return auth, err
@@ -65,7 +67,7 @@ func LazyOAuth(input *LazyOAuthOptions) *OAuthAuth {
 		metadata.LoginLabel = &value
 	}
 	metadata.Login = func(interaction ProviderAuthInteraction, options *OAuthLoginOptions) (any, error) {
-		return invokeAuth(func() (any, error) {
+		return jscompat.Invoke(func() (any, error) {
 			auth, err := loaded()
 			if err != nil {
 				return nil, err
@@ -74,7 +76,7 @@ func LazyOAuth(input *LazyOAuthOptions) *OAuthAuth {
 		})
 	}
 	metadata.Refresh = func(ctx context.Context, credential any) (any, error) {
-		return invokeAuth(func() (any, error) {
+		return jscompat.Invoke(func() (any, error) {
 			auth, err := loaded()
 			if err != nil {
 				return nil, err
@@ -83,7 +85,7 @@ func LazyOAuth(input *LazyOAuthOptions) *OAuthAuth {
 		})
 	}
 	metadata.ToAuth = func(credential any) (any, error) {
-		return invokeAuth(func() (any, error) {
+		return jscompat.Invoke(func() (any, error) {
 			auth, err := loaded()
 			if err != nil {
 				return nil, err

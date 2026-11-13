@@ -12,6 +12,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	"github.com/google/uuid"
 	whatwg "github.com/nationallibraryofnorway/whatwg-url/url"
@@ -74,14 +76,14 @@ func OpenRouterOAuth(settings ...OpenRouterOAuthOptions) *OAuthAuth {
 	label := "Sign in with OpenRouter"
 	return &OAuthAuth{Name: "OpenRouter OAuth", LoginLabel: &label,
 		Login: func(interaction ProviderAuthInteraction, _ *OAuthLoginOptions) (any, error) {
-			return invokeAuth(func() (any, error) { return loginOpenRouter(interaction, options) })
+			return jscompat.Invoke(func() (any, error) { return loginOpenRouter(interaction, options) })
 		},
 		Refresh: func(_ context.Context, credential any) (any, error) { return credential, nil },
 		ToAuth: func(credential any) (any, error) {
 			if jsonjs.IsNullish(credential) {
 				return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.access")
 			}
-			return NewObject(Property{Name: "apiKey", Value: catalogProperty(credential, "access")}), nil
+			return NewObject(Property{Name: "apiKey", Value: jscompat.ReadProperty(credential, "access")}), nil
 		},
 	}
 }
@@ -140,15 +142,15 @@ func loginOpenRouter(interaction ProviderAuthInteraction, options OpenRouterOAut
 }
 
 func parseOpenRouterAuthorizationInput(input string) string {
-	value := strings.TrimFunc(input, jsWhitespace)
+	value := strings.TrimFunc(input, jscompat.IsWhitespace)
 	if value == "" {
 		return ""
 	}
 	if parsed, err := whatwg.Parse(value); err == nil {
-		return urlQueryValues(parsed.Query())["code"]
+		return jscompat.QueryValues(parsed.Query())["code"]
 	}
 	if strings.Contains(value, "code=") {
-		return urlQueryValues(strings.TrimPrefix(value, "?"))["code"]
+		return jscompat.QueryValues(strings.TrimPrefix(value, "?"))["code"]
 	}
 	return value
 }

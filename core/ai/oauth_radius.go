@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	"github.com/google/uuid"
 	whatwg "github.com/nationallibraryofnorway/whatwg-url/url"
@@ -61,7 +63,7 @@ func RadiusOAuth(input *RadiusOAuthOptions, settings ...RadiusOAuthRuntimeOption
 	gateway := NormalizeRadiusGatewayURL(input.Gateway)
 	return &OAuthAuth{Name: input.Name,
 		Login: func(interaction ProviderAuthInteraction, _ *OAuthLoginOptions) (any, error) {
-			return invokeAuth(func() (any, error) {
+			return jscompat.Invoke(func() (any, error) {
 				ctx := interaction.Context
 				if ctx == nil {
 					ctx = context.Background()
@@ -71,13 +73,13 @@ func RadiusOAuth(input *RadiusOAuthOptions, settings ...RadiusOAuthRuntimeOption
 				if err != nil {
 					return nil, err
 				}
-				if catalogStrictEqual(method, "device-code") {
+				if jscompat.StrictEqual(method, "device-code") {
 					return loginRadiusDevice(ctx, gateway, interaction, options)
 				}
-				if catalogStrictEqual(method, "browser") {
+				if jscompat.StrictEqual(method, "browser") {
 					return loginRadiusBrowser(ctx, gateway, interaction, options)
 				}
-				text, err := catalogKey(method, make(map[*Array]bool))
+				text, err := jscompat.ToPropertyKey(method, make(map[*Array]bool))
 				if err != nil {
 					return nil, err
 				}
@@ -85,18 +87,18 @@ func RadiusOAuth(input *RadiusOAuthOptions, settings ...RadiusOAuthRuntimeOption
 			})
 		},
 		Refresh: func(ctx context.Context, credential any) (any, error) {
-			return invokeAuth(func() (any, error) {
+			return jscompat.Invoke(func() (any, error) {
 				if jsonjs.IsNullish(credential) {
 					return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.refresh")
 				}
-				return requestRadiusToken(ctx, gateway, options, Property{Name: "grant_type", Value: "refresh_token"}, Property{Name: "client_id", Value: "pi-gateway"}, Property{Name: "refresh_token", Value: catalogProperty(credential, "refresh")})
+				return requestRadiusToken(ctx, gateway, options, Property{Name: "grant_type", Value: "refresh_token"}, Property{Name: "client_id", Value: "pi-gateway"}, Property{Name: "refresh_token", Value: jscompat.ReadProperty(credential, "refresh")})
 			})
 		},
 		ToAuth: func(credential any) (any, error) {
 			if jsonjs.IsNullish(credential) {
 				return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.access")
 			}
-			return NewObject(Property{Name: "apiKey", Value: catalogProperty(credential, "access")}), nil
+			return NewObject(Property{Name: "apiKey", Value: jscompat.ReadProperty(credential, "access")}), nil
 		},
 	}
 }
@@ -110,10 +112,10 @@ func radiusOAuthFailure(response *http.Response, message string) error {
 		if jsonjs.ValidateJSON(raw) != nil || err != nil || jsonjs.IsNullish(data) {
 			description = string(raw)
 		} else {
-			if value, ok := catalogProperty(data, "error").(string); ok {
+			if value, ok := jscompat.ReadProperty(data, "error").(string); ok {
 				code = &value
 			}
-			description, _ = catalogProperty(data, "error_description").(string)
+			description, _ = jscompat.ReadProperty(data, "error_description").(string)
 		}
 	}
 	detail := description
@@ -159,11 +161,11 @@ func requestRadiusToken(ctx context.Context, gateway string, options RadiusOAuth
 	if jsonjs.IsNullish(data) {
 		return nil, jsonjs.PropertyReadError(true, "data.access_token")
 	}
-	seconds, err := authNumber(catalogProperty(data, "expires_in"))
+	seconds, err := jscompat.ToNumber(jscompat.ReadProperty(data, "expires_in"))
 	if err != nil {
 		return nil, err
 	}
-	return NewObject(Property{Name: "type", Value: "oauth"}, Property{Name: "access", Value: catalogProperty(data, "access_token")}, Property{Name: "refresh", Value: catalogProperty(data, "refresh_token")}, Property{Name: "expires", Value: options.Now() + seconds*1000 - 60000}, Property{Name: "scope", Value: catalogProperty(data, "scope")}), nil
+	return NewObject(Property{Name: "type", Value: "oauth"}, Property{Name: "access", Value: jscompat.ReadProperty(data, "access_token")}, Property{Name: "refresh", Value: jscompat.ReadProperty(data, "refresh_token")}, Property{Name: "expires", Value: options.Now() + seconds*1000 - 60000}, Property{Name: "scope", Value: jscompat.ReadProperty(data, "scope")}), nil
 }
 
 func loginRadiusDevice(ctx context.Context, gateway string, interaction ProviderAuthInteraction, options RadiusOAuthRuntimeOptions) (any, error) {
@@ -182,12 +184,12 @@ func loginRadiusDevice(ctx context.Context, gateway string, interaction Provider
 		return nil, jsonjs.PropertyReadError(true, "data.device_code")
 	}
 	for _, key := range []string{"device_code", "user_code", "verification_uri", "expires_in"} {
-		if !catalogEntryTruthy(catalogProperty(data, key)) {
+		if !jscompat.Truthy(jscompat.ReadProperty(data, key)) {
 			return nil, errors.New("Radius OAuth device authorization response is missing required fields")
 		}
 	}
-	device, interval, expires := catalogProperty(data, "device_code"), catalogProperty(data, "interval"), catalogProperty(data, "expires_in")
-	interaction.Notify(NewObject(Property{Name: "type", Value: "device_code"}, Property{Name: "userCode", Value: catalogProperty(data, "user_code")}, Property{Name: "verificationUri", Value: catalogProperty(data, "verification_uri")}, Property{Name: "intervalSeconds", Value: interval}, Property{Name: "expiresInSeconds", Value: expires}))
+	device, interval, expires := jscompat.ReadProperty(data, "device_code"), jscompat.ReadProperty(data, "interval"), jscompat.ReadProperty(data, "expires_in")
+	interaction.Notify(NewObject(Property{Name: "type", Value: "device_code"}, Property{Name: "userCode", Value: jscompat.ReadProperty(data, "user_code")}, Property{Name: "verificationUri", Value: jscompat.ReadProperty(data, "verification_uri")}, Property{Name: "intervalSeconds", Value: interval}, Property{Name: "expiresInSeconds", Value: expires}))
 	return PollOAuthDeviceCodeFlow(&OAuthDeviceCodePollOptions{Context: ctx, Now: options.Now, Sleep: options.PollSleep, IntervalSeconds: interval, ExpiresInSeconds: expires, Poll: func() (OAuthDeviceCodePollResult, error) {
 		value, err := requestRadiusToken(ctx, gateway, options, Property{Name: "grant_type", Value: "urn:ietf:params:oauth:grant-type:device_code"}, Property{Name: "client_id", Value: "pi-gateway"}, Property{Name: "device_code", Value: device})
 		if err == nil {
@@ -232,7 +234,7 @@ func loginRadiusBrowser(ctx context.Context, gateway string, interaction Provide
 	if jsonjs.IsNullish(discovery) {
 		return nil, jsonjs.PropertyReadError(true, "discovery.authorizationEndpoint")
 	}
-	authorization, ok := catalogProperty(discovery, "authorizationEndpoint").(string)
+	authorization, ok := jscompat.ReadProperty(discovery, "authorizationEndpoint").(string)
 	if !ok {
 		return nil, errors.New("Invalid Radius OAuth config from " + gateway)
 	}
@@ -265,7 +267,7 @@ func loginRadiusBrowser(ctx context.Context, gateway string, interaction Provide
 	interaction.Notify(NewObject(Property{Name: "type", Value: "auth_url"}, Property{Name: "url", Value: url.Href(false)}, Property{Name: "instructions", Value: "Continue in your browser."}))
 	defer callback.Close()
 	credential, err := callback.Wait()
-	if err == nil && !catalogEntryTruthy(credential) {
+	if err == nil && !jscompat.Truthy(credential) {
 		return nil, errors.New("OAuth callback did not complete.")
 	}
 	return credential, err

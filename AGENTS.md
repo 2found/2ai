@@ -16,7 +16,7 @@ and fails on a Go package directory outside them and `examples/`.
 
 ## Ownership
 
-- `core/ai/` and `core/ai/protocol/`: provider transports, transcripts, OAuth, retry/fallback.
+- `core/ai/`, `core/ai/protocol/` and `core/ai/jscompat/`: provider transports, transcripts, OAuth, retry/fallback; `jscompat` is the leaf holding the JavaScript semantics the Pi port emulates (Number, parseFloat, JSON repair/stringify, URLSearchParams, surrogate sanitising, Object helpers) and imports only `core/jsonjs`.
 - `core/agentcore/engine/`: native model loop, streams and tool scheduling.
 - `core/agentcore/host/`: reusable host checkpoint and policy utilities.
 - `core/agentcore/`: composition and governed tool dispatch; `feature/plugins/` extends it.

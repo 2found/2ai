@@ -4,6 +4,18 @@ The native agent engine imports this package directly. Requests use
 `TranscriptContext`; streamed results retain thinking signatures, tool-call IDs,
 usage and ordered content blocks without converting through `agentcore.ChatRequest`.
 
+## Subpackages
+
+- `protocol`: provider-neutral wire contracts.
+- `jscompat`: the JavaScript semantics the Pi port emulates (`ParseJSNumber`,
+  `ParseStreamingJSON`, `RepairJSON`, `ParseJSONWithRepair`, `StringifyJSON`,
+  `SanitizeSurrogates`, and the Object/property helpers). It is a leaf: it
+  imports only `core/jsonjs`, never `core/ai`. Its oracle tests read the shared
+  fixtures in `core/ai/testdata`, which stay put because `SOURCE.json` pins them.
+
+Importing `core/ai` alone still yields the full provider set, model catalog and
+OAuth; nothing needs a blank import.
+
 `MessageContent.Blocks` is a `*BlockList`: shallow copies retain the same list
 when a provider or hook changes its entries or length. Use `Get`/`Len` to read
 and `Set`/`Append`/`Delete`/`SetLength` to edit membership. `Values` returns a

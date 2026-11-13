@@ -8,6 +8,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	whatwg "github.com/nationallibraryofnorway/whatwg-url/url"
 )
@@ -47,33 +49,33 @@ func MetaOAuth(settings ...MetaOAuthOptions) *OAuthAuth {
 			if ctx == nil {
 				ctx = context.Background()
 			}
-			value, err := invokeAuth(func() (any, error) { return loginMetaOAuth(ctx, interaction, options) })
+			value, err := jscompat.Invoke(func() (any, error) { return loginMetaOAuth(ctx, interaction, options) })
 			if err != nil && ctx.Err() != nil {
 				return nil, errors.New("Login cancelled")
 			}
 			return value, err
 		},
 		Refresh: func(ctx context.Context, credential any) (any, error) {
-			return invokeAuth(func() (any, error) {
+			return jscompat.Invoke(func() (any, error) {
 				if jsonjs.IsNullish(credential) {
 					return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.refresh")
 				}
-				return mintMetaOAuthKey(ctx, catalogProperty(credential, "refresh"), options)
+				return mintMetaOAuthKey(ctx, jscompat.ReadProperty(credential, "refresh"), options)
 			})
 		},
 		ToAuth: func(credential any) (any, error) {
 			if jsonjs.IsNullish(credential) {
 				return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.access")
 			}
-			return NewObject(Property{Name: "apiKey", Value: catalogProperty(credential, "access")}), nil
+			return NewObject(Property{Name: "apiKey", Value: jscompat.ReadProperty(credential, "access")}), nil
 		},
 	}
 }
 
 func metaOAuthErrorDetail(body any) string {
 	for _, key := range []string{"error_description", "detail", "message", "error"} {
-		if text, ok := catalogProperty(body, key).(string); ok {
-			if text = strings.TrimFunc(text, jsWhitespace); text != "" {
+		if text, ok := jscompat.ReadProperty(body, key).(string); ok {
+			if text = strings.TrimFunc(text, jscompat.IsWhitespace); text != "" {
 				return ": " + text
 			}
 		}
@@ -106,7 +108,7 @@ func postMetaOAuthForm(ctx context.Context, endpoint string, options MetaOAuthOp
 }
 
 func mintMetaOAuthKey(ctx context.Context, identity any, options MetaOAuthOptions) (any, error) {
-	token, err := catalogKey(identity, make(map[*Array]bool))
+	token, err := jscompat.ToPropertyKey(identity, make(map[*Array]bool))
 	if err != nil {
 		return nil, err
 	}
@@ -121,10 +123,10 @@ func mintMetaOAuthKey(ctx context.Context, identity any, options MetaOAuthOption
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
 		return nil, fmt.Errorf("Meta API key mint failed with status %d%s", response.StatusCode, metaOAuthErrorDetail(body))
 	}
-	key, ok := catalogProperty(body, "api_key").(string)
+	key, ok := jscompat.ReadProperty(body, "api_key").(string)
 	if !ok || key == "" {
 		message := "Meta did not issue an API key."
-		if action := metaOAuthTrustedURL(catalogProperty(body, "action_url")); action != "" {
+		if action := metaOAuthTrustedURL(jscompat.ReadProperty(body, "action_url")); action != "" {
 			message += " Complete setup at " + action
 		}
 		return nil, errors.New(message)
@@ -141,17 +143,17 @@ func loginMetaOAuth(ctx context.Context, interaction ProviderAuthInteraction, op
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
 		return nil, fmt.Errorf("Meta device authorization failed with status %d%s", response.StatusCode, metaOAuthErrorDetail(body))
 	}
-	device, deviceOK := catalogProperty(body, "device_code").(string)
-	user, userOK := catalogProperty(body, "user_code").(string)
-	uri := metaOAuthTrustedURL(catalogProperty(body, "verification_uri_complete"))
+	device, deviceOK := jscompat.ReadProperty(body, "device_code").(string)
+	user, userOK := jscompat.ReadProperty(body, "user_code").(string)
+	uri := metaOAuthTrustedURL(jscompat.ReadProperty(body, "verification_uri_complete"))
 	if uri == "" {
-		uri = metaOAuthTrustedURL(catalogProperty(body, "verification_uri"))
+		uri = metaOAuthTrustedURL(jscompat.ReadProperty(body, "verification_uri"))
 	}
 	if !deviceOK || device == "" || !userOK || user == "" || uri == "" {
 		raw, _ := jsonjs.MarshalValue(body)
 		return nil, errors.New("Invalid Meta device authorization response: " + string(raw))
 	}
-	interval, expires := catalogProperty(body, "interval"), catalogProperty(body, "expires_in")
+	interval, expires := jscompat.ReadProperty(body, "interval"), jscompat.ReadProperty(body, "expires_in")
 	if !oauthPositiveNumber(interval) {
 		interval = Undefined
 	}
@@ -165,15 +167,15 @@ func loginMetaOAuth(ctx context.Context, interaction ProviderAuthInteraction, op
 			return OAuthDeviceCodePollResult{}, err
 		}
 		body := oauthReadObjectJSON(response)
-		if token, ok := catalogProperty(body, "access_token").(string); ok && token != "" && response.StatusCode >= 200 && response.StatusCode < 300 {
+		if token, ok := jscompat.ReadProperty(body, "access_token").(string); ok && token != "" && response.StatusCode >= 200 && response.StatusCode < 300 {
 			return OAuthDeviceCodePollResult{Status: "complete", Value: token}, nil
 		}
-		kind, _ := catalogProperty(body, "error").(string)
+		kind, _ := jscompat.ReadProperty(body, "error").(string)
 		switch kind {
 		case "authorization_pending":
 			return OAuthDeviceCodePollResult{Status: "pending"}, nil
 		case "slow_down":
-			interval := catalogProperty(body, "interval")
+			interval := jscompat.ReadProperty(body, "interval")
 			if !oauthPositiveNumber(interval) {
 				interval = Undefined
 			}

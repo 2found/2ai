@@ -3,9 +3,10 @@ package ai
 import (
 	"context"
 	"errors"
-	"reflect"
 	"sync"
 	"time"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 
 	"github.com/2found/2ai/core/jsonjs"
 )
@@ -69,7 +70,7 @@ func newProviderModelCatalog(providerID func() string, baseline *Array, fetch fu
 				if jsonjs.IsNullish(model) {
 					return jsonjs.PropertyReadError(!jsonjs.IsUndefined(model), "model.provider")
 				}
-				if catalogStrictEqual(catalogProperty(model, "provider"), providerID()) {
+				if jscompat.StrictEqual(jscompat.ReadProperty(model, "provider"), providerID()) {
 					restored.Append(model)
 				}
 			}
@@ -126,7 +127,7 @@ func (c *ProviderModelCatalog) GetAllModels() (*Array, error) {
 			if err != nil {
 				return nil, err
 			}
-			if catalogStrictEqual(entryType, modelType) && catalogStrictEqual(catalogProperty(entry, "id"), catalogProperty(model, "id")) {
+			if jscompat.StrictEqual(entryType, modelType) && jscompat.StrictEqual(jscompat.ReadProperty(entry, "id"), jscompat.ReadProperty(model, "id")) {
 				match = slot
 				break
 			}
@@ -165,7 +166,7 @@ func GetModelType(model any) (any, error) {
 	if jsonjs.IsNullish(model) {
 		return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(model), "model.type")
 	}
-	kind := catalogProperty(model, "type")
+	kind := jscompat.ReadProperty(model, "type")
 	if jsonjs.IsNullish(kind) {
 		return "chat", nil
 	}
@@ -174,16 +175,16 @@ func GetModelType(model any) (any, error) {
 
 func IsModelType(model, kind any) (bool, error) {
 	actual, err := GetModelType(model)
-	return err == nil && catalogStrictEqual(actual, kind), err
+	return err == nil && jscompat.StrictEqual(actual, kind), err
 }
 
 func HasAPI(model, api any) (bool, error) {
 	chat, err := IsModelType(model, "chat")
-	return chat && catalogStrictEqual(catalogProperty(model, "api"), api), err
+	return chat && jscompat.StrictEqual(jscompat.ReadProperty(model, "api"), api), err
 }
 
 func ModelsAreEqual(a, b any) (bool, error) {
-	if !catalogEntryTruthy(a) || !catalogEntryTruthy(b) {
+	if !jscompat.Truthy(a) || !jscompat.Truthy(b) {
 		return false, nil
 	}
 	aType, err := GetModelType(a)
@@ -191,31 +192,5 @@ func ModelsAreEqual(a, b any) (bool, error) {
 		return false, err
 	}
 	bType, err := GetModelType(b)
-	return err == nil && catalogStrictEqual(aType, bType) && catalogStrictEqual(catalogProperty(a, "id"), catalogProperty(b, "id")) && catalogStrictEqual(catalogProperty(a, "provider"), catalogProperty(b, "provider")), err
-}
-
-func catalogStrictEqual(a, b any) bool {
-	if jsonjs.IsUndefined(a) || jsonjs.IsUndefined(b) {
-		return jsonjs.IsUndefined(a) && jsonjs.IsUndefined(b)
-	}
-	if a == nil || b == nil || jsonjs.IsNull(a) || jsonjs.IsNull(b) {
-		return (a == nil || jsonjs.IsNull(a)) && (b == nil || jsonjs.IsNull(b))
-	}
-	number := func(value any) (float64, bool) {
-		v := reflect.ValueOf(value)
-		switch v.Kind() {
-		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-			return float64(v.Int()), true
-		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-			return float64(v.Uint()), true
-		case reflect.Float32, reflect.Float64:
-			return v.Float(), true
-		}
-		return 0, false
-	}
-	if an, ok := number(a); ok {
-		bn, ok := number(b)
-		return ok && an == bn
-	}
-	return reflect.TypeOf(a) == reflect.TypeOf(b) && reflect.TypeOf(a).Comparable() && a == b
+	return err == nil && jscompat.StrictEqual(aType, bType) && jscompat.StrictEqual(jscompat.ReadProperty(a, "id"), jscompat.ReadProperty(b, "id")) && jscompat.StrictEqual(jscompat.ReadProperty(a, "provider"), jscompat.ReadProperty(b, "provider")), err
 }

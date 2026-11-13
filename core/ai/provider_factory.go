@@ -3,6 +3,8 @@ package ai
 import (
 	"context"
 	"fmt"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 type ProviderImages struct {
@@ -60,11 +62,11 @@ func NewModelProvider(input *ProviderFactoryOptions) (*ModelProvider, error) {
 		return nil, fmt.Errorf("Provider %s: at least one of \"api\", \"images\", or \"classifiers\" is required.", input.ID)
 	}
 	keyFor := func(model any) (string, error) {
-		api, err := modelProperty(model, "api")
+		api, err := jscompat.ReadModelProperty(model, "api")
 		if err != nil {
 			return "", err
 		}
-		return catalogKey(api, make(map[*Array]bool))
+		return jscompat.ToPropertyKey(api, make(map[*Array]bool))
 	}
 	apiFor := func(model any) (*ProviderStreams, error) {
 		if single != nil {

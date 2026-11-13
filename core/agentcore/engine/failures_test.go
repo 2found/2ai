@@ -12,6 +12,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/agentcore/engine"
 	"github.com/2found/2ai/core/ai"
 )
@@ -45,7 +47,7 @@ func TestPiFailureValues(t *testing.T) {
 			case "error":
 				failure = errors.New(failure.(string))
 			case "number":
-				failure = ai.ParseJSNumber(failure.(string))
+				failure = jscompat.ParseJSNumber(failure.(string))
 			case "self-cycle":
 				value := []any{float64(1), nil, float64(2)}
 				value[1] = value

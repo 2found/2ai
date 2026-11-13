@@ -5,6 +5,8 @@ import (
 	"slices"
 	"sync"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -57,7 +59,7 @@ func (s *InMemoryCredentialStore) List(ctx context.Context) (*Array, error) {
 		if jsonjs.IsNullish(credential) {
 			return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.type")
 		}
-		result.Append(NewObject(Property{Name: "providerId", Value: id}, Property{Name: "type", Value: catalogProperty(credential, "type")}))
+		result.Append(NewObject(Property{Name: "providerId", Value: id}, Property{Name: "type", Value: jscompat.ReadProperty(credential, "type")}))
 	}
 	return result, nil
 }

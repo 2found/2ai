@@ -13,6 +13,8 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/ai/protocol"
 )
 
@@ -691,7 +693,7 @@ func (p *OpenAIResponsesProvider) consume(resp *http.Response, plan responsesPla
 				return
 			}
 			seenTools[key] = true
-			arguments := string(ParseStreamingJSON(item.Arguments))
+			arguments := string(jscompat.ParseStreamingJSON(item.Arguments))
 			call := protocol.ToolCall{ID: item.CallID, Name: item.Name, Arguments: arguments}
 			tools = append(tools, call)
 			ch <- protocol.ChatDelta{ToolCall: &call}

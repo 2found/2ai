@@ -7,6 +7,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -45,7 +47,7 @@ func RadiusProvider(input RadiusProviderOptions, dependencies RadiusProviderDepe
 			return nil, errors.New("Radius provider requires the pinned baseline model catalog for the default gateway")
 		}
 		for _, entry := range dependencies.BaselineModels.Entries() {
-			model := authSpread(entry.Value)
+			model := jscompat.Spread(entry.Value)
 			model.Set("provider", id)
 			baseline.Append(model)
 		}
@@ -89,7 +91,7 @@ func RadiusProvider(input RadiusProviderOptions, dependencies RadiusProviderDepe
 				if jsonjs.IsNullish(model) {
 					return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(model), "model.id")
 				}
-				if catalogStrictEqual(catalogProperty(entry, "id"), catalogProperty(model, "id")) {
+				if jscompat.StrictEqual(jscompat.ReadProperty(entry, "id"), jscompat.ReadProperty(model, "id")) {
 					index = candidate
 					break
 				}
@@ -103,9 +105,9 @@ func RadiusProvider(input RadiusProviderOptions, dependencies RadiusProviderDepe
 		return merged, nil
 	}
 	provider.RefreshModels = func(refresh ModelRefreshContext) error {
-		_, err := invokeAuth(func() (any, error) {
+		_, err := jscompat.Invoke(func() (any, error) {
 			if refresh.Stored != nil {
-				value := catalogProperty(refresh.Stored, "models")
+				value := jscompat.ReadProperty(refresh.Stored, "models")
 				models, ok := value.(*Array)
 				if !ok {
 					if jsonjs.IsNullish(value) {
@@ -119,7 +121,7 @@ func RadiusProvider(input RadiusProviderOptions, dependencies RadiusProviderDepe
 					if jsonjs.IsNullish(model) {
 						return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(model), "model.provider")
 					}
-					if catalogStrictEqual(catalogProperty(model, "provider"), id) {
+					if jscompat.StrictEqual(jscompat.ReadProperty(model, "provider"), id) {
 						restored.Append(model)
 					}
 				}
@@ -127,7 +129,7 @@ func RadiusProvider(input RadiusProviderOptions, dependencies RadiusProviderDepe
 				if err != nil || !accepted {
 					return nil, err
 				}
-			} else if catalogStrictEqual(catalogProperty(refresh.Credential, "type"), "oauth") {
+			} else if jscompat.StrictEqual(jscompat.ReadProperty(refresh.Credential, "type"), "oauth") {
 				legacy := GetRadiusModels(id, refresh.Credential)
 				if legacy.Len() > 0 {
 					accepted, err := refresh.Publish(ModelsPublication{Persist: NewObject(Property{Name: "models", Value: legacy}, Property{Name: "checkedAt", Value: now()}), Update: update(legacy)})
@@ -143,9 +145,9 @@ func RadiusProvider(input RadiusProviderOptions, dependencies RadiusProviderDepe
 			if !refresh.AllowNetwork || ctx.Err() != nil {
 				return nil, nil
 			}
-			key := catalogProperty(refresh.Credential, "key")
-			if catalogStrictEqual(catalogProperty(refresh.Credential, "type"), "oauth") {
-				key = catalogProperty(refresh.Credential, "access")
+			key := jscompat.ReadProperty(refresh.Credential, "key")
+			if jscompat.StrictEqual(jscompat.ReadProperty(refresh.Credential, "type"), "oauth") {
+				key = jscompat.ReadProperty(refresh.Credential, "access")
 			}
 			config, err := LoadRadiusGatewayConfig(ctx, gateway, key, dependencies.Client)
 			if err != nil || ctx.Err() != nil {

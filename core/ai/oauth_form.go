@@ -4,6 +4,8 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -15,7 +17,7 @@ func oauthFormEncode(fields ...Property) (string, error) {
 		return strings.NewReplacer("%2A", "*", "~", "%7E").Replace(url.QueryEscape(string(jsonjs.StringCodePoints(s))))
 	}
 	for _, field := range fields {
-		value, err := catalogKey(field.Value, make(map[*Array]bool))
+		value, err := jscompat.ToPropertyKey(field.Value, make(map[*Array]bool))
 		if err != nil {
 			return "", err
 		}

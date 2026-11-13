@@ -13,6 +13,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	"github.com/google/uuid"
 )
@@ -100,21 +102,21 @@ func AntigravityOAuth(settings ...AntigravityOAuthOptions) *OAuthAuth {
 	subscription, label := true, "Sign in with Google"
 	return &OAuthAuth{Name: "Google (Antigravity)", IsSubscription: &subscription, LoginLabel: &label,
 		Login: func(interaction ProviderAuthInteraction, _ *OAuthLoginOptions) (any, error) {
-			return invokeAuth(func() (any, error) { return loginAntigravityOAuth(interaction, options) })
+			return jscompat.Invoke(func() (any, error) { return loginAntigravityOAuth(interaction, options) })
 		},
 		Refresh: func(ctx context.Context, credential any) (any, error) {
-			return invokeAuth(func() (any, error) {
+			return jscompat.Invoke(func() (any, error) {
 				if jsonjs.IsNullish(credential) {
 					return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.refresh")
 				}
-				return antigravityOAuthRefresh(ctx, catalogProperty(credential, "refresh"), credential, options)
+				return antigravityOAuthRefresh(ctx, jscompat.ReadProperty(credential, "refresh"), credential, options)
 			})
 		},
 		ToAuth: func(credential any) (any, error) {
 			if jsonjs.IsNullish(credential) {
 				return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.access")
 			}
-			return NewObject(Property{Name: "apiKey", Value: catalogProperty(credential, "access")}), nil
+			return NewObject(Property{Name: "apiKey", Value: jscompat.ReadProperty(credential, "access")}), nil
 		},
 	}
 }
@@ -258,10 +260,10 @@ func antigravityOAuthRefresh(ctx context.Context, refresh, previous any, options
 		token.Set("refresh", text)
 	}
 	if previous != nil {
-		if project, _ := catalogProperty(previous, "project").(string); project != "" && token.Get("project") == nil {
+		if project, _ := jscompat.ReadProperty(previous, "project").(string); project != "" && token.Get("project") == nil {
 			token.Set("project", project)
 		}
-		if account, _ := catalogProperty(previous, "account").(string); account != "" && token.Get("account") == nil {
+		if account, _ := jscompat.ReadProperty(previous, "account").(string); account != "" && token.Get("account") == nil {
 			token.Set("account", account)
 		}
 	}

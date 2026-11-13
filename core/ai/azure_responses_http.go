@@ -9,6 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	whatwg "github.com/nationallibraryofnorway/whatwg-url/url"
 )
@@ -124,7 +126,7 @@ func azureResponsesEndpoint(config AzureResponsesConfig) (string, error) {
 			continue
 		}
 		key, value, _ := strings.Cut(pair, "=")
-		set(urlQueryComponent(key), urlQueryComponent(value))
+		set(jscompat.QueryComponent(key), jscompat.QueryComponent(value))
 	}
 	set("api-version", config.APIVersion)
 	sort.SliceStable(keys, func(i, j int) bool {

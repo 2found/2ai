@@ -7,6 +7,8 @@ import (
 	"sync/atomic"
 	"testing"
 	"time"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 func TestOAuthRefreshCancellationPreservesStartedTransaction(t *testing.T) {
@@ -84,7 +86,7 @@ func TestOAuthRefreshCancellationPreservesStartedTransaction(t *testing.T) {
 				once.Do(func() { close(release) })
 				publicationAwait(t, settled)
 				stored, err := memory.Read(context.Background(), "p")
-				if err != nil || catalogProperty(stored, "refresh") != "rotated" || refreshCalls.Load() != 1 || retained.Err() != nil {
+				if err != nil || jscompat.ReadProperty(stored, "refresh") != "rotated" || refreshCalls.Load() != 1 || retained.Err() != nil {
 					t.Fatal("cancelled waiter discarded or repeated started refresh", stored, err, refreshCalls.Load(), retained.Err())
 				}
 				// Credential persistence settles before the catalogue phase does.

@@ -13,6 +13,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -68,7 +70,7 @@ func OpenAICodexOAuth(settings ...OpenAICodexOAuthOptions) *OAuthAuth {
 	subscription := true
 	return &OAuthAuth{Name: "OpenAI (ChatGPT Plus/Pro)", IsSubscription: &subscription,
 		Login: func(interaction ProviderAuthInteraction, _ *OAuthLoginOptions) (any, error) {
-			return invokeAuth(func() (any, error) {
+			return jscompat.Invoke(func() (any, error) {
 				method, err := interaction.Prompt(context.Background(), NewObject(Property{Name: "type", Value: "select"}, Property{Name: "message", Value: "Select OpenAI Codex login method:"}, Property{Name: "options", Value: NewArray(NewObject(Property{Name: "id", Value: "browser"}, Property{Name: "label", Value: "Browser login (default)"}), NewObject(Property{Name: "id", Value: "device_code"}, Property{Name: "label", Value: "Device code login (headless)"}))}))
 				if err != nil {
 					return nil, err
@@ -77,7 +79,7 @@ func OpenAICodexOAuth(settings ...OpenAICodexOAuthOptions) *OAuthAuth {
 					return loginCodexOAuthDevice(interaction, options)
 				}
 				if method != "browser" {
-					value, err := catalogKey(method, make(map[*Array]bool))
+					value, err := jscompat.ToPropertyKey(method, make(map[*Array]bool))
 					if err != nil {
 						return nil, err
 					}
@@ -87,11 +89,11 @@ func OpenAICodexOAuth(settings ...OpenAICodexOAuthOptions) *OAuthAuth {
 			})
 		},
 		Refresh: func(ctx context.Context, credential any) (any, error) {
-			return invokeAuth(func() (any, error) {
+			return jscompat.Invoke(func() (any, error) {
 				if jsonjs.IsNullish(credential) {
 					return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.refresh")
 				}
-				body, err := oauthFormEncode(Property{Name: "grant_type", Value: "refresh_token"}, Property{Name: "refresh_token", Value: catalogProperty(credential, "refresh")}, Property{Name: "client_id", Value: codexOAuthClientID})
+				body, err := oauthFormEncode(Property{Name: "grant_type", Value: "refresh_token"}, Property{Name: "refresh_token", Value: jscompat.ReadProperty(credential, "refresh")}, Property{Name: "client_id", Value: codexOAuthClientID})
 				if err != nil {
 					return nil, errors.New("OpenAI Codex token refresh error: " + err.Error())
 				}
@@ -106,7 +108,7 @@ func OpenAICodexOAuth(settings ...OpenAICodexOAuthOptions) *OAuthAuth {
 			if jsonjs.IsNullish(credential) {
 				return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.access")
 			}
-			return NewObject(Property{Name: "apiKey", Value: catalogProperty(credential, "access")}), nil
+			return NewObject(Property{Name: "apiKey", Value: jscompat.ReadProperty(credential, "access")}), nil
 		},
 	}
 }
@@ -133,9 +135,9 @@ func codexOAuthToken(response *http.Response, operation string, options OpenAICo
 	if err != nil {
 		return nil, err
 	}
-	access, refresh := catalogProperty(value, "access_token"), catalogProperty(value, "refresh_token")
-	expires, number := deviceCodeNumber(catalogProperty(value, "expires_in"))
-	if !catalogEntryTruthy(access) || !catalogEntryTruthy(refresh) || !number {
+	access, refresh := jscompat.ReadProperty(value, "access_token"), jscompat.ReadProperty(value, "refresh_token")
+	expires, number := deviceCodeNumber(jscompat.ReadProperty(value, "expires_in"))
+	if !jscompat.Truthy(access) || !jscompat.Truthy(refresh) || !number {
 		raw, _ := jsonjs.MarshalValue(value)
 		return nil, fmt.Errorf("OpenAI Codex token %s response missing fields: %s", operation, raw)
 	}
@@ -179,7 +181,7 @@ func codexOAuthAccountID(access any) (string, error) {
 	if err != nil {
 		return "", invalid
 	}
-	account, ok := catalogProperty(catalogProperty(value, "https://api.openai.com/auth"), "chatgpt_account_id").(string)
+	account, ok := jscompat.ReadProperty(jscompat.ReadProperty(value, "https://api.openai.com/auth"), "chatgpt_account_id").(string)
 	if !ok || account == "" {
 		return "", invalid
 	}
@@ -214,7 +216,7 @@ func loginCodexOAuthBrowser(interaction ProviderAuthInteraction, options OpenAIC
 		ctx = context.Background()
 	}
 	var callback *OAuthCallbackServer
-	_, _ = invokeAuth(func() (any, error) {
+	_, _ = jscompat.Invoke(func() (any, error) {
 		server, err := options.StartCallback(&OAuthCallbackServerOptions{ProviderName: "OpenAI", Host: options.CallbackHost(), Port: 1455, Path: "/auth/callback", State: &state, Context: ctx, Complete: func(code string) (any, error) { return code, nil }})
 		if err == nil {
 			callback = server
@@ -249,7 +251,7 @@ func loginCodexOAuthBrowser(interaction ProviderAuthInteraction, options OpenAIC
 		}
 		code = parsed
 	}
-	if !catalogEntryTruthy(code) {
+	if !jscompat.Truthy(code) {
 		return nil, errors.New("Missing authorization code")
 	}
 	return codexOAuthExchange(ctx, code, pkce.Verifier, codexOAuthRedirect, options)
@@ -279,12 +281,12 @@ func loginCodexOAuthDevice(interaction ProviderAuthInteraction, options OpenAICo
 	if err != nil {
 		return nil, err
 	}
-	id, user, interval := catalogProperty(value, "device_auth_id"), catalogProperty(value, "user_code"), catalogProperty(value, "interval")
+	id, user, interval := jscompat.ReadProperty(value, "device_auth_id"), jscompat.ReadProperty(value, "user_code"), jscompat.ReadProperty(value, "interval")
 	if text, ok := interval.(string); ok {
-		interval = ParseJSNumber(strings.TrimFunc(text, jsWhitespace))
+		interval = jscompat.ParseJSNumber(strings.TrimFunc(text, jscompat.IsWhitespace))
 	}
 	seconds, number := deviceCodeNumber(interval)
-	if !catalogEntryTruthy(id) || !catalogEntryTruthy(user) || !number || math.IsNaN(seconds) || math.IsInf(seconds, 0) || seconds < 0 {
+	if !jscompat.Truthy(id) || !jscompat.Truthy(user) || !number || math.IsNaN(seconds) || math.IsInf(seconds, 0) || seconds < 0 {
 		raw, _ := jsonjs.MarshalValue(value)
 		return nil, fmt.Errorf("Invalid OpenAI Codex device code response: %s", raw)
 	}
@@ -303,8 +305,8 @@ func loginCodexOAuthDevice(interaction ProviderAuthInteraction, options OpenAICo
 			if err != nil {
 				return OAuthDeviceCodePollResult{}, err
 			}
-			code, verifier := catalogProperty(value, "authorization_code"), catalogProperty(value, "code_verifier")
-			if !catalogEntryTruthy(code) || !catalogEntryTruthy(verifier) {
+			code, verifier := jscompat.ReadProperty(value, "authorization_code"), jscompat.ReadProperty(value, "code_verifier")
+			if !jscompat.Truthy(code) || !jscompat.Truthy(verifier) {
 				raw, _ := jsonjs.MarshalValue(value)
 				return OAuthDeviceCodePollResult{Status: "failed", Message: "Invalid OpenAI Codex device auth token response: " + string(raw)}, nil
 			}
@@ -317,10 +319,10 @@ func loginCodexOAuthDevice(interaction ProviderAuthInteraction, options OpenAICo
 		raw, _ := oauthRead(response)
 		var kind any
 		if value, err := jsonjs.DecodeValue(raw); err == nil {
-			kind = catalogProperty(value, "error")
+			kind = jscompat.ReadProperty(value, "error")
 			switch kind.(type) {
 			case *Object, *Array:
-				kind = catalogProperty(kind, "code")
+				kind = jscompat.ReadProperty(kind, "code")
 			}
 		}
 		if kind == "deviceauth_authorization_pending" {
@@ -338,5 +340,5 @@ func loginCodexOAuthDevice(interaction ProviderAuthInteraction, options OpenAICo
 	if err != nil {
 		return nil, err
 	}
-	return codexOAuthExchange(ctx, catalogProperty(code, "code"), catalogProperty(code, "verifier"), codexOAuthDeviceRedirect, options)
+	return codexOAuthExchange(ctx, jscompat.ReadProperty(code, "code"), jscompat.ReadProperty(code, "verifier"), codexOAuthDeviceRedirect, options)
 }

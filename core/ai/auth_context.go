@@ -4,6 +4,8 @@ import (
 	"context"
 	"os"
 	"strings"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 // DefaultProviderAuthContext reads process environment lazily. Whitespace-only
@@ -13,7 +15,7 @@ func DefaultProviderAuthContext() *AuthContext {
 	return &AuthContext{
 		Env: func(_ context.Context, name string) (any, error) {
 			value, exists := os.LookupEnv(name)
-			if !exists || strings.TrimFunc(value, jsWhitespace) == "" {
+			if !exists || strings.TrimFunc(value, jscompat.IsWhitespace) == "" {
 				return Undefined, nil
 			}
 			return value, nil

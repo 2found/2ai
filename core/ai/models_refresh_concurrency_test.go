@@ -5,6 +5,8 @@ import (
 	"errors"
 	"sync"
 	"testing"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 func TestPiModelsRefreshSuperseded(t *testing.T) {
@@ -132,7 +134,7 @@ func TestModelsRefreshCatalogIntegrationAndIndependentProviders(t *testing.T) {
 	publicationAwait(t, entered)
 	publicationAwait(t, otherEntered)
 	visible := models.GetAllModels("p")
-	if visible.Len() != 2 || catalogProperty(visible.Get(1), "id") != "cached" {
+	if visible.Len() != 2 || jscompat.ReadProperty(visible.Get(1), "id") != "cached" {
 		t.Fatal("cache not restored before network or unknown type retained")
 	}
 	once.Do(func() { close(release) })
@@ -141,11 +143,11 @@ func TestModelsRefreshCatalogIntegrationAndIndependentProviders(t *testing.T) {
 		t.Fatalf("refresh lost provider error identity: %+v", result)
 	}
 	visible = models.GetAllModels("p")
-	if visible.Len() != 2 || catalogProperty(visible.Get(1), "id") != "fetched" {
+	if visible.Len() != 2 || jscompat.ReadProperty(visible.Get(1), "id") != "fetched" {
 		t.Fatal("refreshed catalog not visible")
 	}
 	stored, err := cache.Read(ctx, "p")
-	if err != nil || catalogProperty(stored, "checkedAt") != int64(1000) {
+	if err != nil || jscompat.ReadProperty(stored, "checkedAt") != int64(1000) {
 		t.Fatalf("refresh snapshot: %v, %v", stored, err)
 	}
 }

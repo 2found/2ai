@@ -16,6 +16,8 @@ import (
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 type radiusOAuthCase struct {
@@ -213,7 +215,7 @@ func runRadiusOAuthCase(t *testing.T, f radiusOAuthFixture, tc radiusOAuthCase, 
 	var err error
 	if tc.Input.Operation == "refresh" {
 		credential := catalogDecode(t, tc.Input.Credential)
-		if catalogProperty(credential, "absent") == true {
+		if jscompat.ReadProperty(credential, "absent") == true {
 			credential = Undefined
 		}
 		value, err = auth.Refresh(ctx, credential)
@@ -230,7 +232,7 @@ func runRadiusOAuthCase(t *testing.T, f radiusOAuthFixture, tc radiusOAuthCase, 
 				cancel(reason)
 			}
 			method := catalogDecode(t, tc.Input.Method)
-			if catalogProperty(method, "absent") == true {
+			if jscompat.ReadProperty(method, "absent") == true {
 				method = Undefined
 			}
 			return method, nil
@@ -267,7 +269,7 @@ func TestPiRadiusOAuthMetadataAndHelpers(t *testing.T) {
 	for i, tc := range f.Helpers {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			credential := catalogDecode(t, tc.Credential)
-			if catalogProperty(credential, "absent") == true {
+			if jscompat.ReadProperty(credential, "absent") == true {
 				credential = Undefined
 			}
 			value, err := auth.ToAuth(credential)

@@ -13,6 +13,8 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 type radiusConfigHTTPCase struct {
@@ -53,7 +55,7 @@ func readRadiusCatalogFixture(t *testing.T) radiusCatalogFixture {
 	return f
 }
 func radiusFixtureModel(t *testing.T, f radiusCatalogFixture) *Object {
-	return authSpread(catalogProperty(catalogDecode(t, f.Baseline), "a"))
+	return jscompat.Spread(jscompat.ReadProperty(catalogDecode(t, f.Baseline), "a"))
 }
 func TestPiRadiusConfig(t *testing.T) {
 	f := readRadiusCatalogFixture(t)
@@ -97,7 +99,7 @@ func TestPiRadiusConfigIdentityAndNativeValues(t *testing.T) {
 		model.Set("contextWindow", value)
 		model.Set("maxTokens", value)
 		models := GetRadiusModels("p", NewObject(Property{Name: "gatewayConfig", Value: NewObject(Property{Name: "baseUrl", Value: "x"}, Property{Name: "models", Value: NewArray(model)})}))
-		number, _ := catalogKey(value, make(map[*Array]bool))
+		number, _ := jscompat.ToPropertyKey(value, make(map[*Array]bool))
 		native.Append(NewObject(Property{Name: "kind", Value: number}, Property{Name: "count", Value: models.Len()}, Property{Name: "context", Value: number}, Property{Name: "max", Value: number}))
 	}
 	sparse := NewArray()

@@ -7,6 +7,8 @@ import (
 	"math"
 	"strconv"
 	"strings"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 // Responses slots are indexed by output_index, which is independent of the
@@ -188,7 +190,7 @@ func (a *responsesAccumulator) chunk(raw json.RawMessage) error {
 				}
 			}
 			slot.block.Extra["partialJson"] = json.RawMessage(marshalSamplingString(next))
-			slot.block.Arguments = ParseStreamingJSON(next)
+			slot.block.Arguments = jscompat.ParseStreamingJSON(next)
 			if emit {
 				a.publish(AssistantMessageEvent{Type: "toolcall_delta", ContentIndex: slot.contentIndex, Delta: delta})
 			}
@@ -266,7 +268,7 @@ func (a *responsesAccumulator) chunk(raw json.RawMessage) error {
 				if args == "" {
 					args = "{}"
 				}
-				block.Arguments = ParseStreamingJSON(args)
+				block.Arguments = jscompat.ParseStreamingJSON(args)
 				responsesNamespace(block, item)
 				delete(block.Extra, "partialJson")
 				a.publish(AssistantMessageEvent{Type: "toolcall_end", ContentIndex: slot.contentIndex, ToolCall: block})

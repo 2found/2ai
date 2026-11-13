@@ -5,6 +5,8 @@ import (
 	"slices"
 	"strings"
 	"unicode/utf16"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 type AnthropicToolsOptions struct {
@@ -131,13 +133,13 @@ func anthropicToolResultContent(content []*ContentBlock) any {
 		for i, block := range content {
 			texts[i] = block.Text
 		}
-		return SanitizeSurrogates(strings.Join(texts, "\n"))
+		return jscompat.SanitizeSurrogates(strings.Join(texts, "\n"))
 	}
 	blocks := []map[string]any{}
 	hasText := false
 	for _, block := range content {
 		if block.Type == "text" {
-			blocks = append(blocks, map[string]any{"type": "text", "text": SanitizeSurrogates(block.Text)})
+			blocks = append(blocks, map[string]any{"type": "text", "text": jscompat.SanitizeSurrogates(block.Text)})
 			hasText = true
 		} else {
 			blocks = append(blocks, anthropicImage(block))
@@ -171,7 +173,7 @@ func ConvertAnthropicMessages(messages []Message, options AnthropicMessagesOptio
 		}
 		pending = nil
 	}
-	nonempty := func(text string) bool { return strings.TrimFunc(text, jsWhitespace) != "" }
+	nonempty := func(text string) bool { return strings.TrimFunc(text, jscompat.IsWhitespace) != "" }
 	for i := 0; i < len(messages); i++ {
 		message := messages[i]
 		switch message.Role {
@@ -179,7 +181,7 @@ func ConvertAnthropicMessages(messages []Message, options AnthropicMessagesOptio
 			blocks := []map[string]any{}
 			text := RenderSystemMessageUpdate(message)
 			if text != "" {
-				blocks = append(blocks, map[string]any{"type": "text", "text": SanitizeSurrogates(text)})
+				blocks = append(blocks, map[string]any{"type": "text", "text": jscompat.SanitizeSurrogates(text)})
 			}
 			if options.ConvertToolDefinitions != nil {
 				names := map[string]bool{}
@@ -210,13 +212,13 @@ func ConvertAnthropicMessages(messages []Message, options AnthropicMessagesOptio
 			volatile[len(params)] = message.reminder
 			if message.Content.Text != nil {
 				if nonempty(*message.Content.Text) {
-					params = append(params, map[string]any{"role": "user", "content": SanitizeSurrogates(*message.Content.Text)})
+					params = append(params, map[string]any{"role": "user", "content": jscompat.SanitizeSurrogates(*message.Content.Text)})
 				}
 			} else {
 				blocks := []map[string]any{}
 				for _, block := range message.Content.Blocks.Values() {
 					if block.Type == "text" {
-						text := SanitizeSurrogates(block.Text)
+						text := jscompat.SanitizeSurrogates(block.Text)
 						if nonempty(text) {
 							blocks = append(blocks, map[string]any{"type": "text", "text": text})
 						}
@@ -235,7 +237,7 @@ func ConvertAnthropicMessages(messages []Message, options AnthropicMessagesOptio
 				switch block.Type {
 				case "text":
 					if nonempty(block.Text) {
-						blocks = append(blocks, map[string]any{"type": "text", "text": SanitizeSurrogates(block.Text)})
+						blocks = append(blocks, map[string]any{"type": "text", "text": jscompat.SanitizeSurrogates(block.Text)})
 					}
 				case "thinking":
 					if block.Redacted != nil && *block.Redacted {
@@ -251,13 +253,13 @@ func ConvertAnthropicMessages(messages []Message, options AnthropicMessagesOptio
 						continue
 					}
 					if !signed && !options.AllowEmptySignature {
-						blocks = append(blocks, map[string]any{"type": "text", "text": SanitizeSurrogates(block.Thinking)})
+						blocks = append(blocks, map[string]any{"type": "text", "text": jscompat.SanitizeSurrogates(block.Thinking)})
 					} else {
 						signature := ""
 						if signed {
 							signature = *block.ThinkingSignature
 						}
-						blocks = append(blocks, map[string]any{"type": "thinking", "thinking": SanitizeSurrogates(block.Thinking), "signature": signature})
+						blocks = append(blocks, map[string]any{"type": "thinking", "thinking": jscompat.SanitizeSurrogates(block.Thinking), "signature": signature})
 					}
 				case "toolCall":
 					input := block.Arguments

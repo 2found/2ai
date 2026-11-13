@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -53,9 +55,9 @@ func ClampOpenAIPromptCacheKey(raw json.RawMessage) (json.RawMessage, error) {
 		case float64:
 			length = v
 		case string:
-			length = ParseJSNumber(v)
+			length = jscompat.ParseJSNumber(v)
 		case []any:
-			length = ParseJSNumber(promptCacheElementString(v))
+			length = jscompat.ParseJSNumber(promptCacheElementString(v))
 		}
 		if math.IsNaN(length) || math.Floor(length) <= OpenAIPromptCacheKeyMaxLength {
 			return raw, nil

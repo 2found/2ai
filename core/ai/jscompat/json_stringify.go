@@ -1,4 +1,4 @@
-package ai
+package jscompat
 
 import "github.com/2found/2ai/core/jsonjs"
 

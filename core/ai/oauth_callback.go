@@ -12,6 +12,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	whatwg "github.com/nationallibraryofnorway/whatwg-url/url"
 )
@@ -93,7 +95,7 @@ func StartOAuthCallbackServer(options *OAuthCallbackServerOptions) (*OAuthCallba
 			page(w, 404, OAuthErrorHTML("Callback route not found."))
 			return
 		}
-		params := urlQueryValues(url.Query())
+		params := jscompat.QueryValues(url.Query())
 		state, hasState := params["state"]
 		if options.State != nil && (!hasState || state != *options.State) {
 			page(w, 400, OAuthErrorHTML("State mismatch."))
@@ -123,7 +125,7 @@ func StartOAuthCallbackServer(options *OAuthCallbackServerOptions) (*OAuthCallba
 		}
 		claimed = true
 		mu.Unlock()
-		result, err := invokeAuth(func() (any, error) { return options.Complete(code) })
+		result, err := jscompat.Invoke(func() (any, error) { return options.Complete(code) })
 		if err != nil {
 			page(w, 502, OAuthErrorHTML(name+" sign-in failed.", err.Error()))
 		} else {
@@ -212,7 +214,7 @@ func WaitForCallbackOrManualInput(interaction ProviderAuthInteraction, callback 
 	var manualError error
 	manualDone := make(chan struct{})
 	go func() {
-		value, err := invokeAuth(func() (any, error) {
+		value, err := jscompat.Invoke(func() (any, error) {
 			return interaction.Prompt(manualContext, NewObject(Property{Name: "type", Value: "manual_code"}, Property{Name: "message", Value: prompt.Message}, Property{Name: "placeholder", Value: prompt.Placeholder}))
 		})
 		mu.Lock()
@@ -226,7 +228,7 @@ func WaitForCallbackOrManualInput(interaction ProviderAuthInteraction, callback 
 	value := any(Undefined)
 	var err error
 	if callback != nil {
-		value, err = invokeAuth(callback.Wait)
+		value, err = jscompat.Invoke(callback.Wait)
 		if err != nil {
 			return nil, err
 		}

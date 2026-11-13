@@ -13,6 +13,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	whatwg "github.com/nationallibraryofnorway/whatwg-url/url"
 )
@@ -70,18 +72,18 @@ func OpenAIChatGPTOAuth(settings ...OpenAIChatGPTOAuthOptions) *OAuthAuth {
 	subscription, label := true, "Sign in with ChatGPT"
 	return &OAuthAuth{Name: "OpenAI (ChatGPT subscription)", IsSubscription: &subscription, LoginLabel: &label,
 		Login: func(interaction ProviderAuthInteraction, login *OAuthLoginOptions) (any, error) {
-			return invokeAuth(func() (any, error) { return loginChatGPTOAuth(interaction, login, options) })
+			return jscompat.Invoke(func() (any, error) { return loginChatGPTOAuth(interaction, login, options) })
 		},
 		Refresh: func(ctx context.Context, credential any) (any, error) {
-			return invokeAuth(func() (any, error) {
+			return jscompat.Invoke(func() (any, error) {
 				if jsonjs.IsNullish(credential) {
 					return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.clientId")
 				}
-				client, ok := catalogProperty(credential, "clientId").(string)
-				if !ok || strings.TrimFunc(client, jsWhitespace) == "" {
+				client, ok := jscompat.ReadProperty(credential, "clientId").(string)
+				if !ok || strings.TrimFunc(client, jscompat.IsWhitespace) == "" {
 					return nil, errors.New("Stored OpenAI OAuth credential does not contain an issued client ID; reconnect ChatGPT")
 				}
-				token, err := requestChatGPTOAuthToken(ctx, options, Property{Name: "grant_type", Value: "refresh_token"}, Property{Name: "client_id", Value: client}, Property{Name: "refresh_token", Value: catalogProperty(credential, "refresh")}, Property{Name: "resource", Value: chatGPTOAuthResource})
+				token, err := requestChatGPTOAuthToken(ctx, options, Property{Name: "grant_type", Value: "refresh_token"}, Property{Name: "client_id", Value: client}, Property{Name: "refresh_token", Value: jscompat.ReadProperty(credential, "refresh")}, Property{Name: "resource", Value: chatGPTOAuthResource})
 				if err != nil {
 					return nil, err
 				}
@@ -92,7 +94,7 @@ func OpenAIChatGPTOAuth(settings ...OpenAIChatGPTOAuthOptions) *OAuthAuth {
 			if jsonjs.IsNullish(credential) {
 				return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.access")
 			}
-			return NewObject(Property{Name: "apiKey", Value: catalogProperty(credential, "access")}), nil
+			return NewObject(Property{Name: "apiKey", Value: jscompat.ReadProperty(credential, "access")}), nil
 		},
 	}
 }
@@ -106,7 +108,7 @@ func chatGPTOAuthCallbackAuthorization(query map[string]string, state string) (C
 	if query["state"] != state {
 		return ChatGPTOAuthAuthorization{}, errors.New("OAuth state mismatch")
 	}
-	client := strings.TrimFunc(query["client_id"], jsWhitespace)
+	client := strings.TrimFunc(query["client_id"], jscompat.IsWhitespace)
 	if client == "" {
 		return ChatGPTOAuthAuthorization{}, errors.New("OpenAI OAuth registration callback did not contain an issued client ID")
 	}
@@ -117,14 +119,14 @@ func chatGPTOAuthManual(input any, state string) (ChatGPTOAuthAuthorization, err
 	if !ok {
 		return ChatGPTOAuthAuthorization{}, errors.New("Paste the full callback URL from the browser")
 	}
-	parsed, err := whatwg.Parse(string(jsonjs.StringCodePoints(strings.TrimFunc(text, jsWhitespace))))
+	parsed, err := whatwg.Parse(string(jsonjs.StringCodePoints(strings.TrimFunc(text, jscompat.IsWhitespace))))
 	if err != nil {
 		return ChatGPTOAuthAuthorization{}, errors.New("Paste the full callback URL from the browser")
 	}
 	if parsed.Scheme() != "http" || parsed.Hostname() != "127.0.0.1" || parsed.Port() != "1455" || parsed.Pathname() != "/auth/callback" {
 		return ChatGPTOAuthAuthorization{}, errors.New("The pasted callback URL must start with " + chatGPTOAuthRedirect)
 	}
-	query := urlQueryValues(parsed.Query())
+	query := jscompat.QueryValues(parsed.Query())
 	if problem := query["error"]; problem != "" {
 		return ChatGPTOAuthAuthorization{}, errors.New("ChatGPT authorization failed: " + problem)
 	}
@@ -164,7 +166,7 @@ func chatGPTOAuthCredential(token *Object, client string, options OpenAIChatGPTO
 	values := map[string]string{}
 	for _, field := range []string{"access_token", "refresh_token", "scope"} {
 		value, ok := token.Get(field).(string)
-		if !ok || strings.TrimFunc(value, jsWhitespace) == "" {
+		if !ok || strings.TrimFunc(value, jscompat.IsWhitespace) == "" {
 			return nil, errors.New("OpenAI OAuth token response has invalid " + field)
 		}
 		values[field] = value
@@ -175,7 +177,7 @@ func chatGPTOAuthCredential(token *Object, client string, options OpenAIChatGPTO
 	}
 	scopes := NewArray()
 	direct := false
-	for _, scope := range strings.FieldsFunc(values["scope"], jsWhitespace) {
+	for _, scope := range strings.FieldsFunc(values["scope"], jscompat.IsWhitespace) {
 		scopes.Append(scope)
 		if scope == chatGPTOAuthDirectScope {
 			direct = true
@@ -232,7 +234,7 @@ func loginChatGPTOAuth(interaction ProviderAuthInteraction, login *OAuthLoginOpt
 	}
 	manual := make(chan authorizationResult, 1)
 	go func() {
-		value, err := invokeAuth(func() (any, error) {
+		value, err := jscompat.Invoke(func() (any, error) {
 			input, err := interaction.Prompt(manualCtx, NewObject(Property{Name: "type", Value: "manual_code"}, Property{Name: "message", Value: "Complete login in your browser, or paste the final redirect URL here:"}, Property{Name: "placeholder", Value: chatGPTOAuthRedirect}))
 			if err != nil {
 				return nil, err
@@ -258,7 +260,7 @@ func loginChatGPTOAuth(interaction ProviderAuthInteraction, login *OAuthLoginOpt
 			result, err = done.value, done.err
 		}
 	}
-	value, err := invokeAuth(func() (any, error) {
+	value, err := jscompat.Invoke(func() (any, error) {
 		if err != nil {
 			return nil, err
 		}
@@ -268,7 +270,7 @@ func loginChatGPTOAuth(interaction ProviderAuthInteraction, login *OAuthLoginOpt
 			return nil, err
 		}
 		id, ok := token.Get("id_token").(string)
-		if !ok || strings.TrimFunc(id, jsWhitespace) == "" {
+		if !ok || strings.TrimFunc(id, jscompat.IsWhitespace) == "" {
 			return nil, errors.New("OpenAI OAuth token response did not contain an ID token")
 		}
 		return chatGPTOAuthCredential(token, result.ClientID, options)

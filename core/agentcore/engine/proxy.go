@@ -13,6 +13,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/ai"
 	"github.com/2found/2ai/core/jsonjs"
 	"golang.org/x/text/encoding/unicode"
@@ -116,7 +118,7 @@ func marshalProxyRequest(value any) (body []byte, err error) {
 	}()
 	body, err = marshalJSScalar(value)
 	if err == nil {
-		return ai.StringifyJSON(body)
+		return jscompat.StringifyJSON(body)
 	}
 	for {
 		wrapped, ok := err.(*json.MarshalerError)
@@ -447,7 +449,7 @@ func (p *proxyAccumulator) process(frame proxyEvent) (ai.AssistantMessageEvent, 
 			content.Extra = map[string]json.RawMessage{}
 		}
 		content.Extra["partialJson"] = jsonjs.QuoteString(input)
-		content.Arguments = ai.ParseStreamingJSON(input)
+		content.Arguments = jscompat.ParseStreamingJSON(input)
 		var parsed any
 		_ = json.Unmarshal(content.Arguments, &parsed)
 		if !proxyTruthy(parsed) {

@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"sync"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	whatwg "github.com/nationallibraryofnorway/whatwg-url/url"
 )
 
@@ -59,7 +61,7 @@ func StartChatGPTOAuthCallback(options ChatGPTOAuthCallbackOptions) (*ChatGPTOAu
 			page(w, 404, OAuthErrorHTML("Callback route not found."))
 			return
 		}
-		query := urlQueryValues(parsed.Query())
+		query := jscompat.QueryValues(parsed.Query())
 		if problem := query["error"]; problem != "" {
 			page(w, 400, OAuthErrorHTML("ChatGPT was not connected.", "Error: "+problem))
 			finish(ChatGPTOAuthAuthorization{}, errors.New("ChatGPT authorization failed: "+problem))

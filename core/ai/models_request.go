@@ -4,6 +4,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -23,15 +25,8 @@ func modelRequestSettings(options []*ModelsRequestOptions) *ModelsRequestOptions
 	return &ModelsRequestOptions{}
 }
 
-func modelProperty(model any, key string) (any, error) {
-	if jsonjs.IsNullish(model) {
-		return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(model), "model."+key)
-	}
-	return catalogProperty(model, key), nil
-}
-
 func (m *Models) requireProvider(model any) (*ModelProvider, error) {
-	id, err := modelProperty(model, "provider")
+	id, err := jscompat.ReadModelProperty(model, "provider")
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +35,7 @@ func (m *Models) requireProvider(model any) (*ModelProvider, error) {
 			return provider, nil
 		}
 	}
-	key, err := catalogKey(id, make(map[*Array]bool))
+	key, err := jscompat.ToPropertyKey(id, make(map[*Array]bool))
 	if err != nil {
 		return nil, err
 	}
@@ -52,11 +47,11 @@ func assertModelType(model any, kind, article string) error {
 	if matches || err != nil {
 		return err
 	}
-	provider, err := catalogKey(catalogProperty(model, "provider"), make(map[*Array]bool))
+	provider, err := jscompat.ToPropertyKey(jscompat.ReadProperty(model, "provider"), make(map[*Array]bool))
 	if err != nil {
 		return err
 	}
-	id, err := catalogKey(catalogProperty(model, "id"), make(map[*Array]bool))
+	id, err := jscompat.ToPropertyKey(jscompat.ReadProperty(model, "id"), make(map[*Array]bool))
 	if err != nil {
 		return err
 	}
@@ -87,7 +82,7 @@ func (m *Models) prepareModelAuth(model any, settings *ModelsRequestOptions) (*p
 		return nil, err
 	}
 	options := settings.Values
-	apiKeyOverride, envOverride := catalogProperty(options, "apiKey"), catalogProperty(options, "env")
+	apiKeyOverride, envOverride := jscompat.ReadProperty(options, "apiKey"), jscompat.ReadProperty(options, "env")
 	// Decoded JSON null is nil, while nil in the native override struct means
 	// omitted. Preserve the explicit property value across that boundary.
 	if apiKeyOverride == nil {
@@ -105,25 +100,25 @@ func (m *Models) applyPreparedAuth(ctx context.Context, model any, settings *Mod
 	if err != nil {
 		return nil, nil, err
 	}
-	if !catalogEntryTruthy(resolution) {
-		id, err := catalogKey(catalogProperty(model, "provider"), make(map[*Array]bool))
+	if !jscompat.Truthy(resolution) {
+		id, err := jscompat.ToPropertyKey(jscompat.ReadProperty(model, "provider"), make(map[*Array]bool))
 		if err != nil {
 			return nil, nil, err
 		}
 		return nil, nil, NewModelsError("auth", "Provider is not configured: "+id, nil)
 	}
-	auth := catalogProperty(resolution, "auth")
-	apiKey := catalogProperty(options, "apiKey")
+	auth := jscompat.ReadProperty(resolution, "auth")
+	apiKey := jscompat.ReadProperty(options, "apiKey")
 	if jsonjs.IsNullish(apiKey) {
 		if jsonjs.IsNullish(auth) {
 			return nil, nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(auth), "auth.apiKey")
 		}
-		apiKey = catalogProperty(auth, "apiKey")
+		apiKey = jscompat.ReadProperty(auth, "apiKey")
 	}
 	if jsonjs.IsNullish(auth) {
 		return nil, nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(auth), "auth.headers")
 	}
-	headers := mergeAuthHeaders(catalogProperty(auth, "headers"), catalogProperty(options, "headers"))
+	headers := mergeAuthHeaders(jscompat.ReadProperty(auth, "headers"), jscompat.ReadProperty(options, "headers"))
 	if settings.TransformHeaders != nil {
 		if jsonjs.IsNullish(headers) {
 			headers = NewObject()
@@ -134,17 +129,17 @@ func (m *Models) applyPreparedAuth(ctx context.Context, model any, settings *Mod
 		}
 	}
 	var env any = Undefined
-	if catalogEntryTruthy(catalogProperty(resolution, "env")) || catalogEntryTruthy(catalogProperty(options, "env")) {
-		env = authSpread(catalogProperty(resolution, "env"))
-		authSpreadInto(env.(*Object), catalogProperty(options, "env"))
+	if jscompat.Truthy(jscompat.ReadProperty(resolution, "env")) || jscompat.Truthy(jscompat.ReadProperty(options, "env")) {
+		env = jscompat.Spread(jscompat.ReadProperty(resolution, "env"))
+		jscompat.SpreadInto(env.(*Object), jscompat.ReadProperty(options, "env"))
 	}
 	requestModel := model
-	if baseURL := catalogProperty(auth, "baseUrl"); catalogEntryTruthy(baseURL) {
-		copy := authSpread(model)
+	if baseURL := jscompat.ReadProperty(auth, "baseUrl"); jscompat.Truthy(baseURL) {
+		copy := jscompat.Spread(model)
 		copy.Set("baseUrl", baseURL)
 		requestModel = copy
 	}
-	requestOptions := authSpread(options)
+	requestOptions := jscompat.Spread(options)
 	requestOptions.Delete("transformHeaders")
 	requestOptions.Set("apiKey", apiKey)
 	requestOptions.Set("headers", headers)
@@ -153,7 +148,7 @@ func (m *Models) applyPreparedAuth(ctx context.Context, model any, settings *Mod
 }
 
 func (m *Models) CancelDeferred(ctx context.Context, model, handle any, options ...*ModelsRequestOptions) error {
-	_, err := invokeAuth(func() (any, error) {
+	_, err := jscompat.Invoke(func() (any, error) {
 		if err := AssertChatModel(model); err != nil {
 			return nil, err
 		}
@@ -162,7 +157,7 @@ func (m *Models) CancelDeferred(ctx context.Context, model, handle any, options 
 			return nil, err
 		}
 		if provider.CancelDeferred == nil {
-			id, err := catalogKey(catalogProperty(model, "provider"), make(map[*Array]bool))
+			id, err := jscompat.ToPropertyKey(jscompat.ReadProperty(model, "provider"), make(map[*Array]bool))
 			if err != nil {
 				return nil, err
 			}
@@ -188,7 +183,7 @@ func (m *Models) Classify(ctx context.Context, model, input any, options ...*Mod
 
 func (m *Models) runModelOperation(ctx context.Context, model, input any, classify bool, options []*ModelsRequestOptions) (any, error) {
 	settings := modelRequestSettings(options)
-	result, err := invokeAuth(func() (any, error) {
+	result, err := jscompat.Invoke(func() (any, error) {
 		assert := AssertImageModel
 		if classify {
 			assert = AssertClassifierModel
@@ -205,7 +200,7 @@ func (m *Models) runModelOperation(ctx context.Context, model, input any, classi
 			operation, name = provider.Classify, "classification"
 		}
 		if operation == nil {
-			id, err := catalogKey(catalogProperty(model, "provider"), make(map[*Array]bool))
+			id, err := jscompat.ToPropertyKey(jscompat.ReadProperty(model, "provider"), make(map[*Array]bool))
 			if err != nil {
 				return nil, err
 			}
@@ -229,14 +224,14 @@ func (m *Models) runModelOperation(ctx context.Context, model, input any, classi
 }
 
 func modelOperationErrorResult(model any, failure error, aborted, classify bool, now func() int64) (*Object, error) {
-	api, err := modelProperty(model, "api")
+	api, err := jscompat.ReadModelProperty(model, "api")
 	if err != nil {
 		return nil, err
 	}
 	if now == nil {
 		now = func() int64 { return time.Now().UnixMilli() }
 	}
-	result := NewObject(Property{Name: "api", Value: api}, Property{Name: "provider", Value: catalogProperty(model, "provider")}, Property{Name: "model", Value: catalogProperty(model, "id")})
+	result := NewObject(Property{Name: "api", Value: api}, Property{Name: "provider", Value: jscompat.ReadProperty(model, "provider")}, Property{Name: "model", Value: jscompat.ReadProperty(model, "id")})
 	if classify {
 		result.Set("answers", NewObject())
 	} else {

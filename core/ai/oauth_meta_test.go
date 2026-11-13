@@ -14,6 +14,8 @@ import (
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 type metaOAuthCase struct {
@@ -177,7 +179,7 @@ func runMetaOAuthCase(t *testing.T, tc metaOAuthCase, realHTTP bool) {
 	var err error
 	if tc.Input.Operation == "refresh" {
 		credential := catalogDecode(t, tc.Input.Credential)
-		if catalogProperty(credential, "absent") == true {
+		if jscompat.ReadProperty(credential, "absent") == true {
 			credential = Undefined
 		}
 		value, err = auth.Refresh(ctx, credential)
@@ -226,7 +228,7 @@ func TestPiMetaOAuthMetadataAndToAuth(t *testing.T) {
 	for i, tc := range f.Helpers {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			credential := catalogDecode(t, tc.Credential)
-			if catalogProperty(credential, "absent") == true {
+			if jscompat.ReadProperty(credential, "absent") == true {
 				credential = Undefined
 			}
 			value, err := auth.ToAuth(credential)

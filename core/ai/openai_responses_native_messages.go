@@ -6,6 +6,8 @@ import (
 	"slices"
 	"strings"
 	"unicode/utf16"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 // ResponsesToolsOptions preserves the distinction between absent and null strict.
@@ -133,17 +135,17 @@ func ConvertResponsesMessages(rawModel json.RawMessage, context TranscriptContex
 					text = RenderSystemMessageUpdate(message)
 				}
 				if text != "" {
-					output = append(output, map[string]any{"role": role, "content": SanitizeSurrogates(text)})
+					output = append(output, map[string]any{"role": role, "content": jscompat.SanitizeSurrogates(text)})
 				}
 			}
 		case "user":
 			content := []map[string]any{}
 			if message.Content.Text != nil {
-				content = append(content, map[string]any{"type": "input_text", "text": SanitizeSurrogates(*message.Content.Text)})
+				content = append(content, map[string]any{"type": "input_text", "text": jscompat.SanitizeSurrogates(*message.Content.Text)})
 			} else {
 				for _, block := range message.Content.Blocks.Values() {
 					if block.Type == "text" {
-						content = append(content, map[string]any{"type": "input_text", "text": SanitizeSurrogates(block.Text)})
+						content = append(content, map[string]any{"type": "input_text", "text": jscompat.SanitizeSurrogates(block.Text)})
 					} else {
 						content = append(content, responsesImage(block))
 					}
@@ -179,7 +181,7 @@ func ConvertResponsesMessages(rawModel json.RawMessage, context TranscriptContex
 						id = "msg_" + completionsShortHash(id)
 					}
 					textIndex++
-					item := map[string]any{"type": "message", "role": "assistant", "content": []any{map[string]any{"type": "output_text", "text": SanitizeSurrogates(block.Text), "annotations": []any{}}}, "status": "completed", "id": id}
+					item := map[string]any{"type": "message", "role": "assistant", "content": []any{map[string]any{"type": "output_text", "text": jscompat.SanitizeSurrogates(block.Text), "annotations": []any{}}}, "status": "completed", "id": id}
 					if phase != "" {
 						item["phase"] = phase
 					}
@@ -196,7 +198,7 @@ func ConvertResponsesMessages(rawModel json.RawMessage, context TranscriptContex
 							return nil, err
 						}
 						item["type"] = "custom_tool_call"
-						item["input"] = SanitizeSurrogates(input)
+						item["input"] = jscompat.SanitizeSurrogates(input)
 					} else {
 						item["type"] = "function_call"
 						if len(block.Arguments) > 0 {
@@ -287,7 +289,7 @@ func responsesToolResultOutput(model completionsModel, blocks []*ContentBlock) a
 	text := strings.Join(texts, "\n")
 	if len(images) == 0 || !slices.Contains(model.Input, "image") {
 		if text != "" {
-			return SanitizeSurrogates(text)
+			return jscompat.SanitizeSurrogates(text)
 		}
 		if len(images) > 0 {
 			return "(see attached image)"
@@ -296,7 +298,7 @@ func responsesToolResultOutput(model completionsModel, blocks []*ContentBlock) a
 	}
 	output := []map[string]any{}
 	if text != "" {
-		output = append(output, map[string]any{"type": "input_text", "text": SanitizeSurrogates(text)})
+		output = append(output, map[string]any{"type": "input_text", "text": jscompat.SanitizeSurrogates(text)})
 	}
 	for _, block := range images {
 		output = append(output, responsesImage(block))

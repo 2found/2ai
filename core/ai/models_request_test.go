@@ -8,6 +8,8 @@ import (
 	"os"
 	"testing"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -84,7 +86,7 @@ func TestPiModelsRequestDispatch(t *testing.T) {
 			payload := NewObject(Property{Name: "payload", Value: "same-input"})
 			handle := NewObject(Property{Name: "id", Value: "handle"})
 			returned := NewObject(Property{Name: "result", Value: "same-return"})
-			values := authSpread(input.Get("request"))
+			values := jscompat.Spread(input.Get("request"))
 			signal := NewObject()
 			values.Set("signal", signal)
 			settings := &ModelsRequestOptions{Values: values, Now: func() int64 { return 1000 }}
@@ -95,7 +97,7 @@ func TestPiModelsRequestDispatch(t *testing.T) {
 					sameInput = arg == any(handle)
 				}
 				_, hasTransform := options.Lookup("transformHeaders")
-				log.Append(NewObject(Property{Name: "dispatch", Value: operation}, Property{Name: "model", Value: m}, Property{Name: "options", Value: options}, Property{Name: "optionKeys", Value: requestPropertyNames(options)}, Property{Name: "headerKeys", Value: requestPropertyNames(options.Get("headers"))}, Property{Name: "sameModel", Value: catalogStrictEqual(m, model)}, Property{Name: "sameInput", Value: sameInput}, Property{Name: "signalIdentity", Value: callCtx == ctx && options.Get("signal") == signal}, Property{Name: "hasTransform", Value: hasTransform}))
+				log.Append(NewObject(Property{Name: "dispatch", Value: operation}, Property{Name: "model", Value: m}, Property{Name: "options", Value: options}, Property{Name: "optionKeys", Value: requestPropertyNames(options)}, Property{Name: "headerKeys", Value: requestPropertyNames(options.Get("headers"))}, Property{Name: "sameModel", Value: jscompat.StrictEqual(m, model)}, Property{Name: "sameInput", Value: sameInput}, Property{Name: "signalIdentity", Value: callCtx == ctx && options.Get("signal") == signal}, Property{Name: "hasTransform", Value: hasTransform}))
 				if mode == "provider-error" || mode == "abort-provider-error" {
 					if mode == "abort-provider-error" {
 						cancel(errors.New("cancelled"))
@@ -181,7 +183,7 @@ func TestPiModelsRequestDispatch(t *testing.T) {
 					if input.Get("transform") == "null" {
 						return Null, nil
 					}
-					result := authSpread(headers)
+					result := jscompat.Spread(headers)
 					result.Set("X-Transformed", "yes")
 					return result, nil
 				}

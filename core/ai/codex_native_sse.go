@@ -7,6 +7,8 @@ import (
 	"io"
 	"strings"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
 )
@@ -34,7 +36,7 @@ func readCodexSSE(ctx context.Context, body io.ReadCloser, consume func(json.Raw
 			return fmt.Errorf("Request was aborted")
 		}
 		buffer += string(bytes[:n])
-		if err == io.EOF && strings.TrimFunc(buffer, jsWhitespace) != "" {
+		if err == io.EOF && strings.TrimFunc(buffer, jscompat.IsWhitespace) != "" {
 			buffer += "\n\n"
 		}
 		for {
@@ -47,10 +49,10 @@ func readCodexSSE(ctx context.Context, body io.ReadCloser, consume func(json.Raw
 			var data []string
 			for _, line := range strings.Split(frame, "\n") {
 				if strings.HasPrefix(line, "data:") {
-					data = append(data, strings.TrimFunc(line[5:], jsWhitespace))
+					data = append(data, strings.TrimFunc(line[5:], jscompat.IsWhitespace))
 				}
 			}
-			payload := strings.TrimFunc(strings.Join(data, "\n"), jsWhitespace)
+			payload := strings.TrimFunc(strings.Join(data, "\n"), jscompat.IsWhitespace)
 			if payload == "" || payload == "[DONE]" {
 				continue
 			}

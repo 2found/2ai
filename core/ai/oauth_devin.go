@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	"github.com/google/uuid"
 )
@@ -80,10 +82,10 @@ func DevinOAuth(settings ...DevinOAuthOptions) *OAuthAuth {
 	subscription := true
 	return &OAuthAuth{Name: "Devin", IsSubscription: &subscription,
 		Login: func(interaction ProviderAuthInteraction, _ *OAuthLoginOptions) (any, error) {
-			return invokeAuth(func() (any, error) { return loginDevinOAuth(interaction, options) })
+			return jscompat.Invoke(func() (any, error) { return loginDevinOAuth(interaction, options) })
 		},
 		Refresh: func(_ context.Context, credential any) (any, error) {
-			return invokeAuth(func() (any, error) {
+			return jscompat.Invoke(func() (any, error) {
 				if jsonjs.IsNullish(credential) {
 					return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.refresh")
 				}
@@ -96,7 +98,7 @@ func DevinOAuth(settings ...DevinOAuthOptions) *OAuthAuth {
 			if jsonjs.IsNullish(credential) {
 				return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.access")
 			}
-			return NewObject(Property{Name: "apiKey", Value: catalogProperty(credential, "access")}), nil
+			return NewObject(Property{Name: "apiKey", Value: jscompat.ReadProperty(credential, "access")}), nil
 		},
 	}
 }
@@ -115,7 +117,7 @@ func loginDevinOAuth(interaction ProviderAuthInteraction, options DevinOAuthOpti
 	// the browser will land on — without these the page just sits there.
 	state := uuid.NewString()
 	var callback *OAuthCallbackServer
-	_, _ = invokeAuth(func() (any, error) {
+	_, _ = jscompat.Invoke(func() (any, error) {
 		server, err := options.StartCallback(&OAuthCallbackServerOptions{
 			ProviderName: "Devin", Host: options.CallbackHost(), Port: devinOAuthCallbackPort,
 			Path: devinOAuthCallbackPath, State: &state, Context: ctx,
@@ -165,7 +167,7 @@ func loginDevinOAuth(interaction ProviderAuthInteraction, options DevinOAuthOpti
 		parsed, _ := parseOAuthAuthorizationInput(text)
 		code = parsed
 	}
-	if !catalogEntryTruthy(code) {
+	if !jscompat.Truthy(code) {
 		return nil, errors.New("Missing authorization code")
 	}
 	return devinOAuthExchange(ctx, code, pkce.Verifier, options)
@@ -208,8 +210,8 @@ func devinOAuthExchange(ctx context.Context, code, verifier any, options DevinOA
 	if err != nil {
 		return nil, err
 	}
-	access := catalogProperty(value, "token")
-	if !catalogEntryTruthy(access) {
+	access := jscompat.ReadProperty(value, "token")
+	if !jscompat.Truthy(access) {
 		raw, _ := jsonjs.MarshalValue(value)
 		return nil, fmt.Errorf("Devin token exchange response missing fields: %s", raw)
 	}
@@ -268,7 +270,7 @@ func devinTokenExpiryMS(token string, options DevinOAuthOptions) float64 {
 	if err != nil {
 		return options.Now() + devinOAuthFallbackLifetimeMS
 	}
-	exp, ok := deviceCodeNumber(catalogProperty(value, "exp"))
+	exp, ok := deviceCodeNumber(jscompat.ReadProperty(value, "exp"))
 	if !ok || exp <= 0 {
 		return options.Now() + devinOAuthFallbackLifetimeMS
 	}

@@ -8,6 +8,8 @@ import (
 	"io"
 	"strings"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
 )
@@ -41,7 +43,7 @@ func readAnthropicSSE(ctx context.Context, body io.Reader, consume func(json.Raw
 		default:
 			return nil
 		}
-		raw, err := ParseJSONWithRepair(payload)
+		raw, err := jscompat.ParseJSONWithRepair(payload)
 		if err == nil && strings.TrimSpace(string(raw)) == "null" {
 			err = errors.New("null is not an object (evaluating 'event.type')")
 		}

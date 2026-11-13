@@ -12,6 +12,8 @@ import (
 	"strings"
 	"sync"
 	"unicode/utf16"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 type anthropicFederationConfig struct{ Rule, Organization, IdentityFile, ServiceAccount, Workspace string }
@@ -118,7 +120,7 @@ func exchangeAnthropicFederation(config anthropicFederationConfig, baseURL strin
 	if err != nil {
 		return fail("Failed to read identity token file at %s: %s", config.IdentityFile, err)
 	}
-	token := strings.TrimFunc(strings.ToValidUTF8(string(data), "\ufffd"), jsWhitespace)
+	token := strings.TrimFunc(strings.ToValidUTF8(string(data), "\ufffd"), jscompat.IsWhitespace)
 	if token == "" {
 		return fail("Identity token file at %s is empty", config.IdentityFile)
 	}
@@ -210,5 +212,5 @@ func anthropicTokenExpiryNumber(raw json.RawMessage) float64 {
 	if raw[0] == '"' || raw[0] == '[' {
 		value = completionsErrorString(raw)
 	}
-	return ParseJSNumber(value)
+	return jscompat.ParseJSNumber(value)
 }

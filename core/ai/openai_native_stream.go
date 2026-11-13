@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"math"
 	"strconv"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 func samplingNonNull(raw json.RawMessage) bool {
@@ -274,7 +276,7 @@ func (a *completionsAccumulator) chunk(raw json.RawMessage) error {
 				text = args
 				partial := samplingString(block.Extra["partialArgs"]) + args
 				block.Extra["partialArgs"] = json.RawMessage(marshalSamplingString(partial))
-				block.Arguments = ParseStreamingJSON(partial)
+				block.Arguments = jscompat.ParseStreamingJSON(partial)
 			} else if input := samplingString(custom["input"]); input != "" {
 				appended, err := a.appendCustom(block, input, false)
 				if err != nil {
@@ -377,7 +379,7 @@ func (a *completionsAccumulator) finish(ctx context.Context) {
 						a.publish(AssistantMessageEvent{Type: "toolcall_delta", ContentIndex: i, Delta: *delta})
 					}
 				} else {
-					block.Arguments = ParseStreamingJSON(samplingString(block.Extra["partialArgs"]))
+					block.Arguments = jscompat.ParseStreamingJSON(samplingString(block.Extra["partialArgs"]))
 				}
 				a.clean(block)
 				a.publish(AssistantMessageEvent{Type: "toolcall_end", ContentIndex: i, ToolCall: block})

@@ -9,6 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	whatwg "github.com/nationallibraryofnorway/whatwg-url/url"
 )
@@ -52,15 +54,15 @@ func GitHubCopilotOAuth(options GitHubCopilotOAuthOptions) (*OAuthAuth, error) {
 	subscription := true
 	return &OAuthAuth{Name: "GitHub Copilot", IsSubscription: &subscription,
 		Login: func(interaction ProviderAuthInteraction, _ *OAuthLoginOptions) (any, error) {
-			return invokeAuth(func() (any, error) { return loginCopilotOAuth(interaction, options) })
+			return jscompat.Invoke(func() (any, error) { return loginCopilotOAuth(interaction, options) })
 		},
 		Refresh: func(ctx context.Context, credential any) (any, error) {
-			return invokeAuth(func() (any, error) {
+			return jscompat.Invoke(func() (any, error) {
 				if jsonjs.IsNullish(credential) {
 					return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.refresh")
 				}
 				enterprise := copilotOAuthEnterprise(credential)
-				value, err := copilotOAuthAccessToken(ctx, catalogProperty(credential, "refresh"), enterprise, options)
+				value, err := copilotOAuthAccessToken(ctx, jscompat.ReadProperty(credential, "refresh"), enterprise, options)
 				if err != nil {
 					return nil, err
 				}
@@ -76,7 +78,7 @@ func GitHubCopilotOAuth(options GitHubCopilotOAuthOptions) (*OAuthAuth, error) {
 			if jsonjs.IsNullish(credential) {
 				return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.access")
 			}
-			access := catalogProperty(credential, "access")
+			access := jscompat.ReadProperty(credential, "access")
 			base, err := copilotOAuthBaseURL(access, copilotOAuthEnterprise(credential))
 			if err != nil {
 				return nil, err
@@ -90,7 +92,7 @@ func copilotOAuthDomain(input string) string {
 	return domain
 }
 func parseCopilotOAuthDomain(input string) (string, bool) {
-	input = strings.TrimFunc(input, jsWhitespace)
+	input = strings.TrimFunc(input, jscompat.IsWhitespace)
 	if input == "" {
 		return "", false
 	}
@@ -104,7 +106,7 @@ func parseCopilotOAuthDomain(input string) (string, bool) {
 	return parsed.Hostname(), true
 }
 func copilotOAuthEnterprise(credential any) any {
-	if value, ok := catalogProperty(credential, "enterpriseUrl").(string); ok && value != "" {
+	if value, ok := jscompat.ReadProperty(credential, "enterpriseUrl").(string); ok && value != "" {
 		if domain, ok := parseCopilotOAuthDomain(value); ok {
 			return domain
 		}
@@ -112,7 +114,7 @@ func copilotOAuthEnterprise(credential any) any {
 	return Undefined
 }
 func copilotOAuthBaseURL(token, enterprise any) (string, error) {
-	if catalogEntryTruthy(token) {
+	if jscompat.Truthy(token) {
 		text, ok := token.(string)
 		if !ok {
 			return "", errors.New("token.match is not a function. (In 'token.match(/proxy-ep=([^;]+)/)', 'token.match' is undefined)")
@@ -139,14 +141,14 @@ func copilotOAuthBaseURL(token, enterprise any) (string, error) {
 			offset = start
 		}
 	}
-	if catalogEntryTruthy(enterprise) {
-		text, err := catalogKey(enterprise, make(map[*Array]bool))
+	if jscompat.Truthy(enterprise) {
+		text, err := jscompat.ToPropertyKey(enterprise, make(map[*Array]bool))
 		return "https://copilot-api." + text, err
 	}
 	return "https://api.individual.githubcopilot.com", nil
 }
 func copilotOAuthHeaders(token any) (http.Header, error) {
-	value, err := catalogKey(token, make(map[*Array]bool))
+	value, err := jscompat.ToPropertyKey(token, make(map[*Array]bool))
 	if err != nil {
 		return nil, err
 	}
@@ -201,7 +203,7 @@ func copilotOAuthRetry(ctx context.Context, endpoint, method string, headers htt
 		delay := 500 * math.Pow(2, float64(retry))
 		after := response.Header.Get("retry-after")
 		if after != "" {
-			seconds := completionsParseFloat(after)
+			seconds := jscompat.ParseJSFloat(after)
 			delay = seconds * 1000
 			if math.IsNaN(seconds) {
 				delay = copilotOAuthDate(after) - options.Now()
@@ -227,7 +229,7 @@ type copilotOAuthCatalog struct{ available, policy *Array }
 
 func parseCopilotOAuthCatalog(raw any, fallback bool, known *Object) (copilotOAuthCatalog, error) {
 	result := copilotOAuthCatalog{available: NewArray(), policy: NewArray()}
-	data, ok := catalogProperty(raw, "data").(*Array)
+	data, ok := jscompat.ReadProperty(raw, "data").(*Array)
 	if !ok {
 		return result, errors.New("Invalid Copilot models response")
 	}
@@ -238,15 +240,15 @@ func parseCopilotOAuthCatalog(raw any, fallback bool, known *Object) (copilotOAu
 	}
 	entries := []entry{}
 	for _, value := range data.Values() {
-		id, ok := catalogProperty(value, "id").(string)
+		id, ok := jscompat.ReadProperty(value, "id").(string)
 		if !ok {
 			continue
 		}
-		if catalogProperty(catalogProperty(catalogProperty(value, "capabilities"), "supports"), "tool_calls") == false {
+		if jscompat.ReadProperty(jscompat.ReadProperty(jscompat.ReadProperty(value, "capabilities"), "supports"), "tool_calls") == false {
 			continue
 		}
-		picker := catalogProperty(value, "model_picker_enabled") == true
-		state := catalogProperty(catalogProperty(value, "policy"), "state")
+		picker := jscompat.ReadProperty(value, "model_picker_enabled") == true
+		state := jscompat.ReadProperty(jscompat.ReadProperty(value, "policy"), "state")
 		entries = append(entries, entry{id, picker, state})
 		if picker && state != "disabled" {
 			result.available.Append(id)
@@ -288,8 +290,8 @@ func copilotOAuthModels(ctx context.Context, token, enterprise any, retries int,
 }
 func copilotOAuthAccessToken(ctx context.Context, refresh, enterprise any, options GitHubCopilotOAuthOptions) (*Object, error) {
 	domain := "github.com"
-	if catalogEntryTruthy(enterprise) {
-		domain, _ = catalogKey(enterprise, make(map[*Array]bool))
+	if jscompat.Truthy(enterprise) {
+		domain, _ = jscompat.ToPropertyKey(enterprise, make(map[*Array]bool))
 	}
 	headers, err := copilotOAuthHeaders(refresh)
 	if err != nil {
@@ -304,8 +306,8 @@ func copilotOAuthAccessToken(ctx context.Context, refresh, enterprise any, optio
 	default:
 		return nil, errors.New("Invalid Copilot token response")
 	}
-	token, ok := catalogProperty(raw, "token").(string)
-	expires, number := deviceCodeNumber(catalogProperty(raw, "expires_at"))
+	token, ok := jscompat.ReadProperty(raw, "token").(string)
+	expires, number := deviceCodeNumber(jscompat.ReadProperty(raw, "expires_at"))
 	if !ok || !number {
 		return nil, errors.New("Invalid Copilot token response fields")
 	}
@@ -358,7 +360,7 @@ func loginCopilotOAuth(interaction ProviderAuthInteraction, options GitHubCopilo
 	}
 	enterprise := any(Undefined)
 	domain := copilotOAuthDomain(text)
-	if strings.TrimFunc(text, jsWhitespace) != "" && domain == "" {
+	if strings.TrimFunc(text, jscompat.IsWhitespace) != "" && domain == "" {
 		return nil, errors.New("Invalid GitHub Enterprise URL/domain")
 	}
 	if domain == "" {
@@ -377,12 +379,12 @@ func loginCopilotOAuth(interaction ProviderAuthInteraction, options GitHubCopilo
 	default:
 		return nil, errors.New("Invalid device code response")
 	}
-	code, codeOK := catalogProperty(raw, "device_code").(string)
-	user, userOK := catalogProperty(raw, "user_code").(string)
-	uri, uriOK := catalogProperty(raw, "verification_uri").(string)
-	interval := catalogProperty(raw, "interval")
+	code, codeOK := jscompat.ReadProperty(raw, "device_code").(string)
+	user, userOK := jscompat.ReadProperty(raw, "user_code").(string)
+	uri, uriOK := jscompat.ReadProperty(raw, "verification_uri").(string)
+	interval := jscompat.ReadProperty(raw, "interval")
 	_, intervalOK := deviceCodeNumber(interval)
-	expires, expiresOK := deviceCodeNumber(catalogProperty(raw, "expires_in"))
+	expires, expiresOK := deviceCodeNumber(jscompat.ReadProperty(raw, "expires_in"))
 	if !codeOK || !userOK || !uriOK || (!jsonjs.IsUndefined(interval) && !intervalOK) || !expiresOK {
 		return nil, errors.New("Invalid device code response fields")
 	}
@@ -400,23 +402,23 @@ func loginCopilotOAuth(interaction ProviderAuthInteraction, options GitHubCopilo
 		if err != nil {
 			return OAuthDeviceCodePollResult{}, err
 		}
-		if access, ok := catalogProperty(raw, "access_token").(string); ok {
+		if access, ok := jscompat.ReadProperty(raw, "access_token").(string); ok {
 			return OAuthDeviceCodePollResult{Status: "complete", Value: access}, nil
 		}
-		if kind, ok := catalogProperty(raw, "error").(string); ok {
+		if kind, ok := jscompat.ReadProperty(raw, "error").(string); ok {
 			if kind == "authorization_pending" {
 				return OAuthDeviceCodePollResult{Status: "pending"}, nil
 			}
 			if kind == "slow_down" {
-				interval := catalogProperty(raw, "interval")
+				interval := jscompat.ReadProperty(raw, "interval")
 				if _, ok := deviceCodeNumber(interval); !ok {
 					interval = Undefined
 				}
 				return OAuthDeviceCodePollResult{Status: "slow_down", IntervalSeconds: interval}, nil
 			}
 			message := "Device flow failed: " + kind
-			if description := catalogProperty(raw, "error_description"); catalogEntryTruthy(description) {
-				value, err := catalogKey(description, make(map[*Array]bool))
+			if description := jscompat.ReadProperty(raw, "error_description"); jscompat.Truthy(description) {
+				value, err := jscompat.ToPropertyKey(description, make(map[*Array]bool))
 				if err != nil {
 					return OAuthDeviceCodePollResult{}, err
 				}

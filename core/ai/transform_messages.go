@@ -4,6 +4,8 @@ import (
 	"slices"
 	"strings"
 	"time"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 const nonVisionUserImagePlaceholder = "(image omitted: model does not support images)"
@@ -118,7 +120,7 @@ func transformMessageReferencesAt(messages []*Message, model *Model, normalize T
 						blocks = append(blocks, block)
 						continue
 					}
-					if strings.TrimFunc(block.Thinking, jsWhitespace) == "" {
+					if strings.TrimFunc(block.Thinking, jscompat.IsWhitespace) == "" {
 						continue
 					}
 					if !same {
@@ -201,11 +203,4 @@ func transformMessageReferencesAt(messages []*Message, model *Model, normalize T
 	}
 	closePending()
 	return result
-}
-
-// ECMAScript trim includes BOM, excludes U+0085, and is not Go's TrimSpace.
-func jsWhitespace(r rune) bool {
-	return r == '\t' || r == '\n' || r == '\v' || r == '\f' || r == '\r' || r == ' ' ||
-		r == '\u00a0' || r == '\u1680' || (r >= '\u2000' && r <= '\u200a') ||
-		r == '\u2028' || r == '\u2029' || r == '\u202f' || r == '\u205f' || r == '\u3000' || r == '\ufeff'
 }

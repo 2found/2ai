@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/ai"
 	"github.com/2found/2ai/core/jsonjs"
 	"github.com/santhosh-tekuri/jsonschema/v6"
@@ -310,7 +312,7 @@ func coercePrimitive(value any, name string) any {
 			if text == "" {
 				return value
 			}
-			number := ai.ParseJSNumber(text)
+			number := jscompat.ParseJSNumber(text)
 			if !math.IsInf(number, 0) && !math.IsNaN(number) && (name != "integer" || math.Trunc(number) == number) {
 				return number
 			}

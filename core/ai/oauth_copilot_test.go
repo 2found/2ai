@@ -15,6 +15,8 @@ import (
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 type copilotOAuthCase struct {
@@ -256,7 +258,7 @@ func runCopilotOAuthCase(t *testing.T, tc copilotOAuthCase, known *Object, realH
 		values := catalogDecode(t, expected).(*Array)
 		filtered := NewArray()
 		for _, value := range values.Values() {
-			if catalogProperty(value, "cancel") != true {
+			if jscompat.ReadProperty(value, "cancel") != true {
 				filtered.Append(value)
 			}
 		}

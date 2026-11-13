@@ -16,6 +16,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 // OpenAICompletionsStreamOptions carries serializable Pi provider controls in
@@ -94,7 +96,7 @@ func completionsAPIKey(provider string, controls map[string]json.RawMessage) (st
 	if key == "" {
 		headers, _ := samplingObject(controls["headers"])
 		for name, value := range headers {
-			if (strings.EqualFold(name, "authorization") || strings.EqualFold(name, "cf-aig-authorization")) && strings.TrimFunc(samplingString(value), jsWhitespace) != "" {
+			if (strings.EqualFold(name, "authorization") || strings.EqualFold(name, "cf-aig-authorization")) && strings.TrimFunc(samplingString(value), jscompat.IsWhitespace) != "" {
 				key = "unused"
 				break
 			}
@@ -441,7 +443,7 @@ func openAIHeadersFor(rawModel json.RawMessage, transcript TranscriptContext, op
 		headers.Set("X-Stainless-Timeout", strconv.FormatFloat(math.Trunc(ms/1000), 'f', -1, 64))
 	}
 	for _, item := range []struct{ env, header string }{{"OPENAI_ORG_ID", "OpenAI-Organization"}, {"OPENAI_PROJECT_ID", "OpenAI-Project"}} {
-		if value := strings.TrimFunc(os.Getenv(item.env), jsWhitespace); value != "" {
+		if value := strings.TrimFunc(os.Getenv(item.env), jscompat.IsWhitespace); value != "" {
 			headers.Set(item.header, value)
 		}
 	}

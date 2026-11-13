@@ -9,6 +9,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -39,7 +41,7 @@ func TestPiJSONRepairDiagnostics(t *testing.T) {
 	for i, tc := range fixture.Cases {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			input := diagnosticValue(t, tc.Input).(string)
-			value, err := ParseJSONWithRepair(input)
+			value, err := jscompat.ParseJSONWithRepair(input)
 			var actualError any
 			if err != nil {
 				actualError = err.Error()

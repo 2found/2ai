@@ -9,6 +9,8 @@ import (
 	"encoding/json"
 	"sync"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/agentcore"
 	"github.com/2found/2ai/core/ai"
 )
@@ -24,7 +26,7 @@ func scriptedNativeMessages(responses ...agentcore.ChatResponse) []ai.Message {
 		for _, call := range response.Message.ToolCalls {
 			arguments := json.RawMessage(call.Arguments)
 			if !json.Valid(arguments) {
-				arguments = ai.ParseStreamingJSON(call.Arguments)
+				arguments = jscompat.ParseStreamingJSON(call.Arguments)
 			}
 			blocks = append(blocks, ai.ContentBlock{Type: "toolCall", ID: call.ID, Name: call.Name, Arguments: arguments})
 		}

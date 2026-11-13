@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/2found/2ai/core/ai/protocol"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -14,6 +13,9 @@ import (
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/2found/2ai/core/ai/jscompat"
+	"github.com/2found/2ai/core/ai/protocol"
 
 	"github.com/2found/2ai/core/jsonjs"
 )
@@ -50,7 +52,7 @@ func TestPiMessagesHTTPProtocol(t *testing.T) {
 				if tc.Input.Action == "advance-clock" {
 					now += 10
 				}
-				if tc.Input.Action == "mutate" && catalogProperty(event, "type") == "text_delta" {
+				if tc.Input.Action == "mutate" && jscompat.ReadProperty(event, "type") == "text_delta" {
 					event.(*Object).Set("delta", "changed")
 				}
 				var clone jsonjs.ValueCloner
@@ -123,10 +125,10 @@ func TestPiMessagesHTTP(t *testing.T) {
 		input := catalogDecode(t, tc.Input).(*Object)
 		t.Run(strconv.Itoa(i)+"-"+input.Get("name").(string), func(t *testing.T) {
 			model := catalogDecode(t, f.Model).(*Object)
-			authSpreadInto(model, catalogProperty(input, "model"))
+			jscompat.SpreadInto(model, jscompat.ReadProperty(input, "model"))
 			controls := NewObject(Property{Name: "apiKey", Value: "key"})
-			authSpreadInto(controls, catalogProperty(input, "values"))
-			if catalogEntryTruthy(input.Get("missingKey")) {
+			jscompat.SpreadInto(controls, jscompat.ReadProperty(input, "values"))
+			if jscompat.Truthy(input.Get("missingKey")) {
 				controls.Delete("apiKey")
 			}
 			env, _ := input.Get("env").(string)

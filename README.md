@@ -45,7 +45,7 @@ keep deployments pinned to that version. Import packages such as
 
 | Package | Use it for | Reference |
 | --- | --- | --- |
-| `core/ai`, `core/ai/protocol` | Transcripts, provider streaming, OAuth and retry/fallback | [AI](core/ai/README.md) |
+| `core/ai`, `core/ai/protocol`, `core/ai/jscompat` | Transcripts, provider streaming, OAuth, retry/fallback and the JS-semantics leaf | [AI](core/ai/README.md) |
 | `core/agentcore` | Compose agents, limits, policies and tool grants | [AgentCore](core/agentcore/README.md) |
 | `core/agentcore/engine` | Low-level native loop and event streams | [Engine](core/agentcore/engine/README.md) |
 | `core/agentcore/host` | Checkpoints and reusable host utilities | `go doc ./core/agentcore/host` |

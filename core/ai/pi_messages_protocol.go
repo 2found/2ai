@@ -6,6 +6,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	"golang.org/x/text/encoding/unicode"
 )
@@ -21,7 +23,7 @@ func readPiMessagesEvents(reader io.Reader, yield func(any) (bool, error)) error
 		data := ""
 		for _, line := range strings.Split(raw, "\n") {
 			if strings.HasPrefix(line, "data:") {
-				data = strings.TrimFunc(line[5:], jsWhitespace)
+				data = strings.TrimFunc(line[5:], jscompat.IsWhitespace)
 				break
 			}
 		}
@@ -32,7 +34,7 @@ func readPiMessagesEvents(reader io.Reader, yield func(any) (bool, error)) error
 			return false, err
 		}
 		event, err := jsonjs.DecodeValue([]byte(data))
-		if err != nil || !catalogEntryTruthy(event) {
+		if err != nil || !jscompat.Truthy(event) {
 			return err == nil, err
 		}
 		return yield(event)
@@ -55,7 +57,7 @@ func readPiMessagesEvents(reader io.Reader, yield func(any) (bool, error)) error
 			if readErr != io.EOF {
 				return readErr
 			}
-			if strings.TrimFunc(buffer, jsWhitespace) != "" {
+			if strings.TrimFunc(buffer, jscompat.IsWhitespace) != "" {
 				_, err := parse(buffer)
 				return err
 			}
@@ -84,12 +86,12 @@ func newPiMessagesEventConverter(model *Object, now func() float64) *piMessagesE
 	}
 	content := NewArray()
 	usage := NewObject(Property{Name: "input", Value: 0}, Property{Name: "output", Value: 0}, Property{Name: "cacheRead", Value: 0}, Property{Name: "cacheWrite", Value: 0}, Property{Name: "totalTokens", Value: 0}, Property{Name: "cost", Value: NewObject(Property{Name: "input", Value: 0}, Property{Name: "output", Value: 0}, Property{Name: "cacheRead", Value: 0}, Property{Name: "cacheWrite", Value: 0}, Property{Name: "total", Value: 0})})
-	return &piMessagesEventConverter{now: now, content: content, partial: NewObject(Property{Name: "role", Value: "assistant"}, Property{Name: "content", Value: content}, Property{Name: "api", Value: catalogProperty(model, "api")}, Property{Name: "provider", Value: catalogProperty(model, "provider")}, Property{Name: "model", Value: catalogProperty(model, "id")}, Property{Name: "usage", Value: usage}, Property{Name: "stopReason", Value: "pending"}, Property{Name: "timestamp", Value: now()})}
+	return &piMessagesEventConverter{now: now, content: content, partial: NewObject(Property{Name: "role", Value: "assistant"}, Property{Name: "content", Value: content}, Property{Name: "api", Value: jscompat.ReadProperty(model, "api")}, Property{Name: "provider", Value: jscompat.ReadProperty(model, "provider")}, Property{Name: "model", Value: jscompat.ReadProperty(model, "id")}, Property{Name: "usage", Value: usage}, Property{Name: "stopReason", Value: "pending"}, Property{Name: "timestamp", Value: now()})}
 }
 
 func (c *piMessagesEventConverter) toolIndex(index any) int {
 	for i, entry := range c.tools {
-		if catalogSameValueZero(entry.index, index) {
+		if jscompat.SameValueZero(entry.index, index) {
 			return i
 		}
 	}
@@ -100,7 +102,7 @@ func piMessagesAdd(left, right any) (any, error) {
 	primitive := func(value any) (any, error) {
 		switch value.(type) {
 		case *Object, *Array:
-			return catalogKey(value, make(map[*Array]bool))
+			return jscompat.ToPropertyKey(value, make(map[*Array]bool))
 		}
 		return value, nil
 	}
@@ -115,18 +117,18 @@ func piMessagesAdd(left, right any) (any, error) {
 	_, aString := a.(string)
 	_, bString := b.(string)
 	if aString || bString {
-		x, err := catalogKey(a, make(map[*Array]bool))
+		x, err := jscompat.ToPropertyKey(a, make(map[*Array]bool))
 		if err != nil {
 			return nil, err
 		}
-		y, err := catalogKey(b, make(map[*Array]bool))
+		y, err := jscompat.ToPropertyKey(b, make(map[*Array]bool))
 		return x + y, err
 	}
-	x, err := authNumber(a)
+	x, err := jscompat.ToNumber(a)
 	if err != nil {
 		return nil, err
 	}
-	y, err := authNumber(b)
+	y, err := jscompat.ToNumber(b)
 	return x + y, err
 }
 
@@ -134,13 +136,13 @@ func (c *piMessagesEventConverter) convert(event any) (*Object, error) {
 	if jsonjs.IsNullish(event) {
 		return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(event), "event.type")
 	}
-	kind, _ := catalogProperty(event, "type").(string)
-	index := catalogProperty(event, "contentIndex")
+	kind, _ := jscompat.ReadProperty(event, "type").(string)
+	index := jscompat.ReadProperty(event, "contentIndex")
 	key := ""
 	switch kind {
 	case "text_start", "text_delta", "text_end", "thinking_start", "thinking_delta", "thinking_end", "toolcall_start", "toolcall_delta", "toolcall_end":
 		var err error
-		key, err = catalogKey(index, make(map[*Array]bool))
+		key, err = jscompat.ToPropertyKey(index, make(map[*Array]bool))
 		if err != nil {
 			return nil, err
 		}
@@ -159,26 +161,26 @@ func (c *piMessagesEventConverter) convert(event any) (*Object, error) {
 	}
 	switch kind {
 	case "done", "error":
-		c.partial.Set("stopReason", catalogProperty(event, "reason"))
-		c.partial.Set("usage", catalogProperty(event, "usage"))
-		c.partial.Set("responseId", catalogProperty(event, "responseId"))
+		c.partial.Set("stopReason", jscompat.ReadProperty(event, "reason"))
+		c.partial.Set("usage", jscompat.ReadProperty(event, "usage"))
+		c.partial.Set("responseId", jscompat.ReadProperty(event, "responseId"))
 		field := "message"
 		if kind == "error" {
 			field = "error"
-			c.partial.Set("errorMessage", catalogProperty(event, "errorMessage"))
+			c.partial.Set("errorMessage", jscompat.ReadProperty(event, "errorMessage"))
 		}
-		if level := catalogProperty(event, "providerThinkingLevel"); !jsonjs.IsUndefined(level) {
+		if level := jscompat.ReadProperty(event, "providerThinkingLevel"); !jsonjs.IsUndefined(level) {
 			c.partial.Set("providerThinkingLevel", level)
 		}
-		if rewrite := catalogProperty(event, "rewrite"); catalogEntryTruthy(rewrite) {
+		if rewrite := jscompat.ReadProperty(event, "rewrite"); jscompat.Truthy(rewrite) {
 			diagnostics := NewArray()
 			if existing, ok := c.partial.Get("diagnostics").(*Array); ok {
 				diagnostics = NewArray(existing.Values()...)
 			}
-			diagnostics.Append(NewObject(Property{Name: "type", Value: "pi_messages_rewrite"}, Property{Name: "timestamp", Value: c.now()}, Property{Name: "details", Value: authSpread(rewrite)}))
+			diagnostics.Append(NewObject(Property{Name: "type", Value: "pi_messages_rewrite"}, Property{Name: "timestamp", Value: c.now()}, Property{Name: "details", Value: jscompat.Spread(rewrite)}))
 			c.partial.Set("diagnostics", diagnostics)
 		}
-		return NewObject(Property{Name: "type", Value: kind}, Property{Name: "reason", Value: catalogProperty(event, "reason")}, Property{Name: field, Value: c.partial}), nil
+		return NewObject(Property{Name: "type", Value: kind}, Property{Name: "reason", Value: jscompat.ReadProperty(event, "reason")}, Property{Name: field, Value: c.partial}), nil
 	case "text_start", "thinking_start":
 		field := "text"
 		if kind == "thinking_start" {
@@ -198,7 +200,7 @@ func (c *piMessagesEventConverter) convert(event any) (*Object, error) {
 		if err != nil {
 			return nil, err
 		}
-		next, err := piMessagesAdd(catalogProperty(target, field), catalogProperty(event, "delta"))
+		next, err := piMessagesAdd(jscompat.ReadProperty(target, field), jscompat.ReadProperty(event, "delta"))
 		if err != nil {
 			return nil, err
 		}
@@ -211,12 +213,12 @@ func (c *piMessagesEventConverter) convert(event any) (*Object, error) {
 		field := "text"
 		if kind == "thinking_end" {
 			field = "thinking"
-			target.Set("redacted", catalogProperty(event, "redacted"))
+			target.Set("redacted", jscompat.ReadProperty(event, "redacted"))
 		}
-		target.Set(field, catalogProperty(event, "content"))
-		target.Set(field+"Signature", catalogProperty(event, "contentSignature"))
+		target.Set(field, jscompat.ReadProperty(event, "content"))
+		target.Set(field+"Signature", jscompat.ReadProperty(event, "contentSignature"))
 	case "toolcall_start":
-		c.content.SetProperty(key, NewObject(Property{Name: "type", Value: "toolCall"}, Property{Name: "id", Value: catalogProperty(event, "id")}, Property{Name: "name", Value: catalogProperty(event, "toolName")}, Property{Name: "arguments", Value: NewObject()}))
+		c.content.SetProperty(key, NewObject(Property{Name: "type", Value: "toolCall"}, Property{Name: "id", Value: jscompat.ReadProperty(event, "id")}, Property{Name: "name", Value: jscompat.ReadProperty(event, "toolName")}, Property{Name: "arguments", Value: NewObject()}))
 		i := c.toolIndex(index)
 		if i < 0 {
 			c.tools = append(c.tools, piMessagesToolJSON{index: index})
@@ -229,7 +231,7 @@ func (c *piMessagesEventConverter) convert(event any) (*Object, error) {
 			c.tools = append(c.tools, piMessagesToolJSON{index: index})
 			i = len(c.tools) - 1
 		}
-		delta, err := catalogKey(catalogProperty(event, "delta"), make(map[*Array]bool))
+		delta, err := jscompat.ToPropertyKey(jscompat.ReadProperty(event, "delta"), make(map[*Array]bool))
 		if err != nil {
 			return nil, err
 		}
@@ -241,7 +243,7 @@ func (c *piMessagesEventConverter) convert(event any) (*Object, error) {
 		if err != nil {
 			return nil, err
 		}
-		arguments, err := jsonjs.DecodeValue(ParseStreamingJSON(c.tools[i].text))
+		arguments, err := jsonjs.DecodeValue(jscompat.ParseStreamingJSON(c.tools[i].text))
 		if err != nil {
 			return nil, err
 		}
@@ -251,13 +253,13 @@ func (c *piMessagesEventConverter) convert(event any) (*Object, error) {
 		if err != nil {
 			return nil, err
 		}
-		authSpreadInto(target, catalogProperty(event, "toolCall"))
+		jscompat.SpreadInto(target, jscompat.ReadProperty(event, "toolCall"))
 		if i := c.toolIndex(index); i >= 0 {
 			c.tools = append(c.tools[:i], c.tools[i+1:]...)
 		}
 		return NewObject(Property{Name: "type", Value: kind}, Property{Name: "contentIndex", Value: index}, Property{Name: "toolCall", Value: target}, Property{Name: "partial", Value: c.partial}), nil
 	}
-	result := authSpread(event)
+	result := jscompat.Spread(event)
 	result.Set("partial", c.partial)
 	return result, nil
 }

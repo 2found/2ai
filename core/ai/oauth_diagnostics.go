@@ -3,6 +3,8 @@ package ai
 import (
 	"strings"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -28,7 +30,7 @@ func (e *OAuthDiagnosticError) Unwrap() error {
 func formatOAuthErrorDetails(value any) (string, error) {
 	failure, isError := value.(error)
 	if !isError {
-		return catalogKey(value, make(map[*Array]bool))
+		return jscompat.ToPropertyKey(value, make(map[*Array]bool))
 	}
 	name := "Error"
 	metadata, _ := failure.(*OAuthDiagnosticError)
@@ -38,13 +40,13 @@ func formatOAuthErrorDetails(value any) (string, error) {
 	details := []string{name + ": " + failure.Error()}
 	if metadata != nil {
 		appendValue := func(label string, value any) error {
-			text, err := catalogKey(value, make(map[*Array]bool))
+			text, err := jscompat.ToPropertyKey(value, make(map[*Array]bool))
 			if err == nil {
 				details = append(details, label+text)
 			}
 			return err
 		}
-		if catalogEntryTruthy(metadata.Code) {
+		if jscompat.Truthy(metadata.Code) {
 			if err := appendValue("code=", metadata.Code); err != nil {
 				return "", err
 			}

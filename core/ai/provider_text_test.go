@@ -13,6 +13,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	"github.com/klauspost/compress/zstd"
 )
@@ -197,7 +199,7 @@ func TestPiSanitizeSurrogates(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if got := SanitizeSurrogates(input.(string)); got != want {
+			if got := jscompat.SanitizeSurrogates(input.(string)); got != want {
 				t.Fatalf("got %s, want %s", jsonjs.QuoteString(got), tc.Expected)
 			}
 		})
@@ -205,7 +207,7 @@ func TestPiSanitizeSurrogates(t *testing.T) {
 	// Go can assemble the two preserved units without normalizing them to UTF-8.
 	high, _ := jsonjs.DecodeJSON([]byte(`"\ud83d"`))
 	low, _ := jsonjs.DecodeJSON([]byte(`"\ude80"`))
-	if got := SanitizeSurrogates(high.(string) + low.(string)); got != "🚀" {
+	if got := jscompat.SanitizeSurrogates(high.(string) + low.(string)); got != "🚀" {
 		t.Fatalf("split pair: %s", jsonjs.QuoteString(got))
 	}
 }

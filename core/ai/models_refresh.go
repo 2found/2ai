@@ -6,6 +6,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -62,7 +64,7 @@ func (m *Models) Refresh(ctx context.Context, options ...ModelsRefreshOptions) M
 			defer scope.Finish()
 			settled := make(chan error, 1)
 			go func() {
-				_, err := invokeAuth(func() (any, error) {
+				_, err := jscompat.Invoke(func() (any, error) {
 					credential, credentialError := m.readCredential(scope.Context, provider.ID)
 					if err := m.runProviderRefreshPhase(provider, credential, false, nil, scope); err != nil {
 						return nil, err
@@ -74,7 +76,7 @@ func (m *Models) Refresh(ctx context.Context, options ...ModelsRefreshOptions) M
 						return nil, nil
 					}
 					credential, err := m.resolveRefreshCredential(scope.Context, provider, credential, settings.Now)
-					if err != nil || !catalogEntryTruthy(credential) {
+					if err != nil || !jscompat.Truthy(credential) {
 						return nil, err
 					}
 					if scope.Context.Err() != nil {
@@ -114,7 +116,7 @@ func (m *Models) Refresh(ctx context.Context, options ...ModelsRefreshOptions) M
 }
 
 func (m *Models) readCredential(ctx context.Context, providerID string) (any, error) {
-	credential, err := invokeAuth(func() (any, error) { return m.credentials.Read(ctx, providerID) })
+	credential, err := jscompat.Invoke(func() (any, error) { return m.credentials.Read(ctx, providerID) })
 	if err != nil {
 		return Undefined, NewModelsError("auth", "Credential store read failed for "+providerID, err)
 	}
@@ -127,13 +129,13 @@ func (m *Models) runProviderRefreshPhase(provider *ModelProvider, credential any
 		return err
 	}
 	var snapshot *Object
-	if catalogEntryTruthy(stored) {
+	if jscompat.Truthy(stored) {
 		if err := validateCatalogClone(stored, make(map[any]bool)); err != nil {
 			return err
 		}
 		var cloner jsonjs.ValueCloner
 		entry := cloner.Clone(stored)
-		models := catalogProperty(entry, "models")
+		models := jscompat.ReadProperty(entry, "models")
 		list, ok := models.(*Array)
 		if !ok {
 			if jsonjs.IsNullish(models) {
@@ -145,7 +147,7 @@ func (m *Models) runProviderRefreshPhase(provider *ModelProvider, credential any
 		if err != nil {
 			return err
 		}
-		snapshot = authSpread(entry)
+		snapshot = jscompat.Spread(entry)
 		snapshot.Set("models", known)
 	}
 	return provider.RefreshModels(ModelRefreshContext{Context: scope.Context, Credential: credential, Stored: snapshot, Publish: scope.Publish, AllowNetwork: network, Force: force})
@@ -156,10 +158,10 @@ func (m *Models) resolveRefreshCredential(ctx context.Context, provider *ModelPr
 		now = func() int64 { return time.Now().UnixMilli() }
 	}
 	unexpired := func(credential any) (bool, error) {
-		expires, err := authNumber(catalogProperty(credential, "expires"))
+		expires, err := jscompat.ToNumber(jscompat.ReadProperty(credential, "expires"))
 		return float64(now()) < expires, err
 	}
-	if catalogStrictEqual(catalogProperty(stored, "type"), "oauth") {
+	if jscompat.StrictEqual(jscompat.ReadProperty(stored, "type"), "oauth") {
 		oauth := provider.authConfig().OAuth
 		if oauth == nil {
 			return Undefined, nil
@@ -175,7 +177,7 @@ func (m *Models) resolveRefreshCredential(ctx context.Context, provider *ModelPr
 			valid, err := unexpired(current)
 			return !valid, err
 		}, oauth.Refresh)
-		if err != nil || !catalogStrictEqual(catalogProperty(post, "type"), "oauth") {
+		if err != nil || !jscompat.StrictEqual(jscompat.ReadProperty(post, "type"), "oauth") {
 			return Undefined, err
 		}
 		return post, nil
@@ -185,18 +187,18 @@ func (m *Models) resolveRefreshCredential(ctx context.Context, provider *ModelPr
 		return Undefined, nil
 	}
 	credential := any(Undefined)
-	if catalogStrictEqual(catalogProperty(stored, "type"), "api_key") {
+	if jscompat.StrictEqual(jscompat.ReadProperty(stored, "type"), "api_key") {
 		credential = stored
 	}
 	result, err := apiKey.Resolve(APIKeyAuthInput{Context: ctx, AuthContext: m.authContext, Credential: credential})
-	if err != nil || !catalogEntryTruthy(result) {
+	if err != nil || !jscompat.Truthy(result) {
 		return Undefined, err
 	}
-	auth := catalogProperty(result, "auth")
+	auth := jscompat.ReadProperty(result, "auth")
 	if jsonjs.IsNullish(auth) {
 		return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(auth), "result.auth.apiKey")
 	}
-	return NewObject(Property{Name: "type", Value: "api_key"}, Property{Name: "key", Value: catalogProperty(auth, "apiKey")}, Property{Name: "env", Value: catalogProperty(result, "env")}), nil
+	return NewObject(Property{Name: "type", Value: "api_key"}, Property{Name: "key", Value: jscompat.ReadProperty(auth, "apiKey")}, Property{Name: "env", Value: jscompat.ReadProperty(result, "env")}), nil
 }
 
 func filterKnownCatalogModels(models *Array) (*Array, error) {
@@ -207,7 +209,7 @@ func filterKnownCatalogModels(models *Array) (*Array, error) {
 		if err != nil {
 			return nil, err
 		}
-		key, err := catalogKey(kind, make(map[*Array]bool))
+		key, err := jscompat.ToPropertyKey(kind, make(map[*Array]bool))
 		if err != nil {
 			return nil, err
 		}

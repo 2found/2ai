@@ -45,7 +45,7 @@ pin phiên bản đó khi triển khai. Import các package như
 
 | Package | Dùng cho | Tài liệu |
 | --- | --- | --- |
-| `core/ai`, `core/ai/protocol` | Transcript, stream provider, OAuth và retry/fallback | [AI](core/ai/README.md) |
+| `core/ai`, `core/ai/protocol`, `core/ai/jscompat` | Transcript, stream provider, OAuth, retry/fallback và lớp JS-semantics ở lá | [AI](core/ai/README.md) |
 | `core/agentcore` | Ghép agent, giới hạn, policy và quyền gọi tool | [AgentCore](core/agentcore/README.md) |
 | `core/agentcore/engine` | Vòng lặp native và event stream cấp thấp | [Engine](core/agentcore/engine/README.md) |
 | `core/agentcore/host` | Checkpoint và tiện ích chung cho host | `go doc ./core/agentcore/host` |

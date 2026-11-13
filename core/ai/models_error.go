@@ -1,6 +1,10 @@
 package ai
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/2found/2ai/core/ai/jscompat"
+)
 
 // ModelsError retains Pi's public error category and the underlying Go cause.
 type ModelsError struct {
@@ -21,7 +25,7 @@ func NewModelsError(code, message string, cause error) *ModelsError {
 				detail = "ModelsError"
 			}
 		}
-		detail = strings.TrimFunc(detail, jsWhitespace)
+		detail = strings.TrimFunc(detail, jscompat.IsWhitespace)
 		if detail != "" && !strings.Contains(message, detail) {
 			message += ": " + detail
 		}

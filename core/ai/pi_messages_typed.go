@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"reflect"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -127,7 +129,7 @@ func (a *piMessagesTypedAdapter) message(value *Object) (*Message, error) {
 	if value == nil {
 		return nil, nil
 	}
-	projection := authSpread(value)
+	projection := jscompat.Spread(value)
 	projection.Delete("content")
 	projection.Delete("usage")
 	message, err := decodePiMessagesProjection[Message](projection)
@@ -183,7 +185,7 @@ func (a *piMessagesTypedAdapter) message(value *Object) (*Message, error) {
 }
 
 func (a *piMessagesTypedAdapter) event(value *Object) (AssistantMessageEvent, error) {
-	projection := authSpread(value)
+	projection := jscompat.Spread(value)
 	for _, field := range []string{"partial", "message", "error", "toolCall"} {
 		projection.Delete(field)
 	}

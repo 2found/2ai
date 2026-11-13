@@ -16,6 +16,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -208,7 +210,7 @@ func TestPiOpenRouterOAuthMetadataAndCredentials(t *testing.T) {
 		ctx, cancel := context.WithCancel(context.Background())
 		cancel()
 		refreshed, err := auth.Refresh(ctx, credential)
-		if err != nil || (catalogStrictEqual(refreshed, credential)) != tc.RefreshSame {
+		if err != nil || (jscompat.StrictEqual(refreshed, credential)) != tc.RefreshSame {
 			t.Fatalf("refresh identity: %v", err)
 		}
 		value, err := auth.ToAuth(credential)

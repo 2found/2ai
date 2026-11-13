@@ -11,6 +11,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -128,7 +130,7 @@ func TestPiModelsLoginLogout(t *testing.T) {
 				t.Fatal(err)
 			}
 			catalogCompare(t, authResolveCapture(stored, nil), tc.Stored)
-			if same := !jsonjs.IsUndefined(issued) && catalogStrictEqual(stored, issued); same != tc.SameStored {
+			if same := !jsonjs.IsUndefined(issued) && jscompat.StrictEqual(stored, issued); same != tc.SameStored {
 				t.Fatal("credential identity differs")
 			}
 		})

@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -84,7 +86,7 @@ func TestPiMessagesProtocol(t *testing.T) {
 				if tc.Input.Action == "advance-clock" {
 					now += 10
 				}
-				if tc.Input.Action == "mutate" && catalogProperty(event, "type") == "text_delta" {
+				if tc.Input.Action == "mutate" && jscompat.ReadProperty(event, "type") == "text_delta" {
 					event.(*Object).Set("delta", "changed")
 				}
 				rawEvents.Append(snapshot(event))

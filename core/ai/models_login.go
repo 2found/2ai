@@ -3,6 +3,8 @@ package ai
 import (
 	"context"
 	"sync"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 // Login preserves the provider's credential object and waits for its write to
@@ -44,7 +46,7 @@ func (m *Models) Login(providerID, authType string, interaction ProviderAuthInte
 	settled := make(chan error, 1)
 	var once sync.Once
 	go func() {
-		_, err := invokeAuth(func() (any, error) {
+		_, err := jscompat.Invoke(func() (any, error) {
 			return m.credentials.Modify(ctx, providerID, func(any) (any, error) {
 				once.Do(func() { close(started) })
 				return credential, nil
@@ -80,7 +82,7 @@ func (m *Models) Logout(ctx context.Context, providerID string) error {
 	if err := context.Cause(ctx); err != nil {
 		return err
 	}
-	_, err := invokeAuth(func() (any, error) { return Undefined, m.credentials.Delete(ctx, providerID) })
+	_, err := jscompat.Invoke(func() (any, error) { return Undefined, m.credentials.Delete(ctx, providerID) })
 	if err != nil {
 		if cause := context.Cause(ctx); cause != nil {
 			return cause

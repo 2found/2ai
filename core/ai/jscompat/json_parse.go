@@ -1,4 +1,4 @@
-package ai
+package jscompat
 
 import (
 	"bytes"
@@ -107,14 +107,14 @@ func parseCompleteJSON(input string) (json.RawMessage, error) {
 // complete scalar/null/array inputs retain their values. Unparseable input and
 // a partial null resolve to {}. No errors escape this streaming helper.
 func ParseStreamingJSON(input string) json.RawMessage {
-	if strings.TrimFunc(input, jsWhitespace) == "" {
+	if strings.TrimFunc(input, IsWhitespace) == "" {
 		return json.RawMessage(`{}`)
 	}
 	if result, err := ParseJSONWithRepair(input); err == nil {
 		return result
 	}
 	for _, candidate := range []string{input, RepairJSON(input)} {
-		p := partialJSONParser{input: strings.TrimFunc(candidate, jsWhitespace)}
+		p := partialJSONParser{input: strings.TrimFunc(candidate, IsWhitespace)}
 		if result, err := p.value(); err == nil {
 			if bytes.Equal(bytes.TrimSpace(result), []byte("null")) && p.nullValue {
 				return json.RawMessage(`{}`)

@@ -10,6 +10,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -246,7 +248,7 @@ func TestModelsStreamNativeHTTPIntegration(t *testing.T) {
 			}
 			body := request.Get("body").(*Object)
 			messages := body.Get("messages").(*Array)
-			if messages.Len() != 2 || catalogProperty(messages.Get(0), "role") != "system" || catalogProperty(messages.Get(1), "content") != "hi" {
+			if messages.Len() != 2 || jscompat.ReadProperty(messages.Get(0), "role") != "system" || jscompat.ReadProperty(messages.Get(1), "content") != "hi" {
 				t.Fatalf("transcript not normalized: %s", catalogStringify(t, body))
 			}
 		})

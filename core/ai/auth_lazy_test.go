@@ -10,6 +10,8 @@ import (
 	"sync/atomic"
 	"testing"
 	"time"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 type lazyOAuthFixture struct {
@@ -284,7 +286,7 @@ func TestPiLazyOAuthModelsIntegration(t *testing.T) {
 				return renewed, nil
 			}, ToAuth: func(c any) (any, error) {
 				log.Append(NewObject(Property{Name: "toAuthSame", Value: c == renewed}))
-				return NewObject(Property{Name: "apiKey", Value: catalogProperty(c, "access")}), nil
+				return NewObject(Property{Name: "apiKey", Value: jscompat.ReadProperty(c, "access")}), nil
 			}}
 			auth := LazyOAuth(&LazyOAuthOptions{Name: "Visible", Load: func() (*OAuthAuth, error) { loads++; return flow, nil }})
 			provider, err := NewModelProvider(&ProviderFactoryOptions{ID: "p", Auth: &ProviderAuth{OAuth: auth}, Models: NewArray(), API: &ProviderStreams{}})

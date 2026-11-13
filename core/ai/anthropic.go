@@ -12,6 +12,8 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/ai/protocol"
 )
 
@@ -683,7 +685,7 @@ func (p *AnthropicProvider) Stream(ctx context.Context, req protocol.ChatRequest
 		}
 		for _, idx := range order {
 			tc := *toolAcc[idx]
-			tc.Arguments = string(ParseStreamingJSON(tc.Arguments))
+			tc.Arguments = string(jscompat.ParseStreamingJSON(tc.Arguments))
 			ch <- protocol.ChatDelta{ToolCall: &tc}
 		}
 		ch <- protocol.ChatDelta{Done: true, StopReason: stopReason, Usage: usage}

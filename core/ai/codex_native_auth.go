@@ -7,10 +7,12 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 func codexNativeURL(base string) string {
-	if strings.TrimFunc(base, jsWhitespace) == "" {
+	if strings.TrimFunc(base, jscompat.IsWhitespace) == "" {
 		base = codexBaseURL
 	}
 	base = strings.TrimRight(base, "/")

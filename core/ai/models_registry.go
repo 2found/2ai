@@ -4,6 +4,8 @@ import (
 	"context"
 	"sync"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -259,7 +261,7 @@ func findCatalogModel(models *Array, id any) (any, error) {
 		if jsonjs.IsNullish(model) {
 			return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(model), "model.id")
 		}
-		if catalogStrictEqual(catalogProperty(model, "id"), id) {
+		if jscompat.StrictEqual(jscompat.ReadProperty(model, "id"), id) {
 			return model, nil
 		}
 	}

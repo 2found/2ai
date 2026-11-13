@@ -5,6 +5,8 @@ import (
 	"errors"
 	"sync"
 	"testing"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 func TestPiOAuthResolutionConcurrentRefresh(t *testing.T) {
@@ -51,7 +53,7 @@ func TestPiOAuthResolutionConcurrentRefresh(t *testing.T) {
 		mu.Lock()
 		derived = append(derived, credential)
 		mu.Unlock()
-		return NewObject(Property{Name: "apiKey", Value: catalogProperty(credential, "access")}), nil
+		return NewObject(Property{Name: "apiKey", Value: jscompat.ReadProperty(credential, "access")}), nil
 	}}}})
 	type completion struct {
 		index int
@@ -121,7 +123,7 @@ func TestOAuthResolutionCancellationPersistsRefresh(t *testing.T) {
 		}
 		return NewObject(Property{Name: "type", Value: "oauth"}, Property{Name: "access", Value: "rotated"}, Property{Name: "refresh", Value: "rotated-refresh"}, Property{Name: "expires", Value: 900000}), nil
 	}, ToAuth: func(credential any) (any, error) {
-		return NewObject(Property{Name: "apiKey", Value: catalogProperty(credential, "access")}), nil
+		return NewObject(Property{Name: "apiKey", Value: jscompat.ReadProperty(credential, "access")}), nil
 	}}}})
 	oldCtx, abort := context.WithCancelCause(ctx)
 	defer abort(nil)
@@ -157,13 +159,13 @@ func TestOAuthResolutionCancellationPersistsRefresh(t *testing.T) {
 		t.Errorf("started refresh repeated or cancelled: calls=%d err=%v", refreshCalls, retained.Err())
 	}
 	mu.Unlock()
-	if catalogProperty(trace["stored"], "refresh") != "rotated-refresh" {
+	if jscompat.ReadProperty(trace["stored"], "refresh") != "rotated-refresh" {
 		t.Fatal("rotated refresh token discarded")
 	}
-	if catalogProperty(catalogProperty(trace["result"], "error"), "message") != "cancelled by caller" {
+	if jscompat.ReadProperty(jscompat.ReadProperty(trace["result"], "error"), "message") != "cancelled by caller" {
 		t.Fatal("cancelled caller did not stop waiting", trace["result"])
 	}
-	if catalogProperty(catalogProperty(trace["next"], "auth"), "apiKey") != "rotated" {
+	if jscompat.ReadProperty(jscompat.ReadProperty(trace["next"], "auth"), "apiKey") != "rotated" {
 		t.Fatal("next caller did not reuse rotated credential", trace["next"])
 	}
 }

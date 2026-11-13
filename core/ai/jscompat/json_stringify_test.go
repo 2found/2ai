@@ -1,4 +1,4 @@
-package ai
+package jscompat_test
 
 import (
 	"crypto/sha256"
@@ -7,10 +7,12 @@ import (
 	"fmt"
 	"os"
 	"testing"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 func TestPiJSONStringifyUTF16Oracle(t *testing.T) {
-	raw, err := os.ReadFile("testdata/pi-json-stringify.json")
+	raw, err := os.ReadFile("../testdata/pi-json-stringify.json")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -28,7 +30,7 @@ func TestPiJSONStringifyUTF16Oracle(t *testing.T) {
 		for page, expected := range fixture.SingleUnits {
 			hash := sha256.New()
 			for offset := 0; offset < 256; offset++ {
-				encoded, err := StringifyJSON(fmt.Appendf(nil, `"\u%04x"`, page*256+offset))
+				encoded, err := jscompat.StringifyJSON(fmt.Appendf(nil, `"\u%04x"`, page*256+offset))
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -45,7 +47,7 @@ func TestPiJSONStringifyUTF16Oracle(t *testing.T) {
 			high := 0xd800 + offset
 			hash := sha256.New()
 			for low := 0xdc00; low <= 0xdfff; low++ {
-				encoded, err := StringifyJSON(fmt.Appendf(nil, `"\u%04x\u%04x"`, high, low))
+				encoded, err := jscompat.StringifyJSON(fmt.Appendf(nil, `"\u%04x\u%04x"`, high, low))
 				if err != nil {
 					t.Fatal(err)
 				}

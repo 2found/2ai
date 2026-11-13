@@ -8,11 +8,11 @@ import (
 	"math"
 	"math/rand"
 	"net/http"
-	"regexp"
-	"strconv"
 	"strings"
 	"time"
 	"unicode/utf16"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 // Request errors retain the fields used by Pi's retry and display helpers.
@@ -69,7 +69,7 @@ func formatOpenAIProviderError(err error, prefix string, appendRawMetadata bool)
 	fields, ok := samplingObject(provider.body)
 	if ok && len(fields) > 0 {
 		encoded, _ := stringifyCompletionsJSON(provider.body)
-		body := strings.TrimFunc(string(encoded), jsWhitespace)
+		body := strings.TrimFunc(string(encoded), jscompat.IsWhitespace)
 		units := utf16.Encode([]rune(body))
 		if len(units) > 4000 {
 			body = string(utf16.Decode(units[:4000])) + fmt.Sprintf("... [truncated %d chars]", len(units)-4000)
@@ -138,17 +138,6 @@ func defaultCompletionsRetryTiming() completionsRetryTiming {
 	}}
 }
 
-var completionsFloatPrefix = regexp.MustCompile(`^[+-]?(?:Infinity|(?:[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?)`)
-
-func completionsParseFloat(value string) float64 {
-	prefix := completionsFloatPrefix.FindString(strings.TrimLeftFunc(value, jsWhitespace))
-	if prefix == "" {
-		return math.NaN()
-	}
-	number, _ := strconv.ParseFloat(prefix, 64)
-	return number
-}
-
 func completionsRetryDelay(err *completionsRequestError, index float64, maxDelay *float64, timing completionsRetryTiming) (time.Duration, error) {
 	validate := func(ms float64) (time.Duration, error) {
 		limit := 60000.0
@@ -170,12 +159,12 @@ func completionsRetryDelay(err *completionsRequestError, index float64, maxDelay
 	}
 	finite := func(value float64) bool { return !math.IsNaN(value) && !math.IsInf(value, 0) }
 	if raw := err.headers.Get("retry-after-ms"); raw != "" {
-		if value := completionsParseFloat(raw); finite(value) {
+		if value := jscompat.ParseJSFloat(raw); finite(value) {
 			return validate(value)
 		}
 	}
 	if raw := err.headers.Get("retry-after"); raw != "" {
-		seconds := completionsParseFloat(raw)
+		seconds := jscompat.ParseJSFloat(raw)
 		ms := seconds * 1000
 		if math.IsNaN(seconds) {
 			if date, parseErr := http.ParseTime(raw); parseErr == nil {

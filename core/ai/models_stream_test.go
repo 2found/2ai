@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/2found/2ai/core/jsonjs"
 	"os"
 	"strings"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/2found/2ai/core/ai/jscompat"
+	"github.com/2found/2ai/core/jsonjs"
 )
 
 type modelsStreamFixture struct {
@@ -175,7 +177,7 @@ func TestPiModelsStreamDispatch(t *testing.T) {
 				if tc.Mode == "transform-error" {
 					return nil, errors.New("transform failed")
 				}
-				result := authSpread(h)
+				result := jscompat.Spread(h)
 				result.Set("X-Transformed", "yes")
 				return result, nil
 			}}

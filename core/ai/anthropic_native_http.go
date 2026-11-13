@@ -14,6 +14,8 @@ import (
 	"strings"
 	"time"
 	"unicode/utf16"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 // AnthropicStreamOptions separates concrete Go transport/callback dependencies
@@ -109,7 +111,7 @@ func anthropicRequestAuth(provider string, controls map[string]json.RawMessage) 
 	}
 	headers, _ := samplingObject(controls["headers"])
 	for name, value := range headers {
-		if (strings.EqualFold(name, "authorization") || strings.EqualFold(name, "x-api-key") || strings.EqualFold(name, "cf-aig-authorization")) && strings.TrimFunc(samplingString(value), jsWhitespace) != "" {
+		if (strings.EqualFold(name, "authorization") || strings.EqualFold(name, "x-api-key") || strings.EqualFold(name, "cf-aig-authorization")) && strings.TrimFunc(samplingString(value), jscompat.IsWhitespace) != "" {
 			return nil
 		}
 	}
@@ -135,7 +137,7 @@ func anthropicHeaders(rawModel json.RawMessage, transcript TranscriptContext, co
 	}
 	for _, line := range strings.Split(os.Getenv("ANTHROPIC_CUSTOM_HEADERS"), "\n") {
 		if name, value, ok := strings.Cut(line, ":"); ok {
-			put(strings.TrimFunc(name, jsWhitespace), strings.TrimFunc(value, jsWhitespace))
+			put(strings.TrimFunc(name, jscompat.IsWhitespace), strings.TrimFunc(value, jscompat.IsWhitespace))
 		}
 	}
 	put("User-Agent", completionsUserAgent())
@@ -251,7 +253,7 @@ func runAnthropicHTTP(ctx context.Context, acc *anthropicAccumulator, rawModel j
 		}
 	}
 	for _, line := range strings.Split(os.Getenv("ANTHROPIC_CUSTOM_HEADERS"), "\n") {
-		if key, _, ok := strings.Cut(line, ":"); ok && strings.EqualFold(strings.TrimFunc(key, jsWhitespace), "authorization") {
+		if key, _, ok := strings.Cut(line, ":"); ok && strings.EqualFold(strings.TrimFunc(key, jscompat.IsWhitespace), "authorization") {
 			overrideBearer = true
 		}
 	}

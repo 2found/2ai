@@ -1,9 +1,11 @@
-package ai
+package jscompat_test
 
 import (
 	"math"
 	"strings"
 	"testing"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 func TestParseJSNumberPreservesNumberSemanticsBeforeCallerPolicy(t *testing.T) {
@@ -20,7 +22,7 @@ func TestParseJSNumberPreservesNumberSemanticsBeforeCallerPolicy(t *testing.T) {
 		{"\u00851", math.NaN()}, {"Inf", math.NaN()}, {"-0x1p2", math.NaN()},
 		{"1_0", math.NaN()}, {"0x-1", math.NaN()}, {"0x+1", math.NaN()}, {"0b1_0", math.NaN()},
 	} {
-		got := ParseJSNumber(tc.input)
+		got := jscompat.ParseJSNumber(tc.input)
 		if math.IsNaN(tc.want) {
 			if !math.IsNaN(got) {
 				t.Errorf("%q: got %v, want NaN", tc.input, got)

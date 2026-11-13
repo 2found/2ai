@@ -1,14 +1,15 @@
-package ai
+package jscompat
 
 import (
-	"golang.org/x/text/encoding/unicode"
 	"strconv"
 	"strings"
+
+	"golang.org/x/text/encoding/unicode"
 )
 
 // URLSearchParams replaces plus before percent decoding and uses the WHATWG
 // UTF-8 replacement algorithm, preserving malformed percent escapes literally.
-func urlQueryComponent(value string) string {
+func QueryComponent(value string) string {
 	var decoded strings.Builder
 	for i := 0; i < len(value); i++ {
 		if value[i] == '+' {
@@ -28,16 +29,16 @@ func urlQueryComponent(value string) string {
 	return text
 }
 
-func urlQueryValues(query string) map[string]string {
+func QueryValues(query string) map[string]string {
 	values := make(map[string]string)
 	for _, pair := range strings.Split(query, "&") {
 		if pair == "" {
 			continue
 		}
 		key, value, _ := strings.Cut(pair, "=")
-		key = urlQueryComponent(key)
+		key = QueryComponent(key)
 		if _, exists := values[key]; !exists {
-			values[key] = urlQueryComponent(value)
+			values[key] = QueryComponent(value)
 		}
 	}
 	return values

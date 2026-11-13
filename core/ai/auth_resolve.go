@@ -5,8 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"reflect"
 	"time"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 
 	"github.com/2found/2ai/core/jsonjs"
 )
@@ -40,19 +41,6 @@ const OAuthMinimumValidityMS = 5 * 60 * 1000
 const OAuthRefreshTimeout = 15 * time.Second
 
 var oauthRefreshTimeoutCause = errors.New("The operation timed out.")
-
-func invokeAuth(callback func() (any, error)) (value any, err error) {
-	defer func() {
-		if recovered := recover(); recovered != nil {
-			var ok bool
-			err, ok = recovered.(error)
-			if !ok {
-				err = fmt.Errorf("%v", recovered)
-			}
-		}
-	}()
-	return callback()
-}
 
 // raceAuthOperation stops waiting on cancellation while continuing to observe
 // the callback. Started OAuth refreshes still persist rotated credentials;
@@ -93,10 +81,10 @@ func raceAuthOperation(ctx context.Context, operation func() (any, error)) (any,
 func ResolveProviderAuth(ctx context.Context, provider *ModelProvider, credentials *CredentialPersistence, authContext *AuthContext, overrides AuthResolutionOverrides) (any, error) {
 	return raceAuthOperation(ctx, func() (any, error) {
 		requestContext := authContext
-		if catalogEntryTruthy(overrides.Env) {
+		if jscompat.Truthy(overrides.Env) {
 			requestContext = &AuthContext{
 				Env: func(ctx context.Context, name string) (any, error) {
-					if value := catalogProperty(overrides.Env, name); catalogEntryTruthy(value) {
+					if value := jscompat.ReadProperty(overrides.Env, name); jscompat.Truthy(value) {
 						return value, nil
 					}
 					return authContext.Env(ctx, name)
@@ -113,22 +101,22 @@ func ResolveProviderAuth(ctx context.Context, provider *ModelProvider, credentia
 			return resolveAPIKey(ctx, provider, requestContext, credential)
 		}
 		readID := provider.ID
-		stored, err := invokeAuth(func() (any, error) { return credentials.Read(ctx, readID) })
+		stored, err := jscompat.Invoke(func() (any, error) { return credentials.Read(ctx, readID) })
 		if err != nil {
 			return nil, NewModelsError("auth", "Credential store read failed for "+readID, err)
 		}
-		if catalogEntryTruthy(stored) {
-			switch catalogProperty(stored, "type") {
+		if jscompat.Truthy(stored) {
+			switch jscompat.ReadProperty(stored, "type") {
 			case "oauth":
 				if provider.authConfig().OAuth != nil {
 					return resolveStoredOAuth(ctx, provider, credentials, stored, overrides)
 				}
 			case "api_key":
 				if provider.authConfig().APIKey != nil {
-					if catalogEntryTruthy(overrides.Env) {
-						credential := authSpread(stored)
-						env := authSpread(catalogProperty(stored, "env"))
-						authSpreadInto(env, overrides.Env)
+					if jscompat.Truthy(overrides.Env) {
+						credential := jscompat.Spread(stored)
+						env := jscompat.Spread(jscompat.ReadProperty(stored, "env"))
+						jscompat.SpreadInto(env, overrides.Env)
 						credential.Set("env", env)
 						stored = credential
 					}
@@ -146,7 +134,7 @@ func ResolveProviderAuth(ctx context.Context, provider *ModelProvider, credentia
 
 func resolveAPIKey(ctx context.Context, provider *ModelProvider, authContext *AuthContext, credential any) (any, error) {
 	providerID, apiKey := provider.ID, provider.authConfig().APIKey
-	result, err := invokeAuth(func() (any, error) {
+	result, err := jscompat.Invoke(func() (any, error) {
 		return apiKey.Resolve(APIKeyAuthInput{Context: ctx, AuthContext: authContext, Credential: credential})
 	})
 	if err != nil {
@@ -165,13 +153,13 @@ func refreshStoredOAuthCredential(ctx context.Context, credentials *CredentialPe
 	stopWait := context.AfterFunc(ctx, func() { cancelLock(context.Cause(ctx)) })
 	defer stopWait()
 	defer cancelLock(nil)
-	return invokeAuth(func() (any, error) {
+	return jscompat.Invoke(func() (any, error) {
 		return credentials.Modify(lockContext, providerID, func(current any) (any, error) {
 			stopWait()
 			if cause := context.Cause(ctx); cause != nil {
 				return nil, cause
 			}
-			if !catalogStrictEqual(catalogProperty(current, "type"), "oauth") {
+			if !jscompat.StrictEqual(jscompat.ReadProperty(current, "type"), "oauth") {
 				return Undefined, nil
 			}
 			needed, err := needsRefresh(current)
@@ -182,7 +170,7 @@ func refreshStoredOAuthCredential(ctx context.Context, credentials *CredentialPe
 			// Retained provider contexts stay live until their timeout, even
 			// when the callback returns or its original caller is cancelled.
 			context.AfterFunc(refreshContext, cancel)
-			return invokeAuth(func() (any, error) { return refresh(refreshContext, current) })
+			return jscompat.Invoke(func() (any, error) { return refresh(refreshContext, current) })
 		})
 	})
 }
@@ -191,7 +179,7 @@ func resolveStoredOAuth(ctx context.Context, provider *ModelProvider, credential
 	providerID, oauth := provider.ID, provider.authConfig().OAuth
 	minimum := float64(OAuthMinimumValidityMS)
 	if !jsonjs.IsNullish(overrides.MinOAuthValidityMS) {
-		value, err := authNumber(overrides.MinOAuthValidityMS)
+		value, err := jscompat.ToNumber(overrides.MinOAuthValidityMS)
 		if err != nil {
 			return nil, err
 		}
@@ -202,7 +190,7 @@ func resolveStoredOAuth(ctx context.Context, provider *ModelProvider, credential
 		now = func() int64 { return time.Now().UnixMilli() }
 	}
 	expiresSoon := func(credential any) (bool, error) {
-		expires, err := authNumber(catalogProperty(credential, "expires"))
+		expires, err := jscompat.ToNumber(jscompat.ReadProperty(credential, "expires"))
 		return float64(now())+minimum >= expires, err
 	}
 	credential := stored
@@ -212,7 +200,7 @@ func resolveStoredOAuth(ctx context.Context, provider *ModelProvider, credential
 	}
 	if soon {
 		post, err := refreshStoredOAuthCredential(ctx, credentials, providerID, expiresSoon, func(refreshContext context.Context, current any) (any, error) {
-			refreshed, err := invokeAuth(func() (any, error) { return oauth.Refresh(refreshContext, current) })
+			refreshed, err := jscompat.Invoke(func() (any, error) { return oauth.Refresh(refreshContext, current) })
 			if err != nil {
 				return nil, NewModelsError("oauth", "OAuth refresh failed for "+providerID, err)
 			}
@@ -224,7 +212,7 @@ func resolveStoredOAuth(ctx context.Context, provider *ModelProvider, credential
 			}
 			return nil, NewModelsError("auth", "Credential store modify failed for "+providerID, err)
 		}
-		if !catalogStrictEqual(catalogProperty(post, "type"), "oauth") {
+		if !jscompat.StrictEqual(jscompat.ReadProperty(post, "type"), "oauth") {
 			return Undefined, nil
 		}
 		credential = post
@@ -241,59 +229,9 @@ func resolveStoredOAuth(ctx context.Context, provider *ModelProvider, credential
 	if cause := context.Cause(ctx); cause != nil {
 		return nil, cause
 	}
-	auth, err := invokeAuth(func() (any, error) { return oauth.ToAuth(credential) })
+	auth, err := jscompat.Invoke(func() (any, error) { return oauth.ToAuth(credential) })
 	if err != nil {
 		return nil, NewModelsError("oauth", "OAuth auth derivation failed for "+providerID, err)
 	}
 	return NewObject(Property{Name: "auth", Value: auth}, Property{Name: "source", Value: "OAuth"}), nil
-}
-
-func authNumber(value any) (float64, error) {
-	if jsonjs.IsUndefined(value) {
-		return math.NaN(), nil
-	}
-	if value == nil || jsonjs.IsNull(value) {
-		return 0, nil
-	}
-	v := reflect.ValueOf(value)
-	switch v.Kind() {
-	case reflect.Bool:
-		if v.Bool() {
-			return 1, nil
-		}
-		return 0, nil
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return float64(v.Int()), nil
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		return float64(v.Uint()), nil
-	case reflect.Float32, reflect.Float64:
-		return v.Float(), nil
-	}
-	text, err := catalogKey(value, make(map[*Array]bool))
-	return ParseJSNumber(text), err
-}
-
-func authSpread(value any) *Object {
-	object := NewObject()
-	authSpreadInto(object, value)
-	return object
-}
-
-func authSpreadInto(target *Object, value any) {
-	switch value := value.(type) {
-	case *Object:
-		for _, property := range value.Entries() {
-			target.Set(property.Name, property.Value)
-		}
-	case *Array:
-		for _, key := range value.PropertyKeys() {
-			item, _ := value.GetProperty(key)
-			target.Set(key, item)
-		}
-	case string:
-		values, _ := catalogValues(value)
-		for index, item := range values {
-			target.Set(fmt.Sprint(index), item)
-		}
-	}
 }

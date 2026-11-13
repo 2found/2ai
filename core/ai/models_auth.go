@@ -2,11 +2,10 @@ package ai
 
 import (
 	"context"
-	"strings"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 
 	"github.com/2found/2ai/core/jsonjs"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 )
 
 // GetAuth accepts a provider ID or a model Object. Model headers override auth
@@ -19,7 +18,7 @@ func (m *Models) GetAuth(ctx context.Context, providerOrModel any, options ...Au
 			return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(providerOrModel), "providerOrModel.provider")
 		}
 		var ok bool
-		providerID, ok = catalogProperty(providerOrModel, "provider").(string)
+		providerID, ok = jscompat.ReadProperty(providerOrModel, "provider").(string)
 		if !ok {
 			return Undefined, nil
 		}
@@ -40,30 +39,30 @@ func (m *Models) authForProvider(ctx context.Context, provider *ModelProvider, p
 	if err != nil {
 		return nil, err
 	}
-	headers := catalogProperty(providerOrModel, "headers")
-	if !catalogEntryTruthy(result) || byID || !catalogEntryTruthy(headers) {
+	headers := jscompat.ReadProperty(providerOrModel, "headers")
+	if !jscompat.Truthy(result) || byID || !jscompat.Truthy(headers) {
 		return result, nil
 	}
-	merged := authSpread(result)
-	resolvedAuth := catalogProperty(result, "auth")
+	merged := jscompat.Spread(result)
+	resolvedAuth := jscompat.ReadProperty(result, "auth")
 	if jsonjs.IsNullish(resolvedAuth) {
 		return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(resolvedAuth), "result.auth.headers")
 	}
-	auth := authSpread(resolvedAuth)
-	auth.Set("headers", mergeAuthHeaders(catalogProperty(auth, "headers"), headers))
+	auth := jscompat.Spread(resolvedAuth)
+	auth.Set("headers", mergeAuthHeaders(jscompat.ReadProperty(auth, "headers"), headers))
 	merged.Set("auth", auth)
 	return merged, nil
 }
 
 func mergeAuthHeaders(base, override any) any {
-	if !catalogEntryTruthy(base) && !catalogEntryTruthy(override) {
+	if !jscompat.Truthy(base) && !jscompat.Truthy(override) {
 		return Undefined
 	}
-	merged := authSpread(base)
-	for _, property := range authSpread(override).Entries() {
-		lower := authHeaderName(property.Name)
+	merged := jscompat.Spread(base)
+	for _, property := range jscompat.Spread(override).Entries() {
+		lower := jscompat.LowerHeaderName(property.Name)
 		for _, existing := range merged.Entries() {
-			if authHeaderName(existing.Name) == lower {
+			if jscompat.LowerHeaderName(existing.Name) == lower {
 				merged.Delete(existing.Name)
 			}
 		}
@@ -74,22 +73,4 @@ func mergeAuthHeaders(base, override any) any {
 		}
 	}
 	return merged
-}
-
-func authHeaderName(name string) string {
-	var result, segment strings.Builder
-	flush := func() {
-		result.WriteString(cases.Lower(language.Und).String(segment.String()))
-		segment.Reset()
-	}
-	for _, point := range jsonjs.StringCodePoints(name) {
-		if point >= 0xd800 && point <= 0xdfff {
-			flush()
-			result.WriteString(catalogCodeUnit(point))
-		} else {
-			segment.WriteRune(point)
-		}
-	}
-	flush()
-	return result.String()
 }

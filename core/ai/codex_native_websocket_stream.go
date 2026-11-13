@@ -10,6 +10,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"golang.org/x/text/encoding/unicode"
 )
 
@@ -71,7 +73,7 @@ func codexSocketCloseError(raw json.RawMessage) error {
 			e.message += " message too big"
 		}
 	}
-	e.message = strings.TrimFunc(e.message, jsWhitespace)
+	e.message = strings.TrimFunc(e.message, jscompat.IsWhitespace)
 	return e
 }
 

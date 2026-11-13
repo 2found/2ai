@@ -18,6 +18,8 @@ import (
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 type chatGPTOAuthCase struct {
@@ -262,7 +264,7 @@ func TestPiChatGPTOAuthMetadataAndToAuth(t *testing.T) {
 	for i, tc := range f.Helpers {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			credential := catalogDecode(t, tc.Credential)
-			if catalogProperty(credential, "absent") == true {
+			if jscompat.ReadProperty(credential, "absent") == true {
 				credential = Undefined
 			}
 			value, err := auth.ToAuth(credential)

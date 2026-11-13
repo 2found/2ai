@@ -16,6 +16,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 	"golang.org/x/text/encoding/unicode"
 )
@@ -86,7 +88,7 @@ func AnthropicOAuth(settings ...AnthropicOAuthOptions) *OAuthAuth {
 	subscription := true
 	return &OAuthAuth{Name: "Anthropic (Claude Pro/Max)", IsSubscription: &subscription,
 		Login: func(interaction ProviderAuthInteraction, _ *OAuthLoginOptions) (any, error) {
-			return invokeAuth(func() (any, error) {
+			return jscompat.Invoke(func() (any, error) {
 				method, err := interaction.Prompt(context.Background(), NewObject(Property{Name: "type", Value: "select"}, Property{Name: "message", Value: "Select Anthropic login method:"}, Property{Name: "options", Value: NewArray(
 					NewObject(Property{Name: "id", Value: "browser"}, Property{Name: "label", Value: "Browser login (default)"}),
 					NewObject(Property{Name: "id", Value: "copy_code"}, Property{Name: "label", Value: "Copy code login (headless)"}),
@@ -95,7 +97,7 @@ func AnthropicOAuth(settings ...AnthropicOAuthOptions) *OAuthAuth {
 					return nil, err
 				}
 				if method != "browser" && method != "copy_code" {
-					text, err := catalogKey(method, make(map[*Array]bool))
+					text, err := jscompat.ToPropertyKey(method, make(map[*Array]bool))
 					if err != nil {
 						return nil, err
 					}
@@ -105,11 +107,11 @@ func AnthropicOAuth(settings ...AnthropicOAuthOptions) *OAuthAuth {
 			})
 		},
 		Refresh: func(ctx context.Context, credential any) (any, error) {
-			return invokeAuth(func() (any, error) {
+			return jscompat.Invoke(func() (any, error) {
 				if jsonjs.IsNullish(credential) {
 					return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.refresh")
 				}
-				body := NewObject(Property{Name: "grant_type", Value: "refresh_token"}, Property{Name: "client_id", Value: anthropicOAuthClientID}, Property{Name: "refresh_token", Value: catalogProperty(credential, "refresh")})
+				body := NewObject(Property{Name: "grant_type", Value: "refresh_token"}, Property{Name: "client_id", Value: anthropicOAuthClientID}, Property{Name: "refresh_token", Value: jscompat.ReadProperty(credential, "refresh")})
 				return anthropicOAuthToken(ctx, body, "", options)
 			})
 		},
@@ -117,7 +119,7 @@ func AnthropicOAuth(settings ...AnthropicOAuthOptions) *OAuthAuth {
 			if jsonjs.IsNullish(credential) {
 				return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(credential), "credential.access")
 			}
-			return NewObject(Property{Name: "apiKey", Value: catalogProperty(credential, "access")}), nil
+			return NewObject(Property{Name: "apiKey", Value: jscompat.ReadProperty(credential, "access")}), nil
 		},
 	}
 }
@@ -142,7 +144,7 @@ func loginAnthropic(interaction ProviderAuthInteraction, copyCode bool, options 
 	} else {
 		// Pi falls back to manual input for every callback-start rejection,
 		// including an occupied port and an already-aborted interaction.
-		started, startErr := invokeAuth(func() (any, error) {
+		started, startErr := jscompat.Invoke(func() (any, error) {
 			return options.StartCallback(&OAuthCallbackServerOptions{ProviderName: "Anthropic", Host: *options.CallbackHost, Port: 53692, Path: "/callback", State: &state, Context: ctx, Complete: func(code string) (any, error) { return code, nil }})
 		})
 		if startErr == nil {
@@ -244,11 +246,11 @@ func anthropicOAuthToken(ctx context.Context, body *Object, redirectURI string, 
 		}
 		return nil, jsonjs.PropertyReadError(true, variable+".refresh_token")
 	}
-	seconds, err := authNumber(catalogProperty(data, "expires_in"))
+	seconds, err := jscompat.ToNumber(jscompat.ReadProperty(data, "expires_in"))
 	if err != nil {
 		return nil, err
 	}
-	return NewObject(Property{Name: "type", Value: "oauth"}, Property{Name: "refresh", Value: catalogProperty(data, "refresh_token")}, Property{Name: "access", Value: catalogProperty(data, "access_token")}, Property{Name: "expires", Value: options.Now() + seconds*1000 - 5*60*1000}), nil
+	return NewObject(Property{Name: "type", Value: "oauth"}, Property{Name: "refresh", Value: jscompat.ReadProperty(data, "refresh_token")}, Property{Name: "access", Value: jscompat.ReadProperty(data, "access_token")}, Property{Name: "expires", Value: options.Now() + seconds*1000 - 5*60*1000}), nil
 }
 
 func postAnthropicOAuthJSON(ctx context.Context, body *Object, options AnthropicOAuthOptions) (string, error) {

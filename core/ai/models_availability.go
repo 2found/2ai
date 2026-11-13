@@ -2,8 +2,8 @@ package ai
 
 import (
 	"context"
-	"math"
-	"reflect"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 
 	"github.com/2found/2ai/core/jsonjs"
 )
@@ -26,7 +26,7 @@ func (m *Models) CheckAuth(ctx context.Context, providerID string) (any, error) 
 }
 
 func (m *Models) checkProviderAuth(ctx context.Context, provider *ModelProvider, credential any) (any, error) {
-	if catalogStrictEqual(catalogProperty(credential, "type"), "oauth") {
+	if jscompat.StrictEqual(jscompat.ReadProperty(credential, "type"), "oauth") {
 		if provider.authConfig().OAuth == nil {
 			return Undefined, nil
 		}
@@ -37,10 +37,10 @@ func (m *Models) checkProviderAuth(ctx context.Context, provider *ModelProvider,
 		return Undefined, nil
 	}
 	if apiKey.Check != nil {
-		if !catalogStrictEqual(catalogProperty(credential, "type"), "api_key") {
+		if !jscompat.StrictEqual(jscompat.ReadProperty(credential, "type"), "api_key") {
 			credential = Undefined
 		}
-		result, err := invokeAuth(func() (any, error) {
+		result, err := jscompat.Invoke(func() (any, error) {
 			return apiKey.Check(APIKeyAuthInput{Context: ctx, AuthContext: m.authContext, Credential: credential})
 		})
 		if err != nil {
@@ -49,10 +49,10 @@ func (m *Models) checkProviderAuth(ctx context.Context, provider *ModelProvider,
 		return result, nil
 	}
 	resolution, err := ResolveProviderAuth(ctx, provider, &m.credentials, m.authContext, AuthResolutionOverrides{})
-	if err != nil || !catalogEntryTruthy(resolution) {
+	if err != nil || !jscompat.Truthy(resolution) {
 		return Undefined, err
 	}
-	return NewObject(Property{Name: "source", Value: catalogProperty(resolution, "source")}, Property{Name: "type", Value: "api_key"}), nil
+	return NewObject(Property{Name: "source", Value: jscompat.ReadProperty(resolution, "source")}, Property{Name: "type", Value: "api_key"}), nil
 }
 
 type authenticatedProvider struct {
@@ -81,7 +81,7 @@ func (m *Models) authenticatedProviders(ctx context.Context, providerID []string
 	for index, provider := range providers {
 		go func(index int, provider *ModelProvider) {
 			entry := authenticatedProvider{provider: provider}
-			_, err := invokeAuth(func() (any, error) {
+			_, err := jscompat.Invoke(func() (any, error) {
 				credential, err := m.readCredential(ctx, provider.ID)
 				if err != nil {
 					return nil, err
@@ -201,7 +201,7 @@ func availableProviderModels(entry authenticatedProvider, all bool) (*Array, err
 		if jsonjs.IsNullish(model) {
 			return nil, jsonjs.PropertyReadError(!jsonjs.IsUndefined(model), "model.id")
 		}
-		ids[index] = catalogProperty(model, "id")
+		ids[index] = jscompat.ReadProperty(model, "id")
 	}
 	if models == nil {
 		return nil, jsonjs.PropertyReadError(true, "models.filter")
@@ -216,7 +216,7 @@ func availableProviderModels(entry authenticatedProvider, all bool) (*Array, err
 		keep := !chat
 		if chat {
 			for _, id := range ids {
-				if catalogSameValueZero(id, catalogProperty(model, "id")) {
+				if jscompat.SameValueZero(id, jscompat.ReadProperty(model, "id")) {
 					keep = true
 					break
 				}
@@ -246,18 +246,4 @@ func (m *Models) GetAvailableOfType(ctx context.Context, kind any, providerID ..
 		}
 	}
 	return result, nil
-}
-
-func catalogSameValueZero(a, b any) bool {
-	if catalogStrictEqual(a, b) {
-		return true
-	}
-	isNaN := func(value any) bool {
-		if value == nil {
-			return false
-		}
-		v := reflect.ValueOf(value)
-		return (v.Kind() == reflect.Float64 || v.Kind() == reflect.Float32) && math.IsNaN(v.Float())
-	}
-	return isNaN(a) && isNaN(b)
 }

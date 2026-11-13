@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 // Anthropic's wire index is transient. Lookup scans the live content in order,
@@ -221,7 +223,7 @@ func (a *anthropicAccumulator) chunk(raw json.RawMessage) error {
 					value := samplingString(delta["partial_json"])
 					partial += value
 					block.Extra["partialJson"] = json.RawMessage(marshalSamplingString(partial))
-					block.Arguments = ParseStreamingJSON(partial)
+					block.Arguments = jscompat.ParseStreamingJSON(partial)
 					a.publish(AssistantMessageEvent{Type: "toolcall_delta", ContentIndex: index, Delta: value})
 				}
 			case "signature_delta":
@@ -247,7 +249,7 @@ func (a *anthropicAccumulator) chunk(raw json.RawMessage) error {
 			case "thinking":
 				a.publish(AssistantMessageEvent{Type: "thinking_end", ContentIndex: index, Content: block.Thinking})
 			case "toolCall":
-				block.Arguments = ParseStreamingJSON(samplingString(block.Extra["partialJson"]))
+				block.Arguments = jscompat.ParseStreamingJSON(samplingString(block.Extra["partialJson"]))
 				delete(block.Extra, "partialJson")
 				a.publish(AssistantMessageEvent{Type: "toolcall_end", ContentIndex: index, ToolCall: block})
 			}

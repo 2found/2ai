@@ -3,6 +3,8 @@ package ai
 import (
 	"context"
 	"errors"
+
+	"github.com/2found/2ai/core/ai/jscompat"
 )
 
 func (m *Models) Stream(ctx context.Context, model any, input Context, options ...*ModelsRequestOptions) *AssistantMessageEventStream {
@@ -20,7 +22,7 @@ func (m *Models) StreamDeferred(ctx context.Context, model, handle any, options 
 func (m *Models) stream(ctx context.Context, model any, transcript TranscriptContext, handle any, method string, settings *ModelsRequestOptions) *AssistantMessageEventStream {
 	var provider *ModelProvider
 	var prepared *preparedModelAuth
-	_, admission := invokeAuth(func() (any, error) {
+	_, admission := jscompat.Invoke(func() (any, error) {
 		if err := AssertChatModel(model); err != nil {
 			return nil, err
 		}
@@ -30,7 +32,7 @@ func (m *Models) stream(ctx context.Context, model any, transcript TranscriptCon
 			return nil, err
 		}
 		if method == "fetchDeferred" && provider.FetchDeferred == nil {
-			id, err := catalogKey(catalogProperty(model, "provider"), make(map[*Array]bool))
+			id, err := jscompat.ToPropertyKey(jscompat.ReadProperty(model, "provider"), make(map[*Array]bool))
 			if err != nil {
 				return nil, err
 			}

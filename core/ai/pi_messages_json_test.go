@@ -10,6 +10,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/2found/2ai/core/ai/jscompat"
+
 	"github.com/2found/2ai/core/jsonjs"
 )
 
@@ -38,7 +40,7 @@ func TestPiMessagesJSONProtocol(t *testing.T) {
 				if err != nil {
 					return err
 				}
-				if tc.Input.Action == "mutate" && catalogProperty(event, "type") == "text_delta" {
+				if tc.Input.Action == "mutate" && jscompat.ReadProperty(event, "type") == "text_delta" {
 					event.(*Object).Set("delta", "changed")
 					encoded, err := jsonjs.MarshalValue(event)
 					if err != nil {
