@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.3.0 — 2026-11-13
+
+Baseline: v0.2.5. **Breaking: every import path changes.** No behavior change, no option, tool, schema or checkpoint change; a host only rewrites its imports.
+
+- **Packages sit in four layer directories.** `core/` imports only `core/`; a unit under `feature/` imports `core/` and never another feature unit; `compose/` imports both and is where features are wired together; `test/` holds test support. `test/layering` enforces the rules, and the kernel boundary test of `core/agentcore` now allows only the `engine` and `host` subpackages.
+
+  | Before (`github.com/2found/2ai/…`) | Now |
+  |---|---|
+  | `jsonjs` | `core/jsonjs` |
+  | `telemetry`, `telemetry/export` | `core/telemetry`, `core/telemetry/export` |
+  | `ai`, `ai/protocol` | `core/ai`, `core/ai/protocol` |
+  | `agentcore`, `agentcore/engine`, `agentcore/host` | `core/agentcore`, `core/agentcore/engine`, `core/agentcore/host` |
+  | `agentcore/plugins/<name>` (advisor, ask, finishguard, goal, jobs, memory, repeatguard, sessionquery, spill, subagent, todo) | `feature/plugins/<name>` |
+  | `agentcore/plugins/preset` | `compose/preset` |
+  | `sandbox`, `credential` | `feature/sandbox`, `feature/credential` |
+  | `telemetry/llm` | `feature/telemetry/llm` |
+  | `telemetry/testing` | `test/telemetry` |
+  | `testing/agentcore` | `test/agentcore` |
+  | `agentcore/integration` | `test/integration` |
+
+  Package names are unchanged, so code that qualifies symbols as `agentcore.X`, `ai.X` or `memory.X` compiles after the import lines are rewritten. Apply the longer paths first.
+- **JS-compatibility helpers leave `ai` for `core/ai/jscompat`.** `ParseJSNumber`, `RepairJSON`, `ParseJSONWithRepair`, `ParseStreamingJSON`, `StringifyJSON` and `SanitizeSurrogates` are now `jscompat.X`. The package is a leaf: it imports only `core/jsonjs`. It also exports the helpers `core/ai` calls across the boundary (`Values`, `CodeUnit`, `ReadProperty`, `ToPropertyKey`, `Truthy`, `StrictEqual`, `SameValueZero`, `ToNumber`, `Spread`, `SpreadInto`, `Invoke`, `LowerHeaderName`, `ReadModelProperty`, `IsWhitespace`, `ParseJSFloat`, `QueryComponent`, `QueryValues`).
+- **Migration.** Rewrite imports by the table, then `go build ./...`. Nothing stored changes: checkpoints, memory files, credentials and telemetry written by 0.2.5 read as before.
+
 ## 0.2.5 — 2026-11-12
 
 Baseline: v0.2.4. Bug fixes in `agentcore/host` and `ai`; no API change and no migration.
