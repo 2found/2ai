@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/2found/2ai/agentcore"
-	"github.com/2found/2ai/ai"
+	"github.com/2found/2ai/core/agentcore"
+	"github.com/2found/2ai/core/ai"
 )
 
 func main() {

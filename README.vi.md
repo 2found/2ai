@@ -26,9 +26,9 @@ không cần API key, dịch vụ bên ngoài hay JavaScript runtime.
 Đọc [ví dụ đầy đủ](examples/scripted/main.go), rồi xem API công khai:
 
 ```sh
-go doc ./agentcore.Config
-go doc ./ai.FallbackProvider
-go doc ./telemetry.NewInMemory
+go doc ./core/agentcore.Config
+go doc ./core/ai.FallbackProvider
+go doc ./core/telemetry.NewInMemory
 ```
 
 Thêm 2ai vào Go module của bạn:
@@ -39,22 +39,28 @@ go get github.com/2found/2ai@main
 
 Go ghi phiên bản theo commit vào `go.mod`. Commit cả `go.mod` và `go.sum`;
 pin phiên bản đó khi triển khai. Import các package như
-`github.com/2found/2ai/ai` và `github.com/2found/2ai/agentcore`.
+`github.com/2found/2ai/core/ai` và `github.com/2found/2ai/core/agentcore`.
 
 ## Chọn đúng lớp cần dùng
 
 | Package | Dùng cho | Tài liệu |
 | --- | --- | --- |
-| `ai`, `ai/protocol` | Transcript, stream provider, OAuth và retry/fallback | [AI](ai/README.md) |
-| `agentcore` | Ghép agent, giới hạn, policy và quyền gọi tool | [AgentCore](agentcore/README.md) |
-| `agentcore/engine` | Vòng lặp native và event stream cấp thấp | [Engine](agentcore/engine/README.md) |
-| `agentcore/host` | Checkpoint và tiện ích chung cho host | `go doc ./agentcore/host` |
-| `agentcore/plugins` | Goal, memory, todo, job, subagent và guard | [Plugins](agentcore/plugins/README.md) |
-| `telemetry`, `telemetry/export`, `telemetry/llm` | Ghi span và trace model đã kết thúc | [Telemetry](telemetry/README.md) |
-| `credential` | Vault trong bộ nhớ và tham chiếu secret | `go doc ./credential` |
-| `sandbox` | File, shell, HTTP và công cụ thực thi do host cấp | `go doc ./sandbox` |
-| `jsonjs` | JSON không mất dữ liệu và identity của value | `go doc ./jsonjs` |
-| `testing/agentcore` | Fixture native session cho test của ứng dụng | `go doc ./testing/agentcore` |
+| `core/ai`, `core/ai/protocol` | Transcript, stream provider, OAuth và retry/fallback | [AI](core/ai/README.md) |
+| `core/agentcore` | Ghép agent, giới hạn, policy và quyền gọi tool | [AgentCore](core/agentcore/README.md) |
+| `core/agentcore/engine` | Vòng lặp native và event stream cấp thấp | [Engine](core/agentcore/engine/README.md) |
+| `core/agentcore/host` | Checkpoint và tiện ích chung cho host | `go doc ./core/agentcore/host` |
+| `feature/plugins` | Goal, memory, todo, job, subagent và guard | [Plugins](feature/plugins/README.md) |
+| `core/telemetry`, `core/telemetry/export`, `feature/telemetry/llm` | Ghi span và trace model đã kết thúc | [Telemetry](core/telemetry/README.md) |
+| `feature/credential` | Vault trong bộ nhớ và tham chiếu secret | `go doc ./feature/credential` |
+| `feature/sandbox` | File, shell, HTTP và công cụ thực thi do host cấp | `go doc ./feature/sandbox` |
+| `core/jsonjs` | JSON không mất dữ liệu và identity của value | `go doc ./core/jsonjs` |
+| `compose/preset` | Bộ plugin mặc định trong một lời gọi | [Preset](compose/preset/README.md) |
+| `test/agentcore` | Fixture native session cho test của ứng dụng | `go doc ./test/agentcore` |
+| `test/telemetry` | Bộ conformance cho adapter telemetry | `go doc ./test/telemetry` |
+
+Thành phần đầu của đường dẫn là lớp: `core` chỉ import `core`, mỗi `feature`
+import `core` và không import feature khác, `compose` ghép các feature, còn
+`test` không bao giờ được code production import. `test/layering` giữ luật này.
 
 Nền tảng này không chứa application server, database sản phẩm hay CLI.
 Dùng [2agent](https://github.com/2found/2agent) để có workspace, hội thoại,
@@ -77,7 +83,7 @@ lịch chạy, pack và app của Soot.
 
 Các transport native đã cấu hình sẵn gồm Codex, Claude Code, Antigravity, Devin
 và endpoint tương thích OpenAI, bao gồm Gemini. Mức hỗ trợ tùy provider;
-[tài liệu AI](ai/README.md) là hợp đồng, không phải cam kết hỗ trợ mọi model
+[tài liệu AI](core/ai/README.md) là hợp đồng, không phải cam kết hỗ trợ mọi model
 trong catalog.
 
 ## Phát triển và kiểm chứng

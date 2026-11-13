@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Agent hoạt động thế nào?</title>
-<meta name="description" content="Giải thích AI agent bằng các khối tương tác — từ LLM đến vòng lặp, tool, context và lan can. Dựa trên 2ai/agentcore.">
+<meta name="description" content="Giải thích AI agent bằng các khối tương tác — từ LLM đến vòng lặp, tool, context và lan can. Dựa trên 2ai/core/agentcore.">
 <style>
 :root{
   --bg:#fbf8f3; --bg2:#f4efe6; --card:#ffffff; --ink:#1f1b2d; --muted:#6b6679; --line:#e8e1d6;
@@ -645,20 +645,20 @@ footer{padding:30px 0 60px;text-align:center;color:var(--muted);font-size:14px}
     <details class="dev">
       <summary>🧑‍💻 Dành cho dev: mỗi mảnh nằm ở đâu trong 2ai</summary>
       <table>
-        <tr><td>LLM &amp; provider</td><td><code>ai/</code> — transcript, streaming, retry, <code>FallbackProvider</code></td></tr>
-        <tr><td>Prompt</td><td><code>agentcore/prompt.go</code> — system + tool declarations + lịch sử</td></tr>
-        <tr><td>Vòng lặp</td><td><code>agentcore/engine/loop.go</code> — <code>Run</code>, <code>runLoop</code>: turn → tool batch → turn…</td></tr>
-        <tr><td>Tool</td><td><code>engine/tools.go</code>, <code>engine/argument_*.go</code> (validate), <code>agentcore/permission.go</code> (<code>Policy</code>, default-deny)</td></tr>
-        <tr><td>Context</td><td><code>agentcore/contextprune.go</code> → <code>compaction.go</code>, <code>plugins/spill</code>, <code>plugins/todo</code>, <code>plugins/memory</code></td></tr>
-        <tr><td>Lan can</td><td><code>plugins/{repeatguard,finishguard,goal,advisor,ask,jobs,subagent}</code>, <code>Limits</code>, <code>sandbox/</code>, <code>credential/</code></td></tr>
-        <tr><td>Quan sát</td><td><code>telemetry/</code> — span cho từng lượt, từng tool</td></tr>
+        <tr><td>LLM &amp; provider</td><td><code>core/ai/</code> — transcript, streaming, retry, <code>FallbackProvider</code></td></tr>
+        <tr><td>Prompt</td><td><code>core/agentcore/prompt.go</code> — system + tool declarations + lịch sử</td></tr>
+        <tr><td>Vòng lặp</td><td><code>core/agentcore/engine/loop.go</code> — <code>Run</code>, <code>runLoop</code>: turn → tool batch → turn…</td></tr>
+        <tr><td>Tool</td><td><code>engine/tools.go</code>, <code>engine/argument_*.go</code> (validate), <code>core/agentcore/permission.go</code> (<code>Policy</code>, default-deny)</td></tr>
+        <tr><td>Context</td><td><code>core/agentcore/contextprune.go</code> → <code>compaction.go</code>, <code>feature/plugins/spill</code>, <code>feature/plugins/todo</code>, <code>feature/plugins/memory</code></td></tr>
+        <tr><td>Lan can</td><td><code>feature/plugins/{repeatguard,finishguard,goal,advisor,ask,jobs,subagent}</code>, <code>Limits</code>, <code>feature/sandbox/</code>, <code>feature/credential/</code></td></tr>
+        <tr><td>Quan sát</td><td><code>core/telemetry/</code> — span cho từng lượt, từng tool</td></tr>
         <tr><td>Chạy thử</td><td><code>go run ./examples/scripted</code> → <code>Hello from 2ai.</code> (không cần API key)</td></tr>
       </table>
     </details>
   </div>
 </section>
 
-<footer>Dựa trên <code>2ai/agentcore</code> v<span id="ver">0.2.5</span> · các ví dụ là minh hoạ đơn giản hoá.</footer>
+<footer>Dựa trên <code>2ai/core/agentcore</code> v<span id="ver">0.2.5</span> · các ví dụ là minh hoạ đơn giản hoá.</footer>
 <script>
 "use strict";
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -1061,61 +1061,61 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
    be:{t:'Đốt tiền, không bao giờ xong',st:['🔁 ∞ lượt','🪙 4M+ token']},
    good:[['brain','Chưa đủ. Tìm thêm.'],['tool','search("…")'],['res','Thêm một ít dữ liệu.'],['warn','Lượt 24/24 — chạm trần'],['guard','Lượt chốt: “Hết ngân sách. Trả lời tốt nhất với những gì đã có.”'],['done','Đây là câu trả lời tạm. Phần còn thiếu: …']],
    ge2:{t:'Dừng đúng hạn, nói thật phần còn thiếu',st:['🔁 24 lượt','🪙 60k token']}},
-  {id:'repeat',e:'🔁',t:'Kẹt một chỗ',gn:'Chống lặp',ge:'🔂',ref:'<code>plugins/repeatguard</code> — nhắc nhẹ sau 3 lần gọi y hệt, mạnh hơn nếu vẫn lặp',
+  {id:'repeat',e:'🔁',t:'Kẹt một chỗ',gn:'Chống lặp',ge:'🔂',ref:'<code>feature/plugins/repeatguard</code> — nhắc nhẹ sau 3 lần gọi y hệt, mạnh hơn nếu vẫn lặp',
    q:'Trang giá bị lỗi. Agent cứ thử lại y hệt.',
    bad:[['brain','Mở trang giá.'],['tool','open("gia.vn")'],['res','404'],['brain','Thử lại.'],['tool','open("gia.vn")'],['res','404'],['brain','Thử lại.'],['warn','…20 lần giống hệt nhau…']],
    be:{t:'Cạn 24 lượt vì một cái lỗi',st:['🔁 24 lượt','🪙 48k token']},
    good:[['brain','Mở trang giá.'],['tool','open("gia.vn")'],['res','404'],['brain','Thử lại.'],['tool','open("gia.vn")'],['res','404'],['guard','Bạn vừa gọi y hệt 3 lần liên tiếp. Thử cách khác?'],['brain','Trang hỏng. Tìm nguồn khác.'],['tool','search("giá xăng")'],['done','Xong, dùng nguồn dự phòng.']],
    ge2:{t:'Tự đổi hướng sau 3 lần',st:['🔁 7 lượt','🪙 9k token']}},
-  {id:'finish',e:'🏃',t:'Báo xong quá sớm',gn:'Cổng nghiệm thu',ge:'✋',ref:'<code>plugins/finishguard</code> · <code>goal</code> (hợp đồng <code>STATUS: DONE</code>) · <code>advisor</code> (người duyệt)',
+  {id:'finish',e:'🏃',t:'Báo xong quá sớm',gn:'Cổng nghiệm thu',ge:'✋',ref:'<code>feature/plugins/finishguard</code> · <code>goal</code> (hợp đồng <code>STATUS: DONE</code>) · <code>advisor</code> (người duyệt)',
    q:'Hỏi doanh thu. Agent trả số nghe rất chắc — mà chưa tra gì.',
    bad:[['user','Doanh thu tuần này tăng bao nhiêu?'],['brain','Chắc tăng khoảng 30%.'],['done','Doanh thu tăng 30%!']],
    be:{t:'Con số bịa, nói rất tự tin',st:['🔁 1 lượt','🪙 0.5k token']},
    good:[['user','Doanh thu tuần này tăng bao nhiêu?'],['brain','Chắc tăng khoảng 30%.'],['guard','Bạn nêu con số nhưng chưa chạy truy vấn nào. Kiểm chứng đã.'],['tool','run_sql("doanh thu 2 tuần")'],['res','+27,4%'],['done','Tăng 27,4% (nguồn: SQL).']],
    ge2:{t:'Có số thật, có nguồn',st:['🔁 3 lượt','🪙 2k token']}},
-  {id:'plan',e:'😵',t:'Quên mục tiêu',gn:'Kế hoạch ghim',ge:'📌',ref:'<code>plugins/todo</code> — kế hoạch nằm trong kho riêng, gắn lại cuối mỗi request; tóm tắt không đụng tới',
+  {id:'plan',e:'😵',t:'Quên mục tiêu',gn:'Kế hoạch ghim',ge:'📌',ref:'<code>feature/plugins/todo</code> — kế hoạch nằm trong kho riêng, gắn lại cuối mỗi request; tóm tắt không đụng tới',
    q:'Việc dài 5 phần. Sau trăm lượt, bản tóm tắt đã nuốt mất danh sách.',
    bad:[['user','Làm 5 việc: A, B, C, D, E'],['tool','làm A, B'],['warn','Dọn bàn: lịch sử bị tóm tắt, mất đề chi tiết'],['brain','Mình đang làm gì nhỉ?'],['done','Xong! (A, B)']],
    be:{t:'Bỏ sót C, D, E mà không biết',st:['🔁 30 lượt','🪙 90k token']},
    good:[['user','Làm 5 việc: A, B, C, D, E'],['tool','làm A, B'],['warn','Dọn bàn: lịch sử bị tóm tắt'],['guard','[kế hoạch] ✔A ✔B ◻C ◻D ◻E'],['tool','làm C, D, E'],['done','Xong đủ 5 việc.']],
    ge2:{t:'Kế hoạch nằm ngoài lịch sử nên còn nguyên',st:['🔁 34 lượt','🪙 95k token']}},
-  {id:'spill',e:'📦',t:'Kết quả quá to',gn:'Kho tạm',ge:'🗄',ref:'<code>plugins/spill</code> — giữ đầu + cuối, cất phần giữa, kèm tool <code>read_spill</code> để lấy lại',
+  {id:'spill',e:'📦',t:'Kết quả quá to',gn:'Kho tạm',ge:'🗄',ref:'<code>feature/plugins/spill</code> — giữ đầu + cuối, cất phần giữa, kèm tool <code>read_spill</code> để lấy lại',
    q:'Tool trả 40.000 dòng log. Lỗi nằm ở giữa.',
    bad:[['tool','read_log()'],['res','40.000 dòng… phần giữa bị cắt mất'],['brain','Không thấy lỗi nào.'],['done','Hệ thống bình thường.']],
    be:{t:'Bỏ lỡ đúng chỗ có lỗi',st:['🔁 3 lượt','🪙 3k token']},
    good:[['tool','read_log()'],['res','Xem trước đầu + cuối. Phần còn lại cất kho (phiếu #9f3c)'],['guard','Cần đoạn nào, gọi read_spill(#9f3c, từ…đến)'],['tool','read_spill(#9f3c, 18000…19000)'],['res','Dòng 18.412: lỗi kết nối DB'],['done','Tìm ra: lỗi kết nối DB lúc 03:12.']],
    ge2:{t:'Bàn không phình, vẫn lấy đúng đoạn cần',st:['🔁 5 lượt','🪙 4k token']}},
-  {id:'sub',e:'🧑‍🤝‍🧑',t:'Việc quá lớn',gn:'Agent con',ge:'🧑‍🤝‍🧑',ref:'<code>plugins/subagent</code> — con có bàn riêng, cha chỉ nhận câu trả lời cuối. Tiết kiệm <i>context</i>, không phải tiền tính toán',
+  {id:'sub',e:'🧑‍🤝‍🧑',t:'Việc quá lớn',gn:'Agent con',ge:'🧑‍🤝‍🧑',ref:'<code>feature/plugins/subagent</code> — con có bàn riêng, cha chỉ nhận câu trả lời cuối. Tiết kiệm <i>context</i>, không phải tiền tính toán',
    q:'Đọc 30 file để tìm nguyên nhân. Bàn của agent chính sẽ ngập.',
    bad:[['tool','read_file ×30'],['res','+90.000 token đổ vào bàn'],['warn','Bàn đầy 90% — chỉ còn chỗ cho vài dòng trả lời'],['done','Trả lời vội, thiếu ý.']],
    be:{t:'Bàn chính ngập vì việc vặt',st:['🔁 8 lượt','🪙 110k token']},
    good:[['tool','spawn_subagent("đọc 30 file, báo nguyên nhân")'],['park','Agent con làm ở bàn riêng… (đọc 30 file)'],['res','Con chỉ trả 1 đoạn: “Lỗi ở cấu hình cache”'],['done','Nguyên nhân: cấu hình cache.']],
    ge2:{t:'Việc vặt ở bàn riêng; bàn chính nhận kết luận',st:['🔁 3 lượt','🪙 6k token ở bàn chính']}},
-  {id:'jobs',e:'⏳',t:'Việc chạy lâu',gn:'Việc nền',ge:'⏳',ref:'<code>plugins/jobs</code> — tool trả ngay mã job; xong thì báo vào lượt sau',
+  {id:'jobs',e:'⏳',t:'Việc chạy lâu',gn:'Việc nền',ge:'⏳',ref:'<code>feature/plugins/jobs</code> — tool trả ngay mã job; xong thì báo vào lượt sau',
    q:'Render video mất 20 phút. Agent làm gì trong lúc chờ?',
    bad:[['tool','render_video()'],['warn','⏳ …đứng chờ 20 phút, không làm được gì khác…'],['res','Xong'],['brain','Giờ mới viết caption.'],['done','Xong sau 22 phút.']],
    be:{t:'Cả agent đứng chờ',st:['⏱ 22 phút']},
    good:[['tool','start_job(render_video) → #7'],['res','Đã chạy nền, mã #7'],['brain','Trong lúc chờ, viết caption.'],['tool','write(caption)'],['guard','Job #7 đã xong ✔'],['done','Xong sau 20 phút, caption viết sẵn.']],
    ge2:{t:'Làm song song, không phí thời gian',st:['⏱ 20 phút']}},
-  {id:'ask',e:'🙋',t:'Cần người quyết',gn:'Hỏi người',ge:'🙋',ref:'<code>plugins/ask</code> — câu hỏi có lựa chọn; run được “đỗ” lại, trả lời xong chạy tiếp',
+  {id:'ask',e:'🙋',t:'Cần người quyết',gn:'Hỏi người',ge:'🙋',ref:'<code>feature/plugins/ask</code> — câu hỏi có lựa chọn; run được “đỗ” lại, trả lời xong chạy tiếp',
    q:'Sắp xoá 200 file. Có nên không?',
    bad:[['brain','Chắc là file cũ. Xoá.'],['tool','delete(200 file)'],['res','Đã xoá'],['fail','Có file quan trọng trong đó.']],
    be:{t:'Đoán bừa một việc không hoàn tác được',st:['↩ không lấy lại được']},
    good:[['brain','Việc này không hoàn tác được.'],['tool','ask("Xoá 200 file cũ?", [Có, Không])'],['park','Agent tạm dừng — không tốn token trong lúc chờ'],['user','Giữ lại file 2024 nhé.'],['tool','delete(168 file)'],['done','Đã xoá 168, giữ 32 file 2024.']],
    ge2:{t:'Người quyết, agent làm',st:['⏸ chờ = 0 token']}},
-  {id:'fall',e:'⚡',t:'AI nhà cung cấp sập',gn:'Thang dự phòng',ge:'⚡',ref:'<code>ai/FallbackProvider</code> — thử lại, rồi sang model kế; ngừng chuyển khi đã có chữ hiện ra',
+  {id:'fall',e:'⚡',t:'AI nhà cung cấp sập',gn:'Thang dự phòng',ge:'⚡',ref:'<code>core/ai/FallbackProvider</code> — thử lại, rồi sang model kế; ngừng chuyển khi đã có chữ hiện ra',
    q:'Giữa chừng, model chính báo lỗi 503.',
    bad:[['tool','tìm 12 nguồn'],['res','Đã có 12 nguồn'],['brain','Gọi model A để tổng hợp…'],['fail','Model A: 503 — dừng toàn bộ.']],
    be:{t:'Cả lượt công cốc',st:['🔥 mất hết tiến độ']},
    good:[['tool','tìm 12 nguồn'],['res','Đã có 12 nguồn'],['brain','Gọi model A để tổng hợp…'],['warn','Model A: 503'],['guard','Thử lại → chuyển sang model B'],['done','Model B tổng hợp xong.']],
    ge2:{t:'Tự chuyển sang model dự phòng',st:['+2 giây']}},
-  {id:'mem',e:'🗒',t:'Quên từ hôm qua',gn:'Trí nhớ dài hạn',ge:'🗒',ref:'<code>plugins/memory</code> — <code>memory_recall</code> / <code>learn</code>: nhớ qua các lần chạy',
+  {id:'mem',e:'🗒',t:'Quên từ hôm qua',gn:'Trí nhớ dài hạn',ge:'🗒',ref:'<code>feature/plugins/memory</code> — <code>memory_recall</code> / <code>learn</code>: nhớ qua các lần chạy',
    q:'Hôm qua bạn dặn: báo cáo dạng PDF, gửi 9h. Hôm nay: “làm như hôm qua”.',
    bad:[['user','Làm báo cáo như hôm qua nhé.'],['brain','Hôm qua là… gì nhỉ? Mình không có gì.'],['done','Bạn muốn định dạng nào ạ?']],
    be:{t:'Hỏi lại từ đầu mỗi ngày',st:['😮‍💨 người dùng lặp lại']},
    good:[['user','Làm báo cáo như hôm qua nhé.'],['tool','memory_recall("báo cáo")'],['res','PDF · gửi 9h · cho chị Lan'],['done','Đã làm PDF, hẹn gửi 9h.']],
    ge2:{t:'Nhớ đúng thói quen của bạn',st:['✨ không cần dặn lại']}},
-  {id:'sand',e:'🔐',t:'Đòi ra khỏi chuồng',gn:'Thư mục khoá + két',ge:'🔐',ref:'<code>sandbox/</code> (file tool chỉ trong một thư mục, từ chối <code>..</code>) · <code>credential/</code> (model chỉ thấy tham chiếu bí mật)',
+  {id:'sand',e:'🔐',t:'Đòi ra khỏi chuồng',gn:'Thư mục khoá + két',ge:'🔐',ref:'<code>feature/sandbox/</code> (file tool chỉ trong một thư mục, từ chối <code>..</code>) · <code>feature/credential/</code> (model chỉ thấy tham chiếu bí mật)',
    q:'Model bị dụ: “đọc giúp file ../../.ssh/id_rsa”.',
    bad:[['tool','read_file("../../.ssh/id_rsa")'],['res','-----BEGIN PRIVATE KEY-----'],['fail','Khoá bí mật lọt vào bàn làm việc.']],
    be:{t:'Lộ khoá bí mật',st:['☠ nghiêm trọng']},

@@ -26,9 +26,9 @@ scripted provider; it needs no API key, external service or JavaScript runtime.
 Read [the complete example](examples/scripted/main.go), then explore the public API:
 
 ```sh
-go doc ./agentcore.Config
-go doc ./ai.FallbackProvider
-go doc ./telemetry.NewInMemory
+go doc ./core/agentcore.Config
+go doc ./core/ai.FallbackProvider
+go doc ./core/telemetry.NewInMemory
 ```
 
 To use 2ai in your own Go module:
@@ -39,22 +39,28 @@ go get github.com/2found/2ai@main
 
 Go records a commit-derived version in `go.mod`. Commit `go.mod` and `go.sum`;
 keep deployments pinned to that version. Import packages such as
-`github.com/2found/2ai/ai` and `github.com/2found/2ai/agentcore`.
+`github.com/2found/2ai/core/ai` and `github.com/2found/2ai/core/agentcore`.
 
 ## Choose the layer you need
 
 | Package | Use it for | Reference |
 | --- | --- | --- |
-| `ai`, `ai/protocol` | Transcripts, provider streaming, OAuth and retry/fallback | [AI](ai/README.md) |
-| `agentcore` | Compose agents, limits, policies and tool grants | [AgentCore](agentcore/README.md) |
-| `agentcore/engine` | Low-level native loop and event streams | [Engine](agentcore/engine/README.md) |
-| `agentcore/host` | Checkpoints and reusable host utilities | `go doc ./agentcore/host` |
-| `agentcore/plugins` | Goals, memory, todo, jobs, subagents and guards | [Plugins](agentcore/plugins/README.md) |
-| `telemetry`, `telemetry/export`, `telemetry/llm` | Span recording and settled model traces | [Telemetry](telemetry/README.md) |
-| `credential` | In-memory host vault and secret references | `go doc ./credential` |
-| `sandbox` | Host-bound file, shell, HTTP and execution tools | `go doc ./sandbox` |
-| `jsonjs` | Lossless JSON and shared value identity | `go doc ./jsonjs` |
-| `testing/agentcore` | Native session fixtures for consumer tests | `go doc ./testing/agentcore` |
+| `core/ai`, `core/ai/protocol` | Transcripts, provider streaming, OAuth and retry/fallback | [AI](core/ai/README.md) |
+| `core/agentcore` | Compose agents, limits, policies and tool grants | [AgentCore](core/agentcore/README.md) |
+| `core/agentcore/engine` | Low-level native loop and event streams | [Engine](core/agentcore/engine/README.md) |
+| `core/agentcore/host` | Checkpoints and reusable host utilities | `go doc ./core/agentcore/host` |
+| `feature/plugins` | Goals, memory, todo, jobs, subagents and guards | [Plugins](feature/plugins/README.md) |
+| `core/telemetry`, `core/telemetry/export`, `feature/telemetry/llm` | Span recording and settled model traces | [Telemetry](core/telemetry/README.md) |
+| `feature/credential` | In-memory host vault and secret references | `go doc ./feature/credential` |
+| `feature/sandbox` | Host-bound file, shell, HTTP and execution tools | `go doc ./feature/sandbox` |
+| `core/jsonjs` | Lossless JSON and shared value identity | `go doc ./core/jsonjs` |
+| `compose/preset` | The default plugin set in one call | [Preset](compose/preset/README.md) |
+| `test/agentcore` | Native session fixtures for consumer tests | `go doc ./test/agentcore` |
+| `test/telemetry` | Conformance cases for telemetry adapters | `go doc ./test/telemetry` |
+
+The first path element is the layer: `core` imports only `core`, a `feature`
+imports `core` and never another feature, `compose` assembles features, and
+`test` is never imported by production code. `test/layering` enforces this.
 
 The foundation has no application server, product database or CLI. Use
 [2agent](https://github.com/2found/2agent) for Soot's workspace, conversations,
@@ -77,7 +83,7 @@ schedules, packs and app.
 
 Configured native transports cover Codex, Claude Code, Antigravity, Devin and
 OpenAI-compatible endpoints, including Gemini. Support varies by provider;
-[AI documentation](ai/README.md) is the contract, not a promise of support for
+[AI documentation](core/ai/README.md) is the contract, not a promise of support for
 every model in a provider catalog.
 
 ## Versioned releases

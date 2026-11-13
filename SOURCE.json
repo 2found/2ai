@@ -12,8 +12,8 @@
     "third_party/pi"
   ],
   "path_mapping": {
-    "internal/jsonjs": "jsonjs",
-    "internal/agentcoretest": "testing/agentcore"
+    "internal/jsonjs": "core/jsonjs",
+    "internal/agentcoretest": "test/agentcore"
   },
   "sha256_before_import_migration": {
     "LICENSE": "1287cc8fd9035151769585fafaf13b05b80f36ddc0e89ff38d44575e21606221",
