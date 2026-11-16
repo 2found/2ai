@@ -284,18 +284,32 @@ func TestNativeRecalledMemorySkipsOnlyVisibleBullets(t *testing.T) {
 	block := func(content string) *ai.Message {
 		return &ai.Message{Role: "user", Content: ai.TextContent(content)}
 	}
-	history := []*ai.Message{block("# Recalled memory\n- (fact, id a) alpha\n"), block("hi"), block("# Recalled memory\n- (fact, id b) bravo\n")}
-
-	if got := nativeRecalledMemory(recalled, history, nil); got != nil {
-		t.Fatalf("every bullet is visible, got %q", ai.ContentText(got.Content))
+	decoded := []*ai.Message{block("# Recalled memory\n- (fact, id a) alpha\n"), block("hi"), block("# Recalled memory\n- (fact, id b) bravo\n")}
+	stored := make([]json.RawMessage, len(decoded))
+	for i, message := range decoded {
+		stored[i], _ = json.Marshal(message)
 	}
-	summary, _ := json.Marshal(nativehost.Summary{PrefixCount: 2})
-	got := nativeRecalledMemory(recalled, history, summary)
-	if got == nil || got.Role != "user" {
-		t.Fatal("a summarized bullet was not re-injected")
+	// A resumed run holds plain stored messages as role-only stand-ins; the
+	// bullets are read from their stored bytes.
+	stubbed, stubbedFlags := make([]*ai.Message, len(decoded)), make([]bool, len(decoded))
+	for i := range stubbed {
+		stubbed[i], stubbedFlags[i] = &ai.Message{Role: "user"}, true
 	}
-	if text := ai.ContentText(got.Content); !strings.Contains(text, "(fact, id a) alpha") || strings.Contains(text, "bravo") {
-		t.Fatalf("memory = %q", text)
+	for _, history := range []struct {
+		messages []*ai.Message
+		stubbed  []bool
+	}{{decoded, make([]bool, len(decoded))}, {stubbed, stubbedFlags}} {
+		if got := nativeRecalledMemory(recalled, history.messages, stored, history.stubbed, nil); got != nil {
+			t.Fatalf("every bullet is visible, got %q", ai.ContentText(got.Content))
+		}
+		summary, _ := json.Marshal(nativehost.Summary{PrefixCount: 2})
+		got := nativeRecalledMemory(recalled, history.messages, stored, history.stubbed, summary)
+		if got == nil || got.Role != "user" {
+			t.Fatal("a summarized bullet was not re-injected")
+		}
+		if text := ai.ContentText(got.Content); !strings.Contains(text, "(fact, id a) alpha") || strings.Contains(text, "bravo") {
+			t.Fatalf("memory = %q", text)
+		}
 	}
 }
 

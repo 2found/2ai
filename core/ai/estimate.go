@@ -3,6 +3,7 @@ package ai
 import (
 	"encoding/json"
 	"math"
+	"unicode/utf8"
 )
 
 // EstimatedCharsPerToken is Pi's conservative fallback ratio; settled provider
@@ -49,6 +50,43 @@ func estimateUTF16Length(text string) int {
 func EstimateTextTokens(text string) float64 {
 	return math.Ceil(float64(estimateUTF16Length(text)) / EstimatedCharsPerToken)
 }
+
+// EstimateTextTokensBytes is EstimateTextTokens(string(text)) without the
+// string copy: a host estimating stored JSON need not duplicate it.
+func EstimateTextTokensBytes(text []byte) float64 {
+	length := 0
+	if utf8.Valid(text) {
+		// Valid UTF-8 has one lead byte per rune, and a 4-byte sequence is
+		// the one rune above U+FFFF, two UTF-16 units.
+		for _, c := range text {
+			length += int(utf16Units[c])
+		}
+	} else {
+		for i := 0; i < len(text); {
+			r, size := utf8.DecodeRune(text[i:])
+			length++
+			if r > 0xffff {
+				length++
+			}
+			i += size
+		}
+	}
+	return math.Ceil(float64(length) / EstimatedCharsPerToken)
+}
+
+// utf16Units is what a byte of valid UTF-8 adds to the UTF-16 length.
+var utf16Units = func() (units [256]uint8) {
+	for c := range units {
+		switch {
+		case c >= 0x80 && c < 0xc0:
+		case c >= 0xf0:
+			units[c] = 2
+		default:
+			units[c] = 1
+		}
+	}
+	return units
+}()
 
 func estimateJSONString(value any) string {
 	encoded, err := json.Marshal(value)

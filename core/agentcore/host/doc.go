@@ -15,6 +15,15 @@
 // A legacy agentcore.Message display projection is not a native checkpoint and
 // must not be replayed as one.
 //
+// A stored transcript is read in place. SplitMessages validates it as JSON in
+// one pass and returns each message as its stored bytes; ReadMessages then
+// validates every tool batch and reads, without decoding, the facts batch
+// validation and compaction need from each message in the shape 2ai writes.
+// Compactor.Learn seeds the memo from that read, and PrepareMessages takes the
+// split messages, so a request costs the messages it adds and sends. A summary
+// also records PrefixRawDigest, the digest of its prefix's stored bytes, and
+// a prefix whose bytes match is accepted without the semantic digest.
+//
 // Requests are reduced in three steps, cheapest first:
 //
 //   - Tool-result clearing (CompactionPolicy.Clearing, the analogue of the

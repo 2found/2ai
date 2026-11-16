@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- **A resumed native run no longer re-reads the whole transcript.** `RunNative` validates the stored transcript in one pass and carries every stored message into the next `NativeState` as its exact stored bytes; only the messages the run settles are encoded. A run that appends one turn to a long compacted thread costs about the same at 4,367 messages as at 50. Checkpoints written before read as before.
+- **`RunResult.Messages` holds only the messages the run added** (a fresh run's system prompt included), and the new `RunResult.Restored` counts the stored messages before them. Memory consolidation already staged only the run's own messages; a resumed run's rollout ID now also covers `Restored`, and a fresh run's is unchanged.
+- **A summary records `prefix_raw_digest`**, the SHA-256 of its prefix's stored bytes, beside `prefix_digest`. A summary without it is matched by the semantic digest and gains it.
+- A stored message that 2ai did not write in its own encoding (other key order, whitespace, unescaped `<`) is now written back verbatim instead of re-encoded. `NativeRun.State` is read in place: do not modify it before `RunNative` returns.
+- `core/agentcore/host` adds `SplitMessages`, `LocateMember`, `ReadMessages`/`Transcript`, `ValidateMessageList`, `Compactor.Learn`, `Compactor.PrepareMessages` and `Compactor.Accepted`; `ai.EstimateTextTokensBytes` estimates tokens of UTF-8 bytes without a string copy.
+
 ## 0.3.0 — 2026-11-13
 
 Baseline: v0.2.5. **Breaking: every import path changes.** No behavior change, no option, tool, schema or checkpoint change; a host only rewrites its imports.

@@ -121,7 +121,7 @@ func (c *Compactor) clear(ctx context.Context, view []json.RawMessage, head, bas
 	apply := func() []json.RawMessage {
 		out, cloned := view, false
 		for _, i := range results {
-			if auth(i) >= c.cleared.Boundary || facts[i].tokens < minClearTokens {
+			if auth(i) >= c.cleared.Boundary || facts[i].tokenCount() < minClearTokens {
 				continue
 			}
 			if !cloned {
@@ -136,13 +136,13 @@ func (c *Compactor) clear(ctx context.Context, view []json.RawMessage, head, bas
 		boundary := auth(results[len(results)-settings.Keep])
 		saving := 0
 		for _, i := range results {
-			if a := auth(i); a >= c.cleared.Boundary && a < boundary && facts[i].tokens >= minClearTokens {
-				saving += facts[i].tokens - minClearTokens/2
+			if a := auth(i); a >= c.cleared.Boundary && a < boundary && facts[i].tokenCount() >= minClearTokens {
+				saving += facts[i].tokenCount() - minClearTokens/2
 			}
 		}
 		if boundary > c.cleared.Boundary && saving >= settings.ClearAtLeast && (cold || c.cacheCold(facts, settings.CacheTTL) || factTokens(c.memo.of(out)) > settings.Trigger) {
 			for _, i := range results {
-				if a := auth(i); a >= c.cleared.Boundary && a < boundary && facts[i].tokens >= minArchiveTokens && !facts[i].isError && policy.Archive != nil {
+				if a := auth(i); a >= c.cleared.Boundary && a < boundary && facts[i].tokenCount() >= minArchiveTokens && !facts[i].isError && policy.Archive != nil {
 					if locator, err := policy.Archive(ctx, facts[i].toolName, facts[i].toolCallID, resultText(view[i])); err == nil && locator != "" {
 						if c.cleared.Locators == nil {
 							c.cleared.Locators = map[int]string{}

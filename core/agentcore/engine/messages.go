@@ -20,6 +20,29 @@ func replayMessageValues(messages *MessageList) ([]ai.Message, error) {
 	return result, nil
 }
 
+// replaySystemMessageValues is the system messages of replayMessageValues,
+// with its error for a missing entry: only a system message declares tools,
+// and copying every message of a long history to find them cost the whole
+// transcript on every turn.
+func replaySystemMessageValues(messages *MessageList) ([]ai.Message, error) {
+	if messages == nil {
+		return []ai.Message{}, nil
+	}
+	messages.mu.RLock()
+	defer messages.mu.RUnlock()
+	result := []ai.Message{}
+	for index := 0; index < messages.length; index++ {
+		message, present := messages.values[index]
+		if message == nil {
+			return nil, jsonjs.PropertyReadError(present, "message.role")
+		}
+		if message.Role == "system" {
+			result = append(result, *message)
+		}
+	}
+	return result, nil
+}
+
 func messageListOrEmpty(messages *MessageList) *MessageList {
 	if messages == nil {
 		return NewList[*ai.Message]()

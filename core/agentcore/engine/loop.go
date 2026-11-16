@@ -301,7 +301,7 @@ func declareToolChanges(current Context, pending *MessageList, now func() int64)
 	}
 	// Replay the history before projecting tools, matching argument evaluation
 	// order in getToolStateChanges(getCurrentTools(...), tools.map(...)).
-	history, err := replayMessageValues(current.Messages)
+	history, err := replaySystemMessageValues(current.Messages)
 	if err != nil {
 		return nil, err
 	}

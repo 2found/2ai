@@ -50,17 +50,27 @@ func ProjectMessage(raw json.RawMessage) (protocol.Message, error) {
 		m.Content = GetCurrentSystemPrompt([]Message{system})
 	}
 	if len(native.Usage) > 0 && string(native.Usage) != "null" {
-		var usage Usage
-		var cost struct{ Cost json.RawMessage }
-		if err := json.Unmarshal(native.Usage, &usage); err != nil {
+		usage, err := ProjectUsage(native.Usage)
+		if err != nil {
 			return m, err
 		}
-		_ = json.Unmarshal(native.Usage, &cost)
-		projected := usage.Protocol()
-		projected.CostUnpriced = len(cost.Cost) == 0 || string(cost.Cost) == "null"
-		m.Usage = &projected
+		m.Usage = usage
 	}
 	return m, nil
+}
+
+// ProjectUsage is the accounting view of a native message's usage object, as
+// ProjectMessage reads it. Usage without a cost object projects as unpriced.
+func ProjectUsage(raw json.RawMessage) (*protocol.Usage, error) {
+	var usage Usage
+	var cost struct{ Cost json.RawMessage }
+	if err := json.Unmarshal(raw, &usage); err != nil {
+		return nil, err
+	}
+	_ = json.Unmarshal(raw, &cost)
+	projected := usage.Protocol()
+	projected.CostUnpriced = len(cost.Cost) == 0 || string(cost.Cost) == "null"
+	return &projected, nil
 }
 
 // ProjectContent extracts display text, images and tool calls from native

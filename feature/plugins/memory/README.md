@@ -93,8 +93,11 @@ add/merge/retract changes. The store must atomically validate the supplied
 snapshot, apply changes and consume rollouts. Source IDs and scope are validated
 before commit. The native binding uses no tools and accounts every AI attempt.
 
-Staging hashes the original JSON transcript one message at a time, preserving
-existing rollout IDs without retaining a second complete transcript buffer.
+Staging takes the run's own messages (`RunResult.Messages`) and hashes them
+one message at a time, without retaining a second complete transcript buffer.
+A fresh run's rollout ID is the digest it always had; a resumed run's also
+covers `RunResult.Restored`, so two runs that repeat each other word for word
+stay distinct rollouts.
 Evidence still keeps at most 32 messages within 32 KB plus an 8 KB final answer;
 tool-call annotations are joined once before truncation. This bounds staging
 scratch space by the largest message rather than the total transcript.

@@ -55,16 +55,16 @@ func (c *curation) FinalizeRun(ctx context.Context, result agentcore.RunResult, 
 	if result.StopReason != "" && result.StopReason != "stop" && result.StopReason != "end_turn" {
 		return nil
 	}
-	id, err := rolloutDigest(result.Messages)
+	id, err := rolloutDigest(result.Messages, result.Restored)
 	if err != nil {
 		return err
 	}
 	r := Rollout{ID: id, Final: agentcore.TruncateMiddle(RedactSecrets(result.Final), 8000)}
 	budget := 32000
-	// Only this run's messages: a restored transcript was evidence for the runs
-	// that wrote it, and resending it made every consolidation of a long
-	// conversation pay for the same turns again.
-	for i := len(result.Messages) - 1; i >= min(c.restored, len(result.Messages)) && len(r.Messages) < 32 && budget > 0; i-- {
+	// result.Messages is only this run's messages: a restored transcript was
+	// evidence for the runs that wrote it, and resending it made every
+	// consolidation of a long conversation pay for the same turns again.
+	for i := len(result.Messages) - 1; i >= 0 && len(r.Messages) < 32 && budget > 0; i-- {
 		m := result.Messages[i]
 		if m.Role == agentcore.RoleSystem || m.Role == agentcore.RoleUser && strings.HasPrefix(m.Content, agentcore.RecalledMemoryHeader) {
 			continue
@@ -100,8 +100,11 @@ func (c *curation) FinalizeRun(ctx context.Context, result agentcore.RunResult, 
 
 // Hash the same JSON array as before without materializing a second complete
 // transcript. Peak scratch space is bounded by one message; nil and empty
-// transcripts deliberately keep their distinct durable digests.
-func rolloutDigest(messages []agentcore.Message) (string, error) {
+// transcripts deliberately keep their distinct durable digests. A resumed
+// run's messages are only the ones it added, which two runs of a conversation
+// can repeat word for word; the count of restored messages before them tells
+// them apart. A fresh run (restored 0) keeps the digest it always had.
+func rolloutDigest(messages []agentcore.Message, restored int) (string, error) {
 	h := sha256.New()
 	if messages == nil {
 		_, _ = h.Write([]byte("null"))
@@ -118,6 +121,9 @@ func rolloutDigest(messages []agentcore.Message) (string, error) {
 			_, _ = h.Write(raw)
 		}
 		_, _ = h.Write([]byte("]"))
+	}
+	if restored > 0 {
+		_, _ = fmt.Fprintf(h, "@%d", restored)
 	}
 	return hex.EncodeToString(h.Sum(nil)), nil
 }

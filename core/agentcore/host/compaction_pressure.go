@@ -7,6 +7,8 @@ import (
 	"slices"
 	"strings"
 	"unicode/utf8"
+
+	"github.com/2found/2ai/core/ai"
 )
 
 // ContextBudgetError contains only safe numeric diagnostics for public hosts.
@@ -20,14 +22,20 @@ func (e *ContextBudgetError) Error() string {
 // by a local estimate. Rewritten views invalidate older usage anchors without
 // modifying the original billable usage or signed native messages.
 func ContextTokens(raw json.RawMessage) int {
-	messages, err := splitMessages(raw)
-	if err != nil {
-		return max(1, estimateTokens(string(raw)))
+	var messages []json.RawMessage
+	var err error
+	if i := skipSpace(raw, 0); i < len(raw) && raw[i] == '[' {
+		messages, err = SplitMessages(raw)
 	}
+	if messages == nil || err != nil {
+		// Not a transcript: estimate the text itself.
+		return max(1, int(ai.EstimateTextTokensBytes(raw)))
+	}
+	values := make([]messageFacts, len(messages))
 	facts := make([]*messageFacts, len(messages))
 	for i, m := range messages {
-		f := decodeFacts(m)
-		facts[i] = &f
+		values[i] = factsOf(m)
+		facts[i] = &values[i]
 	}
 	return factTokens(facts)
 }
@@ -37,7 +45,18 @@ func ContextTokens(raw json.RawMessage) int {
 // If the request still cannot fit, fail before sending it instead of repeatedly
 // paying for a summary over the same tail. The original transcript is untouched.
 func (c *Compactor) Prepare(ctx context.Context, raw json.RawMessage, policy CompactionPolicy) (json.RawMessage, error) {
-	messages, view, _ := c.transform(ctx, raw, policy, false)
+	return c.prepare(ctx, &transcriptInput{raw: raw}, policy)
+}
+
+// PrepareMessages is Prepare of the transcript whose elements are messages,
+// each a JSON value: a host holding a transcript as its stored messages need
+// not join it for a request that a summary shortens.
+func (c *Compactor) PrepareMessages(ctx context.Context, messages []json.RawMessage, policy CompactionPolicy) (json.RawMessage, error) {
+	return c.prepare(ctx, &transcriptInput{messages: messages, split: true}, policy)
+}
+
+func (c *Compactor) prepare(ctx context.Context, in *transcriptInput, policy CompactionPolicy) (json.RawMessage, error) {
+	messages, view, _ := c.transform(ctx, in, policy, false)
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
@@ -95,7 +114,7 @@ func (c *Compactor) Prepare(ctx context.Context, raw json.RawMessage, policy Com
 	// result. A final fold is safe only when the original request has a completed
 	// assistant/tool batch; transform enforces that boundary and persistence.
 	policy.Force = true
-	if next, nextRaw, _ := c.transform(ctx, raw, policy, false); tokens(next, nextRaw) < tokens(messages, view) {
+	if next, nextRaw, _ := c.transform(ctx, in, policy, false); tokens(next, nextRaw) < tokens(messages, view) {
 		messages, view = next, nextRaw
 	}
 	if estimated := tokens(messages, view); estimated > fitBudget {

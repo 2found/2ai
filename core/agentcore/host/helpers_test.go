@@ -11,6 +11,6 @@ func (c *Compactor) testTransform(ctx context.Context, raw json.RawMessage) json
 }
 
 func (c *Compactor) testTransformWith(ctx context.Context, raw json.RawMessage, policy CompactionPolicy) json.RawMessage {
-	_, out, _ := c.transform(ctx, raw, policy, false)
+	_, out, _ := c.transform(ctx, &transcriptInput{raw: raw}, policy, false)
 	return out
 }

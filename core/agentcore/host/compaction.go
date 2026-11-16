@@ -122,11 +122,18 @@ func SummaryText(text string) (string, bool) {
 }
 
 // Summary binds a persisted summary to an exact native transcript prefix.
+// PrefixDigest identifies the prefix semantically (canonical JSON), so a
+// prefix re-encoded with other bytes still matches. PrefixRawDigest, when
+// present, is the SHA-256 of the prefix's stored bytes as one array: the run
+// checks it first, a hash of the bytes rather than a decode of every message,
+// and falls back to PrefixDigest when the bytes differ or a summary written
+// before it existed has none.
 type Summary struct {
-	Revision     string          `json:"revision"`
-	PrefixCount  int             `json:"prefix_count"`
-	PrefixDigest string          `json:"prefix_digest"`
-	Message      json.RawMessage `json:"message"`
+	Revision        string          `json:"revision"`
+	PrefixCount     int             `json:"prefix_count"`
+	PrefixDigest    string          `json:"prefix_digest"`
+	PrefixRawDigest string          `json:"prefix_raw_digest,omitempty"`
+	Message         json.RawMessage `json:"message"`
 }
 
 // ParseSummary validates a persisted summary envelope.
@@ -142,7 +149,51 @@ func ParseSummary(raw string) (Summary, error) {
 	if _, err := hex.DecodeString(summary.PrefixDigest); err != nil {
 		return summary, errors.New("invalid native context summary digest")
 	}
+	if _, err := hex.DecodeString(summary.PrefixRawDigest); err != nil || len(summary.PrefixRawDigest) != 64 {
+		// Only a shortcut: without it the semantic digest decides.
+		summary.PrefixRawDigest = ""
+	}
 	return summary, nil
+}
+
+// prefixRawDigest is the SHA-256 of messages[:count] joined as one array,
+// byte for byte.
+func prefixRawDigest(messages []json.RawMessage, count int) string {
+	h := sha256.New()
+	h.Write([]byte("["))
+	for i, raw := range messages[:count] {
+		if i > 0 {
+			h.Write([]byte(","))
+		}
+		h.Write(raw)
+	}
+	h.Write([]byte("]"))
+	var sum [sha256.Size]byte
+	return hex.EncodeToString(h.Sum(sum[:0]))
+}
+
+// matches reports whether saved summarizes original's first PrefixCount
+// messages. A semantic match on a summary without a byte digest, or with a
+// stale one, records the byte digest so later requests and runs skip the
+// semantic check.
+func (c *Compactor) matches(saved *Summary, original []json.RawMessage) bool {
+	if saved.Revision != c.revision || saved.PrefixCount > len(original) {
+		return false
+	}
+	raw := ""
+	if saved.PrefixRawDigest != "" {
+		if raw = prefixRawDigest(original, saved.PrefixCount); raw == saved.PrefixRawDigest {
+			return true
+		}
+	}
+	if c.memo.digest(original, saved.PrefixCount) != saved.PrefixDigest {
+		return false
+	}
+	if raw == "" {
+		raw = prefixRawDigest(original, saved.PrefixCount)
+	}
+	saved.PrefixRawDigest = raw
+	return true
 }
 
 // PrefixDigest hashes semantic JSON identity without rounding opaque numbers.
@@ -158,12 +209,15 @@ func PrefixDigest(messages []json.RawMessage) string {
 }
 
 // Compactor owns one run's request view and persisted summary. Calls must be serialized.
+// It reads the transcripts it is given in place and may keep reading them
+// while it lives: do not modify one after passing it.
 type Compactor struct {
 	config   CompactionPolicy
 	revision string
 	saved    *Summary
 	cleared  ClearState
 	failures int
+	accepted int // summaries accepted, see Accepted
 	record   func(context.Context, json.RawMessage) error
 	usage    func(protocol.Usage)
 	memo     transcriptMemo
@@ -184,7 +238,7 @@ func (c *Compactor) clock() time.Time {
 // consult Allow or the failure breaker, since someone asked for it.
 func (c *Compactor) Compact(ctx context.Context, raw json.RawMessage, policy CompactionPolicy) error {
 	policy.Force = true
-	if _, _, summarized := c.transform(ctx, raw, policy, true); !summarized {
+	if _, _, summarized := c.transform(ctx, &transcriptInput{raw: raw}, policy, true); !summarized {
 		if err := ctx.Err(); err != nil {
 			return err
 		}
@@ -197,23 +251,28 @@ func (c *Compactor) Compact(ctx context.Context, raw json.RawMessage, policy Com
 // refers to a prefix of this exact view (after native host hooks), never to a
 // Go text projection; on mismatch the full native context is the safe
 // fallback. Calls are serialized by the host.
-func (c *Compactor) transform(ctx context.Context, raw json.RawMessage, policy CompactionPolicy, manual bool) (messages []json.RawMessage, out json.RawMessage, summarized bool) {
-	out = raw
+//
+// The view is the input itself unless a summary or clearing rewrites it: an
+// input given as messages is joined only then.
+func (c *Compactor) transform(ctx context.Context, in *transcriptInput, policy CompactionPolicy, manual bool) (messages []json.RawMessage, out json.RawMessage, summarized bool) {
 	defer func() {
 		if recover() != nil {
-			messages, out, summarized = nil, raw, false
+			messages, out, summarized = nil, nil, false
+		}
+		if out == nil {
+			out = in.joined()
 		}
 	}()
 	if ctx.Err() != nil {
 		return
 	}
-	original, err := splitMessages(raw)
+	original, err := in.elements()
 	if err != nil || validFacts(c.memo.of(original)) != nil {
 		return
 	}
 	messages = original
 	full, base, head := original, 0, 0
-	if saved := c.saved; saved != nil && saved.Revision == c.revision && saved.PrefixCount <= len(original) && c.memo.digest(original, saved.PrefixCount) == saved.PrefixDigest {
+	if saved := c.saved; saved != nil && c.matches(saved, original) {
 		role := ""
 		if saved.PrefixCount < len(original) {
 			role = c.memo.of(original[saved.PrefixCount : saved.PrefixCount+1])[0].role
@@ -227,7 +286,12 @@ func (c *Compactor) transform(ctx context.Context, raw json.RawMessage, policy C
 		}
 	}
 	view := c.clear(ctx, full, head, base, policy, false)
-	messages, out = view, joinMessages(view)
+	messages = view
+	if sameMessages(view, original) {
+		out = in.joined()
+	} else {
+		out = joinMessages(view)
+	}
 	facts := c.memo.of(view)
 	cut := compactionCut(facts, policy.Budget, policy.KeepRecent)
 	if policy.Force && len(view) > head {
@@ -327,18 +391,55 @@ func (c *Compactor) transform(ctx context.Context, raw json.RawMessage, policy C
 		failed()
 		return
 	}
-	saved := Summary{Revision: c.revision, PrefixCount: count, PrefixDigest: c.memo.digest(original, count), Message: message}
+	saved := Summary{Revision: c.revision, PrefixCount: count, PrefixDigest: c.memo.digest(original, count), PrefixRawDigest: prefixRawDigest(original, count), Message: message}
 	payload, _ := json.Marshal(saved)
 	if c.record != nil && c.record(ctx, payload) != nil {
 		return
 	}
 	c.saved = &saved
+	c.accepted++
 	c.failures = 0
 	if policy.Observe != nil {
 		event.PostTokens, event.PrefixMessages = ContextTokens(nextRaw), count
 		policy.Observe(event)
 	}
 	return next, nextRaw, true
+}
+
+// transcriptInput is a transcript given as JSON, as its elements, or both.
+type transcriptInput struct {
+	raw      json.RawMessage
+	messages []json.RawMessage
+	split    bool // messages holds raw's elements
+	err      error
+}
+
+func (in *transcriptInput) elements() ([]json.RawMessage, error) {
+	if !in.split {
+		in.messages, in.err = splitMessages(in.raw)
+		in.split = true
+	}
+	return in.messages, in.err
+}
+
+func (in *transcriptInput) joined() json.RawMessage {
+	if in.raw == nil {
+		in.raw = joinMessages(in.messages)
+	}
+	return in.raw
+}
+
+// sameMessages reports whether a and b hold the very same message slices.
+func sameMessages(a, b []json.RawMessage) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if len(a[i]) != len(b[i]) || (len(a[i]) > 0 && &a[i][0] != &b[i][0]) {
+			return false
+		}
+	}
+	return true
 }
 
 // summaryView replaces a validated prefix while preserving its system messages.
@@ -463,7 +564,7 @@ func compactionCut(facts []*messageFacts, budget, keep int) int {
 	}
 	recent := 0
 	for i := len(facts) - 1; i > 0; i-- {
-		recent += facts[i].tokens
+		recent += facts[i].tokenCount()
 		role := facts[i].role
 		if recent >= keep && ((priorAssistant[i] && (role == "assistant" || role == "user")) || (role == "user" && priorUsers[i] > 0)) {
 			return i
@@ -495,6 +596,11 @@ func (c *Compactor) Checkpoint() json.RawMessage {
 	raw, _ := json.Marshal(c.saved)
 	return raw
 }
+
+// Accepted counts the summaries this compactor has accepted. A request whose
+// count changed rebased the view on a new summary; Checkpoint's bytes may also
+// change when a restored summary gains its byte digest, which is no rebase.
+func (c *Compactor) Accepted() int { return c.accepted }
 
 // Restore validates a saved summary before replacing the current checkpoint.
 // The next Transform additionally verifies its digest against the native input.

@@ -122,4 +122,12 @@ func TestRolloutCarriesOnlyTheRunsOwnMessages(t *testing.T) {
 	if want := []string{"user:second", "assistant:answer to second"}; !slices.Equal(contents, want) {
 		t.Fatalf("second rollout = %q, want %q", contents, want)
 	}
+	// A run that repeats an earlier one word for word is still its own rollout.
+	seen = nil
+	again := run(first.NativeState, "second")
+	run(again.NativeState, "second")
+	last := func(c Consolidation) string { return c.Rollouts[len(c.Rollouts)-1].ID }
+	if len(seen) != 2 || last(seen[0]) == last(seen[1]) {
+		t.Fatalf("repeated runs share a rollout: %+v", seen)
+	}
 }

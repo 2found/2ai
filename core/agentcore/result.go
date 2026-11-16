@@ -9,11 +9,17 @@ import "encoding/json"
 // contracts — a consumer renders them and a plugin observes them — so they
 // stay separate from the machinery that produces them.
 
-// RunResult is the outcome of a run: the final assistant text, the full message
-// history (working memory), the tool trace, and summed usage.
+// RunResult is the outcome of a run: the final assistant text, the messages
+// the run added, the tool trace, and summed usage.
 type RunResult struct {
-	Final      string      `json:"final"`
-	Messages   []Message   `json:"messages"`
+	Final string `json:"final"`
+	// Messages are the messages this run added to the transcript, projected
+	// for display: on a fresh run its system prompt, input and replies; on a
+	// resumed run only what followed the Restored stored messages, which a
+	// consumer already holds from earlier results.
+	Messages []Message `json:"messages"`
+	// Restored counts the stored messages a native run resumed from.
+	Restored   int         `json:"restored,omitempty"`
 	Tools      []ToolTrace `json:"tool_calls"`
 	Usage      Usage       `json:"usage"`
 	Turns      int         `json:"turns"`

@@ -1,7 +1,6 @@
 package host
 
 import (
-	"bytes"
 	"crypto/sha256"
 	"encoding"
 	"encoding/hex"
@@ -10,6 +9,8 @@ import (
 	"hash"
 	"hash/maphash"
 	"math"
+
+	"github.com/2found/2ai/core/ai"
 )
 
 // messageFacts is what the compactor reads from one native message. Decoding
@@ -22,7 +23,19 @@ type messageFacts struct {
 	usage                                  float64
 	calls                                  []string // tool call IDs of a settled assistant message
 	callArgs                               map[string]json.RawMessage
-	tokens, bytes                          int
+	bytes                                  int
+	// tokens is the message's text estimate, counted from raw on first use:
+	// most requests read the estimate of their view only.
+	tokens  int
+	counted bool
+	raw     json.RawMessage
+}
+
+func (f *messageFacts) tokenCount() int {
+	if !f.counted {
+		f.tokens, f.counted = max(1, int(ai.EstimateTextTokensBytes(f.raw))-imageDiscount(f.raw)), true
+	}
+	return f.tokens
 }
 
 func decodeFacts(raw json.RawMessage) messageFacts {
@@ -56,7 +69,7 @@ func decodeFacts(raw json.RawMessage) messageFacts {
 			}
 		}
 	}
-	f.tokens = max(1, estimateTokens(string(raw))-imageDiscount(raw))
+	f.tokens, f.counted = max(1, estimateTokens(string(raw))-imageDiscount(raw)), true
 	return f
 }
 
@@ -66,6 +79,9 @@ func decodeFacts(raw json.RawMessage) messageFacts {
 type transcriptMemo struct {
 	seed  maphash.Seed
 	facts map[uint64]*messageFacts
+	// slab holds new facts in chunks, so caching a message costs no
+	// allocation of its own.
+	slab []messageFacts
 	// marks[i] fingerprints authoritative message i; states[i] is the SHA-256
 	// state after "[" and messages 0..i-1, so a prefix digest of any length
 	// up to len(states)-1 needs no rehash.
@@ -84,13 +100,19 @@ func (m *transcriptMemo) mark(raw json.RawMessage) uint64 {
 
 // of returns the cached facts of each message.
 func (m *transcriptMemo) of(messages []json.RawMessage) []*messageFacts {
+	if m.facts == nil {
+		m.seed, m.facts = maphash.MakeSeed(), make(map[uint64]*messageFacts, len(messages))
+	}
 	out := make([]*messageFacts, len(messages))
 	for i, raw := range messages {
 		key := m.mark(raw)
 		f := m.facts[key]
 		if f == nil {
-			decoded := decodeFacts(raw)
-			f = &decoded
+			if len(m.slab) == cap(m.slab) {
+				m.slab = make([]messageFacts, 0, min(max(64, len(messages)-i), 4096))
+			}
+			m.slab = append(m.slab, factsOf(raw))
+			f = &m.slab[len(m.slab)-1]
 			m.facts[key] = f
 		}
 		out[i] = f
@@ -165,16 +187,7 @@ func joinMessages(messages []json.RawMessage) json.RawMessage {
 	return append(out, ']')
 }
 
-func splitMessages(raw json.RawMessage) ([]json.RawMessage, error) {
-	var messages []json.RawMessage
-	if err := json.Unmarshal(raw, &messages); err != nil {
-		return nil, err
-	}
-	if messages == nil && !bytes.Equal(bytes.TrimSpace(raw), []byte("[]")) {
-		return nil, fmt.Errorf("native transcript must be an array")
-	}
-	return messages, nil
-}
+func splitMessages(raw json.RawMessage) ([]json.RawMessage, error) { return SplitMessages(raw) }
 
 // validFacts is validateMessages over cached facts.
 func validFacts(facts []*messageFacts) error {
@@ -207,7 +220,7 @@ func factTokens(facts []*messageFacts) int {
 	floor := 1 // the array's brackets and separators
 	var rewrittenAt int64
 	for _, f := range facts {
-		floor += f.tokens
+		floor += f.tokenCount()
 		if f.summary {
 			rewrittenAt = max(rewrittenAt, f.timestamp)
 		}
@@ -222,7 +235,7 @@ func factTokens(facts []*messageFacts) int {
 				return max(floor, int(math.Ceil(count))+tail)
 			}
 		}
-		tail += f.tokens
+		tail += f.tokenCount()
 	}
 	return max(1, floor)
 }

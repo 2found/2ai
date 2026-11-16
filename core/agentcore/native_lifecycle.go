@@ -7,13 +7,37 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/2found/2ai/core/ai"
+	nativehost "github.com/2found/2ai/core/agentcore/host"
 )
 
 // ObserveMessages delivers a detached display projection to existing plugin
 // observers. Native request/history JSON remains authoritative and cannot be
 // rewritten by a legacy observer.
+// ObservesMessages reports whether any extension observes messages, so a
+// caller can skip encoding a transcript nobody reads.
+func (h *ToolHost) ObservesMessages() bool {
+	h.gate.RLock()
+	defer h.gate.RUnlock()
+	return len(h.exts.observers) > 0
+}
+
 func (h *ToolHost) ObserveMessages(ctx context.Context, phase ObservePhase, turn int, raw json.RawMessage) error {
+	return h.observeMessages(ctx, phase, turn, func() ([]json.RawMessage, error) {
+		var messages []json.RawMessage
+		if err := json.Unmarshal(raw, &messages); err != nil {
+			return nil, err
+		}
+		return messages, nil
+	})
+}
+
+// ObserveMessageList is ObserveMessages for messages already split into
+// their encoded elements, such as a stored transcript.
+func (h *ToolHost) ObserveMessageList(ctx context.Context, phase ObservePhase, turn int, messages []json.RawMessage) error {
+	return h.observeMessages(ctx, phase, turn, func() ([]json.RawMessage, error) { return messages, nil })
+}
+
+func (h *ToolHost) observeMessages(ctx context.Context, phase ObservePhase, turn int, messages func() ([]json.RawMessage, error)) error {
 	h.gate.RLock()
 	defer h.gate.RUnlock()
 	if h.closed || !h.lifecycle.Load() {
@@ -24,13 +48,13 @@ func (h *ToolHost) ObserveMessages(ctx context.Context, phase ObservePhase, turn
 	if len(h.exts.observers) == 0 {
 		return nil
 	}
-	var messages []json.RawMessage
-	if err := json.Unmarshal(raw, &messages); err != nil {
+	list, err := messages()
+	if err != nil {
 		return err
 	}
-	projected := make([]Message, 0, len(messages))
-	for _, message := range messages {
-		value, err := ai.ProjectMessage(message)
+	projected := make([]Message, 0, len(list))
+	for _, message := range list {
+		value, err := nativehost.ProjectMessage(message)
 		if err != nil {
 			return err
 		}
@@ -363,6 +387,14 @@ func (h *ToolHost) CompleteRun(ctx context.Context, result RunResult) RunResult 
 // TransformContext applies native request-view hooks without rewriting the
 // durable transcript. A failing or mutating hook cannot damage the last valid
 // view: each receives an isolated copy, and invalid output is discarded.
+// TransformsContext reports whether TransformContext may change a context:
+// whether any context hook or extension is installed.
+func (h *ToolHost) TransformsContext() bool {
+	h.gate.RLock()
+	defer h.gate.RUnlock()
+	return !h.closed && (len(h.agent.hooks.Context) > 0 || len(h.exts.contexts) > 0)
+}
+
 func (h *ToolHost) TransformContext(ctx context.Context, raw json.RawMessage) json.RawMessage {
 	h.gate.RLock()
 	defer h.gate.RUnlock()

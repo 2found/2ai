@@ -68,9 +68,24 @@ are imported once as untrusted source facts, never replayed as provider history.
 `RunNative` accepts an opaque prior checkpoint and newly authored user/system
 input. It composes the existing plugins and governed tools around `engine.Agent`,
 with native compaction and explicit-parent telemetry. Display `Messages` are
-output only. Durable sessions use the application's native session host for
-in-flight effects, leases and parked delegations. Ephemeral native subagents
-continue corrections from `NativeState`, preserving their original transcript.
+output only, and hold only the messages the run added (on a fresh run, its
+system prompt too); `Restored` counts the stored messages before them. Durable
+sessions use the application's native session host for in-flight effects,
+leases and parked delegations. Ephemeral native subagents continue corrections
+from `NativeState`, preserving their original transcript.
+
+A resumed run reads the stored transcript in place, so its cost follows the
+messages it sends and adds, not the length of the thread. `NativeRun.State` is
+validated in one pass (JSON and every tool batch) and split into each message's
+stored bytes; a message in the shape 2ai writes is read without being decoded,
+and the engine holds a role-only stand-in for it. The next `NativeState` carries
+every stored message back as its exact stored bytes, and encodes only the
+messages the run settled. A summary records a digest of its prefix's stored
+bytes (`prefix_raw_digest`) beside the semantic `prefix_digest`; a summary
+without one, as older checkpoints hold, is matched by the semantic digest and
+gains the raw one. What still reads the whole transcript: a request view that is
+not compacted (the provider is sent all of it), a `TransformContext` hook, and
+a message observer at `PhaseRestore`, which projects every stored message.
 
 Shared native compaction and transcript-checkpoint utilities live in
 [`host/`](host/); application persistence and credentials remain in the consumer.

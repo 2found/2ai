@@ -29,10 +29,13 @@ type NativeRun struct {
 	Commands map[string]json.RawMessage
 	// ControlOnly applies commands and checkpoints without making a model request.
 	ControlOnly bool
-	State       json.RawMessage
-	Input       []Message
-	Task        string
-	Sink        StreamSink
+	// State is read in place while the run lasts: settled messages pass
+	// through to the next state as their stored bytes, never re-encoded. Do
+	// not modify it before RunNative returns.
+	State json.RawMessage
+	Input []Message
+	Task  string
+	Sink  StreamSink
 	// Lifecycle receives bounded setup steps that happen before the provider
 	// loop starts, such as recalling relevant memory.
 	Lifecycle  func(string)
@@ -146,15 +149,29 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 		}
 	}
 	checkpoint := nativeCheckpoint{Revision: nativeCheckpointRevision, Messages: json.RawMessage(`[]`)}
+	// stored is the checkpoint's transcript, each message the exact bytes it
+	// was stored as. A run reads what it needs from them and returns them
+	// unchanged: its cost follows the messages it reads or adds, not the
+	// length of the thread.
+	var stored []json.RawMessage
+	transcript, _ := nativehost.ReadMessages(nil)
 	selected := 0
 	if len(input.State) > 0 {
-		if err := json.Unmarshal(input.State, &checkpoint); err != nil {
-			return result, err
+		var splitErr error
+		if stored, splitErr = readNativeCheckpoint(input.State, &checkpoint); splitErr != nil {
+			// Report a state that is not JSON as json.Unmarshal does.
+			if err := json.Unmarshal(input.State, &nativeCheckpoint{}); err != nil {
+				return result, err
+			}
 		}
 		if checkpoint.Revision != nativeCheckpointRevision {
 			return result, errors.New("agentcore: unsupported native checkpoint revision")
 		}
-		if err := nativehost.ValidateMessages(checkpoint.Messages); err != nil {
+		if splitErr != nil {
+			return result, splitErr
+		}
+		var err error
+		if transcript, err = nativehost.ReadMessages(stored); err != nil {
 			return result, err
 		}
 		// Resume on the candidate the conversation last settled on. When the
@@ -174,8 +191,12 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 	} else {
 		selected = min(ladder.Rung(), len(provider.Candidates)-1)
 	}
-	var history []*ai.Message
-	if err := json.Unmarshal(checkpoint.Messages, &history); err != nil {
+	// history is the engine's view of stored: the engine reads only roles and
+	// system messages' tool declarations, so a plain user, assistant or tool
+	// result message is a role-only stand-in. Every request is built from the
+	// stored bytes instead (encoded), and providers decode what they send.
+	history, stubbed, err := nativeHistory(stored, transcript)
+	if err != nil {
 		return result, err
 	}
 	// sentSystem is the system prompt the transcript carries; a new system
@@ -183,17 +204,15 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 	sentSystem := nativeSystemText(history)
 	// settled is the transcript as the engine appends it, each message encoded
 	// once: a request and a checkpoint join bytes instead of re-encoding the
-	// whole history every turn.
-	var settled []json.RawMessage
+	// whole history every turn. added is the part of it this run wrote.
+	var settled, added []json.RawMessage
 	encoded := make(map[*ai.Message]json.RawMessage, len(history))
-	for _, message := range history {
-		raw, err := json.Marshal(message)
-		if err != nil {
-			return result, err
+	for i, message := range history {
+		if message != nil {
+			encoded[message] = stored[i]
 		}
-		encoded[message] = raw
 	}
-	encode := func(messages []*ai.Message) (json.RawMessage, error) {
+	encodeParts := func(messages []*ai.Message) ([]json.RawMessage, error) {
 		parts := make([]json.RawMessage, len(messages))
 		for i, message := range messages {
 			if parts[i] = encoded[message]; parts[i] == nil {
@@ -203,6 +222,13 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 				}
 				parts[i] = raw
 			}
+		}
+		return parts, nil
+	}
+	encode := func(messages []*ai.Message) (json.RawMessage, error) {
+		parts, err := encodeParts(messages)
+		if err != nil {
+			return nil, err
 		}
 		return joinRawMessages(parts), nil
 	}
@@ -303,7 +329,7 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 	if err != nil {
 		return result, err
 	}
-	if err := h.ObserveMessages(ctx, PhaseRestore, 0, checkpoint.Messages); err != nil {
+	if err := h.ObserveMessageList(ctx, PhaseRestore, 0, stored); err != nil {
 		return result, err
 	}
 	if err := h.ObserveMessages(ctx, PhaseExternalInput, 0, external); err != nil {
@@ -573,6 +599,7 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 		}
 	}
 	compactor := nativehost.NewCompactor(nativehost.CompactorOptions{Revision: nativeCheckpointRevision, Policy: policy, Usage: func(u Usage) { result.Usage = result.Usage.Add(u) }})
+	compactor.Learn(transcript)
 	if len(checkpoint.Summary) > 0 {
 		if err := compactor.Restore(checkpoint.Summary); err != nil {
 			// The full opaque transcript remains available; discard a bad
@@ -596,9 +623,7 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 		if !resumable.ok {
 			return nil
 		}
-		state := resumable.checkpoint
-		state.Messages = joinRawMessages(settled[:resumable.count])
-		raw, _ := json.Marshal(state)
+		raw, _ := writeNativeCheckpoint(resumable.checkpoint, settled[:resumable.count])
 		return raw
 	}
 	capture := func(ctx context.Context) error {
@@ -740,19 +765,25 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 					Open: func(ctx context.Context, index, _ int) (*ai.AssistantMessageEventStream, error) {
 						candidate := provider.Candidates[index]
 						prepared = engine.Request{Context: source.Context, Model: candidate.Model, ThinkingLevel: source.ThinkingLevel}
-						raw, err := encode(source.Context.Messages.Values())
+						parts, err := encodeParts(source.Context.Messages.Values())
 						if err != nil {
 							return nil, &ai.PreparationError{Cause: err}
 						}
-						raw = h.TransformContext(ctx, raw)
 						var model struct{ ContextWindow int }
 						_ = json.Unmarshal(candidate.Model, &model)
-						prior := compactor.Checkpoint()
+						prior := compactor.Accepted()
 						shared.index, shared.controls, shared.ok = index, controls, true
-						if recovered := recoveryView[index]; recovered != nil {
+						var raw json.RawMessage
+						switch recovered := recoveryView[index]; {
+						case recovered != nil:
 							raw = recovered
-						} else {
-							raw, err = compactor.Prepare(ctx, raw, policy.ForWindow(model.ContextWindow))
+						case h.TransformsContext():
+							raw, err = compactor.Prepare(ctx, h.TransformContext(ctx, joinRawMessages(parts)), policy.ForWindow(model.ContextWindow))
+						default:
+							// Nothing rewrites the context: the compactor reads the
+							// stored messages as they are, and joins them only for
+							// a request that sends them all.
+							raw, err = compactor.PrepareMessages(ctx, parts, policy.ForWindow(model.ContextWindow))
 						}
 						if err != nil {
 							var budgetError *nativehost.ContextBudgetError
@@ -762,7 +793,7 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 							return nil, &ai.PreparationError{Cause: err}
 						}
 						lastView[index] = slices.Clone(raw)
-						if summary := compactor.Checkpoint(); len(summary) > 0 && !bytes.Equal(prior, summary) {
+						if compactor.Accepted() != prior && len(compactor.Checkpoint()) > 0 {
 							if err := h.ObserveMessages(ctx, PhaseRebase, result.Turns, raw); err != nil {
 								return nil, &ai.PreparationError{Cause: err}
 							}
@@ -779,16 +810,19 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 							}
 						}
 						transcript := ai.NormalizeContext(ai.Context{Messages: visible})
-						view, err := json.Marshal(transcript.Messages())
-						if err != nil {
-							return nil, &ai.PreparationError{Cause: err}
-						}
-						if err := h.ObserveMessages(ctx, PhaseRequest, result.Turns, view); err != nil {
-							return nil, &ai.PreparationError{Cause: err}
-						}
-						if len(a.hooks.BeforeProviderRequest) > 0 {
-							if err := a.observeNativeRequest(ctx, candidate.Model, view, source.Context.Tools); err != nil {
+						// The view is encoded again only for those who read it.
+						if hooked := len(a.hooks.BeforeProviderRequest) > 0; hooked || h.ObservesMessages() {
+							view, err := json.Marshal(transcript.Messages())
+							if err != nil {
 								return nil, &ai.PreparationError{Cause: err}
+							}
+							if err := h.ObserveMessages(ctx, PhaseRequest, result.Turns, view); err != nil {
+								return nil, &ai.PreparationError{Cause: err}
+							}
+							if hooked {
+								if err := a.observeNativeRequest(ctx, candidate.Model, view, source.Context.Tools); err != nil {
+									return nil, &ai.PreparationError{Cause: err}
+								}
 							}
 						}
 						trace.Start(candidate.Model, transcript)
@@ -941,6 +975,7 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 			if raw, err = json.Marshal(message); err != nil {
 				return result, err
 			}
+			added = append(added, raw)
 		}
 		settled, encoded[message] = append(settled, raw), raw
 	}
@@ -991,6 +1026,7 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 				return err
 			}
 			settled, encoded[event.Message] = append(settled, data), data
+			added = append(added, data)
 			if err := h.ObserveMessages(ctx, PhaseAppend, result.Turns, joinRawMessages([]json.RawMessage{data})); err != nil {
 				return err
 			}
@@ -1084,7 +1120,7 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 			prompts = append(prompts, nativeSystemMessage(system))
 			sentSystem = system
 		}
-		if memory := nativeRecalledMemory(recalled, history, checkpoint.Summary); memory != nil {
+		if memory := nativeRecalledMemory(recalled, history, stored, stubbed, checkpoint.Summary); memory != nil {
 			prompts = append(prompts, memory)
 		}
 		for _, raw := range rawInput {
@@ -1108,18 +1144,19 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 	if state.ErrorMessage != nil && *state.ErrorMessage != "" && failure == nil {
 		failure = errors.New(*state.ErrorMessage)
 	}
-	messages, err := json.Marshal(state.Messages)
-	if err == nil {
-		// A run stopped inside a tool batch leaves no resumable transcript;
-		// the last settled turn's state is returned instead.
-		err = nativehost.ValidateMessages(messages)
+	// settled is state.Messages as each message settled. The stored part was
+	// validated closed on the way in, so the transcript is closed when what
+	// this run added is: a run stopped inside a tool batch leaves no
+	// resumable transcript, and the last settled turn's state is returned
+	// instead.
+	if state.Messages.Len() != len(settled) {
+		return result, errors.Join(failure, errors.New("agentcore: native transcript diverged from its settled messages"))
 	}
-	if err != nil {
+	if err := nativehost.ValidateMessageList(added); err != nil {
 		return result, errors.Join(failure, err)
 	}
-
-	for _, message := range state.Messages.Values() {
-		raw, _ := json.Marshal(message)
+	result.Restored = len(stored)
+	for _, raw := range added {
 		projected, err := ai.ProjectMessage(raw)
 		if err != nil {
 			return result, errors.Join(failure, err)
@@ -1145,9 +1182,9 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 	if err != nil {
 		return result, errors.Join(failure, err)
 	}
-	checkpoint = nativeCheckpoint{Question: checkpoint.Question, Goal: h.committedGoal, GoalRevisions: checkpoint.GoalRevisions, Plugins: pluginState, Revision: nativeCheckpointRevision, Model: slices.Clone(provider.Candidates[selected].Model), Messages: messages, Summary: compactor.Checkpoint(), Cleared: compactor.Cleared()}
+	checkpoint = nativeCheckpoint{Question: checkpoint.Question, Goal: h.committedGoal, GoalRevisions: checkpoint.GoalRevisions, Plugins: pluginState, Revision: nativeCheckpointRevision, Model: slices.Clone(provider.Candidates[selected].Model), Summary: compactor.Checkpoint(), Cleared: compactor.Cleared()}
 	result.NativeRevision = nativeCheckpointRevision
-	result.NativeState, err = json.Marshal(checkpoint)
+	result.NativeState, err = writeNativeCheckpoint(checkpoint, settled)
 	if err != nil {
 		return result, errors.Join(failure, err)
 	}
@@ -1160,15 +1197,40 @@ func (a *Agent) runNative(ctx context.Context, input NativeRun) (result RunResul
 // requests read it from the prompt cache instead of rewriting the prefix, and
 // a bullet the request still carries verbatim is not repeated; one covered by a
 // compaction summary is, since the summary may have dropped it.
-func nativeRecalledMemory(recalled []MemoryEntry, history []*ai.Message, summary json.RawMessage) *ai.Message {
-	visible := history
-	var saved nativehost.Summary
-	if len(summary) > 0 && json.Unmarshal(summary, &saved) == nil && saved.PrefixCount > 0 && saved.PrefixCount <= len(visible) {
-		visible = visible[saved.PrefixCount:]
+//
+// history[i] stands for stored[i]; a stubbed one carries only its role, and is
+// decoded from stored the first time a bullet is looked for.
+func nativeRecalledMemory(recalled []MemoryEntry, history []*ai.Message, stored []json.RawMessage, stubbed []bool, summary json.RawMessage) *ai.Message {
+	if len(recalled) == 0 {
+		return nil
 	}
+	first := 0
+	var saved nativehost.Summary
+	if len(summary) > 0 && json.Unmarshal(summary, &saved) == nil && saved.PrefixCount > 0 && saved.PrefixCount <= len(history) {
+		first = saved.PrefixCount
+	}
+	var texts []string
+	decoded := false
 	memory := renderRecalledMemory(recalled, func(bullet string) bool {
-		for _, message := range visible {
-			if message != nil && message.Role == "user" && strings.Contains(ai.ContentText(message.Content), bullet) {
+		if !decoded {
+			decoded = true
+			for i := first; i < len(history); i++ {
+				message := history[i]
+				if message == nil || message.Role != "user" {
+					continue
+				}
+				if stubbed[i] {
+					var full ai.Message
+					if json.Unmarshal(stored[i], &full) != nil {
+						continue
+					}
+					message = &full
+				}
+				texts = append(texts, ai.ContentText(message.Content))
+			}
+		}
+		for _, text := range texts {
+			if strings.Contains(text, bullet) {
 				return true
 			}
 		}
@@ -1328,6 +1390,114 @@ func (h *ToolHost) nativeTools(ctx context.Context, parent telemetry.Context, sa
 		tools = append(tools, tool)
 	}
 	return tools, nil
+}
+
+// readNativeCheckpoint decodes state into checkpoint and returns its
+// transcript as the stored elements (splitStoredMessages): everything but the
+// transcript is decoded, and the transcript is validated as JSON in one pass
+// without being decoded. A state whose "messages" member another key could
+// shadow under encoding/json's case-insensitive matching is decoded whole, as
+// before. An error is the first of decoding and splitting.
+func readNativeCheckpoint(state json.RawMessage, checkpoint *nativeCheckpoint) ([]json.RawMessage, error) {
+	start, end, ok, err := nativehost.LocateMember(state, "messages")
+	if err != nil || !ok {
+		if err := json.Unmarshal(state, checkpoint); err != nil {
+			return nil, err
+		}
+		return splitStoredMessages(checkpoint.Messages)
+	}
+	stored, err := splitStoredMessages(state[start:end:end])
+	if err != nil {
+		return nil, err
+	}
+	rest := make([]byte, 0, len(state)-(end-start)+2)
+	rest = append(append(append(rest, state[:start]...), "[]"...), state[end:]...)
+	if err := json.Unmarshal(rest, checkpoint); err != nil {
+		return nil, err
+	}
+	checkpoint.Messages = state[start:end:end]
+	return stored, nil
+}
+
+// splitStoredMessages is a checkpoint's transcript as its stored elements. A
+// null transcript is empty, as json.Unmarshal reads it.
+func splitStoredMessages(raw json.RawMessage) ([]json.RawMessage, error) {
+	if string(bytes.Trim(raw, " \t\r\n")) == "null" {
+		return nil, nil
+	}
+	return nativehost.SplitMessages(raw)
+}
+
+// nativeHistory is the engine's history for stored messages. The engine reads
+// a message's role, and a system message's sections and tool declarations;
+// so a user, assistant or tool result message in the shape 2ai writes becomes
+// a role-only stand-in (stubbed), and only the others are decoded.
+func nativeHistory(stored []json.RawMessage, transcript *nativehost.Transcript) ([]*ai.Message, []bool, error) {
+	history := make([]*ai.Message, len(stored))
+	stubbed := make([]bool, len(stored))
+	stubs := make([]ai.Message, 0, len(stored))
+	for i, raw := range stored {
+		if role, ok := transcript.PlainRole(i); ok && (role == "user" || role == "assistant" || role == "toolResult") {
+			stubs = append(stubs, ai.Message{Role: role})
+			history[i], stubbed[i] = &stubs[len(stubs)-1], true
+			continue
+		}
+		if string(raw) == "null" {
+			continue // as a decoded []*ai.Message holds it
+		}
+		message := new(ai.Message)
+		if err := json.Unmarshal(raw, message); err != nil {
+			return nil, nil, err
+		}
+		history[i] = message
+	}
+	return history, stubbed, nil
+}
+
+// writeNativeCheckpoint is json.Marshal(checkpoint) with messages as its
+// transcript, written as they are rather than re-encoded: a stored message
+// keeps its stored bytes, and one the run settled is json.Marshal's encoding
+// already. For messages in that encoding the result is json.Marshal's.
+func writeNativeCheckpoint(checkpoint nativeCheckpoint, messages []json.RawMessage) (json.RawMessage, error) {
+	head, err := json.Marshal(struct {
+		Question *nativeQuestion `json:"question,omitempty"`
+		Revision string          `json:"revision"`
+		Model    json.RawMessage `json:"model"`
+	}{checkpoint.Question, checkpoint.Revision, checkpoint.Model})
+	if err != nil {
+		return nil, err
+	}
+	tail, err := json.Marshal(struct {
+		Summary       json.RawMessage            `json:"summary,omitempty"`
+		Cleared       json.RawMessage            `json:"cleared,omitempty"`
+		Goal          string                     `json:"goal,omitempty"`
+		GoalRevisions []GoalRevision             `json:"goalRevisions,omitempty"`
+		Plugins       map[string]json.RawMessage `json:"plugins,omitempty"`
+	}{checkpoint.Summary, checkpoint.Cleared, checkpoint.Goal, checkpoint.GoalRevisions, checkpoint.Plugins})
+	if err != nil {
+		return nil, err
+	}
+	size := len(head) + len(`,"messages":[]`) + len(tail)
+	for _, raw := range messages {
+		size += len(raw) + 1
+	}
+	out := make([]byte, 0, size)
+	out = append(out, head[:len(head)-1]...)
+	out = append(out, `,"messages":[`...)
+	for i, raw := range messages {
+		if i > 0 {
+			out = append(out, ',')
+		}
+		out = append(out, raw...)
+	}
+	out = append(out, ']')
+	if len(tail) > 2 {
+		out = append(out, ',')
+		out = append(out, tail[1:]...)
+	} else {
+		out = append(out, '}')
+	}
+	return out, nil
 }
 
 // joinRawMessages encodes a JSON array of already encoded messages.
