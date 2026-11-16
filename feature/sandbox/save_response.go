@@ -21,6 +21,31 @@ import (
 // only, no escaping the root, no following a symlink out — so a model that
 // asks to save to "../../.ssh/authorized_keys" gets an error, not a foothold.
 
+// DefaultSaveMaxBytes bounds a response body written with save_as. The inline
+// bound of each tool (a few hundred KiB) exists to fit a context window; a body
+// that goes to disk is read by the file and shell tools instead, so it may be
+// as large as a document worth downloading.
+const DefaultSaveMaxBytes = 25 << 20
+
+// bodyLimit is how many body bytes a call reads: the save bound when the call
+// saves into a workspace that exists, else the inline bound.
+func bodyLimit(inline, save int64, saveAs string, sink responseSink) int64 {
+	if strings.TrimSpace(saveAs) != "" && sink.available() {
+		return max(inline, save)
+	}
+	return inline
+}
+
+// capBody trims a body read with one byte of headroom to limit, reporting
+// whether the document continued past it. Reading limit+1 is what tells a body
+// of exactly limit bytes from a cut one.
+func capBody(body []byte, limit int64) ([]byte, bool) {
+	if int64(len(body)) > limit {
+		return body[:limit], true
+	}
+	return body, false
+}
+
 // responseSink writes tool output into the agent's workspace. A zero value (no
 // workspace configured) refuses the save with an explanation rather than
 // silently returning the body inline, because an agent that asked for a file and

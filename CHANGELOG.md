@@ -1,7 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.3.1 — 2026-11-17
 
+Baseline: v0.3.0. No breaking change; checkpoints written before read as before.
+
+- **`save_as` keeps downloads up to 25 MiB.** `http_request` and `web_fetch` read a body saved into the workspace up to `sandbox.DefaultSaveMaxBytes` (25 MiB) instead of their inline bound (256 KiB / 512 KiB); a body shown inline keeps the inline bound. `WithHTTPSaveMaxBytes` and `WithWebFetchSaveMaxBytes` change it. Both tools now read one byte past the bound, so a body of exactly the bound is no longer reported truncated.
+- **`grep` uses ripgrep when it can.** A host-substrate `grep` runs `rg` (found on `PATH`, or `WithGrepRipgrep(path)`; `WithGrepRipgrep("")` turns it off) and returns the same rows, pages and notices as the Go engine, which still serves the sandbox substrate and every case rg cannot (no binary, a pattern only RE2 accepts, a scope through a symlink or under a nested `.gitignore`, any rg failure). rg streams large files, so it also finds matches past the Go engine's 2 MB per-file bound.
+- **`grep` has `output_mode`**: `content` (default), `files_with_matches` or `count`; `offset` and `limit` count files in the last two. A file's final newline no longer opens an empty last line that `^$` or a context window could show.
 - **A resumed native run no longer re-reads the whole transcript.** `RunNative` validates the stored transcript in one pass and carries every stored message into the next `NativeState` as its exact stored bytes; only the messages the run settles are encoded. A run that appends one turn to a long compacted thread costs about the same at 4,367 messages as at 50. Checkpoints written before read as before.
 - **`RunResult.Messages` holds only the messages the run added** (a fresh run's system prompt included), and the new `RunResult.Restored` counts the stored messages before them. Memory consolidation already staged only the run's own messages; a resumed run's rollout ID now also covers `Restored`, and a fresh run's is unchanged.
 - **A summary records `prefix_raw_digest`**, the SHA-256 of its prefix's stored bytes, beside `prefix_digest`. A summary without it is matched by the semantic digest and gains it.

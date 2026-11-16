@@ -68,6 +68,10 @@ type HTTPTool struct {
 	allowHosts     map[string]struct{}
 	allowPlainHTTP bool
 	maxBodyBytes   int64
+	// saveMaxBytes bounds a body the call saves with save_as. It is larger
+	// than maxBodyBytes: the inline bound exists to fit a context window, a
+	// file on disk does not have one.
+	saveMaxBytes int64
 	// ipBlocked decides whether a resolved IP is off-limits. Defaults to
 	// blockedIP (refuses loopback/private/link-local); a test seam can relax it
 	// to exercise the happy path against an httptest server on 127.0.0.1. Read at
@@ -112,6 +116,17 @@ func WithHTTPWorkspace(ws *Workspace) HTTPOption {
 	}
 }
 
+// WithHTTPSaveMaxBytes bounds a response body saved with save_as
+// (DefaultSaveMaxBytes when unset). Values <= 0 leave the default; a value
+// below the inline bound is raised to it, so saving never reads less.
+func WithHTTPSaveMaxBytes(n int64) HTTPOption {
+	return func(t *HTTPTool) {
+		if n > 0 {
+			t.saveMaxBytes = n
+		}
+	}
+}
+
 // WithHTTPTimeout overrides the per-request timeout. Zero disables it while
 // preserving caller cancellation; negative values leave the default intact.
 func WithHTTPTimeout(d time.Duration) HTTPOption {
@@ -138,6 +153,7 @@ func NewHTTPRequestTool(sb agentcore.Sandbox, opts ...HTTPOption) *HTTPTool {
 		sb:           sb,
 		allowHosts:   make(map[string]struct{}),
 		maxBodyBytes: httpDefaultMaxBodyBytes,
+		saveMaxBytes: DefaultSaveMaxBytes,
 		ipBlocked:    blockedIP,
 	}
 	dialer := &net.Dialer{Timeout: 10 * time.Second}
@@ -296,6 +312,7 @@ func (t *HTTPTool) Run(ctx context.Context, args string) (string, error) {
 		return "", err
 	}
 
+	limit := bodyLimit(t.maxBodyBytes, t.saveMaxBytes, in.SaveAs, t.sink)
 	if t.sb != nil {
 		resp, body, err := execSandboxHTTP(ctx, t.sb, ToolHTTPRequest, sandboxHTTPRequest{
 			Method:  method,
@@ -307,12 +324,13 @@ func (t *HTTPTool) Run(ctx context.Context, args string) (string, error) {
 			// nothing else — including on a redirect, which is not followed here.
 			AllowHosts:     t.AllowHosts(),
 			TimeoutSeconds: int(t.client.Timeout / time.Second),
-			MaxBodyBytes:   t.maxBodyBytes,
+			MaxBodyBytes:   limit + 1,
 		})
 		if err != nil {
 			return "", err
 		}
-		return t.respond(ctx, in.SaveAs, resp, body)
+		body, truncated := capBody(body, limit)
+		return t.respond(ctx, in.SaveAs, resp, body, truncated)
 	}
 
 	var bodyReader io.Reader
@@ -333,18 +351,16 @@ func (t *HTTPTool) Run(ctx context.Context, args string) (string, error) {
 	}
 	defer resp.Body.Close()
 
-	body, _ := io.ReadAll(io.LimitReader(resp.Body, t.maxBodyBytes))
-	return t.respond(ctx, in.SaveAs, resp, body)
+	body, _ := io.ReadAll(io.LimitReader(resp.Body, limit+1))
+	body, truncated := capBody(body, limit)
+	return t.respond(ctx, in.SaveAs, resp, body, truncated)
 }
 
 // respond returns the body inline, or writes it to the workspace and returns the
 // status plus a receipt. The status and content-type are reported either way —
 // a save is not a reason to hide that the server answered 404 and the "file" is
 // an error page.
-func (t *HTTPTool) respond(ctx context.Context, saveAs string, resp *http.Response, body []byte) (string, error) {
-	// Equal to the limit means ReadAll stopped at the cap, so the document very
-	// likely continues past what we hold.
-	truncated := int64(len(body)) >= t.maxBodyBytes
+func (t *HTTPTool) respond(ctx context.Context, saveAs string, resp *http.Response, body []byte, truncated bool) (string, error) {
 	return t.sink.respond(ctx, ToolHTTPRequest, saveAs, body, truncated, func(b []byte) string {
 		return formatHTTPResponse(resp, b)
 	})

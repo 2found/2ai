@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"sort"
@@ -39,42 +40,86 @@ var skipDir = map[string]struct{}{
 }
 
 // GrepTool searches file contents in the workspace by regular expression
-// (Claude Code's Grep / pi's grep). The matching is always pure Go regexp in
-// this process — only the file I/O moves: a guarded host walk by default, or a
-// batched listing + read inside the sandbox when one is provided. Keeping RE2
-// above the substrate seam is what makes both paths return the same lines in
-// the same order. Returns file:line:match lines, capped for token safety.
+// (Claude Code's Grep / pi's grep). Two engines return the same rows in the
+// same order: ripgrep, when the tool runs on the host and an rg binary is
+// found (fast on large trees — what makes a code checkout searchable), and
+// pure Go RE2 otherwise — a guarded host walk, or a batched listing + read
+// inside the sandbox when one is provided. The pattern is always compiled as
+// RE2 first, so an invalid pattern fails the same way on both, and any ripgrep
+// failure falls back to the Go engine rather than failing the call.
 type GrepTool struct {
 	workspace *Workspace
 	fs        workspaceFS
+	// rg is the ripgrep binary the host engine uses; empty uses the Go engine.
+	rg string
+}
+
+// GrepOption configures a GrepTool.
+type GrepOption func(*GrepTool)
+
+// WithGrepRipgrep sets the ripgrep binary for host searches. An empty path
+// disables ripgrep, so every search uses the Go engine. Without this option a
+// host-substrate grep looks rg up on PATH. Ignored with a sandbox: the search
+// then runs inside it.
+func WithGrepRipgrep(path string) GrepOption {
+	return func(t *GrepTool) {
+		if t.rg != "-" {
+			t.rg = path
+		}
+	}
 }
 
 // NewGrepTool builds grep over the given sandbox. sb is optional: nil walks and
 // reads the host filesystem under the Workspace guards (the default), non-nil
 // lists and reads inside the sandbox — batched into one exec per call, never
 // one per file.
-func NewGrepTool(sb agentcore.Sandbox, workspace *Workspace) *GrepTool {
-	return &GrepTool{workspace: workspace, fs: newWorkspaceFS(sb, workspace)}
+func NewGrepTool(sb agentcore.Sandbox, workspace *Workspace, options ...GrepOption) *GrepTool {
+	t := &GrepTool{workspace: workspace, fs: newWorkspaceFS(sb, workspace)}
+	if sb != nil {
+		t.rg = "-" // the sandbox substrate never execs on the host
+	} else if path, err := exec.LookPath("rg"); err == nil {
+		t.rg = path
+	}
+	for _, option := range options {
+		option(t)
+	}
+	if t.rg == "-" {
+		t.rg = ""
+	}
+	return t
 }
 
 func (t *GrepTool) Name() string   { return ToolGrep }
 func (t *GrepTool) Parallel() bool { return true }
 
+// Output modes, as Claude Code's Grep names them.
+const (
+	grepModeContent = "content"
+	grepModeFiles   = "files_with_matches"
+	grepModeCount   = "count"
+)
+
 func (t *GrepTool) Schema() agentcore.ToolSchema {
 	return agentcore.ToolSchema{
 		Name:   ToolGrep,
 		Strict: agentcore.ToolStrictEnabled,
-		Description: "Search file contents in the agent workspace by regular expression (Go/RE2 syntax). " +
-			"Returns matching lines as path:line:text, capped at " + fmt.Sprint(maxGrepMatches) + " matches. " +
-			"Honors nested .gitignore files and excludes dependency/VCS directories. Files above 2MB are reported as skipped; read_file byte paging can inspect them. Use offset to continue a result page. " +
+		Description: "Search file contents in the agent workspace by regular expression (RE2 syntax). " +
+			"output_mode content (default) returns matching lines as path:line:text; files_with_matches returns only the paths; count returns path:matches. " +
+			"Results are capped at " + fmt.Sprint(maxGrepMatches) + " rows; use offset to continue a page. " +
+			"Honors nested .gitignore files and excludes dependency/VCS directories. Files that could not be searched (for example above 2MB) are listed; read_file byte paging can inspect them. " +
 			"Use glob to narrow which files are searched, path to scope to a subdirectory, and context " +
-			"to see surrounding lines without a follow-up read_file.",
+			"to see surrounding lines without a follow-up read_file. Prefer this tool over grep or rg in the shell.",
 		Parameters: map[string]any{
 			"type": "object",
 			"properties": map[string]any{
 				"pattern": map[string]any{"type": "string", "description": "RE2 regular expression to match against each line (or a plain string with literal)."},
 				"path":    map[string]any{"type": "string", "description": "Optional workspace-relative subdirectory to search. Defaults to the whole workspace."},
 				"glob":    map[string]any{"type": "string", "description": "Optional filename filter, e.g. *.go or **/*.ts. Matches the workspace-relative path."},
+				"output_mode": map[string]any{
+					"type":        "string",
+					"enum":        []string{grepModeContent, grepModeFiles, grepModeCount},
+					"description": "content (default): matching lines; files_with_matches: one path per matching file; count: path:number of matching lines.",
+				},
 				"case_insensitive": map[string]any{
 					"type":        "boolean",
 					"description": "Case-insensitive match. Defaults to false.",
@@ -85,17 +130,31 @@ func (t *GrepTool) Schema() agentcore.ToolSchema {
 				},
 				"context": map[string]any{
 					"type":        "integer",
-					"description": "Lines of context to show before and after each match (like grep -C). Defaults to 0, max " + fmt.Sprint(maxGrepContext) + ".",
+					"description": "content mode: lines of context before and after each match (like grep -C). Defaults to 0, max " + fmt.Sprint(maxGrepContext) + ".",
 				},
 				"limit": map[string]any{
 					"type":        "integer",
-					"description": "Maximum matches to return. Defaults to " + fmt.Sprint(maxGrepMatches) + " (also the hard cap).",
+					"description": "Maximum rows to return. Defaults to " + fmt.Sprint(maxGrepMatches) + " (also the hard cap).",
 				},
-				"offset": map[string]any{"type": "integer", "minimum": 0, "maximum": 1000000, "description": "Number of matching lines to skip; continuation notices supply the next offset."},
+				"offset": map[string]any{"type": "integer", "minimum": 0, "maximum": 1000000, "description": "Number of rows (matching lines, or files in the other modes) to skip; continuation notices supply the next offset."},
 			},
 			"required": []string{"pattern"},
 		},
 	}
+}
+
+// grepQuery is one validated search.
+type grepQuery struct {
+	pattern  string // as given; ripgrep compiles it itself
+	re       *regexp.Regexp
+	glob     *regexp.Regexp
+	path     string
+	mode     string
+	literal  bool
+	fold     bool
+	ctxLines int
+	limit    int
+	offset   int
 }
 
 func (t *GrepTool) Run(ctx context.Context, args string) (string, error) {
@@ -103,6 +162,7 @@ func (t *GrepTool) Run(ctx context.Context, args string) (string, error) {
 		Pattern         string `json:"pattern"`
 		Path            string `json:"path"`
 		Glob            string `json:"glob"`
+		OutputMode      string `json:"output_mode"`
 		CaseInsensitive bool   `json:"case_insensitive"`
 		Literal         bool   `json:"literal"`
 		Context         int    `json:"context"`
@@ -118,6 +178,14 @@ func (t *GrepTool) Run(ctx context.Context, args string) (string, error) {
 	if in.Offset < 0 || in.Offset > 1000000 {
 		return "", fmt.Errorf("grep: offset must be between 0 and 1000000")
 	}
+	q := grepQuery{pattern: in.Pattern, path: in.Path, literal: in.Literal, fold: in.CaseInsensitive, offset: in.Offset}
+	switch q.mode = strings.TrimSpace(in.OutputMode); q.mode {
+	case "":
+		q.mode = grepModeContent
+	case grepModeContent, grepModeFiles, grepModeCount:
+	default:
+		return "", fmt.Errorf("grep: output_mode must be content, files_with_matches or count")
+	}
 	expr := in.Pattern
 	if in.Literal {
 		expr = regexp.QuoteMeta(expr)
@@ -125,63 +193,69 @@ func (t *GrepTool) Run(ctx context.Context, args string) (string, error) {
 	if in.CaseInsensitive {
 		expr = "(?i)" + expr
 	}
-	limit := in.Limit
-	if limit <= 0 || limit > maxGrepMatches {
-		limit = maxGrepMatches
+	q.limit = in.Limit
+	if q.limit <= 0 || q.limit > maxGrepMatches {
+		q.limit = maxGrepMatches
 	}
-	ctxLines := in.Context
-	if ctxLines < 0 {
-		ctxLines = 0
+	q.ctxLines = min(max(in.Context, 0), maxGrepContext)
+	if q.mode != grepModeContent {
+		q.ctxLines = 0
 	}
-	if ctxLines > maxGrepContext {
-		ctxLines = maxGrepContext
-	}
-	re, err := regexp.Compile(expr)
-	if err != nil {
+	var err error
+	if q.re, err = regexp.Compile(expr); err != nil {
 		return "", fmt.Errorf("grep: invalid pattern: %w", err)
 	}
-
-	var globRe *regexp.Regexp
 	if g := strings.TrimSpace(in.Glob); g != "" {
-		globRe, err = compileGlob(g)
-		if err != nil {
+		if q.glob, err = compileGlob(g); err != nil {
 			return "", fmt.Errorf("grep: invalid glob: %w", err)
 		}
 	}
-
-	// List first, filter by glob, then read what survives. The glob filter has to
-	// happen before the read so the sandbox substrate only ships the files that
-	// can actually match, instead of the whole tree.
-	all, err := t.fs.List(ctx, in.Path)
+	if t.rg != "" {
+		if res, ok := t.ripgrep(ctx, q); ok {
+			return res.render(), nil
+		}
+		if err := ctx.Err(); err != nil {
+			return "", fmt.Errorf("grep: %w", err)
+		}
+	}
+	res, err := t.goGrep(ctx, q)
 	if err != nil {
 		return "", fmt.Errorf("grep: %w", err)
 	}
+	return res.render(), nil
+}
+
+// goGrep is the pure Go engine over the tool's file substrate.
+func (t *GrepTool) goGrep(ctx context.Context, q grepQuery) (*grepResult, error) {
+	// List first, filter by glob, then read what survives. The glob filter has to
+	// happen before the read so the sandbox substrate only ships the files that
+	// can actually match, instead of the whole tree.
+	all, err := t.fs.List(ctx, q.path)
+	if err != nil {
+		return nil, err
+	}
 	candidates := all
-	if globRe != nil {
+	if q.glob != nil {
 		candidates = candidates[:0:0]
 		for _, rel := range all {
-			if globRe.MatchString(rel) {
+			if q.glob.MatchString(rel) {
 				candidates = append(candidates, rel)
 			}
 		}
 	}
-
-	var out []string
-	var skipped []string
-	count := 0
-	seen := 0
-	truncated := false
+	res := newGrepResult(q)
 	readErr := t.fs.ReadEach(ctx, candidates, maxGrepFileBytes, func(rel string, data []byte) error {
 		if data == nil {
-			if len(skipped) < 20 {
-				skipped = append(skipped, rel)
-			}
+			res.skip(rel)
 			return nil
 		}
 		if !utf8.Valid(data) {
 			return nil // binary
 		}
 		lines := strings.Split(string(data), "\n")
+		if n := len(lines); n > 1 && lines[n-1] == "" {
+			lines = lines[:n-1] // the newline ending the last line opens no line
+		}
 		var hits []int
 		for i, line := range lines {
 			if i%1024 == 0 {
@@ -189,62 +263,129 @@ func (t *GrepTool) Run(ctx context.Context, args string) (string, error) {
 					return err
 				}
 			}
-			if re.MatchString(line) {
-				seen++
-				if seen <= in.Offset {
-					continue
-				}
+			if q.re.MatchString(line) {
 				hits = append(hits, i)
-				if count+len(hits) > limit {
-					truncated = true
-					break
-				}
 			}
 		}
-		if len(hits) == 0 {
-			return nil
-		}
-		if count+len(hits) > limit {
-			hits = hits[:limit-count]
-			truncated = true
-		}
-		count += len(hits)
-		appendGrepHits(&out, rel, lines, hits, ctxLines)
-		if truncated {
+		if res.addFile(rel, hits, func(i int) (string, bool) {
+			if i < 0 || i >= len(lines) {
+				return "", false
+			}
+			return lines[i], true
+		}) {
 			return errStopRead
 		}
 		return nil
 	})
 	if readErr != nil && !errors.Is(readErr, errStopRead) {
-		return "", fmt.Errorf("grep: %w", readErr)
+		return nil, readErr
 	}
-	joined := strings.Join(out, "\n")
-	if count == 0 {
+	return res, nil
+}
+
+// grepResult accumulates rows across files, applying offset and limit to
+// matching lines (content mode) or to files (the other modes).
+type grepResult struct {
+	q         grepQuery
+	out       []string
+	seen      int // rows passed, including those skipped by offset
+	count     int // rows emitted
+	truncated bool
+	skipped   []string
+}
+
+func newGrepResult(q grepQuery) *grepResult { return &grepResult{q: q} }
+
+// room is how many more hits of one file the page can use: those still to be
+// skipped by offset, those still to be emitted, and one that proves the page
+// was truncated. Outside content mode a file is one row, so one hit is enough.
+func (r *grepResult) room() int {
+	if r.q.mode != grepModeContent {
+		return 1
+	}
+	return max(r.q.offset-r.seen, 0) + r.q.limit - r.count + 1
+}
+
+func (r *grepResult) skip(rel string) {
+	if len(r.skipped) < 20 {
+		r.skipped = append(r.skipped, rel)
+	}
+}
+
+// addFile takes one file's matching line indexes (0-based, ascending) and a
+// reader for its lines; it reports true once the limit is reached.
+func (r *grepResult) addFile(rel string, hits []int, line func(int) (string, bool)) bool {
+	if len(hits) == 0 {
+		return false
+	}
+	if r.q.mode != grepModeContent {
+		r.seen++
+		if r.seen <= r.q.offset {
+			return false
+		}
+		if r.count == r.q.limit {
+			r.truncated = true
+			return true
+		}
+		r.count++
+		if r.q.mode == grepModeFiles {
+			r.out = append(r.out, rel)
+		} else {
+			r.out = append(r.out, fmt.Sprintf("%s:%d", rel, len(hits)))
+		}
+		return false
+	}
+	var kept []int
+	for _, h := range hits {
+		r.seen++
+		if r.seen <= r.q.offset {
+			continue
+		}
+		if r.count+len(kept) == r.q.limit {
+			r.truncated = true
+			break
+		}
+		kept = append(kept, h)
+	}
+	r.count += len(kept)
+	appendGrepHits(&r.out, rel, kept, r.q.ctxLines, line)
+	return r.truncated
+}
+
+func (r *grepResult) render() string {
+	joined := strings.Join(r.out, "\n")
+	if r.count == 0 {
 		joined = "no matches"
 	}
-	if truncated {
-		joined += fmt.Sprintf("\n…[truncated at %d matches — use offset=%d to continue, or narrow path/glob; maximum limit is %d]", limit, in.Offset+count, maxGrepMatches)
+	if r.truncated {
+		unit := "matches"
+		if r.q.mode != grepModeContent {
+			unit = "files"
+		}
+		joined += fmt.Sprintf("\n…[truncated at %d %s — use offset=%d to continue, or narrow path/glob; maximum limit is %d]", r.q.limit, unit, r.q.offset+r.count, maxGrepMatches)
 	}
-	if len(skipped) > 0 {
-		joined += "\n[Search coverage incomplete: unreadable files or files above 2MB were skipped (up to 20 shown): " + strings.Join(skipped, ", ") + ". Use read_file byte_offset/byte_limit to inspect large files.]"
+	if len(r.skipped) > 0 {
+		joined += "\n[Search coverage incomplete: unreadable files or files above 2MB were skipped (up to 20 shown): " + strings.Join(r.skipped, ", ") + ". Use read_file byte_offset/byte_limit to inspect large files.]"
 	}
-	for _, line := range out {
+	for _, line := range r.out {
 		if strings.HasSuffix(line, "…") {
 			joined += "\n[Long matching lines were shortened; use read_file byte paging for full text.]"
 			break
 		}
 	}
-	return joined, nil
+	return joined
 }
 
 // appendGrepHits renders one file's accepted matches. Without context each hit
 // is a path:line:text row. With context, overlapping windows are merged into
 // groups (grep -C style): matched lines keep the ':' separators, context lines
-// use '-', and groups are divided by a "--" row.
-func appendGrepHits(out *[]string, rel string, lines []string, hits []int, ctxLines int) {
+// use '-', and groups are divided by a "--" row. line reads a 0-based line and
+// reports false past the end of the file.
+func appendGrepHits(out *[]string, rel string, hits []int, ctxLines int, line func(int) (string, bool)) {
 	if ctxLines == 0 {
 		for _, h := range hits {
-			*out = append(*out, fmt.Sprintf("%s:%d:%s", rel, h+1, clampLine(lines[h])))
+			text, _ := line(h)
+			*out = append(*out, fmt.Sprintf("%s:%d:%s", rel, h+1, clampLine(text)))
 		}
 		return
 	}
@@ -255,7 +396,7 @@ func appendGrepHits(out *[]string, rel string, lines []string, hits []int, ctxLi
 	type span struct{ start, end int }
 	var spans []span
 	for _, h := range hits {
-		s, e := max(0, h-ctxLines), min(len(lines)-1, h+ctxLines)
+		s, e := max(0, h-ctxLines), h+ctxLines
 		if n := len(spans); n > 0 && s <= spans[n-1].end+1 {
 			spans[n-1].end = max(spans[n-1].end, e)
 			continue
@@ -267,11 +408,18 @@ func appendGrepHits(out *[]string, rel string, lines []string, hits []int, ctxLi
 			*out = append(*out, "--")
 		}
 		for i := sp.start; i <= sp.end; i++ {
+			text, ok := line(i)
+			if !ok {
+				if i > sp.start && !isHit[i] {
+					break
+				}
+				continue
+			}
 			sep := "-"
 			if isHit[i] {
 				sep = ":"
 			}
-			*out = append(*out, fmt.Sprintf("%s%s%d%s%s", rel, sep, i+1, sep, clampLine(lines[i])))
+			*out = append(*out, fmt.Sprintf("%s%s%d%s%s", rel, sep, i+1, sep, clampLine(text)))
 		}
 	}
 }

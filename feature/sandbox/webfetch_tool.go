@@ -46,6 +46,8 @@ type WebFetchTool struct {
 	sb           agentcore.Sandbox
 	client       *http.Client
 	maxBodyBytes int64
+	// saveMaxBytes bounds a document the call saves with save_as.
+	saveMaxBytes int64
 	// sink writes a fetched document into the agent's workspace when the call
 	// asks for save_as. Zero value = no workspace, and save_as is refused.
 	sink responseSink
@@ -66,6 +68,7 @@ func NewWebFetchTool(sb agentcore.Sandbox, ws *Workspace, options ...WebFetchOpt
 	t := &WebFetchTool{
 		sb:           sb,
 		maxBodyBytes: webFetchMaxBodyBytes,
+		saveMaxBytes: DefaultSaveMaxBytes,
 		client: &http.Client{
 			Timeout: webFetchTimeout,
 			// A redirect stays on the requested host and its subdomains, as the
@@ -99,6 +102,16 @@ func NewWebFetchTool(sb agentcore.Sandbox, ws *Workspace, options ...WebFetchOpt
 }
 
 type WebFetchOption func(*WebFetchTool)
+
+// WithWebFetchSaveMaxBytes bounds a document saved with save_as
+// (DefaultSaveMaxBytes when unset). Values <= 0 leave the default.
+func WithWebFetchSaveMaxBytes(n int64) WebFetchOption {
+	return func(t *WebFetchTool) {
+		if n > 0 {
+			t.saveMaxBytes = n
+		}
+	}
+}
 
 // WithWebFetchTimeout sets the host fetch deadline; zero leaves cancellation to the caller.
 func WithWebFetchTimeout(timeout time.Duration) WebFetchOption {
@@ -186,6 +199,7 @@ func (t *WebFetchTool) Run(ctx context.Context, args string) (string, error) {
 		body []byte
 		ct   string
 	)
+	limit := bodyLimit(t.maxBodyBytes, t.saveMaxBytes, in.SaveAs, t.sink)
 	if t.sb != nil {
 		resp, b, err := execSandboxHTTP(ctx, t.sb, ToolWebFetch, sandboxHTTPRequest{
 			Method:  http.MethodGet,
@@ -197,13 +211,14 @@ func (t *WebFetchTool) Run(ctx context.Context, args string) (string, error) {
 			FollowRedirects: true,
 			MaxRedirects:    webFetchMaxRedirects,
 			TimeoutSeconds:  int(webFetchTimeout / time.Second),
-			MaxBodyBytes:    t.maxBodyBytes,
+			MaxBodyBytes:    limit + 1,
 		})
 		if err != nil {
 			return "", err
 		}
-		body, ct = b, resp.Header.Get("Content-Type")
-		return t.respond(ctx, in.SaveAs, u.String(), resp.Status, ct, body)
+		body, truncated := capBody(b, limit)
+		ct = resp.Header.Get("Content-Type")
+		return t.respond(ctx, in.SaveAs, u.String(), resp.Status, ct, body, truncated)
 	}
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
@@ -220,9 +235,10 @@ func (t *WebFetchTool) Run(ctx context.Context, args string) (string, error) {
 	}
 	defer resp.Body.Close()
 
-	body, _ = io.ReadAll(io.LimitReader(resp.Body, t.maxBodyBytes))
+	body, _ = io.ReadAll(io.LimitReader(resp.Body, limit+1))
+	body, truncated := capBody(body, limit)
 	ct = resp.Header.Get("Content-Type")
-	return t.respond(ctx, in.SaveAs, u.String(), resp.Status, ct, body)
+	return t.respond(ctx, in.SaveAs, u.String(), resp.Status, ct, body, truncated)
 }
 
 // respond returns the readable document, or saves it and returns a receipt.
@@ -230,10 +246,7 @@ func (t *WebFetchTool) Run(ctx context.Context, args string) (string, error) {
 // What gets saved is the RAW body, not the HTML-stripped text: the stripping
 // exists to fit a page into a context window, and a file the agent is about to
 // parse should be the document the server sent, not a lossy rendering of it.
-func (t *WebFetchTool) respond(ctx context.Context, saveAs, url, status, ct string, body []byte) (string, error) {
-	// Equal to the limit means ReadAll stopped at the cap, so the document very
-	// likely continues past what we hold.
-	truncated := int64(len(body)) >= t.maxBodyBytes
+func (t *WebFetchTool) respond(ctx context.Context, saveAs, url, status, ct string, body []byte, truncated bool) (string, error) {
 	return t.sink.respond(ctx, ToolWebFetch, saveAs, body, truncated, func(b []byte) string {
 		return formatWebFetch(url, status, ct, b)
 	})

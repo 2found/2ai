@@ -2,6 +2,7 @@ package sandbox
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -180,5 +181,65 @@ func TestSaveReceiptAdmitsTruncation(t *testing.T) {
 	}
 	if !strings.Contains(cut, "TRUNCATED") {
 		t.Errorf("a body cut off at the read limit was reported as complete: %s", cut)
+	}
+}
+
+// A saved download is bounded by the save limit, not by the inline one: a 1 MiB
+// CSV saved with save_as lands whole and its receipt does not claim truncation,
+// while the same body inline is still cut at the tool's inline bound.
+func TestSaveAsKeepsBodiesLargerThanTheInlineBound(t *testing.T) {
+	big := strings.Repeat("0123456789abcdef\n", 1<<16) // 1 MiB + change, above both inline bounds
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "text/csv")
+		_, _ = w.Write([]byte(big))
+	}))
+	defer srv.Close()
+	ws := newTestWorkspace(t)
+	httpTool := NewHTTPRequestTool(nil, WithHTTPAllowHosts([]string{hostOf(t, srv.URL)}), WithHTTPAllowPlain(true), WithHTTPWorkspace(ws))
+	httpTool.AllowAllIPsForTest()
+	fetch := NewWebFetchTool(nil, ws)
+	fetch.AllowAllIPsForTest()
+	runs := map[string]func(string) (string, error){
+		"http_request": func(args string) (string, error) { return httpTool.Run(context.Background(), args) },
+		"web_fetch":    func(args string) (string, error) { return fetch.Run(context.Background(), args) },
+	}
+	for name, run := range runs {
+		out, err := run(`{"url":"` + srv.URL + `","save_as":"dl/` + name + `.csv"}`)
+		if err != nil {
+			t.Fatalf("%s: %v", name, err)
+		}
+		if strings.Contains(out, "TRUNCATED") {
+			t.Fatalf("%s: a body under the save bound must not be reported truncated: %q", name, out)
+		}
+		got, err := os.ReadFile(filepath.Join(ws.Root(), "dl", name+".csv"))
+		if err != nil || string(got) != big {
+			t.Fatalf("%s: saved %d bytes, want %d (err %v)", name, len(got), len(big), err)
+		}
+	}
+	inline, err := httpTool.Run(context.Background(), `{"url":"`+srv.URL+`"}`)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(inline) > httpDefaultMaxBodyBytes+4096 {
+		t.Fatalf("inline body must keep its bound, got %d bytes", len(inline))
+	}
+}
+
+// A save bound below the body cuts the file and says so.
+func TestSaveAsAboveTheSaveBoundIsReportedTruncated(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		_, _ = w.Write([]byte(strings.Repeat("x", 300*1024)))
+	}))
+	defer srv.Close()
+	ws := newTestWorkspace(t)
+	tool := NewHTTPRequestTool(nil, WithHTTPAllowHosts([]string{hostOf(t, srv.URL)}), WithHTTPAllowPlain(true), WithHTTPWorkspace(ws), WithHTTPSaveMaxBytes(100*1024))
+	tool.AllowAllIPsForTest()
+	out, err := tool.Run(context.Background(), `{"url":"`+srv.URL+`","save_as":"cut.bin"}`)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// The save bound never reads less than the inline one (256 KiB).
+	if !strings.Contains(out, "TRUNCATED") || !strings.Contains(out, fmt.Sprint(httpDefaultMaxBodyBytes)) {
+		t.Fatalf("expected a truncation receipt at the inline bound, got %q", out)
 	}
 }

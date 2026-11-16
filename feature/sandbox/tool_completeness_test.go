@@ -14,7 +14,9 @@ func TestSearchCoveragePaginationAndRoot(t *testing.T) {
 	mustWrite(t, ws, "huge.txt", strings.Repeat("filler\n", 310000)+"NEEDLE_AT_END\n")
 	mustWrite(t, ws, "many.txt", strings.Repeat("HIT\n", 250))
 	for _, sb := range []agentcore.Sandbox{nil, NewHostSandbox()} {
-		grep := NewGrepTool(sb, ws)
+		// The Go engine bounds a file at 2MB; ripgrep (when present) streams it
+		// and is covered by TestGrepRipgrepSearchesPastTheGoFileBound.
+		grep := NewGrepTool(sb, ws, WithGrepRipgrep(""))
 		out, err := grep.Run(context.Background(), `{"pattern":"NEEDLE_AT_END","path":"."}`)
 		if err != nil || !strings.Contains(out, "coverage incomplete") || !strings.Contains(out, "huge.txt") || !strings.Contains(out, "byte_offset") {
 			t.Fatal("incomplete search was hidden", out, err)
