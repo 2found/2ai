@@ -25,6 +25,13 @@ type Model struct {
 	// fallback, otherwise 0 for "unknown". It is what the compaction budget is
 	// capped against, so 0 must stay distinguishable from a real number.
 	ContextWindow int `json:"context_window,omitempty"`
+	// ReasoningEfforts are the effort levels the model serves, weakest first:
+	// the vendor's own when its list said, otherwise ReasoningEffortsFor. Nil
+	// (null) is unknown; empty is a model that reasons without a level.
+	ReasoningEfforts []string `json:"reasoning_efforts"`
+	// LongContextThreshold is the input size past which the model bills at a
+	// higher rate (LongContextThresholdFor), or 0 for a flat or unknown price.
+	LongContextThreshold int `json:"long_context_threshold,omitempty"`
 	// Capabilities is sparse tri-state metadata. Missing fields mean unknown,
 	// not unsupported; explicit live discovery values refine adapter defaults.
 	Capabilities protocol.ModelCapabilities `json:"capabilities,omitempty"`

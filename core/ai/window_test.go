@@ -36,7 +36,7 @@ func TestContextWindowForPicksTheLongestMatchingPrefix(t *testing.T) {
 		{"gpt-4.1", 1_047_576},
 		{"claude-sonnet-4-20250514", 200_000},
 		{"claude-2.1", 100_000},
-		{"gemini-1.5-pro-002", 2_000_000},
+		{"gemini-1.5-pro-002", 1_000_000},
 		{"gemini-1.0-pro", 32_768},
 		{"grok-4-latest", 256_000},
 		{"grok-3", 131_072},
@@ -81,6 +81,10 @@ func TestContextWindowForCurrentFamilies(t *testing.T) {
 		{"", "glm-5.3", 1_000_000},
 		{"", "minimax-m2.7", 204_800},
 		{"", "minimax-m3", 512_000},
+		{"", "qwen3.5-plus", 262_144},
+		{"openai", "gpt-5.1-codex-max", 272_000},
+		{"openai", "gpt-daybreak-red-latest", 400_000},
+		{"google", "gemma-4-E4B-it", 131_072},
 		{"", "qwen3.7-plus", 1_000_000},
 	}
 	for _, c := range cases {
@@ -107,6 +111,10 @@ func TestContextWindowForVendorOverrides(t *testing.T) {
 		{VendorOpenAICodex, "gpt-5.6-luna", 1_000_000},
 		{VendorOpenAICodex, "o3", 200_000},
 		{"OpenAI-Codex", "gpt-6-sol", 272_000},
+		{"opencode-zen", "qwen3.6-plus", 262_144},
+		{"opencode-go", "qwen3.6-plus", 1_000_000},
+		{"opencode-go", "glm-5", 202_752},
+		{"opencode-go", "glm-5.3", 1_000_000},
 	}
 	for _, c := range cases {
 		if got := ContextWindowFor(c.vendor, c.model); got != c.want {
@@ -122,9 +130,9 @@ func TestContextWindowForVendorOverrides(t *testing.T) {
 func TestContextWindowForSeesThroughRoutedIDs(t *testing.T) {
 	cases := map[string]int{
 		"anthropic/claude-sonnet-4": 200_000,
-		"models/gemini-1.5-pro":     2_000_000,
+		"models/gemini-1.0-pro":     32_768,
 		"openai/gpt-4o":             128_000,
-		"google/gemini-1.5-pro-002": 2_000_000,
+		"google/gemini-1.0-pro-002": 32_768,
 		"ANTHROPIC/Claude-Sonnet-4": 200_000,
 	}
 	for id, want := range cases {

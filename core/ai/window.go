@@ -54,10 +54,18 @@ var contextWindows = map[string]int{
 
 	// Gemini reports inputTokenLimit live, so these are only reached through an
 	// OpenAI-compatible proxy that strips it.
-	"gemini-":        1_000_000,
-	"gemini-1.5-pro": 2_000_000,
-	"gemini-2.5-pro": 1_000_000,
-	"gemini-1.0":     32_768,
+	"gemini-":                 1_000_000,
+	"gemini-1.5-pro":          1_000_000,
+	"gemini-2.5-pro":          1_000_000,
+	"gemini-1.0":              32_768,
+	"gemini-2.5-computer-use": 128_000,
+	"gemini-live-":            128_000,
+	"gemini-3.1-flash-live":   131_072,
+	"gemini-robotics-er":      131_072,
+	"gemma-3":                 131_072,
+	"gemma-4":                 256_000,
+	"gemma-4-e2b":             131_072,
+	"gemma-4-e4b":             131_072,
 
 	// xAI serves an OpenAI-compatible surface that does report context_length,
 	// so these are a backstop for proxies that drop it.
@@ -78,7 +86,11 @@ var contextWindows = map[string]int{
 	"claude-fable-":     1_000_000,
 	"claude-mythos-":    1_000_000,
 
+	"codex-mini":          200_000,
 	"gpt-5-chat":          128_000,
+	"gpt-5-codex":         272_000,
+	"gpt-5.1-codex":       272_000,
+	"gpt-5.2-codex":       272_000,
 	"gpt-5.1-chat":        128_000,
 	"gpt-5.2-chat":        128_000,
 	"gpt-5.3-chat":        128_000,
@@ -91,6 +103,11 @@ var contextWindows = map[string]int{
 	"gpt-5.6":             1_050_000,
 	"gpt-5.6-cyber":       400_000,
 	"gpt-6":               1_050_000,
+	"daybreak-blue":       1_050_000,
+	"daybreak-red":        400_000,
+	"gpt-daybreak-blue":   1_050_000,
+	"gpt-daybreak-red":    400_000,
+	"gpt-oss":             131_072,
 
 	"grok-4.20":     1_000_000,
 	"grok-4.3":      1_000_000,
@@ -116,7 +133,7 @@ var contextWindows = map[string]int{
 	"glm-4.6":            200_000,
 	"glm-4.6v":           128_000,
 	"glm-4.7":            200_000,
-	"glm-5":              204_800,
+	"glm-5":              202_752,
 	"glm-5.1":            200_000,
 	"glm-5.2":            1_000_000,
 	"glm-5.3":            1_000_000,
@@ -127,7 +144,10 @@ var contextWindows = map[string]int{
 	"minimax-m3-free": 200_000,
 	"minimax-m3.1":    1_000_000,
 
-	"qwen3.5-plus":  1_000_000,
+	// Alibaba serves 1M, but both OpenCode gateways serve 262k, and a router
+	// reached as an OpenAI-compatible vendor has no table of its own: the
+	// smaller window costs an early summary, the larger a failed run.
+	"qwen3.5-plus":  262_144,
 	"qwen3.6-flash": 1_000_000,
 	"qwen3.6-plus":  1_000_000,
 	"qwen3.7":       1_000_000,
@@ -135,6 +155,23 @@ var contextWindows = map[string]int{
 	"qwen3.8-max":   983_616,
 
 	"swe-1": 200_000,
+
+	// Families the OpenCode gateways serve below 300k (Soot's default summary
+	// point); one at 1M or more is left to the caller's ceiling.
+	"big-pickle":             200_000,
+	"cat-jam":                262_144,
+	"flint-":                 262_144,
+	"hy3":                    256_000,
+	"iceman":                 262_144,
+	"laguna-":                256_000,
+	"ling-":                  262_100,
+	"mimo-v2-flash":          262_144,
+	"mimo-v2-omni":           262_144,
+	"nemotron-3-super":       204_800,
+	"nemotron-3.5-lightning": 262_144,
+	"north-mini-code":        256_000,
+	"ring-":                  262_000,
+	"trinity-large":          131_072,
 }
 
 // vendorContextWindows are the windows a vendor serves that differ from the
@@ -156,6 +193,16 @@ var vendorContextWindows = map[string]map[string]int{
 		"claude-sonnet-4-6": 250_000,
 		"claude-opus-5":     1_000_000,
 		"claude-sonnet-5":   1_000_000,
+	},
+	// The OpenCode gateways serve some models, and their free variants, with
+	// less than their makers do.
+	"opencode-zen": {
+		"hy3-free":             190_000,
+		"mimo-v2.5-free":       200_000,
+		"mimo-v2.6-flash-free": 200_000,
+		"qwen3.6-plus":         262_144,
+		"qwen3.6-plus-free":    1_048_576,
+		"qwen3.8-max":          262_144,
 	},
 	VendorOpenAICodex: {
 		"gpt-5":        272_000,

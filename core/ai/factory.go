@@ -310,15 +310,25 @@ func (w *wired) ListModels(ctx context.Context) ([]Model, error) {
 		if window <= 0 {
 			window = ContextWindowFor(w.vendor, m.ID)
 		}
+		efforts := m.ReasoningEfforts
+		if efforts == nil {
+			efforts, _ = ReasoningEffortsFor(w.vendor, m.ID)
+		}
+		threshold := m.LongContextThreshold
+		if threshold <= 0 {
+			threshold = LongContextThresholdFor(w.vendor, m.ID)
+		}
 		caps := protocol.CapabilitiesOf(w.inner, m.ID).Overlay(m.Capabilities)
 		discovered[m.ID] = m.Capabilities
 		out = append(out, Model{
-			ProviderID:     w.id,
-			ProviderVendor: w.vendor,
-			ProviderName:   w.name,
-			ID:             m.ID,
-			ContextWindow:  window,
-			Capabilities:   caps,
+			ProviderID:           w.id,
+			ProviderVendor:       w.vendor,
+			ProviderName:         w.name,
+			ID:                   m.ID,
+			ContextWindow:        window,
+			ReasoningEfforts:     efforts,
+			LongContextThreshold: threshold,
+			Capabilities:         caps,
 		})
 	}
 	w.modelsMu.Lock()
