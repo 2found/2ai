@@ -32,9 +32,8 @@ var contextWindows = map[string]int{
 	// Devin GetCliModelConfigs reports 262000 for swe-2-{medium,high,max}
 	// (verified 2026-10-06). The CLI alias swe-2 resolves to that same family.
 	"swe-2": 262_000,
-	// Anthropic reports no window. Every currently-served Claude is at least
-	// 200k; the 1M-token variants are beta and opt-in, so the family default
-	// stays at the floor.
+	// Anthropic reports no window. Claude 4.5 and earlier are 200k; 4.6 onward
+	// serve 1M without a beta header and are listed further down.
 	"claude-":        200_000,
 	"claude-2":       100_000,
 	"claude-instant": 100_000,
@@ -64,6 +63,107 @@ var contextWindows = map[string]int{
 	// so these are a backstop for proxies that drop it.
 	"grok-":  131_072,
 	"grok-4": 256_000,
+
+	// The entries below come from oh-my-pi's model catalog (2026-11-17): the
+	// window the model's maker serves, the smaller where its own plans differ.
+	// A vendor that serves a model with another window has its own table
+	// (vendorContextWindows); a router reports its own through discovery.
+	"claude-opus-4-6":   1_000_000,
+	"claude-opus-4-7":   1_000_000,
+	"claude-opus-4-8":   1_000_000,
+	"claude-opus-5":     1_000_000,
+	"claude-sonnet-4-6": 1_000_000,
+	"claude-sonnet-5":   1_000_000,
+	"claude-haiku-5":    1_000_000,
+	"claude-fable-":     1_000_000,
+	"claude-mythos-":    1_000_000,
+
+	"gpt-5-chat":          128_000,
+	"gpt-5.1-chat":        128_000,
+	"gpt-5.2-chat":        128_000,
+	"gpt-5.3-chat":        128_000,
+	"gpt-5.3-codex":       272_000,
+	"gpt-5.3-codex-spark": 128_000,
+	"gpt-5.4":             1_000_000,
+	"gpt-5.4-mini":        400_000,
+	"gpt-5.4-nano":        400_000,
+	"gpt-5.5":             1_050_000,
+	"gpt-5.6":             1_050_000,
+	"gpt-5.6-cyber":       400_000,
+	"gpt-6":               1_050_000,
+
+	"grok-4.20":     1_000_000,
+	"grok-4.3":      1_000_000,
+	"grok-4.5":      500_000,
+	"grok-4.6":      500_000,
+	"grok-4.7":      500_000,
+	"grok-build":    256_000,
+	"grok-code":     256_000,
+	"grok-composer": 200_000,
+
+	"deepseek-v4":              1_000_000,
+	"deepseek-v4-flash-free":   200_000,
+	"deepseek-v4.1-flash-free": 200_000,
+	"deepseek-flash":           1_000_000,
+	"deepseek-pro":             1_000_000,
+
+	"kimi-k2":      262_144,
+	"kimi-k2-0711": 131_072,
+	"kimi-k3":      1_048_576,
+
+	"glm-4.5":            131_072,
+	"glm-4.5v":           64_000,
+	"glm-4.6":            200_000,
+	"glm-4.6v":           128_000,
+	"glm-4.7":            200_000,
+	"glm-5":              204_800,
+	"glm-5.1":            200_000,
+	"glm-5.2":            1_000_000,
+	"glm-5.3":            1_000_000,
+	"glm-5.3-flash-free": 200_000,
+
+	"minimax-m2":      204_800,
+	"minimax-m3":      512_000,
+	"minimax-m3-free": 200_000,
+	"minimax-m3.1":    1_000_000,
+
+	"qwen3.5-plus":  1_000_000,
+	"qwen3.6-flash": 1_000_000,
+	"qwen3.6-plus":  1_000_000,
+	"qwen3.7":       1_000_000,
+	"qwen3.8-flash": 1_000_000,
+	"qwen3.8-max":   983_616,
+
+	"swe-1": 200_000,
+}
+
+// vendorContextWindows are the windows a vendor serves that differ from the
+// model's own, matched before contextWindows. A Claude Code login never sends
+// the 1M-context beta (a subscription has no long-context credit), so Claude
+// 4.x keeps 200k there; the 5.x families are 1M without it.
+var vendorContextWindows = map[string]map[string]int{
+	VendorClaudeCode: {
+		"claude-":         200_000,
+		"claude-opus-5":   1_000_000,
+		"claude-sonnet-5": 1_000_000,
+		"claude-haiku-5":  1_000_000,
+		"claude-fable-":   1_000_000,
+		"claude-mythos-":  1_000_000,
+	},
+	VendorGoogleAntigravity: {
+		"claude-":           200_000,
+		"claude-opus-4-6":   250_000,
+		"claude-sonnet-4-6": 250_000,
+		"claude-opus-5":     1_000_000,
+		"claude-sonnet-5":   1_000_000,
+	},
+	VendorOpenAICodex: {
+		"gpt-5":        272_000,
+		"gpt-5.6":      1_000_000,
+		"gpt-6":        272_000,
+		"gpt-6.1":      500_000,
+		"gpt-daybreak": 272_000,
+	},
 }
 
 // ContextWindowFor returns the input context window for a model id, or 0 when
@@ -71,18 +171,27 @@ var contextWindows = map[string]int{
 // opinion" — and callers must treat it as such rather than as a window of size
 // zero.
 //
-// Vendor is accepted for future per-vendor disambiguation and is currently only
-// normalized; ids are matched on their own because a workspace reaches the same
-// model through several vendor ids (openai, openai-compat, a router).
+// Vendor picks a vendor's own table first (vendorContextWindows); otherwise ids
+// are matched on their own because a workspace reaches the same model through
+// several vendor ids (openai, openai-compat, a router).
 func ContextWindowFor(vendor, model string) int {
 	id := normalizeModelID(model)
 	if id == "" {
 		return 0
 	}
+	if window := longestPrefix(vendorContextWindows[strings.ToLower(strings.TrimSpace(vendor))], id); window > 0 {
+		return window
+	}
+	return longestPrefix(contextWindows, id)
+}
+
+// longestPrefix is the value of the longest key of table that id starts
+// with, or 0.
+func longestPrefix(table map[string]int, id string) int {
 	best, bestLen := 0, -1
-	for prefix, window := range contextWindows {
+	for prefix, n := range table {
 		if strings.HasPrefix(id, prefix) && len(prefix) > bestLen {
-			best, bestLen = window, len(prefix)
+			best, bestLen = n, len(prefix)
 		}
 	}
 	return best

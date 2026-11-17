@@ -52,6 +52,69 @@ func TestContextWindowForPicksTheLongestMatchingPrefix(t *testing.T) {
 	}
 }
 
+// The current families must not fall to an older family default: Claude 4.6+
+// at the 200k floor compacted a 1M model at 168k, and grok-build at the grok-
+// default compacted near 99k.
+func TestContextWindowForCurrentFamilies(t *testing.T) {
+	cases := []struct {
+		vendor, model string
+		want          int
+	}{
+		{"anthropic", "claude-opus-4-5", 200_000},
+		{"anthropic", "claude-opus-4-6", 1_000_000},
+		{"anthropic", "claude-sonnet-5-5", 1_000_000},
+		{"anthropic", "claude-haiku-4-5", 200_000},
+		{"anthropic", "claude-haiku-5-5", 1_000_000},
+		{"openai", "gpt-5", 400_000},
+		{"openai", "gpt-5.3-chat-latest", 128_000},
+		{"openai", "gpt-5.3-codex-spark", 128_000},
+		{"openai", "gpt-5.4-mini", 400_000},
+		{"openai", "gpt-5.5", 1_050_000},
+		{"openai", "gpt-6-luna", 1_050_000},
+		{"xai", "grok-build", 256_000},
+		{"xai", "grok-4.20-0309-reasoning", 1_000_000},
+		{"xai", "grok-4.7", 500_000},
+		{"deepseek", "deepseek-v4-flash", 1_000_000},
+		{"", "kimi-k2.6", 262_144},
+		{"", "kimi-k3", 1_048_576},
+		{"", "glm-5.1", 200_000},
+		{"", "glm-5.3", 1_000_000},
+		{"", "minimax-m2.7", 204_800},
+		{"", "minimax-m3", 512_000},
+		{"", "qwen3.7-plus", 1_000_000},
+	}
+	for _, c := range cases {
+		if got := ContextWindowFor(c.vendor, c.model); got != c.want {
+			t.Errorf("ContextWindowFor(%q, %q) = %d, want %d", c.vendor, c.model, got, c.want)
+		}
+	}
+}
+
+// A subscription login serves some models with a smaller window than the
+// maker's API: the vendor's own entry wins, and an id it does not list falls
+// back to the model's own window.
+func TestContextWindowForVendorOverrides(t *testing.T) {
+	cases := []struct {
+		vendor, model string
+		want          int
+	}{
+		{VendorClaudeCode, "claude-opus-4-8", 200_000},
+		{VendorClaudeCode, "claude-opus-5-5", 1_000_000},
+		{VendorGoogleAntigravity, "claude-sonnet-4-6", 250_000},
+		{VendorGoogleAntigravity, "claude-opus-5-5", 1_000_000},
+		{VendorOpenAICodex, "gpt-6-sol", 272_000},
+		{VendorOpenAICodex, "gpt-6.1-sol", 500_000},
+		{VendorOpenAICodex, "gpt-5.6-luna", 1_000_000},
+		{VendorOpenAICodex, "o3", 200_000},
+		{"OpenAI-Codex", "gpt-6-sol", 272_000},
+	}
+	for _, c := range cases {
+		if got := ContextWindowFor(c.vendor, c.model); got != c.want {
+			t.Errorf("ContextWindowFor(%q, %q) = %d, want %d", c.vendor, c.model, got, c.want)
+		}
+	}
+}
+
 // A router rewrites ids on the way through ("anthropic/claude-sonnet-4") and
 // Gemini returns resource names ("models/gemini-2.5-pro"). Matching the raw
 // string would silently drop the window for every model reached that way — a
