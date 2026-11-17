@@ -134,6 +134,21 @@ func TestClearingWaitsForTheTriggerWhileTheCacheIsWarm(t *testing.T) {
 	}
 }
 
+// A trigger above the budget waits for the budget, not half of it.
+func TestClearingTriggerAboveTheBudgetIsTheBudget(t *testing.T) {
+	now := time.UnixMilli(10_000_000)
+	policy := CompactionPolicy{Budget: 100_000, KeepRecent: 2000, Clearing: ToolResultClearing{Trigger: 1_000_000, CacheTTL: time.Minute}}
+	// 70 results: ~70k tokens, past half the budget but under it.
+	c := NewCompactor(CompactorOptions{Revision: "r", Policy: policy})
+	c.now = func() time.Time { return now }
+	if got := clearedCount(viewOf(t, c, clearRequest(70, 4000, now.Add(-30*time.Second).UnixMilli()), policy)); got != 0 {
+		t.Fatalf("cleared %d results under the budget with a warm cache", got)
+	}
+	if got := clearedCount(viewOf(t, c, clearRequest(110, 4000, now.Add(-30*time.Second).UnixMilli()), policy)); got == 0 {
+		t.Fatal("nothing cleared past the budget")
+	}
+}
+
 func TestClearingExcludesToolsShortensErrorsAndArchives(t *testing.T) {
 	archived := map[string]string{}
 	policy := CompactionPolicy{Budget: 100_000, KeepRecent: 2000, Clearing: ToolResultClearing{ExcludeTools: []string{"read_skill"}},

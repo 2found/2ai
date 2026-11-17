@@ -84,6 +84,21 @@ func CapabilitiesFor(vendor, model string) protocol.ModelCapabilities {
 		return protocol.ModelCapabilities{
 			ImageInput: supported, MaxInputImages: 90,
 		}
+	case "deepseek":
+		// Image support stays unknown (the optimistic path); the count is the
+		// fact. Without it the unknown-provider budget kept 5 images, so an agent
+		// checking its work lost every earlier screenshot. The Chat Completions
+		// API took 150 in one request (2026-11-17).
+		return protocol.ModelCapabilities{MaxInputImages: 100}
+	case VendorXaiOAuth:
+		// xAI documents no image-count limit for image understanding (20 MiB
+		// each); support itself stays unknown, as for DeepSeek.
+		return protocol.ModelCapabilities{MaxInputImages: 100}
+	case "opencode", "opencode-zen", "opencode-go":
+		// A gateway over many upstreams, like OpenRouter: the same budget, so
+		// an agent keeps its earlier pictures instead of the unknown floor of 5.
+		// Which models see images at all is per model and stays unknown.
+		return protocol.ModelCapabilities{MaxInputImages: 90}
 	default:
 		return protocol.ModelCapabilities{}
 	}

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- **DeepSeek, Grok OAuth and OpenCode keep an agent's earlier pictures.** They stated no image count, so the unknown-provider floor kept only the 5 newest images in each request, and an agent checking its work lost every earlier screenshot. DeepSeek and xAI now allow 100 (DeepSeek took 150 in one request; xAI documents no count limit) and the OpenCode gateways 90, like OpenRouter. Whether a model sees images at all stays unknown. A test holds every chat vendor in the settings catalog above the floor.
+- **A tool-result clearing `Trigger` above the context budget now means the budget.** It used to fall back to half the budget, so a host could not ask for clearing to wait until just before a summary. Zero still selects half.
+
 ## 0.4.0 — 2026-11-17
 
 Baseline: v0.3.2. **Breaking:** four workspace tools take Claude Code's names.

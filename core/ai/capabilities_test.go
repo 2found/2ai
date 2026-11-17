@@ -173,4 +173,19 @@ func TestProviderImageBudgetsArePortableAndAntigravityIsExplicitlyTextOnly(t *te
 	if got := CapabilitiesFor(VendorGoogleAntigravity, "m"); got.ImageInput != protocol.CapabilityUnsupported {
 		t.Fatalf("antigravity image capability = %+v", got)
 	}
+	// DeepSeek states its count only; whether a model sees images stays the
+	// optimistic unknown.
+	if got := CapabilitiesFor("deepseek", "deepseek-flash"); got.MaxInputImages != 100 || got.ImageInput != protocol.CapabilityUnknown {
+		t.Fatalf("deepseek image capability = %+v", got)
+	}
+	// Every vendor the settings catalog offers for chat states its image count,
+	// so none falls to the unknown-provider floor; Antigravity alone sees none.
+	for _, option := range ProviderOptions() {
+		if option.Purpose != "llm" || option.ID == VendorGoogleAntigravity {
+			continue
+		}
+		if got := CapabilitiesFor(option.ID, "m"); got.MaxInputImages <= 5 || got.ImageInput == protocol.CapabilityUnsupported {
+			t.Fatalf("%s image capability = %+v", option.ID, got)
+		}
+	}
 }

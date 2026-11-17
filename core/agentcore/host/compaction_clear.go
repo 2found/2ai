@@ -25,7 +25,8 @@ type ToolResultClearing struct {
 	// Disabled turns clearing off; a persisted boundary is then ignored.
 	Disabled bool
 	// Trigger is the estimated request size past which the boundary may move
-	// while the prompt cache is warm. Zero selects half the Budget.
+	// while the prompt cache is warm. Zero selects half the Budget; a Trigger
+	// above the Budget is the Budget, so clearing comes just before a summary.
 	Trigger int
 	// Keep is how many of the most recent tool results stay verbatim. Zero
 	// selects DefaultKeepToolResults.
@@ -54,8 +55,10 @@ const minClearTokens = 128
 const minArchiveTokens = 512
 
 func (p ToolResultClearing) resolved(budget int) ToolResultClearing {
-	if p.Trigger <= 0 || (budget > 0 && p.Trigger > budget) {
+	if p.Trigger <= 0 {
 		p.Trigger = budget / 2
+	} else if budget > 0 && p.Trigger > budget {
+		p.Trigger = budget
 	}
 	if p.Keep <= 0 {
 		p.Keep = DefaultKeepToolResults
