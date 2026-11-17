@@ -20,7 +20,7 @@ import (
 // before the model is shown the tool.
 //
 // It is the legitimate-egress counterpart to the container tools in this
-// package: where run_shell runs untrusted code with --network none, this makes
+// package: where bash runs untrusted code with --network none, this makes
 // *controlled* outbound calls to an operator-approved host allowlist. Where the
 // call is made from depends on the substrate it was built with — see HTTPTool.
 const ToolHTTPRequest = "http_request"

@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	ToolReadFile  = "read_file"
-	ToolWriteFile = "write_file"
+	ToolReadFile  = "read"
+	ToolWriteFile = "write"
 )
 
 const (
@@ -35,7 +35,7 @@ type ReadFileTool struct {
 	fs        workspaceFS
 }
 
-// NewReadFileTool builds read_file over the given sandbox. sb is optional: nil
+// NewReadFileTool builds read over the given sandbox. sb is optional: nil
 // reads the file directly from the host filesystem under the Workspace guards
 // (the default), non-nil reads it from inside the sandbox with the workspace
 // bind-mounted.
@@ -52,7 +52,7 @@ func (t *ReadFileTool) Schema() agentcore.ToolSchema {
 		Description: "Read a UTF-8 text file from the agent workspace. Content is returned with " +
 			"cat -n style line numbers so you can cite exact lines. Use offset and limit to read a " +
 			"window of a large file; a truncated read ends with the exact offset to continue from. " +
-			"The result includes a content_hash required by edit_file and edit_lines to reject stale edits. " +
+			"The result includes a content_hash required by edit and edit_lines to reject stale edits. " +
 			"Use byte_offset and byte_limit to page through files above 16MB or the suffix of an oversized line. " +
 			"The path must be relative and cannot escape the workspace.",
 		Parameters: map[string]any{
@@ -86,22 +86,22 @@ func (t *ReadFileTool) Run(ctx context.Context, args string) (string, error) {
 		ByteLimit  int    `json:"byte_limit"`
 	}
 	if err := json.Unmarshal([]byte(args), &in); err != nil {
-		return "", fmt.Errorf("read_file: invalid arguments: %w", err)
+		return "", fmt.Errorf("read: invalid arguments: %w", err)
 	}
 	_, rel, err := t.workspace.Resolve(in.Path)
 	if err != nil {
-		return "", fmt.Errorf("read_file: %w", err)
+		return "", fmt.Errorf("read: %w", err)
 	}
 	info, err := t.fs.Stat(ctx, rel)
 	if err != nil {
-		return "", fmt.Errorf("read_file: %w", err)
+		return "", fmt.Errorf("read: %w", err)
 	}
 	if info.IsDir {
-		return "", fmt.Errorf("read_file: %s is a directory", rel)
+		return "", fmt.Errorf("read: %s is a directory", rel)
 	}
 	if in.ByteOffset != nil {
 		if *in.ByteOffset < 0 || *in.ByteOffset > info.Size || in.Offset != 0 || in.Limit != 0 {
-			return "", fmt.Errorf("read_file: byte_offset must be within file bounds and cannot combine with line offset/limit")
+			return "", fmt.Errorf("read: byte_offset must be within file bounds and cannot combine with line offset/limit")
 		}
 		limit := in.ByteLimit
 		if limit <= 0 {
@@ -113,7 +113,7 @@ func (t *ReadFileTool) Run(ctx context.Context, args string) (string, error) {
 		start := max(int64(0), *in.ByteOffset-3)
 		data, hash, err := t.fs.ReadRange(ctx, rel, start, limit+7)
 		if err != nil {
-			return "", fmt.Errorf("read_file: %w", err)
+			return "", fmt.Errorf("read: %w", err)
 		}
 		index := int(*in.ByteOffset - start)
 		for index > 0 && index < len(data) && data[index]&0xc0 == 0x80 {
@@ -127,7 +127,7 @@ func (t *ReadFileTool) Run(ctx context.Context, args string) (string, error) {
 			content = string(data[:size])
 		}
 		if !utf8.ValidString(content) {
-			return "", fmt.Errorf("read_file: byte window is not UTF-8 text")
+			return "", fmt.Errorf("read: byte window is not UTF-8 text")
 		}
 		next := start + int64(len(content))
 		partial := start > 0 || next < info.Size
@@ -137,18 +137,18 @@ func (t *ReadFileTool) Run(ctx context.Context, args string) (string, error) {
 		return fmt.Sprintf("path: %s\ncontent_hash: %s\nbytes: %d\nbyte_offset: %d\nnext_byte_offset: %d\ntruncated: %t\ncontent:\n%s\n[Use byte_offset=%d to continue.]", rel, hash, info.Size, start, next, partial, content, next), nil
 	}
 	if in.ByteLimit != 0 {
-		return "", fmt.Errorf("read_file: byte_limit requires byte_offset")
+		return "", fmt.Errorf("read: byte_limit requires byte_offset")
 	}
 	if info.Size > maxReadWholeFileBytes {
-		return "", fmt.Errorf("read_file: %s is %d bytes, over the %dMB line-read cap — use byte_offset=0 and byte_limit=65536 to page the file",
+		return "", fmt.Errorf("read: %s is %d bytes, over the %dMB line-read cap — use byte_offset=0 and byte_limit=65536 to page the file",
 			rel, info.Size, maxReadWholeFileBytes/(1024*1024))
 	}
 	data, err := t.fs.ReadFile(ctx, rel)
 	if err != nil {
-		return "", fmt.Errorf("read_file: %w", err)
+		return "", fmt.Errorf("read: %w", err)
 	}
 	if !utf8.Valid(data) {
-		return "", fmt.Errorf("read_file: %s is not UTF-8 text", rel)
+		return "", fmt.Errorf("read: %s is not UTF-8 text", rel)
 	}
 
 	// Window the requested line range FIRST (1-based offset, optional limit),
@@ -166,7 +166,7 @@ func (t *ReadFileTool) Run(ctx context.Context, args string) (string, error) {
 		start = 1
 	}
 	if start > total {
-		return "", fmt.Errorf("read_file: offset %d is beyond end of file (%d lines)", in.Offset, total)
+		return "", fmt.Errorf("read: offset %d is beyond end of file (%d lines)", in.Offset, total)
 	}
 	end := total
 	if in.Limit > 0 && start+in.Limit-1 < end {
@@ -237,7 +237,7 @@ type WriteFileTool struct {
 	fs        workspaceFS
 }
 
-// NewWriteFileTool builds write_file over the given sandbox. sb is optional: nil
+// NewWriteFileTool builds write over the given sandbox. sb is optional: nil
 // writes directly to the host filesystem under the Workspace guards (the
 // default), non-nil writes from inside the sandbox with the workspace
 // bind-mounted — where the content rides stdin, never argv or env. Either way
@@ -253,7 +253,7 @@ func (t *WriteFileTool) Schema() agentcore.ToolSchema {
 	return agentcore.ToolSchema{
 		Name: ToolWriteFile,
 		Description: "Create or replace a UTF-8 text file inside the agent workspace. Replacing an existing file requires " +
-			"expected_hash: the content_hash from your latest read_file, write_file, edit_file, or edit_lines result for that " +
+			"expected_hash: the content_hash from your latest read, write, edit, or edit_lines result for that " +
 			"path, so a file you have not read (or that changed since) is never overwritten. The write is atomic. The result " +
 			"includes a content_hash for a subsequent edit. Parent directories are created; paths must be relative and cannot " +
 			"escape the workspace.",
@@ -265,7 +265,7 @@ func (t *WriteFileTool) Schema() agentcore.ToolSchema {
 				"path":                    map[string]any{"type": "string", "description": "Workspace-relative file path."},
 				"content":                 map[string]any{"type": "string", "description": "Complete file content to write."},
 				"expected_hash":           map[string]any{"type": "string", "description": "Required when the file exists: content_hash of the current complete file. Omit when creating a new file."},
-				"allow_partial_overwrite": map[string]any{"type": "boolean", "description": "Explicitly confirm a full-file replacement after a partial read. Requires expected_hash. Prefer edit_file/edit_lines for partial reads."},
+				"allow_partial_overwrite": map[string]any{"type": "boolean", "description": "Explicitly confirm a full-file replacement after a partial read. Requires expected_hash. Prefer edit/edit_lines for partial reads."},
 			},
 			"required": []string{"path", "content"},
 		},
@@ -280,46 +280,46 @@ func (t *WriteFileTool) Run(ctx context.Context, args string) (string, error) {
 		AllowPartialOverwrite bool   `json:"allow_partial_overwrite"`
 	}
 	if err := json.Unmarshal([]byte(args), &in); err != nil {
-		return "", fmt.Errorf("write_file: invalid arguments: %w", err)
+		return "", fmt.Errorf("write: invalid arguments: %w", err)
 	}
 	_, rel, err := t.workspace.Resolve(in.Path)
 	if err != nil {
-		return "", fmt.Errorf("write_file: %w", err)
+		return "", fmt.Errorf("write: %w", err)
 	}
 	if t.workspace.partialRead(rel) != "" && !in.AllowPartialOverwrite {
-		return "", fmt.Errorf("write_file: %s was only partially read; use edit_file/edit_lines, read the full file, or explicitly confirm allow_partial_overwrite with expected_hash", rel)
+		return "", fmt.Errorf("write: %s was only partially read; use edit/edit_lines, read the full file, or explicitly confirm allow_partial_overwrite with expected_hash", rel)
 	}
-	// Overwriting is hash-guarded exactly like edit_file: an existing file is
+	// Overwriting is hash-guarded exactly like edit: an existing file is
 	// replaced only when the caller names the snapshot it is replacing, so a
 	// file the model never read (or that changed since) is never clobbered.
 	info, statErr := t.fs.Stat(ctx, rel)
 	switch {
 	case statErr == nil && info.IsDir:
-		return "", fmt.Errorf("write_file: %s is a directory", rel)
+		return "", fmt.Errorf("write: %s is a directory", rel)
 	case statErr == nil:
 		if strings.TrimSpace(in.ExpectedHash) == "" {
-			return "", fmt.Errorf("write_file: %s already exists; read it and pass its content_hash as expected_hash to replace it, or use edit_file/edit_lines", rel)
+			return "", fmt.Errorf("write: %s already exists; read it and pass its content_hash as expected_hash to replace it, or use edit/edit_lines", rel)
 		}
 		hash, err := normalizeFileHash(in.ExpectedHash)
 		if err != nil {
-			return "", fmt.Errorf("write_file: expected_hash %w", err)
+			return "", fmt.Errorf("write: expected_hash %w", err)
 		}
 		_, actual, err := t.fs.ReadRange(ctx, rel, 0, 0)
 		if err != nil {
-			return "", fmt.Errorf("write_file: %w", err)
+			return "", fmt.Errorf("write: %w", err)
 		}
 		if hash != actual {
-			return "", fmt.Errorf("write_file: stale snapshot for %s: expected %s, current content_hash is %s; re-read the file", rel, hash, actual)
+			return "", fmt.Errorf("write: stale snapshot for %s: expected %s, current content_hash is %s; re-read the file", rel, hash, actual)
 		}
 	case errors.Is(statErr, fs.ErrNotExist):
 		if strings.TrimSpace(in.ExpectedHash) != "" {
-			return "", fmt.Errorf("write_file: stale snapshot for %s: the file no longer exists; omit expected_hash to create it", rel)
+			return "", fmt.Errorf("write: stale snapshot for %s: the file no longer exists; omit expected_hash to create it", rel)
 		}
 	default:
-		return "", fmt.Errorf("write_file: %w", statErr)
+		return "", fmt.Errorf("write: %w", statErr)
 	}
 	if err := t.fs.WriteFile(ctx, rel, []byte(in.Content)); err != nil {
-		return "", fmt.Errorf("write_file: %w", err)
+		return "", fmt.Errorf("write: %w", err)
 	}
 	_ = t.workspace.recordRead(rel, "", false)
 	return fmt.Sprintf("path: %s\ncontent_hash: %s\nbytes_written: %d", rel, fileContentHash([]byte(in.Content)), len(in.Content)), nil

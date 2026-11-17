@@ -204,7 +204,7 @@ func (f fakeDocker) called(t *testing.T, prefix string) int {
 	return n
 }
 
-// run_shell never gets network, so egress args must always be --network none with
+// bash never gets network, so egress args must always be --network none with
 // no proxy env — offline regardless of any allowlist config.
 func TestEgressArgsNoNetworkIsOffline(t *testing.T) {
 	s := NewDockerSandbox()

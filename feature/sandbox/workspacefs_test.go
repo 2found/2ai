@@ -127,7 +127,7 @@ func TestReadFileIdenticalAcrossSubstrates(t *testing.T) {
 			return NewReadFileTool(sb, ws).Run(context.Background(), args)
 		})
 		if host != boxed {
-			t.Errorf("read_file %s differs between substrates:\n--- host ---\n%s\n--- sandbox ---\n%s", args, host, boxed)
+			t.Errorf("read %s differs between substrates:\n--- host ---\n%s\n--- sandbox ---\n%s", args, host, boxed)
 		}
 	}
 }
@@ -150,7 +150,7 @@ func TestReadFileErrorsOnBothSubstrates(t *testing.T) {
 			{"sandbox", NewReadFileTool(NewHostSandbox(), ws)},
 		} {
 			if _, err := sb.tool.Run(context.Background(), args); err == nil {
-				t.Errorf("%s substrate: read_file %s should have failed", sb.name, args)
+				t.Errorf("%s substrate: read %s should have failed", sb.name, args)
 			}
 		}
 	}
@@ -165,7 +165,7 @@ func TestWriteAndEditRoundTripOnSandboxSubstrate(t *testing.T) {
 	body := "line one\nline two\n"
 	if _, err := NewWriteFileTool(sb, ws).Run(context.Background(),
 		fmt.Sprintf(`{"path":"out/new.txt","content":%q}`, body)); err != nil {
-		t.Fatalf("write_file: %v", err)
+		t.Fatalf("write: %v", err)
 	}
 	onDisk, err := os.ReadFile(filepath.Join(ws.Root(), "out", "new.txt"))
 	if err != nil {
@@ -175,14 +175,14 @@ func TestWriteAndEditRoundTripOnSandboxSubstrate(t *testing.T) {
 		t.Fatalf("written content = %q, want %q", onDisk, body)
 	}
 
-	// edit_file reads and rewrites through the same substrate.
+	// edit reads and rewrites through the same substrate.
 	out, err := NewEditFileTool(sb, ws).Run(context.Background(),
 		editArgs(t, ws, "out/new.txt", "line two", "line 2", false))
 	if err != nil {
-		t.Fatalf("edit_file: %v", err)
+		t.Fatalf("edit: %v", err)
 	}
 	if !strings.Contains(out, "replacements: 1") {
-		t.Fatalf("edit_file output = %q", out)
+		t.Fatalf("edit output = %q", out)
 	}
 	edited, _ := os.ReadFile(filepath.Join(ws.Root(), "out", "new.txt"))
 	if string(edited) != "line one\nline 2\n" {

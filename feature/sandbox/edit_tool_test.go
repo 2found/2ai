@@ -33,14 +33,14 @@ func TestEditFileReplacesUniqueMatch(t *testing.T) {
 func TestEditFileSchemaRequiresSnapshotHash(t *testing.T) {
 	required, ok := NewEditFileTool(nil, mustWorkspace(t)).Schema().Parameters["required"].([]string)
 	if !ok {
-		t.Fatal("edit_file required schema is not []string")
+		t.Fatal("edit required schema is not []string")
 	}
 	for _, name := range required {
 		if name == "expected_hash" {
 			return
 		}
 	}
-	t.Fatalf("edit_file schema does not require expected_hash: %v", required)
+	t.Fatalf("edit schema does not require expected_hash: %v", required)
 }
 
 func TestEditFileRejectsAmbiguousMatch(t *testing.T) {
@@ -191,7 +191,7 @@ func editArgs(t *testing.T, ws *Workspace, path, oldString, newString string, re
 	return string(raw)
 }
 
-// mutatingWorkspaceFS injects a concurrent change between edit_file's initial
+// mutatingWorkspaceFS injects a concurrent change between edit's initial
 // snapshot read and its final pre-write revalidation.
 type mutatingWorkspaceFS struct {
 	workspaceFS

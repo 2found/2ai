@@ -13,11 +13,11 @@ import (
 // Without it, everything an agent fetches has to come back through the model:
 // a 4 MB CSV is truncated, a PDF is unreadable, and a dataset it wanted to
 // analyze is a summary of a dataset. With it, http_request and web_fetch put the
-// bytes in the same directory read_file, grep, and run_shell already work in, so
+// bytes in the same directory read, grep, and bash already work in, so
 // "download this and count the rows" is two ordinary tool calls instead of an
 // impossibility.
 //
-// The saved path goes through the same workspace guard as write_file — relative
+// The saved path goes through the same workspace guard as write — relative
 // only, no escaping the root, no following a symlink out — so a model that
 // asks to save to "../../.ssh/authorized_keys" gets an error, not a foothold.
 

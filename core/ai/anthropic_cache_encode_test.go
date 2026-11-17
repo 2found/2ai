@@ -22,7 +22,7 @@ func TestAnthropicEncode_CacheBreakpoints(t *testing.T) {
 		Messages: []protocol.Message{
 			{Role: protocol.RoleSystem, Content: "you are a reviewer"},
 			{Role: protocol.RoleUser, Content: "big diff payload"},
-			{Role: protocol.RoleAssistant, Content: "", ToolCalls: []protocol.ToolCall{{ID: "t1", Name: "read_file", Arguments: `{"path":"a.go"}`}}},
+			{Role: protocol.RoleAssistant, Content: "", ToolCalls: []protocol.ToolCall{{ID: "t1", Name: "read", Arguments: `{"path":"a.go"}`}}},
 			{Role: protocol.RoleTool, ToolCallID: "t1", Content: "file body"},
 		},
 	}

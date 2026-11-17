@@ -10,6 +10,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"time"
 	"unicode/utf8"
 
 	"github.com/2found/2ai/core/agentcore"
@@ -106,15 +107,20 @@ func (t *GrepTool) Schema() agentcore.ToolSchema {
 		Description: "Search file contents in the agent workspace by regular expression (RE2 syntax). " +
 			"output_mode content (default) returns matching lines as path:line:text; files_with_matches returns only the paths; count returns path:matches. " +
 			"Results are capped at " + fmt.Sprint(maxGrepMatches) + " rows; use offset to continue a page. " +
-			"Honors nested .gitignore files and excludes dependency/VCS directories. Files that could not be searched (for example above 2MB) are listed; read_file byte paging can inspect them. " +
-			"Use glob to narrow which files are searched, path to scope to a subdirectory, and context " +
-			"to see surrounding lines without a follow-up read_file. Prefer this tool over grep or rg in the shell.",
+			"Honors nested .gitignore files and excludes dependency/VCS directories. Files that could not be searched (for example above 2MB) are listed; the read tool's byte_offset paging can inspect them. " +
+			"Use glob or type to narrow which files are searched, path to scope to a subdirectory, multiline for a pattern that spans lines, and context " +
+			"to see surrounding lines without a follow-up read call. Prefer this tool over grep or rg in the shell.",
 		Parameters: map[string]any{
 			"type": "object",
 			"properties": map[string]any{
 				"pattern": map[string]any{"type": "string", "description": "RE2 regular expression to match against each line (or a plain string with literal)."},
 				"path":    map[string]any{"type": "string", "description": "Optional workspace-relative subdirectory to search. Defaults to the whole workspace."},
 				"glob":    map[string]any{"type": "string", "description": "Optional filename filter, e.g. *.go or **/*.ts. Matches the workspace-relative path."},
+				"type":    map[string]any{"type": "string", "description": "Optional file type, e.g. go, js, ts, py, rust, java, c, cpp, md, json, yaml, html, css, sh, sql. Cheaper than an equivalent glob."},
+				"multiline": map[string]any{
+					"type":        "boolean",
+					"description": "Let the pattern span lines: . also matches a newline, e.g. \"func Foo\\(.*?\\n}\". Every line of a match is listed. Defaults to false.",
+				},
 				"output_mode": map[string]any{
 					"type":        "string",
 					"enum":        []string{grepModeContent, grepModeFiles, grepModeCount},
@@ -152,6 +158,8 @@ type grepQuery struct {
 	mode     string
 	literal  bool
 	fold     bool
+	multi    bool
+	exts     map[string]bool // type: the extensions a file must have, nil for any
 	ctxLines int
 	limit    int
 	offset   int
@@ -165,6 +173,8 @@ func (t *GrepTool) Run(ctx context.Context, args string) (string, error) {
 		OutputMode      string `json:"output_mode"`
 		CaseInsensitive bool   `json:"case_insensitive"`
 		Literal         bool   `json:"literal"`
+		Multiline       bool   `json:"multiline"`
+		Type            string `json:"type"`
 		Context         int    `json:"context"`
 		Limit           int    `json:"limit"`
 		Offset          int    `json:"offset"`
@@ -178,7 +188,17 @@ func (t *GrepTool) Run(ctx context.Context, args string) (string, error) {
 	if in.Offset < 0 || in.Offset > 1000000 {
 		return "", fmt.Errorf("grep: offset must be between 0 and 1000000")
 	}
-	q := grepQuery{pattern: in.Pattern, path: in.Path, literal: in.Literal, fold: in.CaseInsensitive, offset: in.Offset}
+	q := grepQuery{pattern: in.Pattern, path: in.Path, literal: in.Literal, fold: in.CaseInsensitive, multi: in.Multiline, offset: in.Offset}
+	if typ := strings.ToLower(strings.TrimSpace(in.Type)); typ != "" {
+		exts, ok := grepTypes[typ]
+		if !ok {
+			return "", fmt.Errorf("grep: unknown type %q; known: %s (or use glob)", in.Type, strings.Join(grepTypeNames(), ", "))
+		}
+		q.exts = map[string]bool{}
+		for _, e := range exts {
+			q.exts[e] = true
+		}
+	}
 	switch q.mode = strings.TrimSpace(in.OutputMode); q.mode {
 	case "":
 		q.mode = grepModeContent
@@ -192,6 +212,11 @@ func (t *GrepTool) Run(ctx context.Context, args string) (string, error) {
 	}
 	if in.CaseInsensitive {
 		expr = "(?i)" + expr
+	}
+	if in.Multiline {
+		// As rg --multiline --multiline-dotall: . crosses lines, ^ and $
+		// still anchor at line boundaries.
+		expr = "(?ms)" + expr
 	}
 	q.limit = in.Limit
 	if q.limit <= 0 || q.limit > maxGrepMatches {
@@ -235,10 +260,10 @@ func (t *GrepTool) goGrep(ctx context.Context, q grepQuery) (*grepResult, error)
 		return nil, err
 	}
 	candidates := all
-	if q.glob != nil {
+	if q.glob != nil || q.exts != nil {
 		candidates = candidates[:0:0]
 		for _, rel := range all {
-			if q.glob.MatchString(rel) {
+			if q.wants(rel) {
 				candidates = append(candidates, rel)
 			}
 		}
@@ -257,7 +282,13 @@ func (t *GrepTool) goGrep(ctx context.Context, q grepQuery) (*grepResult, error)
 			lines = lines[:n-1] // the newline ending the last line opens no line
 		}
 		var hits []int
+		if q.multi {
+			hits = multilineHits(q.re, string(data))
+		}
 		for i, line := range lines {
+			if q.multi {
+				break
+			}
 			if i%1024 == 0 {
 				if err := ctx.Err(); err != nil {
 					return err
@@ -281,6 +312,65 @@ func (t *GrepTool) goGrep(ctx context.Context, q grepQuery) (*grepResult, error)
 		return nil, readErr
 	}
 	return res, nil
+}
+
+// wants reports a file glob and type let through.
+func (q grepQuery) wants(rel string) bool {
+	if q.glob != nil && !q.glob.MatchString(rel) {
+		return false
+	}
+	if q.exts != nil && !q.exts[strings.ToLower(strings.TrimPrefix(filepath.Ext(rel), "."))] {
+		return false
+	}
+	return true
+}
+
+// multilineHits is every line a match of re in text covers, in order, once
+// each: a match that spans three lines lists all three.
+func multilineHits(re *regexp.Regexp, text string) []int {
+	starts := []int{0} // byte offset of each line's first byte
+	for i := 0; i < len(text); i++ {
+		if text[i] == '\n' && i+1 < len(text) {
+			starts = append(starts, i+1)
+		}
+	}
+	lineOf := func(off int) int { return sort.SearchInts(starts, off+1) - 1 }
+	var hits []int
+	next := 0 // lines below next are already listed
+	for _, m := range re.FindAllStringIndex(text, -1) {
+		if m[0] == len(text) && len(text) > 0 && text[len(text)-1] == '\n' {
+			continue // an empty match after the final newline is on no line
+		}
+		last := lineOf(m[0])
+		if m[1] > m[0] {
+			last = lineOf(m[1] - 1)
+		}
+		for l := max(lineOf(m[0]), next); l <= last; l++ {
+			hits = append(hits, l)
+		}
+		next = max(next, last+1)
+	}
+	return hits
+}
+
+// grepTypes are the file types grep's type names, by extension (Claude
+// Code's Grep passes type to ripgrep; both engines here use this table).
+var grepTypes = map[string][]string{
+	"go": {"go"}, "js": {"js", "jsx", "mjs", "cjs"}, "ts": {"ts", "tsx", "mts", "cts"}, "py": {"py", "pyi"},
+	"rust": {"rs"}, "java": {"java"}, "kotlin": {"kt", "kts"}, "swift": {"swift"}, "c": {"c", "h"},
+	"cpp": {"cc", "cpp", "cxx", "c++", "hh", "hpp", "hxx", "h"}, "cs": {"cs"}, "rb": {"rb"}, "php": {"php"},
+	"md": {"md", "markdown", "mdx"}, "json": {"json", "jsonl"}, "yaml": {"yaml", "yml"}, "toml": {"toml"},
+	"html": {"html", "htm"}, "css": {"css", "scss", "sass", "less"}, "sh": {"sh", "bash", "zsh"}, "sql": {"sql"},
+	"vue": {"vue"}, "svelte": {"svelte"}, "proto": {"proto"}, "txt": {"txt"}, "xml": {"xml"}, "csv": {"csv", "tsv"},
+}
+
+func grepTypeNames() []string {
+	names := make([]string, 0, len(grepTypes))
+	for n := range grepTypes {
+		names = append(names, n)
+	}
+	sort.Strings(names)
+	return names
 }
 
 // grepResult accumulates rows across files, applying offset and limit to
@@ -365,11 +455,11 @@ func (r *grepResult) render() string {
 		joined += fmt.Sprintf("\n…[truncated at %d %s — use offset=%d to continue, or narrow path/glob; maximum limit is %d]", r.q.limit, unit, r.q.offset+r.count, maxGrepMatches)
 	}
 	if len(r.skipped) > 0 {
-		joined += "\n[Search coverage incomplete: unreadable files or files above 2MB were skipped (up to 20 shown): " + strings.Join(r.skipped, ", ") + ". Use read_file byte_offset/byte_limit to inspect large files.]"
+		joined += "\n[Search coverage incomplete: unreadable files or files above 2MB were skipped (up to 20 shown): " + strings.Join(r.skipped, ", ") + ". Use the read tool's byte_offset/byte_limit to inspect large files.]"
 	}
 	for _, line := range r.out {
 		if strings.HasSuffix(line, "…") {
-			joined += "\n[Long matching lines were shortened; use read_file byte paging for full text.]"
+			joined += "\n[Long matching lines were shortened; use the read tool's byte_offset paging for full text.]"
 			break
 		}
 	}
@@ -425,8 +515,10 @@ func appendGrepHits(out *[]string, rel string, hits []int, ctxLines int, line fu
 }
 
 // GlobTool lists workspace files whose relative path matches a glob pattern
-// (Claude Code's Glob), supporting * ? and ** segments. Results are sorted for
-// stable output and capped for token safety.
+// (Claude Code's Glob), supporting * ? and ** segments. As Claude Code's, the
+// newest-modified file comes first: what the agent is working on, or what a
+// command just wrote, leads the list and survives the cap. A substrate that
+// cannot report modification times (the sandbox) sorts by path.
 type GlobTool struct {
 	workspace *Workspace
 	fs        workspaceFS
@@ -448,7 +540,7 @@ func (t *GlobTool) Schema() agentcore.ToolSchema {
 		Strict: agentcore.ToolStrictEnabled,
 		Description: "List files in the agent workspace, respecting nested .gitignore and dependency exclusions, whose relative path matches a glob pattern " +
 			"(supports *, ?, and ** for any depth, e.g. **/*.go or src/**/test_*.ts). " +
-			"Returns up to " + fmt.Sprint(maxGlobMatches) + " sorted paths.",
+			"Returns up to " + fmt.Sprint(maxGlobMatches) + " paths, most recently modified first.",
 		Parameters: map[string]any{
 			"type": "object",
 			"properties": map[string]any{
@@ -481,26 +573,34 @@ func (t *GlobTool) Run(ctx context.Context, args string) (string, error) {
 	}
 
 	var hits []string
-	truncated := false
 	for _, rel := range all {
-		if !globRe.MatchString(rel) {
-			continue
+		if globRe.MatchString(rel) {
+			hits = append(hits, rel)
 		}
-		if len(hits) >= maxGlobMatches {
-			truncated = true
-			break
-		}
-		hits = append(hits, rel)
 	}
 	if len(hits) == 0 {
 		return "no files match", nil
 	}
 	sort.Strings(hits)
+	if timed, ok := t.fs.(modTimer); ok {
+		times := timed.ModTimes(ctx, hits)
+		// Newest first; equal times (and files that vanished) keep path order.
+		sort.SliceStable(hits, func(i, j int) bool { return times[hits[i]].After(times[hits[j]]) })
+	}
+	total := len(hits)
+	if total > maxGlobMatches {
+		hits = hits[:maxGlobMatches]
+	}
 	out := strings.Join(hits, "\n")
-	if truncated {
-		out += fmt.Sprintf("\n…[truncated at %d files]", maxGlobMatches)
+	if total > maxGlobMatches {
+		out += fmt.Sprintf("\n…[%d more files not shown; the %d most recently modified are listed. Narrow the pattern or path]", total-maxGlobMatches, maxGlobMatches)
 	}
 	return out, nil
+}
+
+// modTimer is a substrate that reports modification times cheaply (the host).
+type modTimer interface {
+	ModTimes(ctx context.Context, rels []string) map[string]time.Time
 }
 
 func clampLine(s string) string {

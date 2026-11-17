@@ -11,7 +11,7 @@ import (
 	"github.com/2found/2ai/core/agentcore"
 )
 
-// write_file on both substrates: an existing file is replaced only against the
+// write on both substrates: an existing file is replaced only against the
 // snapshot the caller read, atomically, keeping its mode.
 func TestWriteFileOverwriteIsHashGuardedAndAtomic(t *testing.T) {
 	skipOnWindows(t)

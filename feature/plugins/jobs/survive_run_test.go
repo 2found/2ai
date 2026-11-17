@@ -103,7 +103,7 @@ func TestKeptJobSurvivesToTheNextTurn(t *testing.T) {
 		t.Fatalf("second run = %+v %v", res2, err)
 	}
 	all := strings.Join(seen(), "\n")
-	for _, want := range []string{"running (kept)", "ready on http://localhost:5173", "Cancellation requested"} {
+	for _, want := range []string{"running (kept)", "ready on http://localhost:5173", "Cancelled job_1; it has stopped"} {
 		if !strings.Contains(all, want) {
 			t.Errorf("the next turn never saw %q:\n%s", want, all)
 		}

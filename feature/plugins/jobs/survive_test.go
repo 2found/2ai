@@ -109,8 +109,8 @@ func TestOnlyAKeptJobSurvivesItsRun(t *testing.T) {
 	if got := strings.Join(toolNames(b), ","); !strings.HasSuffix(got, ",job_keep") {
 		t.Fatalf("tools = %s", got)
 	}
-	forgotten, _ := b.start(context.Background(), "run_shell", "forgotten", block)
-	kept, _ := b.start(context.Background(), "run_shell", "dev server", block)
+	forgotten, _ := b.start(context.Background(), "bash", "forgotten", block)
+	kept, _ := b.start(context.Background(), "bash", "dev server", block)
 	keepJob(t, b, kept.ID)
 	b.CloseRun()
 
@@ -148,7 +148,7 @@ func TestKeptJobKeepsItsOwnRunContext(t *testing.T) {
 	startCtx, stopRun := context.WithCancel(context.WithValue(context.Background(), key{}, "run one"))
 	var seen atomicString
 	release := make(chan struct{})
-	r, err := b.start(startCtx, "run_shell", "watch", func(ctx context.Context) (string, error) {
+	r, err := b.start(startCtx, "bash", "watch", func(ctx context.Context) (string, error) {
 		<-release
 		seen.set(ctx.Value(key{}))
 		return "", ctx.Err()
@@ -188,7 +188,7 @@ func TestUnkeptJobDiesWithTheRunContext(t *testing.T) {
 	s := &Survival{Hold: NewHold(nil)}
 	b, _ := run(t, s, "conv-die")
 	runCtx, stop := context.WithCancel(context.Background())
-	r, _ := b.start(runCtx, "run_shell", "x", block)
+	r, _ := b.start(runCtx, "bash", "x", block)
 	stop()
 	if got := settled(t, b, r.ID); got.State != cancelled {
 		t.Fatalf("job = %+v", got)
@@ -198,7 +198,7 @@ func TestUnkeptJobDiesWithTheRunContext(t *testing.T) {
 func TestKeptJobIsInvisibleToAnotherConversation(t *testing.T) {
 	s := &Survival{Hold: NewHold(nil)}
 	b, _ := run(t, s, "conv-a")
-	r, _ := b.start(context.Background(), "run_shell", "secret server", block)
+	r, _ := b.start(context.Background(), "bash", "secret server", block)
 	keepJob(t, b, r.ID)
 	b.CloseRun()
 
@@ -226,13 +226,16 @@ func TestAnnouncedByTheAttachedRunOnly(t *testing.T) {
 	c := newEnds()
 	s := &Survival{Hold: NewHold(c.record)}
 	b, _ := run(t, s, "conv-att")
-	r, _ := b.start(context.Background(), "run_shell", "short", block)
+	r, _ := b.start(context.Background(), "bash", "short", block)
 	keepJob(t, b, r.ID)
 	b.CloseRun()
 
 	next, _ := run(t, s, "conv-att")
 	defer next.CloseRun()
-	cancelJob(t, next, r.ID)
+	// The job ends on its own (not through job_cancel, whose result already
+	// tells the model).
+	j, _ := next.find(r.ID)
+	j.cancel()
 	settled(t, next, r.ID)
 	if n := len(next.BeforeStep(context.Background(), agentcore.StepInfo{}).AdditionalContexts); n != 1 {
 		t.Fatalf("attached run announced %d notices, want 1", n)
@@ -259,7 +262,7 @@ func TestAnnouncedByTheCallbackOnly(t *testing.T) {
 	s := &Survival{Hold: NewHold(c.record)}
 	b, _ := run(t, s, "conv-cb")
 	finish := make(chan struct{})
-	r, _ := b.start(context.Background(), "run_shell", "build", func(ctx context.Context) (string, error) {
+	r, _ := b.start(context.Background(), "bash", "build", func(ctx context.Context) (string, error) {
 		<-finish
 		return "build ok", nil
 	})
@@ -268,7 +271,7 @@ func TestAnnouncedByTheCallbackOnly(t *testing.T) {
 
 	close(finish)
 	got := c.next(t)
-	if got.Conversation != "conv-cb" || got.JobID != r.ID || got.State != "succeeded" || got.Tool != "run_shell" ||
+	if got.Conversation != "conv-cb" || got.JobID != r.ID || got.State != "succeeded" || got.Tool != "bash" ||
 		!strings.Contains(got.Notice, "build ok") || !strings.Contains(got.Notice, "Background job update") {
 		t.Fatalf("Ended = %+v", got)
 	}
@@ -293,7 +296,7 @@ func TestEndedJobUnannouncedAtCloseGoesThroughTheCallback(t *testing.T) {
 	s := &Survival{Hold: NewHold(c.record)}
 	b, _ := run(t, s, "conv-late")
 	finish := make(chan struct{})
-	r, _ := b.start(context.Background(), "run_shell", "build", func(context.Context) (string, error) { <-finish; return "done", nil })
+	r, _ := b.start(context.Background(), "bash", "build", func(context.Context) (string, error) { <-finish; return "done", nil })
 	keepJob(t, b, r.ID)
 	close(finish)
 	settled(t, b, r.ID)
@@ -316,7 +319,7 @@ func TestExactlyOnceUnderRaces(t *testing.T) {
 		s := &Survival{Hold: NewHold(c.record)}
 		b, _ := run(t, s, "conv-race")
 		finish := make(chan struct{})
-		r, _ := b.start(context.Background(), "run_shell", "x", func(context.Context) (string, error) { <-finish; return "ok", nil })
+		r, _ := b.start(context.Background(), "bash", "x", func(context.Context) (string, error) { <-finish; return "ok", nil })
 		keepJob(t, b, r.ID)
 		b.CloseRun()
 
@@ -346,7 +349,7 @@ func TestMaxJobsIsEnforcedPerConversation(t *testing.T) {
 	defer b.CloseRun()
 	var ids []string
 	for range 3 {
-		r, _ := b.start(context.Background(), "run_shell", "svc", block)
+		r, _ := b.start(context.Background(), "bash", "svc", block)
 		ids = append(ids, r.ID)
 	}
 	keepJob(t, b, ids[0])
@@ -362,7 +365,7 @@ func TestMaxJobsIsEnforcedPerConversation(t *testing.T) {
 	keepJob(t, b, ids[2])
 	other, _ := run(t, s, "conv-other")
 	defer other.CloseRun()
-	r, _ := other.start(context.Background(), "run_shell", "svc", block)
+	r, _ := other.start(context.Background(), "bash", "svc", block)
 	keepJob(t, other, r.ID)
 }
 
@@ -370,7 +373,7 @@ func TestMaxAgeCancelsAKeptJob(t *testing.T) {
 	c := newEnds()
 	s := &Survival{Hold: NewHold(c.record), MaxAge: 80 * time.Millisecond}
 	b, _ := run(t, s, "conv-age")
-	r, _ := b.start(context.Background(), "run_shell", "forever", block)
+	r, _ := b.start(context.Background(), "bash", "forever", block)
 	keepJob(t, b, r.ID)
 	b.CloseRun()
 	got := c.next(t)
@@ -383,7 +386,7 @@ func TestMaxAgeCancelsAKeptJob(t *testing.T) {
 		t.Fatalf("job = %+v", j)
 	}
 	// An age already used up counts from the job's start, not from the keep.
-	old, _ := next.start(context.Background(), "run_shell", "old", block)
+	old, _ := next.start(context.Background(), "bash", "old", block)
 	time.Sleep(100 * time.Millisecond)
 	keepJob(t, next, old.ID)
 	if j := settled(t, next, old.ID); j.State != cancelled {
@@ -395,7 +398,7 @@ func TestFinishedKeptRecordsExpire(t *testing.T) {
 	s := &Survival{Hold: NewHold(func(Ended) {}), MaxAge: 50 * time.Millisecond}
 	b, _ := run(t, s, "conv-exp")
 	finish := make(chan struct{})
-	r, _ := b.start(context.Background(), "run_shell", "x", func(context.Context) (string, error) { <-finish; return "ok", nil })
+	r, _ := b.start(context.Background(), "bash", "x", func(context.Context) (string, error) { <-finish; return "ok", nil })
 	keepJob(t, b, r.ID)
 	b.CloseRun()
 	close(finish)
@@ -414,7 +417,7 @@ func TestKeepRefusals(t *testing.T) {
 	keep := jobKeepTool{jobTool{b, "job_keep"}}
 	sub, _ := b.start(context.Background(), "spawn_subagent", "child", block)
 	host, _ := b.start(context.Background(), "agent_call", "model", block)
-	done, _ := b.start(context.Background(), "run_shell", "quick", func(context.Context) (string, error) { return "", nil })
+	done, _ := b.start(context.Background(), "bash", "quick", func(context.Context) (string, error) { return "", nil })
 	settled(t, b, done.ID)
 	for name, tc := range map[string]struct{ id, want string }{
 		"sub-agent":     {sub.ID, "usage"},
@@ -443,7 +446,7 @@ func TestKeepNeedsAConversation(t *testing.T) {
 		t.Fatal(err)
 	}
 	b := ext.(*board)
-	r, _ := b.start(context.Background(), "run_shell", "x", block)
+	r, _ := b.start(context.Background(), "bash", "x", block)
 	if _, err := (jobKeepTool{jobTool{b, "job_keep"}}).Run(context.Background(), `{"id":"`+r.ID+`"}`); err == nil || !strings.Contains(err.Error(), "conversation") {
 		t.Fatalf("keep without identity = %v", err)
 	}
@@ -476,12 +479,12 @@ func TestKeptJobDoesNotBlockTheFinalAnswer(t *testing.T) {
 	b, _ := run(t, s, "conv-stop")
 	defer b.CloseRun()
 	b.stopWait = 20 * time.Millisecond
-	kept, _ := b.start(context.Background(), "run_shell", "server", block)
+	kept, _ := b.start(context.Background(), "bash", "server", block)
 	keepJob(t, b, kept.ID)
 	if d := b.TurnStopping(context.Background(), agentcore.StopInfo{}); d.Continue || d.StopReason != "" {
 		t.Fatalf("a kept job blocked the answer: %+v", d)
 	}
-	forgotten, _ := b.start(context.Background(), "run_shell", "forgotten", block)
+	forgotten, _ := b.start(context.Background(), "bash", "forgotten", block)
 	if d := b.TurnStopping(context.Background(), agentcore.StopInfo{}); !d.Continue || !strings.Contains(d.Inject[0].Content, "pending") {
 		t.Fatalf("an unkept job no longer blocks the answer: %+v", d)
 	}
@@ -493,7 +496,7 @@ func TestKeptJobDoesNotBlockTheFinalAnswer(t *testing.T) {
 func TestRestartReportsAKeptJobInterrupted(t *testing.T) {
 	first := &Survival{Hold: NewHold(nil)}
 	b, _ := run(t, first, "conv-restart")
-	r, _ := b.start(context.Background(), "run_shell", "dev server", block)
+	r, _ := b.start(context.Background(), "bash", "dev server", block)
 	keepJob(t, b, r.ID)
 	state, err := b.NativeState() // taken before CloseRun, as the loop does
 	if err != nil {
@@ -525,8 +528,8 @@ func TestRestartReportsAKeptJobInterrupted(t *testing.T) {
 func TestRestoreAdoptsTheLiveKeptJob(t *testing.T) {
 	s := &Survival{Hold: NewHold(nil)}
 	b, _ := run(t, s, "conv-live")
-	r, _ := b.start(context.Background(), "run_shell", "dev server", block)
-	other, _ := b.start(context.Background(), "run_shell", "forgotten", block)
+	r, _ := b.start(context.Background(), "bash", "dev server", block)
+	other, _ := b.start(context.Background(), "bash", "forgotten", block)
 	keepJob(t, b, r.ID)
 	state, _ := b.NativeState()
 	b.CloseRun()
@@ -576,7 +579,7 @@ func TestHoldCancelAll(t *testing.T) {
 	h := NewHold(func(Ended) {})
 	s := &Survival{Hold: h}
 	b, _ := run(t, s, "conv-shut")
-	r, _ := b.start(context.Background(), "run_shell", "x", block)
+	r, _ := b.start(context.Background(), "bash", "x", block)
 	keepJob(t, b, r.ID)
 	b.CloseRun()
 	h.CancelAll()
@@ -593,7 +596,7 @@ func TestCallbackPanicIsContained(t *testing.T) {
 	s := &Survival{Hold: NewHold(func(Ended) { close(called); panic("host bug") })}
 	b, _ := run(t, s, "conv-panic")
 	finish := make(chan struct{})
-	r, _ := b.start(context.Background(), "run_shell", "x", func(context.Context) (string, error) { <-finish; return "", nil })
+	r, _ := b.start(context.Background(), "bash", "x", func(context.Context) (string, error) { <-finish; return "", nil })
 	keepJob(t, b, r.ID)
 	b.CloseRun()
 	close(finish)
@@ -617,7 +620,7 @@ func TestHoldForgetsAKeptJobOnceItsNoticeRunCloses(t *testing.T) {
 	s := &Survival{Hold: h}
 	b, _ := run(t, s, "conv-forget")
 	finish := make(chan struct{})
-	r, _ := b.start(context.Background(), "run_shell", "build", func(context.Context) (string, error) {
+	r, _ := b.start(context.Background(), "bash", "build", func(context.Context) (string, error) {
 		<-finish
 		return "build ok", nil
 	})
@@ -642,7 +645,7 @@ func TestHoldDoesNotKeepAJobItsRunAnnounced(t *testing.T) {
 	h := NewHold(func(Ended) { t.Error("the callback fired for a job its run announced") })
 	s := &Survival{Hold: h}
 	b, _ := run(t, s, "conv-own")
-	r, _ := b.start(context.Background(), "run_shell", "x", func(context.Context) (string, error) { return "ok", nil })
+	r, _ := b.start(context.Background(), "bash", "x", func(context.Context) (string, error) { return "ok", nil })
 	keepJob(t, b, r.ID)
 	if _, err := b.wait(context.Background(), r.ID); err != nil {
 		t.Fatal(err)
@@ -666,7 +669,7 @@ func TestHoldExpiresAFinishedJobNoRunCollects(t *testing.T) {
 	for _, conv := range []string{"conv-a", "conv-b", "conv-c"} {
 		b, _ := run(t, s, conv)
 		finish := make(chan struct{})
-		r, _ := b.start(context.Background(), "run_shell", "x", func(context.Context) (string, error) { <-finish; return "ok", nil })
+		r, _ := b.start(context.Background(), "bash", "x", func(context.Context) (string, error) { <-finish; return "ok", nil })
 		keepJob(t, b, r.ID)
 		b.CloseRun()
 		close(finish)
@@ -692,7 +695,7 @@ func TestExpiryLeavesAnAdoptedRecordAlone(t *testing.T) {
 	s := &Survival{Hold: h, MaxAge: 40 * time.Millisecond}
 	b, _ := run(t, s, "conv-adopt")
 	finish := make(chan struct{})
-	r, _ := b.start(context.Background(), "run_shell", "x", func(context.Context) (string, error) { <-finish; return "kept result", nil })
+	r, _ := b.start(context.Background(), "bash", "x", func(context.Context) (string, error) { <-finish; return "kept result", nil })
 	keepJob(t, b, r.ID)
 	b.CloseRun()
 	close(finish)

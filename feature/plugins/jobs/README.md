@@ -68,7 +68,7 @@ output (`output_bytes` asks for more, never beyond the run's tool-result limit);
 `job_list` adds the newest output line under each running job; a `job_wait` that
 times out carries the newest 1 KiB. A job that fails or is cancelled keeps up to
 4 KiB of its last output beside its error. A job that never publishes renders
-exactly as before. The `run_shell` / `computer_use` background mode streams the
+exactly as before. The `bash` / `computer_use` background mode streams the
 command's output into its job, and an async `spawn_subagent` publishes a start
 line and its current tool or progress note.
 

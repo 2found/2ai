@@ -277,8 +277,9 @@ var gateExemptTools = map[string]bool{
 }
 
 // defaultMaxToolResultBytes bounds a tool result before it reaches the LLM —
-// token + safety guard (UTF-8-safe).
-const defaultMaxToolResultBytes = 24 * 1024
+// token + safety guard (UTF-8-safe). It holds a shell result at Claude Code's
+// 30,000 bytes of output with its exit code and notes.
+const defaultMaxToolResultBytes = 32 * 1024
 
 // truncateBytes trims s to at most maxBytes without splitting a UTF-8 rune,
 // appending a marker when it cuts. A maxBytes <= 0 disables truncation.

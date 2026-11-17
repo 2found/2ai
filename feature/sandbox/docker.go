@@ -47,7 +47,7 @@ const (
 	// package managers (pip/apt/npm) can install system-wide. It is still hard
 	// isolated — all Linux capabilities dropped, no-new-privileges, no host env,
 	// resource caps — but it is the deliberate, policy-granted exception to the
-	// nobody/read-only locked default the one-shot run_shell keeps.
+	// nobody/read-only locked default the one-shot bash keeps.
 	rootUser = "0:0"
 )
 
@@ -93,7 +93,7 @@ func WithImage(image string) Option {
 
 // WithComputerUseImage sets the image used for persistent computer-use sessions
 // (a richer toolchain image with python/pandoc/office libraries). Empty leaves
-// computer-use sessions on the default image. One-shot run_shell is unaffected.
+// computer-use sessions on the default image. One-shot bash is unaffected.
 func WithComputerUseImage(image string) Option {
 	return func(s *DockerSandbox) {
 		if strings.TrimSpace(image) != "" {

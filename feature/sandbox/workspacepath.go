@@ -92,7 +92,7 @@ type WorkspaceScope struct {
 // It has a default at all because requiring configuration to get a workspace is
 // how a capability quietly ships turned off: with no root configured the file
 // tools have nowhere to work, so they are withheld, and the agent a user just
-// granted read_file to cannot read a file. A default that works out of the box
+// granted read to cannot read a file. A default that works out of the box
 // is the difference between "recommended" and "required".
 func DefaultWorkspaceBase() (string, error) {
 	home, err := os.UserHomeDir()

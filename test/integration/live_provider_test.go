@@ -155,10 +155,10 @@ type flakyWriter struct {
 	files     map[string]string
 }
 
-func (w *flakyWriter) Name() string { return "write_file" }
+func (w *flakyWriter) Name() string { return "write" }
 func (w *flakyWriter) Schema() agentcore.ToolSchema {
 	return agentcore.ToolSchema{
-		Name:        "write_file",
+		Name:        "write",
 		Description: "Write a file to disk. May transiently fail; retry on error.",
 		Parameters: map[string]any{
 			"type": "object",
@@ -244,12 +244,12 @@ func TestReal_CreativeLandingPage(t *testing.T) {
 		Model:    model,
 		Limits:   &limits,
 		Tools:    agentcore.NewToolSet(writer),
-		Policy:   agentcore.NewAllowList("write_file"),
+		Policy:   agentcore.NewAllowList("write"),
 		Definition: agentcore.AgentDefinition{
 			Agents: "You are a world-class creative web designer. Produce the page ONLY by calling " +
-				"write_file(path, content); never put HTML in your text reply. content must be a single, " +
+				"write(path, content); never put HTML in your text reply. content must be a single, " +
 				"self-contained HTML document (inline CSS, no external assets). Keep any reasoning extremely " +
-				"brief — go straight to the write_file call. The write_file tool may fail transiently and " +
+				"brief — go straight to the write call. The write tool may fail transiently and " +
 				"return an error — if it does, simply call it again with the same content until it succeeds. " +
 				"Do not give up after a tool error. Once the file is written, reply with a one-line confirmation.",
 		},
@@ -278,12 +278,12 @@ func TestReal_CreativeLandingPage(t *testing.T) {
 	// (1) The agent genuinely encountered tool errors and did not stop on them.
 	var sawToolError bool
 	for _, tr := range res.Tools {
-		if tr.Tool == "write_file" && tr.Error != "" {
+		if tr.Tool == "write" && tr.Error != "" {
 			sawToolError = true
 		}
 	}
 	if !sawToolError {
-		t.Fatalf("test did not exercise the error path (no write_file error recorded); traces=%+v", res.Tools)
+		t.Fatalf("test did not exercise the error path (no write error recorded); traces=%+v", res.Tools)
 	}
 	if failed == 0 || attempts <= failed {
 		t.Fatalf("expected the agent to retry past %d transient failures, attempts=%d", failed, attempts)

@@ -87,6 +87,14 @@ type Plugin struct {
 	// Survive, when set, adds job_keep and lets kept jobs outlive their run.
 	// Nil keeps every job bound to its run, exactly as without the option.
 	Survive *Survival
+	// Disposable, when set, names the tools whose background jobs are the
+	// run's scaffolding (a dev server, a file watcher started from a shell):
+	// one still running when the model gives its final answer is cancelled
+	// then, without re-opening the run, and its end is not announced. Claude
+	// Code leaves a background shell to the session the same way. Without it
+	// every pending job re-opens the run, and the model, told to cancel a
+	// server it no longer needed, wrote its whole answer again twice.
+	Disposable func(tool string) bool
 }
 
 // Name identifies the plugin and the extension it installs.
@@ -134,7 +142,7 @@ func (p Plugin) BeginRun(ctx context.Context, info agentcore.RunInfo) (agentcore
 	if maxBytes <= 0 {
 		maxBytes = defaultResultBytes
 	}
-	b := &board{maxConcurrent: limit, maxBytes: maxBytes, stopWait: stopWait, allowSend: p.AllowSend, mu: new(sync.Mutex)}
+	b := &board{maxConcurrent: limit, maxBytes: maxBytes, stopWait: stopWait, allowSend: p.AllowSend, disposable: p.Disposable, mu: new(sync.Mutex)}
 	if p.Survive != nil {
 		if err := b.attach(ctx, info, p.Survive); err != nil {
 			return nil, err
@@ -150,6 +158,7 @@ type board struct {
 	maxBytes      int
 	stopWait      time.Duration
 	allowSend     bool
+	disposable    func(tool string) bool
 	// survive is the resolved Survival config, nil when jobs never outlive
 	// their run. conv is the conversation the run belongs to.
 	survive *survival
@@ -388,6 +397,37 @@ func (b *board) wait(ctx context.Context, id string) (record, error) {
 	return j.record, nil
 }
 
+// dispose cancels a disposable job at the run's finish and marks it
+// announced, so its end re-opens nothing.
+func (b *board) dispose(ctx context.Context, id string) {
+	j, err := b.find(id)
+	if err != nil {
+		return
+	}
+	j.cancel()
+	select {
+	case <-j.finished:
+	case <-ctx.Done():
+	}
+	b.mu.Lock()
+	j.Announced = true
+	b.mu.Unlock()
+}
+
+// seen marks a finished job announced: the model has just read how it ended
+// (job_status, job_wait, job_cancel), so a notice would only repeat it.
+func (b *board) seen(id string) {
+	j, err := b.find(id)
+	if err != nil {
+		return
+	}
+	b.mu.Lock()
+	if j.done() {
+		j.Announced = true
+	}
+	b.mu.Unlock()
+}
+
 // drain returns the finished jobs no notice has carried yet, and marks them
 // announced.
 func (b *board) drain() []record {
@@ -442,6 +482,10 @@ func (b *board) TurnStopping(ctx context.Context, _ agentcore.StopInfo) agentcor
 	defer cancel()
 	for _, r := range b.list() {
 		if r.done() || r.Keep {
+			continue
+		}
+		if b.disposable != nil && b.disposable(r.Tool) {
+			b.dispose(waitCtx, r.ID)
 			continue
 		}
 		if settled, err := b.wait(waitCtx, r.ID); err != nil || !settled.done() {
@@ -745,6 +789,7 @@ func (t jobWaitTool) Run(ctx context.Context, args string) (string, error) {
 		}
 		return msg, nil
 	}
+	t.board.seen(j.ID)
 	return renderJob(j), nil
 }
 
@@ -754,7 +799,7 @@ func (t jobCancelTool) Schema() agentcore.ToolSchema {
 	return jobIDSchema("job_cancel", "Cancel a running background job.", nil)
 }
 
-func (t jobCancelTool) Run(_ context.Context, args string) (string, error) {
+func (t jobCancelTool) Run(ctx context.Context, args string) (string, error) {
 	id, err := jobIDArg(args)
 	if err != nil {
 		return "", err
@@ -764,8 +809,19 @@ func (t jobCancelTool) Run(_ context.Context, args string) (string, error) {
 		return "", err
 	}
 	j.cancel()
-	return fmt.Sprintf("Cancellation requested for %s.", id), nil
+	// A cooperative job ends at once: say so, and the model need not ask.
+	wait, stop := context.WithTimeout(ctx, cancelSettle)
+	defer stop()
+	r, err := t.board.wait(wait, id)
+	if err != nil || !r.done() {
+		return fmt.Sprintf("Cancellation requested for %s.", id), nil
+	}
+	t.board.seen(id)
+	return fmt.Sprintf("Cancelled %s; it has stopped.", id), nil
 }
+
+// cancelSettle bounds how long job_cancel waits to report the job stopped.
+const cancelSettle = 2 * time.Second
 
 func unmarshalArgs(args string, v any) error {
 	if err := json.Unmarshal([]byte(args), v); err != nil {
@@ -821,6 +877,7 @@ func (b *board) render(id string, tail int) (string, error) {
 	b.mu.Unlock()
 	text := renderJob(r)
 	if r.done() {
+		b.seen(id)
 		return text, nil
 	}
 	if r.Keep {

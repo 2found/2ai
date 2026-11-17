@@ -163,9 +163,9 @@ func TestKeepRecentIsClampedToHalfTheBudget(t *testing.T) {
 // the bulk stays in the CALL, mirroring a full-file write tool.
 type sinkTool struct{ calls int }
 
-func (s *sinkTool) Name() string { return "write_file" }
+func (s *sinkTool) Name() string { return "write" }
 func (s *sinkTool) Schema() ToolSchema {
-	return ToolSchema{Name: "write_file", Description: "write a file", Parameters: map[string]any{"type": "object"}}
+	return ToolSchema{Name: "write", Description: "write a file", Parameters: map[string]any{"type": "object"}}
 }
 func (s *sinkTool) Run(_ context.Context, _ string) (string, error) {
 	s.calls++
@@ -186,7 +186,7 @@ func bigArgsStream(target, argSize int, calls, summaries *int) ai.StreamFn {
 		}
 		args := fmt.Sprintf(`{"path":"page.html","content":"%s-%d"}`, bigText(argSize), *calls)
 		return nativeEmit(&ai.Message{Role: "assistant", StopReason: "toolUse", Content: ai.BlockContent(
-			ai.ContentBlock{Type: "toolCall", ID: fmt.Sprintf("w%d", *calls), Name: "write_file", Arguments: json.RawMessage(args)},
+			ai.ContentBlock{Type: "toolCall", ID: fmt.Sprintf("w%d", *calls), Name: "write", Arguments: json.RawMessage(args)},
 		)})(ctx, model, view, options)
 	}
 }
@@ -204,7 +204,7 @@ func TestCompactionFiresWhenBulkIsInToolCallArguments(t *testing.T) {
 		NativeProvider: nativeCandidate("bigargs", stream),
 		Model:          "bigargs",
 		Tools:          NewToolSet(&sinkTool{}),
-		Policy:         NewAllowList("write_file"),
+		Policy:         NewAllowList("write"),
 		Limits:         &limits,
 		// No keep-recent override: the default 20k window must be clamped to
 		// the 4k budget or this run wedges (the pre-fix behavior). The

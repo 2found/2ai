@@ -61,7 +61,7 @@ type WebFetchTool struct {
 // which cannot (its allowlist can't re-check a redirected host).
 //
 // ws is optional and enables save_as: with a workspace the fetched document can
-// be written where read_file, grep, and run_shell can reach it, which is what a
+// be written where read, grep, and bash can reach it, which is what a
 // page too long to read in one context needs.
 func NewWebFetchTool(sb agentcore.Sandbox, ws *Workspace, options ...WebFetchOption) *WebFetchTool {
 	dialer := &net.Dialer{Timeout: 10 * time.Second}

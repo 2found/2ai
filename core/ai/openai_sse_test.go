@@ -35,7 +35,7 @@ func TestDecodeSSEResponse_FoldsContentAndUsage(t *testing.T) {
 // Tool-call deltas arrive fragmented across SSE chunks keyed by index; they must
 // be reassembled into whole ToolCalls.
 func TestDecodeSSEResponse_ReassemblesToolCalls(t *testing.T) {
-	body := "data: {\"choices\":[{\"index\":0,\"delta\":{\"tool_calls\":[{\"index\":0,\"id\":\"call_1\",\"function\":{\"name\":\"read_file\",\"arguments\":\"{\\\"path\\\":\"}}]},\"finish_reason\":null}]}\n\n" +
+	body := "data: {\"choices\":[{\"index\":0,\"delta\":{\"tool_calls\":[{\"index\":0,\"id\":\"call_1\",\"function\":{\"name\":\"read\",\"arguments\":\"{\\\"path\\\":\"}}]},\"finish_reason\":null}]}\n\n" +
 		"data: {\"choices\":[{\"index\":0,\"delta\":{\"tool_calls\":[{\"index\":0,\"function\":{\"arguments\":\"\\\"a.txt\\\"}\"}}]},\"finish_reason\":\"tool_calls\"}]}\n\n" +
 		"data: [DONE]\n\n"
 	p := &OpenAIProvider{}
@@ -47,7 +47,7 @@ func TestDecodeSSEResponse_ReassemblesToolCalls(t *testing.T) {
 		t.Fatalf("got %d tool calls, want 1", len(resp.Message.ToolCalls))
 	}
 	tc := resp.Message.ToolCalls[0]
-	if tc.ID != "call_1" || tc.Name != "read_file" || tc.Arguments != `{"path":"a.txt"}` {
+	if tc.ID != "call_1" || tc.Name != "read" || tc.Arguments != `{"path":"a.txt"}` {
 		t.Fatalf("tool call = %+v", tc)
 	}
 }

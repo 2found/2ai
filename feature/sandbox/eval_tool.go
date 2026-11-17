@@ -74,7 +74,7 @@ func (t *EvalTool) Schema() agentcore.ToolSchema {
 			"Use reset=true to discard only the selected language's state before the cell. Relative file access starts in the shared agent workspace. " +
 			"JavaScript accepts static or dynamic imports and TypeScript cell syntax when the runtime is Node.js 22.13 or newer. " +
 			"display(value), rich displays, and final expressions preserve Markdown, JSON, PNG, and JPEG output; vision-capable models receive images natively. " +
-			"Inside a live agent run, call governed host tools with await tool.read_file({...}) or await tool(\"read_file\", {...}) in JavaScript, and tool(\"read_file\", {...}) in Python. These calls use the same policy, validation, credentials, budgets, tracing, and cancellation as direct tool calls. " +
+			"Inside a live agent run, call governed host tools with await tool.read({...}) or await tool(\"read\", {...}) in JavaScript, and tool(\"read\", {...}) in Python. These calls use the same policy, validation, credentials, budgets, tracing, and cancellation as direct tool calls. " +
 			"Output is bounded; interactive input is unsupported. A timeout discards the kernel and never replays the cell. " +
 			"The runtime is operator-provisioned and server deployments execute it inside the configured sandbox.",
 		Parameters: map[string]any{

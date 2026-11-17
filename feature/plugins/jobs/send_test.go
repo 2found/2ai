@@ -26,7 +26,7 @@ func TestJobSendDeliversAndRefuses(t *testing.T) {
 		<-ctx.Done()
 		return "", ctx.Err()
 	})
-	shell, _ := b.start(context.Background(), "run_shell", "server", block)
+	shell, _ := b.start(context.Background(), "bash", "server", block)
 	quick, _ := b.start(context.Background(), "t", "quick", func(context.Context) (string, error) { return "ok", nil })
 	settled(t, b, quick.ID)
 	<-ready

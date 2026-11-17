@@ -27,7 +27,7 @@ type EditLinesTool struct {
 }
 
 // NewEditLinesTool builds edit_lines over the same host-or-sandbox filesystem
-// seam as read_file, write_file, and edit_file.
+// seam as read, write, and edit.
 func NewEditLinesTool(sb agentcore.Sandbox, workspace *Workspace) *EditLinesTool {
 	return &EditLinesTool{workspace: workspace, fs: newWorkspaceFS(sb, workspace)}
 }
@@ -39,7 +39,7 @@ func (t *EditLinesTool) Schema() agentcore.ToolSchema {
 		Name:   ToolEditLines,
 		Strict: agentcore.ToolStrictEnabled,
 		Description: "Apply up to 100 non-overlapping line edits to one UTF-8 workspace file as one guarded update. " +
-			"Pass expected_hash from the latest read_file, write_file, edit_file, or edit_lines result. " +
+			"Pass expected_hash from the latest read, write, edit, or edit_lines result. " +
 			"All line numbers refer to that original snapshot, not to earlier edits in this call. " +
 			"Use replace/delete with inclusive start_line and end_line; insert_before/insert_after " +
 			"with line; or append at EOF. Text may contain multiple lines. The tool rejects stale " +
@@ -176,7 +176,7 @@ func (t *EditLinesTool) Run(ctx context.Context, args string) (string, error) {
 	}
 	updatedBytes := []byte(updated)
 
-	// Keep the same lost-update defense as edit_file: expensive preparation is
+	// Keep the same lost-update defense as edit: expensive preparation is
 	// done against one snapshot, then the raw bytes are checked again directly
 	// before the write on either filesystem substrate.
 	latest, err := t.fs.ReadFile(ctx, rel)

@@ -500,7 +500,7 @@ func TestCodex_StreamDecodesTextToolCallAndUsage(t *testing.T) {
 		w.Header().Set("Content-Type", "text/event-stream")
 		io.WriteString(w,
 			"data: {\"type\":\"response.output_text.delta\",\"delta\":\"Hello\"}\n\n"+
-				"data: {\"type\":\"response.output_item.done\",\"item\":{\"type\":\"function_call\",\"call_id\":\"call_1\",\"name\":\"read_file\",\"arguments\":\"{\\\"path\\\":\\\"a.txt\\\"}\"}}\n\n"+
+				"data: {\"type\":\"response.output_item.done\",\"item\":{\"type\":\"function_call\",\"call_id\":\"call_1\",\"name\":\"read\",\"arguments\":\"{\\\"path\\\":\\\"a.txt\\\"}\"}}\n\n"+
 				"data: {\"type\":\"response.completed\",\"response\":{\"status\":\"completed\",\"usage\":{\"input_tokens\":10,\"output_tokens\":5,\"input_tokens_details\":{\"cached_tokens\":4}}}}\n\n")
 	}))
 	defer srv.Close()
@@ -567,7 +567,7 @@ func TestCodex_StreamDecodesTextToolCallAndUsage(t *testing.T) {
 	if text != "Hello" {
 		t.Fatalf("text = %q, want Hello", text)
 	}
-	if toolCall == nil || toolCall.ID != "call_1" || toolCall.Name != "read_file" || toolCall.Arguments != `{"path":"a.txt"}` {
+	if toolCall == nil || toolCall.ID != "call_1" || toolCall.Name != "read" || toolCall.Arguments != `{"path":"a.txt"}` {
 		t.Fatalf("tool call = %+v", toolCall)
 	}
 	if done.StopReason != "completed" {
@@ -592,7 +592,7 @@ func TestAntigravity_EnvelopeAndStreamDecode(t *testing.T) {
 		_ = json.Unmarshal(data, &body)
 		w.Header().Set("Content-Type", "text/event-stream")
 		io.WriteString(w,
-			"data: {\"response\":{\"candidates\":[{\"content\":{\"role\":\"model\",\"parts\":[{\"text\":\"Hi\"},{\"thought\":true,\"text\":\"secret\"},{\"functionCall\":{\"name\":\"read_file\",\"args\":{\"path\":\"a.txt\"}}}]},\"finishReason\":\"STOP\"}],\"usageMetadata\":{\"promptTokenCount\":10,\"candidatesTokenCount\":3,\"cachedContentTokenCount\":2}}}\n\n")
+			"data: {\"response\":{\"candidates\":[{\"content\":{\"role\":\"model\",\"parts\":[{\"text\":\"Hi\"},{\"thought\":true,\"text\":\"secret\"},{\"functionCall\":{\"name\":\"read\",\"args\":{\"path\":\"a.txt\"}}}]},\"finishReason\":\"STOP\"}],\"usageMetadata\":{\"promptTokenCount\":10,\"candidatesTokenCount\":3,\"cachedContentTokenCount\":2}}}\n\n")
 	}))
 	defer srv.Close()
 
@@ -609,7 +609,7 @@ func TestAntigravity_EnvelopeAndStreamDecode(t *testing.T) {
 			{Role: protocol.RoleSystem, Content: "Be terse."},
 			{Role: protocol.RoleUser, Content: "hi"},
 		},
-		Tools: []protocol.ToolSchema{{Name: "read_file", Description: "read", Parameters: map[string]any{"type": "object"}}},
+		Tools: []protocol.ToolSchema{{Name: "read", Description: "read", Parameters: map[string]any{"type": "object"}}},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -671,7 +671,7 @@ func TestAntigravity_EnvelopeAndStreamDecode(t *testing.T) {
 	if text != "Hi" {
 		t.Fatalf("text = %q, want Hi (thought part must not stream)", text)
 	}
-	if toolCall == nil || toolCall.Name != "read_file" || toolCall.ID == "" {
+	if toolCall == nil || toolCall.Name != "read" || toolCall.ID == "" {
 		t.Fatalf("tool call = %+v", toolCall)
 	}
 	if done.StopReason != "stop" {

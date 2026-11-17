@@ -16,15 +16,15 @@ import (
 
 // ToolRunShell is the stable tool name the model calls to run a shell command.
 // A consumer's Policy must permit this name before the model is shown the tool.
-const ToolRunShell = "run_shell"
+const ToolRunShell = "bash"
 
 // ToolComputerUse is the higher-privilege, Claude-Code-level shell. Unlike
-// run_shell (locked: ephemeral, read-only, no network), it runs in a persistent
+// bash (locked: ephemeral, read-only, no network), it runs in a persistent
 // session container with network egress and a writable filesystem, so the agent
 // can install tooling (pip/apt/npm) and have it — plus any files it writes —
 // survive across calls: write code, run it, install a PDF/DOCX/XLSX parser, then
 // produce a PDF/PPTX/HTML artifact. It is a deliberate, policy-granted capability
-// distinct from run_shell so a project opts into it explicitly.
+// distinct from bash so a project opts into it explicitly.
 const ToolComputerUse = "computer_use"
 
 // ShellTool lets the agent run a shell command on whichever substrate it was
@@ -44,7 +44,7 @@ type ShellTool struct {
 	// description does not promise isolation the substrate is not providing.
 	hosted bool
 
-	// name/description let one implementation back both the locked run_shell and
+	// name/description let one implementation back both the locked bash and
 	// the persistent computer_use surface (the only behavioural fork is limits +
 	// session awareness).
 	name        string
@@ -75,8 +75,8 @@ func ComputerUseLimits(networkAllow ...string) agentcore.SandboxLimits {
 }
 
 // shellWorkdir is where the workspace is mounted inside the shell sandbox when a
-// workspace is configured, so run_shell and the read_file/write_file tools share
-// one filesystem (a script written with write_file is runnable, and shell output
+// workspace is configured, so bash and the read/write tools share
+// one filesystem (a script written with write is runnable, and shell output
 // is readable back) — the coherent-workspace behaviour an agent expects.
 const shellWorkdir = "/workspace"
 
@@ -87,14 +87,16 @@ const (
 	shellDefaultTimeoutS = 120.0
 	shellMaxTimeoutS     = 600.0
 	// Each stream keeps its first shellHeadBytes and last shellTailBytes; the
-	// middle is replaced by an omitted-bytes marker. Both streams together stay
-	// under agentcore's default per-tool-result cap, so the loop never has to
-	// truncate a shell result itself — and the tail, where errors land, always
-	// survives.
-	shellHeadBytes = 4 * 1024
-	shellTailBytes = 8 * 1024
+	// middle is replaced by an omitted-bytes marker. What a result shows of
+	// both streams together is shellOutputBudget, Claude Code's 30,000: one
+	// noisy stream may use all of it, two share it. It stays under agentcore's
+	// default per-tool-result cap, so the loop never has to truncate a shell
+	// result itself, and the tail, where errors land, always survives.
+	shellHeadBytes    = 10 * 1000
+	shellTailBytes    = 20 * 1000
+	shellOutputBudget = 30 * 1000
 	// shellLogDir is the workspace-relative directory full outputs land in —
-	// readable via read_file/grep, and from the shell's working directory.
+	// readable via read/grep, and from the shell's working directory.
 	shellLogDir = ".shell_logs"
 	// A streaming run reports the newest shellProgressBytes of output at most
 	// every shellProgressInterval.
@@ -108,7 +110,7 @@ const (
 // it.
 var shellPipeGrace = 5 * time.Second
 
-// NewShellTool builds a run_shell tool over the given sandbox. sb is optional:
+// NewShellTool builds a bash tool over the given sandbox. sb is optional:
 // nil runs the command directly on the host machine via HostSandbox (the
 // default substrate for an embedded consumer), non-nil runs it inside the
 // sandbox. limits is the per-call isolation envelope (the zero value is
@@ -202,7 +204,7 @@ func (t *ShellTool) Name() string { return t.name }
 // ExternalContent marks command output as untrusted (agentcore.ExternalContentTool)
 // when the command can reach the network: curl, package installs and git
 // clones bring in text nobody in the run wrote. Without network the output
-// derives from the workspace and the agent's own commands, like read_file, and
+// derives from the workspace and the agent's own commands, like read, and
 // is left unframed so the frame stays a signal rather than noise on every call.
 func (t *ShellTool) ExternalContent() bool { return t.hosted || t.limits.Network }
 
@@ -315,7 +317,7 @@ func (t *ShellTool) request(ctx context.Context, command string, timeout float64
 		req.Session = agentcore.SandboxSessionFrom(ctx)
 	}
 	// Share the agent workspace with the file tools: bind-mount it read-write and
-	// run from it, so write_file → run_shell (and back) is coherent. The bind
+	// run from it, so write → bash (and back) is coherent. The bind
 	// mount stays writable even with the read-only root; isolation (no host env,
 	// no network) is unchanged.
 	if t.workspace != nil {
@@ -367,7 +369,7 @@ func (t *ShellTool) background(ctx context.Context, req agentcore.SandboxExec, c
 	}
 	out := "started in background: " + string(receipt)
 	if log != nil {
-		out += "\nlive output: " + log.rel + " (read it with read_file while the command runs)"
+		out += "\nlive output: " + log.rel + " (open it with the read tool while the command runs)"
 	}
 	return out + "\nIts result is reported when it finishes; use the background job tools to check on or cancel it.", nil
 }

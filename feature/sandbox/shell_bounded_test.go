@@ -232,7 +232,7 @@ func TestShellWatchdogClosesPipesHeldPastTheKill(t *testing.T) {
 			t.Fatalf("out = %q", out)
 		}
 	case <-time.After(5 * time.Second):
-		t.Fatal("run_shell hung on pipes held open past the kill")
+		t.Fatal("bash hung on pipes held open past the kill")
 	}
 }
 

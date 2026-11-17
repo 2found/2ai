@@ -13,8 +13,8 @@ import (
 
 // save_as is what connects the network tools to the rest of the agent. These
 // tests are about that connection, not about writing files: the assertion that
-// matters is that what web_fetch downloaded is afterwards a file read_file and
-// run_shell can open, at the path the agent was told.
+// matters is that what web_fetch downloaded is afterwards a file read and
+// bash can open, at the path the agent was told.
 
 func TestWebFetchSavesTheBodyIntoTheWorkspace(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {

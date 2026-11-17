@@ -1,6 +1,6 @@
 package sandbox
 
-// edit_match.go — matching machinery for edit_file, ported from pi's
+// edit_match.go — matching machinery for edit, ported from pi's
 // edit-diff.ts. Exact match runs first; when it finds nothing, a fuzzy pass
 // retries in a normalized view that tolerates the mangling models introduce
 // when quoting code back (smart quotes, unicode dashes, non-breaking spaces,
@@ -112,7 +112,7 @@ func fuzzyReplace(content, oldS, newS, rel string, replaceAll bool) (string, int
 	normContent := normalizeFuzzy(content)
 	normOld := normalizeFuzzy(oldS)
 	if normOld == "" {
-		return "", 0, fmt.Errorf("edit_file: old_string not found in %s", rel)
+		return "", 0, fmt.Errorf("edit: old_string not found in %s", rel)
 	}
 
 	// Non-overlapping match offsets in the normalized view.
@@ -126,10 +126,10 @@ func fuzzyReplace(content, oldS, newS, rel string, replaceAll bool) (string, int
 		from += i + len(normOld)
 	}
 	if len(matches) == 0 {
-		return "", 0, fmt.Errorf("edit_file: old_string not found in %s", rel)
+		return "", 0, fmt.Errorf("edit: old_string not found in %s", rel)
 	}
 	if len(matches) > 1 && !replaceAll {
-		return "", 0, fmt.Errorf("edit_file: old_string matches %d locations in %s after fuzzy normalization; add context to make it unique or set replace_all", len(matches), rel)
+		return "", 0, fmt.Errorf("edit: old_string matches %d locations in %s after fuzzy normalization; add context to make it unique or set replace_all", len(matches), rel)
 	}
 
 	// Normalization is per-line, so both views have identical line structure.

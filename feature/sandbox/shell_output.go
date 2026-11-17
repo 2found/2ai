@@ -64,6 +64,46 @@ func (b *headTail) String() string {
 	return fmt.Sprintf("%s\n[... %d bytes omitted ...]\n%s", head, omitted, tail)
 }
 
+// render is String within limit bytes of output: the stored head and tail cut
+// to a third and two thirds of it, so the end, where errors land, gets more.
+func (b *headTail) render(limit int) string {
+	if b.total <= int64(limit) || limit <= 0 {
+		return b.String()
+	}
+	head, tail := b.head, b.tailBytes()
+	if b.omitted() == 0 {
+		// Nothing dropped yet: head and tail are one run of bytes.
+		head = append(append([]byte(nil), head...), tail...)
+		tail = head
+	}
+	cut := headTail{headMax: limit / 3, total: b.total}
+	cut.head = head[:min(len(head), cut.headMax)]
+	cut.tailMax = min(len(tail), limit-len(cut.head))
+	cut.tail = tail[len(tail)-cut.tailMax:]
+	return cut.String()
+}
+
+// limits is how much of each stream a result shows: all of both when they fit
+// shellOutputBudget, else the smaller whole when it fits half and the larger
+// the rest, else half each.
+func (o *shellOutput) limits() [2]int {
+	size := [2]int{}
+	for i := range o.streams {
+		size[i] = int(min(o.streams[i].total, int64(shellHeadBytes+shellTailBytes)))
+	}
+	if size[0]+size[1] <= shellOutputBudget {
+		return size
+	}
+	half := shellOutputBudget / 2
+	switch {
+	case size[0] <= half:
+		return [2]int{size[0], shellOutputBudget - size[0]}
+	case size[1] <= half:
+		return [2]int{shellOutputBudget - size[1], size[1]}
+	}
+	return [2]int{half, half}
+}
+
 // trailingPartialRune is the length of an incomplete UTF-8 sequence at the end
 // of p (0 when p ends on a rune boundary).
 func trailingPartialRune(p []byte) int {
@@ -218,7 +258,8 @@ func (w shellStream) Write(p []byte) (int, error) {
 func (o *shellOutput) stream(i int) shellStream { return shellStream{o, i} }
 
 func (o *shellOutput) truncated() bool {
-	return o.streams[0].omitted() > 0 || o.streams[1].omitted() > 0
+	limits := o.limits()
+	return o.streams[0].total > int64(limits[0]) || o.streams[1].total > int64(limits[1])
 }
 
 // report emits the newest output tail every shellProgressInterval while the
@@ -273,8 +314,9 @@ func (o *shellOutput) format(res agentcore.SandboxResult) string {
 		fmt.Fprintf(&b, "killed: %s\n", res.KillReason)
 	}
 	fmt.Fprintf(&b, "exit_code: %d\n", res.ExitCode)
+	limits := o.limits()
 	for i, label := range []string{"stdout", "stderr"} {
-		if text := strings.TrimRight(o.streams[i].String(), "\n"); text != "" {
+		if text := strings.TrimRight(o.streams[i].render(limits[i]), "\n"); text != "" {
 			fmt.Fprintf(&b, "%s:\n%s\n", label, text)
 		}
 	}
@@ -283,7 +325,7 @@ func (o *shellOutput) format(res agentcore.SandboxResult) string {
 		case o.log != nil && o.log.f != nil && !o.log.failed && o.log.dropped > 0:
 			fmt.Fprintf(&b, "[output truncated — the first %d bytes of the output (stdout and stderr interleaved) are saved to %s, the last %d bytes were not saved; the tail above is the end]\n", o.log.written, o.log.rel, o.log.dropped)
 		case o.log != nil && o.log.f != nil && !o.log.failed:
-			fmt.Fprintf(&b, "[output truncated — the full output (stdout and stderr interleaved) is saved to %s; read it with read_file or grep]\n", o.log.rel)
+			fmt.Fprintf(&b, "[output truncated — the full output (stdout and stderr interleaved) is saved to %s; open it with the read or grep tool]\n", o.log.rel)
 		default:
 			b.WriteString("[output truncated — no workspace log is available; rerun with less output (e.g. pipe through tail or grep)]\n")
 		}

@@ -30,7 +30,17 @@ func TestGrepRipgrepMatchesTheGoEngine(t *testing.T) {
 	mustWrite(t, ws, ".hidden/h.txt", "needle hidden\n")
 	mustWrite(t, ws, "crlf.txt", "needle\r\nline two\r\n")
 	mustWrite(t, ws, "many.txt", strings.Repeat("needle row\nfiller\n", 30))
+	mustWrite(t, ws, "src/span.go", "package src\n\nfunc Spread(a int) {\n\tneedle(a)\n}\n\nfunc Other() {}\n")
+	mustWrite(t, ws, "web/app.TS", "const needle = 1\n")
 	for _, args := range []string{
+		`{"pattern":"func Spread.*?\\n}","multiline":true}`,
+		`{"pattern":"func Spread.*?\\n}","multiline":true,"context":1}`,
+		`{"pattern":"func Spread.*?\\n}","multiline":true,"output_mode":"count"}`,
+		`{"pattern":"needle\\(a\\)\\n}\\n\\nfunc","multiline":true,"limit":2}`,
+		`{"pattern":"^func","multiline":true}`,
+		`{"pattern":"needle","type":"go"}`,
+		`{"pattern":"needle","type":"ts"}`,
+		`{"pattern":"needle","type":"md","output_mode":"files_with_matches"}`,
 		`{"pattern":"needle"}`,
 		`{"pattern":"needle","context":1}`,
 		`{"pattern":"needle","context":3,"limit":5}`,

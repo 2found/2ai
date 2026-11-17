@@ -32,11 +32,11 @@ func TestRenderTranscriptKeepsFactsAndDropsOpaqueBytes(t *testing.T) {
 		nativeRequestJSON(map[string]any{"role": "assistant", "usage": map[string]any{"input": 99}, "content": []any{
 			map[string]any{"type": "thinking", "thinking": "private", "thinkingSignature": "SIGNATURE"},
 			map[string]any{"type": "text", "text": "Writing the file."},
-			map[string]any{"type": "toolCall", "id": "c1", "name": "write_file", "arguments": map[string]any{"path": "a.go", "content": strings.Repeat("y", 5000)}}}}),
-		nativeRequestJSON(map[string]any{"role": "toolResult", "toolCallId": "c1", "toolName": "write_file", "isError": true, "content": []any{map[string]any{"type": "text", "text": "HEAD " + strings.Repeat("z", 9000) + " permission denied"}}}),
+			map[string]any{"type": "toolCall", "id": "c1", "name": "write", "arguments": map[string]any{"path": "a.go", "content": strings.Repeat("y", 5000)}}}}),
+		nativeRequestJSON(map[string]any{"role": "toolResult", "toolCallId": "c1", "toolName": "write", "isError": true, "content": []any{map[string]any{"type": "text", "text": "HEAD " + strings.Repeat("z", 9000) + " permission denied"}}}),
 	})
 	text := strings.Join(blocks, "\n")
-	for _, want := range []string{"PREVIOUS SUMMARY", "Goal: ship", "USER: look at this [1 image(s) omitted]", "ASSISTANT: Writing the file.", "ASSISTANT called write_file(content=", "path=\"a.go\"", "TOOL write_file (error) -> HEAD", "permission denied"} {
+	for _, want := range []string{"PREVIOUS SUMMARY", "Goal: ship", "USER: look at this [1 image(s) omitted]", "ASSISTANT: Writing the file.", "ASSISTANT called write(content=", "path=\"a.go\"", "TOOL write (error) -> HEAD", "permission denied"} {
 		if !strings.Contains(text, want) {
 			t.Errorf("rendering lost %q", want)
 		}

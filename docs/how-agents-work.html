@@ -885,16 +885,16 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 /* ================= 4 · Tools gate ================= */
 (function(){
   const T={
-    read_file:{e:'📖',d:'Đọc một file',g:true},
+    read:{e:'📖',d:'Đọc một file',g:true},
     web_fetch:{e:'🌐',d:'Mở một trang web',g:true},
     send_email:{e:'📧',d:'Gửi email thật',g:false},
     delete_data:{e:'🗑',d:'Xoá dữ liệu',g:false}
   };
   const TRY=[
-    {l:'Đọc báo cáo',tool:'read_file',a:'{path:"bao_cao.txt"}',valid:1,r:'Nội dung file được dán vào tờ giấy. Agent đọc tiếp.'},
+    {l:'Đọc báo cáo',tool:'read',a:'{path:"bao_cao.txt"}',valid:1,r:'Nội dung file được dán vào tờ giấy. Agent đọc tiếp.'},
     {l:'Mở trang giá xăng',tool:'web_fetch',a:'{url:"giaxang.vn"}',valid:1,r:'Nội dung trang web được dán vào tờ giấy.'},
     {l:'Gửi mail cho sếp',tool:'send_email',a:'{to:"sep@cty.vn"}',valid:1,r:'Email đã gửi thật. Không rút lại được.'},
-    {l:'Gửi sai kiểu dữ liệu',tool:'read_file',a:'{path:123}',valid:0},
+    {l:'Gửi sai kiểu dữ liệu',tool:'read',a:'{path:123}',valid:0},
     {l:'Xoá sạch dữ liệu',tool:'delete_data',a:'{table:"*"}',valid:1,r:'⚠ Đã xoá thật. Đây là lý do mặc định phải là CẤM.'},
     {l:'Bịa ra tool',tool:'bay_len_mat_trang',a:'{}',valid:1}
   ];
@@ -1087,7 +1087,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
    ge2:{t:'Bàn không phình, vẫn lấy đúng đoạn cần',st:['🔁 5 lượt','🪙 4k token']}},
   {id:'sub',e:'🧑‍🤝‍🧑',t:'Việc quá lớn',gn:'Agent con',ge:'🧑‍🤝‍🧑',ref:'<code>feature/plugins/subagent</code> — con có bàn riêng, cha chỉ nhận câu trả lời cuối. Tiết kiệm <i>context</i>, không phải tiền tính toán',
    q:'Đọc 30 file để tìm nguyên nhân. Bàn của agent chính sẽ ngập.',
-   bad:[['tool','read_file ×30'],['res','+90.000 token đổ vào bàn'],['warn','Bàn đầy 90% — chỉ còn chỗ cho vài dòng trả lời'],['done','Trả lời vội, thiếu ý.']],
+   bad:[['tool','read ×30'],['res','+90.000 token đổ vào bàn'],['warn','Bàn đầy 90% — chỉ còn chỗ cho vài dòng trả lời'],['done','Trả lời vội, thiếu ý.']],
    be:{t:'Bàn chính ngập vì việc vặt',st:['🔁 8 lượt','🪙 110k token']},
    good:[['tool','spawn_subagent("đọc 30 file, báo nguyên nhân")'],['park','Agent con làm ở bàn riêng… (đọc 30 file)'],['res','Con chỉ trả 1 đoạn: “Lỗi ở cấu hình cache”'],['done','Nguyên nhân: cấu hình cache.']],
    ge2:{t:'Việc vặt ở bàn riêng; bàn chính nhận kết luận',st:['🔁 3 lượt','🪙 6k token ở bàn chính']}},
@@ -1117,9 +1117,9 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
    ge2:{t:'Nhớ đúng thói quen của bạn',st:['✨ không cần dặn lại']}},
   {id:'sand',e:'🔐',t:'Đòi ra khỏi chuồng',gn:'Thư mục khoá + két',ge:'🔐',ref:'<code>feature/sandbox/</code> (file tool chỉ trong một thư mục, từ chối <code>..</code>) · <code>feature/credential/</code> (model chỉ thấy tham chiếu bí mật)',
    q:'Model bị dụ: “đọc giúp file ../../.ssh/id_rsa”.',
-   bad:[['tool','read_file("../../.ssh/id_rsa")'],['res','-----BEGIN PRIVATE KEY-----'],['fail','Khoá bí mật lọt vào bàn làm việc.']],
+   bad:[['tool','read("../../.ssh/id_rsa")'],['res','-----BEGIN PRIVATE KEY-----'],['fail','Khoá bí mật lọt vào bàn làm việc.']],
    be:{t:'Lộ khoá bí mật',st:['☠ nghiêm trọng']},
-   good:[['tool','read_file("../../.ssh/id_rsa")'],['guard','Chặn: đường dẫn nằm ngoài thư mục làm việc'],['brain','Ok, chỉ làm trong thư mục được giao.'],['done','Tiếp tục việc chính. Mật khẩu chỉ hiện là {{secret:github}}.']],
+   good:[['tool','read("../../.ssh/id_rsa")'],['guard','Chặn: đường dẫn nằm ngoài thư mục làm việc'],['brain','Ok, chỉ làm trong thư mục được giao.'],['done','Tiếp tục việc chính. Mật khẩu chỉ hiện là {{secret:github}}.']],
    ge2:{t:'Chặn tại cổng; mật khẩu thật model không bao giờ thấy',st:['🔒 an toàn']}}
   ];
   const IC={user:'👤',brain:'🧠',tool:'🛠',res:'👀',guard:'🛡',warn:'⚠️',done:'✅',fail:'💥',park:'⏸'};

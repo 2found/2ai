@@ -13,12 +13,13 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/2found/2ai/core/agentcore"
 )
 
-// workspaceFS is the I/O substrate the file and search tools (read_file,
-// write_file, edit_file, edit_lines, grep, glob) run on. It exists so those tools have one
+// workspaceFS is the I/O substrate the file and search tools (read,
+// write, edit, edit_lines, grep, glob) run on. It exists so those tools have one
 // implementation and two backends: hostFS does the os.ReadFile / WalkDir calls
 // they have always done, sandboxFS routes the same primitives through
 // agentcore.Sandbox.Exec. Every byte of windowing, line numbering, fuzzy
@@ -109,6 +110,28 @@ func (h hostFS) open(rel string) (*os.Root, string, error) {
 		return nil, "", err
 	}
 	return root, clean, nil
+}
+
+// ModTimes is the modification time of each of rels that can be read; one
+// root is opened for all of them.
+func (h hostFS) ModTimes(ctx context.Context, rels []string) map[string]time.Time {
+	out := make(map[string]time.Time, len(rels))
+	root, err := h.ws.openRoot()
+	if err != nil {
+		return out
+	}
+	defer root.Close()
+	for i, rel := range rels {
+		if i%1024 == 0 && ctx.Err() != nil {
+			return out
+		}
+		if info, err := root.Lstat(filepath.FromSlash(rel)); err == nil {
+			// Whole seconds, as the sandbox's stat reports them, so both
+			// substrates order the same files the same way.
+			out[rel] = info.ModTime().Truncate(time.Second)
+		}
+	}
+	return out
 }
 
 func (h hostFS) Stat(ctx context.Context, rel string) (fsStat, error) {
@@ -334,7 +357,7 @@ func (h hostFS) ReadRange(ctx context.Context, rel string, offset int64, limit i
 
 // fileWorkdir is where the workspace is bind-mounted for the file tools. It
 // matches shellWorkdir so a path the model saw from grep names the same file
-// run_shell sees.
+// bash sees.
 const fileWorkdir = shellWorkdir
 
 const (
@@ -525,6 +548,31 @@ dd if="$p" bs=1 skip="$2" count="$3" 2>/dev/null`
 		return nil, "", err
 	}
 	return []byte(data), strings.ToUpper(hash), nil
+}
+
+// ModTimes is the modification time of each of rels, in whole seconds, from
+// one exec: GNU stat (-c %Y) or BSD stat (-f %m), the paths on stdin. A path
+// it cannot stat is left out.
+func (s sandboxFS) ModTimes(ctx context.Context, rels []string) map[string]time.Time {
+	out := make(map[string]time.Time, len(rels))
+	if len(rels) == 0 {
+		return out
+	}
+	script := `if stat -c %Y / >/dev/null 2>&1; then f='-c %Y'; else f='-f %m'; fi
+while IFS= read -r p; do
+  t=$(stat $f "$p" 2>/dev/null) && printf '%s %s\n' "$t" "$p"
+done`
+	res, err := s.exec(ctx, agentcore.SandboxExec{Argv: []string{"/bin/sh", "-c", script}, Stdin: strings.Join(rels, "\n") + "\n"})
+	if err != nil || res.ExitCode != 0 {
+		return out
+	}
+	for _, line := range strings.Split(res.Stdout, "\n") {
+		sec, rel, ok := strings.Cut(line, " ")
+		if n, err := strconv.ParseInt(sec, 10, 64); ok && err == nil {
+			out[rel] = time.Unix(n, 0)
+		}
+	}
+	return out
 }
 
 func (s sandboxFS) ReadEach(ctx context.Context, rels []string, maxBytes int64, fn func(string, []byte) error) error {

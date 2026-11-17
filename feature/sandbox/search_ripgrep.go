@@ -76,6 +76,13 @@ func (t *GrepTool) ripgrep(ctx context.Context, q grepQuery) (*grepResult, bool)
 	if q.fold {
 		args = append(args, "--ignore-case")
 	}
+	if q.multi {
+		args = append(args, "--multiline", "--multiline-dotall")
+	}
+	for ext := range q.exts {
+		// Only narrows the walk; wants() below is what decides.
+		args = append(args, "--iglob", "*."+ext)
+	}
 	if q.ctxLines > 0 {
 		args = append(args, "--context", strconv.Itoa(q.ctxLines))
 	}
@@ -117,29 +124,33 @@ func (t *GrepTool) ripgrep(ctx context.Context, q grepQuery) (*grepResult, bool)
 				file.ok = false // a line that is not UTF-8: the Go engine skips the file
 				continue
 			}
-			n := msg.Data.LineNumber - 1
-			if msg.Type == "match" {
-				file.matched++
-			}
-			// Hold no more of a file than the page can use: the hits that can
-			// still be emitted plus one that proves truncation, and the lines
-			// around them. count mode keeps only the number.
-			full := len(file.hits) >= res.room()
-			if msg.Type == "match" && !full && q.mode != grepModeCount {
-				file.hits = append(file.hits, n)
-			}
-			if q.mode == grepModeContent && (!full || (len(file.hits) > 0 && n <= file.hits[len(file.hits)-1]+q.ctxLines)) {
-				if file.lines == nil {
-					file.lines = map[int]string{}
+			// A multiline match carries every line it spans; each is a hit,
+			// as the Go engine lists them.
+			for k, text := range strings.SplitAfter(strings.TrimSuffix(*msg.Data.Lines.Text, "\n"), "\n") {
+				n := msg.Data.LineNumber - 1 + k
+				if msg.Type == "match" {
+					file.matched++
 				}
-				file.lines[n] = strings.TrimSuffix(*msg.Data.Lines.Text, "\n")
+				// Hold no more of a file than the page can use: the hits that can
+				// still be emitted plus one that proves truncation, and the lines
+				// around them. count mode keeps only the number.
+				full := len(file.hits) >= res.room()
+				if msg.Type == "match" && !full && q.mode != grepModeCount {
+					file.hits = append(file.hits, n)
+				}
+				if q.mode == grepModeContent && (!full || (len(file.hits) > 0 && n <= file.hits[len(file.hits)-1]+q.ctxLines)) {
+					if file.lines == nil {
+						file.lines = map[int]string{}
+					}
+					file.lines[n] = strings.TrimSuffix(text, "\n")
+				}
 			}
 		case "end":
 			if !file.ok || msg.Data.BinaryOffset != nil {
 				file = rgFile{}
 				continue
 			}
-			if q.glob != nil && !q.glob.MatchString(file.path) {
+			if !q.wants(file.path) {
 				file = rgFile{}
 				continue
 			}

@@ -87,7 +87,7 @@ func TestComputerUseToolThreadsSessionAndLimits(t *testing.T) {
 	if stub.last.Session != "conv-123" {
 		t.Fatalf("session = %q, want conv-123", stub.last.Session)
 	}
-	// The computer-use envelope is the opposite of run_shell's lock: network on,
+	// The computer-use envelope is the opposite of bash's lock: network on,
 	// writable fs, so installs work.
 	if c := stub.last.Constraints; !c.Network || !c.WritableFS || strings.Join(c.NetworkAllow, ",") != "pypi.org,files.pythonhosted.org" {
 		t.Fatalf("expected allowlisted networked writable constraints, got %+v", c)
@@ -150,7 +150,7 @@ func TestShellToolSpillsOversizedOutput(t *testing.T) {
 	rel = rel[:strings.IndexAny(rel, "; ")]
 	logOut, rerr := NewReadFileTool(nil, ws).Run(context.Background(), `{"path":"`+rel+`","offset":4001,"limit":2}`)
 	if rerr != nil {
-		t.Fatalf("spilled log not readable via read_file: %v", rerr)
+		t.Fatalf("spilled log not readable via read: %v", rerr)
 	}
 	if !strings.Contains(logOut, "final error: it broke") {
 		t.Fatalf("spilled log missing content: %q", logOut)
@@ -182,7 +182,7 @@ func TestShellToolRejectsEmptyAndBadArgs(t *testing.T) {
 	}
 }
 
-// The sandbox is optional in both directions: with none injected, run_shell
+// The sandbox is optional in both directions: with none injected, bash
 // runs the command directly on the host machine instead of refusing.
 func TestShellToolWithoutSandboxRunsOnHost(t *testing.T) {
 	ws, err := NewWorkspace(t.TempDir())
@@ -221,7 +221,7 @@ func TestShellToolHostModeHidesHostEnv(t *testing.T) {
 	}
 }
 
-// The host substrate runs in the workspace directory, so run_shell and the file
+// The host substrate runs in the workspace directory, so bash and the file
 // tools keep sharing one filesystem without a bind mount to arrange it.
 func TestShellToolHostModeRunsInWorkspace(t *testing.T) {
 	dir := t.TempDir()
@@ -273,7 +273,7 @@ func TestShellToolHostModeEnforcesTimeout(t *testing.T) {
 
 // When a workspace is configured the shell must share it with the file tools:
 // the workspace is bind-mounted read-write and is the command's working dir, so
-// write_file → run_shell (and back) operate on one filesystem.
+// write → bash (and back) operate on one filesystem.
 func TestShellToolMountsWorkspace(t *testing.T) {
 	ws, err := NewWorkspace(t.TempDir())
 	if err != nil {

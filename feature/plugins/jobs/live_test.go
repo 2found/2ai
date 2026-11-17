@@ -18,7 +18,7 @@ func publisher(t *testing.T, b *board, chunks ...string) (id string, release fun
 	t.Helper()
 	published := make(chan struct{})
 	done := make(chan struct{})
-	r, err := b.start(context.Background(), "run_shell", "build", func(ctx context.Context) (string, error) {
+	r, err := b.start(context.Background(), "bash", "build", func(ctx context.Context) (string, error) {
 		for _, c := range chunks {
 			agentcore.PublishJobOutput(ctx, c)
 		}
@@ -163,7 +163,7 @@ func TestJobListShowsElapsedAndTheLastLine(t *testing.T) {
 		t.Fatal(err)
 	}
 	lines := strings.Split(out, "\n")
-	if len(lines) != 2 || !strings.HasPrefix(lines[0], id+"\trunning\trun_shell\t") || !strings.HasSuffix(lines[0], "\tbuild") {
+	if len(lines) != 2 || !strings.HasPrefix(lines[0], id+"\trunning\tbash\t") || !strings.HasSuffix(lines[0], "\tbuild") {
 		t.Fatalf("list = %q", out)
 	}
 	if !strings.HasPrefix(lines[1], "\t> linking xxx") || len(lines[1]) > lastLineBytes+16 {

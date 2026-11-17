@@ -470,11 +470,11 @@ func contains(s, sub string) bool {
 // run; each is answered with an error telling the model to re-issue, and the
 // refusal is traced as not-allowed without spending tool-call budget.
 func TestTruncatedResponseNeverExecutesTools(t *testing.T) {
-	tool := &echoTool{name: "write_file"}
+	tool := &echoTool{name: "write"}
 	faux := scriptedNativeProvider(
 		ChatResponse{
 			Message: Message{Role: RoleAssistant, ToolCalls: []ToolCall{
-				{ID: "c1", Name: "write_file", Arguments: `{"path":"a.go","content":"package main`},
+				{ID: "c1", Name: "write", Arguments: `{"path":"a.go","content":"package main`},
 			}},
 			StopReason: "length",
 		},
@@ -484,7 +484,7 @@ func TestTruncatedResponseNeverExecutesTools(t *testing.T) {
 		NativeProvider: faux,
 		Model:          "test",
 		Tools:          NewToolSet(tool),
-		Policy:         NewAllowList("write_file"),
+		Policy:         NewAllowList("write"),
 	})
 	if err != nil {
 		t.Fatalf("New: %v", err)

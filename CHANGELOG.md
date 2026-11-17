@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.4.0 — 2026-11-17
+
+Baseline: v0.3.2. **Breaking:** four workspace tools take Claude Code's names.
+
+- **`read_file`, `write_file`, `edit_file` and `run_shell` are now `read`, `write`, `edit` and `bash`.** These are Claude Code's Read, Write, Edit and Bash, so a model trained on that harness calls them without being told. The constants (`ToolReadFile`, `ToolWriteFile`, `ToolEditFile`, `ToolRunShell`) keep their Go names with the new values. Tool descriptions, error prefixes ("read: …") and notices name the new tools. A host that lists tools by name, in policy, grants, prompts or skills, renames them too. A stored transcript with calls to the old names still loads; a new call to an old name is refused as an unknown tool. `edit_lines`, `grep`, `glob`, `web_fetch` and `web_search` keep their names.
+- **`bash` shows up to 30,000 bytes of output, as Claude Code does.** Each stream keeps its first 10,000 and last 20,000 bytes. A result shows at most 30,000 bytes of both together: one noisy stream may use all of it, and two share it. Before, each stream kept 4 KB + 8 KB. The full output is still saved under `.shell_logs/` when anything is cut.
+- **agentcore's default per-result cap is 32 KiB** (was 24 KiB), so a `bash` result is never cut a second time.
+- **`grep` has `multiline` and `type`.** `multiline` lets a pattern span lines, with `.` matching a newline, as rg `-U --multiline-dotall`, and lists every line a match covers. `type` (go, js, ts, py, rust, md, json, yaml, …) narrows the search to a file type. Both engines, ripgrep and Go, return the same rows for both.
+- **`glob` lists the most recently modified file first**, as Claude Code's Glob does. When more than 500 files match, it keeps the 500 newest and says how many it left out. Both substrates compare times in whole seconds, and ties stay in path order.
+
+- **`jobs.Plugin.Disposable` lets a run's scaffolding end with its answer.** It names the tools whose background jobs are the run's own scaffolding (a dev server or file watcher started from a shell). One still running at the final answer is cancelled then, without re-opening the run, and its end is not announced, as Claude Code leaves a background shell to the session. Without it a server the model kept for screenshots re-opened the run ("Background work is still pending"), the model listed, cancelled and inspected it, gave its whole answer again, and was re-opened once more to be told the job it had just cancelled was cancelled.
+- **A job the model saw end is not announced again.** `job_status` and `job_wait` that return a finished job, and `job_cancel`, mark it announced. `job_cancel` waits up to 2 s for the job to stop and says so ("Cancelled job_1; it has stopped."); a job that does not stop in time still answers "Cancellation requested".
+
 ## 0.3.2 — 2026-11-17
 
 Baseline: v0.3.1. No breaking change; a backend that does not implement the new interface behaves as before.
