@@ -101,7 +101,7 @@ func (c *NativeClient) Candidate(id string, contextWindow int) (FallbackCandidat
 	if maxTokens <= 0 {
 		maxTokens = 16384
 	}
-	model, err := json.Marshal(map[string]any{"id": id, "name": id, "agentrayProviderId": c.spec.SessionScope, "provider": c.provider, "api": c.api, "baseUrl": c.endpoint, "contextWindow": contextWindow, "maxTokens": maxTokens, "reasoning": true, "input": []string{"text", "image"}, "cost": listCost(c.provider, id), "compat": c.compat})
+	model, err := json.Marshal(map[string]any{"id": id, "name": id, "agentrayProviderId": c.spec.SessionScope, "provider": c.provider, "api": c.api, "baseUrl": c.endpoint, "contextWindow": contextWindow, "maxTokens": maxTokens, "reasoning": true, "thinkingLevelMap": hostThinkingLevels, "input": []string{"text", "image"}, "cost": listCost(c.provider, id), "compat": c.compat})
 	if err != nil {
 		return FallbackCandidate{}, err
 	}
@@ -118,6 +118,13 @@ func (c *NativeClient) Candidate(id string, contextWindow int) (FallbackCandidat
 		return (NativeProvider{Tokens: c.spec.TokenSource}).Stream(ctx, requested, transcript, controls)
 	}}, nil
 }
+
+// hostThinkingLevels declares xhigh and max, which the pi-derived option
+// builders otherwise lower to high for a model that does not list them. A
+// native candidate is a model the host names, so the host chooses its level,
+// as it already decides that the model reasons; a level the model refuses is
+// dropped by the provider session as before.
+var hostThinkingLevels = map[string]string{"xhigh": "xhigh", "max": "max"}
 
 func isOpenAIAPI(endpoint string) bool {
 	u, err := url.Parse(endpoint)
