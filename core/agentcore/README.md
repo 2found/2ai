@@ -269,7 +269,7 @@ cannot give one belongs in a plugin, or belongs nowhere.
 
 | file | why core |
 |---|---|
-| [`env.go`](env.go) | **execution contract** — host-owned tool infrastructure: `Env`, the `Sandbox`, optional `SessionSandbox` and `ProcessSandbox` capabilities (persistent eval and LSP), session-id plumbing, and `CredentialResolver`. These are not agent plugins. The host binds sandbox backends to tools; the executor resolves credentials after gating. `Env.Sandbox` is diagnostic metadata, not an isolation switch. |
+| [`env.go`](env.go) | **execution contract** — host-owned tool infrastructure: `Env`, the `Sandbox`, optional `SessionSandbox`, `ProcessSandbox` (persistent eval and LSP) and `HostPathSandbox` (a backend whose processes see mounts at their host path) capabilities, session-id plumbing, and `CredentialResolver`. These are not agent plugins. The host binds sandbox backends to tools; the executor resolves credentials after gating. `Env.Sandbox` is diagnostic metadata, not an isolation switch. |
 | [`memory.go`](memory.go) | **contract** — `MemoryEntry`, `MemoryStore`, `Embedder`, `Cosine`: cross-run recall as a seam the consumer backs. A nil store is valid; ranking degrades to keyword recall rather than failing. |
 | [`faux.go`](faux.go) | **seam default** — the providers that make the loop testable with no network and no key: `FauxProvider` (scripted) and `ReplayProvider` (plays a recorded `[]TurnRecord` and asserts the loop rebuilt the same request, so a transcript is a regression test). omp has no record/replay; this is agentray's. |
 

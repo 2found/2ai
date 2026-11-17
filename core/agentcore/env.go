@@ -132,6 +132,18 @@ type ProcessSandbox interface {
 	Start(ctx context.Context, req SandboxExec) (SandboxProcess, error)
 }
 
+// HostPathSandbox is the optional capability of a backend whose commands see
+// every mount at its host Source path, not at its Target: macOS Seatbelt
+// confines what a process may touch but cannot move a path, so a workspace
+// mounted at "/workspace" is still found at its real path there. A tool that
+// hands absolute paths to the process it starts (a language server's root and
+// file URIs) names them by Source when HostPaths is true. Commands that work in
+// their working directory need nothing: a backend maps Workdir either way.
+type HostPathSandbox interface {
+	Sandbox
+	HostPaths() bool
+}
+
 // SandboxProcess is one started interactive command. Callers own all three
 // pipes and must call Wait. Kill is idempotent and terminates the command's
 // process group or container, not merely its direct child.

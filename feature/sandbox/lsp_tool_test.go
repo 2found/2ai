@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync"
 	"testing"
@@ -223,6 +224,70 @@ func TestLSPToolTreatsInjectedHostSandboxAsHostMode(t *testing.T) {
 	}
 	if _, ok := tool.fs.(hostFS); !ok {
 		t.Fatalf("filesystem = %T, want hostFS", tool.fs)
+	}
+}
+
+// hostPathSandbox is a sandboxed backend (not HostSandbox) whose processes see
+// mounts at their host path, as the macOS Seatbelt backend does.
+type hostPathSandbox struct {
+	*HostSandbox
+	seesHost bool
+	starts   []agentcore.SandboxExec
+}
+
+func (s *hostPathSandbox) HostPaths() bool { return s.seesHost }
+
+func (s *hostPathSandbox) Start(ctx context.Context, req agentcore.SandboxExec) (agentcore.SandboxProcess, error) {
+	s.starts = append(s.starts, req)
+	return s.HostSandbox.Start(ctx, req)
+}
+
+func TestLSPToolNamesHostPathsWhenTheSandboxCannotMoveThem(t *testing.T) {
+	for _, seesHost := range []bool{true, false} {
+		ws := mustWorkspace(t)
+		mustWrite(t, ws, "main.ts", "const target = target;\n")
+		uris := filepath.Join(t.TempDir(), "uris.log")
+		cfg := LSPConfig{TimeoutSeconds: 5, Servers: []LSPServerConfig{{
+			Name: "fixture", Command: os.Args[0],
+			Args:       []string{"-test.run=^TestLSPHelperProcess$", "--", "lsp-helper", "", uris},
+			Extensions: []string{".ts"}, LanguageID: "typescript",
+		}}}
+		sb := &hostPathSandbox{HostSandbox: NewHostSandbox(), seesHost: seesHost}
+		tool, err := NewLSPTool(sb, ws, cfg)
+		if err != nil {
+			t.Fatalf("NewLSPTool: %v", err)
+		}
+		if tool.hosted {
+			t.Fatal("a sandboxed backend must not run in host mode")
+		}
+		out, err := tool.Run(context.Background(), `{"action":"definition","file":"main.ts","line":1,"symbol":"target#2"}`)
+		if err != nil {
+			t.Fatalf("seesHost=%v definition: %v", seesHost, err)
+		}
+		if !strings.Contains(out, "main.ts:1:10") {
+			t.Fatalf("seesHost=%v definition = %q, want a workspace-relative location", seesHost, out)
+		}
+		want := shellWorkdir
+		if seesHost {
+			want = ws.Root()
+		}
+		data, err := os.ReadFile(uris)
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, uri := range strings.Fields(string(data)) {
+			u, err := url.Parse(uri)
+			path, ok := fileURIPathForOS(u, runtime.GOOS)
+			if err != nil || !ok || (path != want && !strings.HasPrefix(path, want+string(filepath.Separator))) {
+				t.Fatalf("seesHost=%v: server was given %s, want paths under %s", seesHost, uri, want)
+			}
+		}
+		if len(data) == 0 {
+			t.Fatalf("seesHost=%v: the fixture logged no URI", seesHost)
+		}
+		if len(sb.starts) != 1 || sb.starts[0].Mounts[0].Target != shellWorkdir || !sb.starts[0].Mounts[0].ReadOnly {
+			t.Fatalf("seesHost=%v starts = %+v, want one read-only workspace mount at %s", seesHost, sb.starts, shellWorkdir)
+		}
 	}
 }
 
@@ -489,6 +554,11 @@ func TestLSPHelperProcess(t *testing.T) {
 		}
 		switch msg.Method {
 		case "initialize":
+			var init struct {
+				RootURI string `json:"rootUri"`
+			}
+			_ = json.Unmarshal(msg.Params, &init)
+			logHelperURI(init.RootURI)
 			if counter := helperArgAfter("lsp-helper"); counter != "" {
 				f, err := os.OpenFile(counter, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0o600)
 				if err == nil {
@@ -513,6 +583,7 @@ func TestLSPHelperProcess(t *testing.T) {
 				} `json:"textDocument"`
 			}
 			_ = json.Unmarshal(msg.Params, &params)
+			logHelperURI(params.TextDocument.URI)
 			openedText = strings.TrimSpace(params.TextDocument.Text)
 			openedVersion = params.TextDocument.Version
 			writeHelperLSP(map[string]any{
@@ -570,6 +641,19 @@ func TestLSPHelperProcess(t *testing.T) {
 			writeHelperLSP(map[string]any{"jsonrpc": "2.0", "id": json.RawMessage(msg.ID), "result": nil})
 		case "exit":
 			return
+		}
+	}
+}
+
+// logHelperURI appends uri to the file named two arguments after
+// "lsp-helper", when the test passed one.
+func logHelperURI(uri string) {
+	for i, arg := range os.Args {
+		if arg == "lsp-helper" && i+2 < len(os.Args) && uri != "" {
+			if f, err := os.OpenFile(os.Args[i+2], os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0o600); err == nil {
+				_, _ = io.WriteString(f, uri+"\n")
+				_ = f.Close()
+			}
 		}
 	}
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2 — 2026-11-17
+
+Baseline: v0.3.1. No breaking change; a backend that does not implement the new interface behaves as before.
+
+- **`lsp` works in a sandbox that cannot move paths.** A backend whose commands see every mount at its host path, not at its target (macOS Seatbelt, which confines paths but cannot move them), implements the new optional `agentcore.HostPathSandbox` (`HostPaths() bool`). `lsp` then tells the language server the workspace's real path as its root and in every file URI. It used to send `/workspace`, which does not exist there: gopls found no module, `diagnostics` reported nothing and `definition` failed with "no views". Docker and bubblewrap, which bind the workspace at `/workspace`, are unchanged.
+
 ## 0.3.1 — 2026-11-17
 
 Baseline: v0.3.0. No breaking change; checkpoints written before read as before.

@@ -77,8 +77,12 @@ func NewLSPToolWithRegistry(sb agentcore.Sandbox, workspace *Workspace, registry
 	if registry == nil {
 		registry = NewLSPSessionRegistry(0, 0)
 	}
+	// The server is told its root and files by absolute path. In a backend that
+	// cannot move paths (agentcore.HostPathSandbox) the mount at shellWorkdir is
+	// only found at the workspace's real path, and a server given /workspace
+	// finds no module or project there.
 	root := shellWorkdir
-	if hosted {
+	if hp, ok := sb.(agentcore.HostPathSandbox); hosted || ok && hp.HostPaths() {
 		root = workspace.Root()
 	}
 	return &LSPTool{
