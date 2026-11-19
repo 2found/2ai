@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.4.2 — 2026-11-19
+
+Baseline: v0.4.1. No breaking change. `AgentDefinition` gains `ResponseFormatting`; `ConsolidationWorker` gains `Active()`.
+
+- **A host chooses the system prompt's formatting section.** `AgentDefinition.ResponseFormatting` replaces the `# Response formatting` section: empty keeps `DefaultResponseFormatting` (byte-identical to before, ```chart fences included), `MarkdownResponseFormatting` is the same without the chart fence for a host whose surfaces draw no charts (an agent told about a fence nothing draws answers with raw JSON where a table would have read), `NoResponseFormatting` leaves the section out, and any other text replaces it.
+- **A model call no longer encodes and decodes the whole transcript first.** Every native provider (Anthropic, OpenAI Completions and Responses, Azure, Codex and the OAuth pools) froze the caller's transcript by a JSON round trip before streaming, and then encoded it again for the request, so each turn of a long run re-serialized every earlier turn. It now copies the typed records, as stream snapshots already did. The wire output is unchanged: a test holds the copy byte-identical to the round trip, resolved or not, and detached from later caller edits. On a 100-turn transcript with 4 KB tool results the freeze takes 0.14 ms and 0.29 MB instead of 37 ms and 27 MB. The freeze itself no longer refuses a transcript JSON cannot encode (a nonfinite usage number, a cyclic `Details`); the request encoding still does wherever such a field is sent.
+- **`ConsolidationWorker.Active()` counts the memory passes calling a model now.** Shutdown cancels them, and the next pass pays for the same model call again; a host about to restart or reload can wait while it is non-zero. Queued scopes are not counted, so a backlog never holds a restart longer than one pass (60 s at most).
+
 ## 0.4.1 — 2026-11-18
 
 Baseline: v0.4.0. No breaking change. `Model` gains two fields.

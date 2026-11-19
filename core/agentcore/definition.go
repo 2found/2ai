@@ -35,6 +35,11 @@ type AgentDefinition struct {
 	Agents      string      // AGENTS.md — what it works on (always loaded)
 	Skills      []Skill     // headers selected by description match; body loads on demand
 	SkillLoader SkillLoader // optional deferred content loader for selected skills
+	// ResponseFormatting replaces the system prompt's "# Response formatting"
+	// section. Empty keeps DefaultResponseFormatting, which offers ```chart
+	// fences; a host whose surfaces draw no charts passes
+	// MarkdownResponseFormatting, and NoResponseFormatting leaves it out.
+	ResponseFormatting string
 }
 
 // Severity ranks a load Diagnostic.

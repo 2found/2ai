@@ -36,15 +36,7 @@ func nativeOAuthPoolStream(ctx context.Context, rawModel json.RawMessage, transc
 	if controls == nil {
 		controls = map[string]json.RawMessage{}
 	}
-	encoded, err := json.Marshal(transcript)
-	if err != nil {
-		return nil, err
-	}
-	var frozen Context
-	if err = json.Unmarshal(encoded, &frozen); err != nil {
-		return nil, err
-	}
-	transcript = NormalizeContext(frozen)
+	transcript = freezeTranscript(transcript)
 	out := NewAssistantMessageEventStreamFor(ctx)
 	now := time.Now().UnixMilli()
 	if options.Now != nil {

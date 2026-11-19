@@ -226,7 +226,7 @@ cannot give one belongs in a plugin, or belongs nowhere.
 | [`plugin.go`](plugin.go) | **loop** — `Plugin`, `Registry`, `Priority`. The composition surface itself: seam setters, additive contributions, per-plugin `Unload`. |
 | [`compose.go`](compose.go) | **loop** — `Build`, `BuildRegistry`, `ApplyConfig`, and `Limits`/`DefaultLimits`: the run's bounds are chosen at composition, read every turn, and published to extensions through `RunInfo`. There is no composition in which a run is unbounded. |
 | [`agent.go`](agent.go) | **loop** — the configured runtime instance (capability-bearing fields unexported on purpose, see `fork.go`) plus `Agent.Describe()`: what the agent is *actually* configured with after every default and override. |
-| [`definition.go`](definition.go) | **contract** — `AgentDefinition`, `Skill`, `SkillLoader`, and the always-loaded byte cap that keeps the system prompt bounded. |
+| [`definition.go`](definition.go) | **contract** — `AgentDefinition` (its `ResponseFormatting` chooses the prompt's formatting section), `Skill`, `SkillLoader`, and the always-loaded byte cap that keeps the system prompt bounded. |
 | [`seams.go`](seams.go) | **seam default** — `ConfigPlugin`, `ModelPlugin`, `DefinitionPlugin`, `PolicyPlugin`, `ToolsPlugin`, `HooksPlugin`, `BudgetPlugin`, `SessionPlugin`, `CompactionPlugin`, `SteeringPlugin`. Core adapters that claim seams during `Build(...)` without needing fake wrapper packages under `plugins/`. |
 
 ### The loop and its extension points

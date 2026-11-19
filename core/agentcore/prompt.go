@@ -105,24 +105,37 @@ func containment(a, b map[string]struct{}) float64 {
 	return float64(inter) / float64(len(small))
 }
 
-// responseFormattingGuidance is the baseline "how to present an answer"
-// capability every agent gets. The chat surface renders GitHub-flavored
-// markdown — headings, lists, bold, fenced code, pipe tables — plus real charts
-// from a ```chart code fence carrying a JSON spec (drawn with the same ECharts
-// engine as the dashboard). Telling the agent this makes its data answers
-// scannable (a table of top novels beats a run-on sentence, a trend line beats a
-// wall of numbers) instead of one flat paragraph. Users can extend or override
-// this via their AGENTS.md, which is injected above as "Mission & Context".
-const responseFormattingGuidance = `# Response formatting
+// DefaultResponseFormatting is the baseline "how to present an answer"
+// capability every agent gets unless its definition sets ResponseFormatting.
+// The chat surface renders GitHub-flavored markdown — headings, lists, bold,
+// fenced code, pipe tables — plus real charts from a ```chart code fence
+// carrying a JSON spec (drawn with the same ECharts engine as the dashboard).
+// Telling the agent this makes its data answers scannable (a table of top
+// novels beats a run-on sentence, a trend line beats a wall of numbers)
+// instead of one flat paragraph. Users can extend or override this via their
+// AGENTS.md, which is injected above as "Mission & Context".
+const DefaultResponseFormatting = markdownFormattingHead + chartFormatting + markdownFormattingTail
+
+// MarkdownResponseFormatting is DefaultResponseFormatting without the
+// ```chart fence, for a host whose surfaces render GitHub-flavored markdown
+// but draw no charts: told about a fence nothing draws, the agent answers
+// with raw JSON where a table would have read.
+const MarkdownResponseFormatting = markdownFormattingHead + markdownFormattingTail
+
+const markdownFormattingHead = `# Response formatting
 Your replies render as GitHub-flavored markdown. Use it to make data easy to scan:
 - Lead with a one-line **key takeaway**, then supporting detail.
 - Use ## / ### headings to structure longer answers.
 - When you present rows of data (top pages, novels, channels, funnel steps), use a markdown table with a header row, not a run-on sentence or a bare list.
 - Use **bold** for the numbers and names that matter.
-- When a trend, comparison, or breakdown is the point (a metric over time, top items, a distribution), draw a real chart: emit a ` + "```chart" + ` code fence whose body is a JSON spec. The chart renders with the same engine as the dashboard, so prefer it over describing the shape in prose.
+`
+
+const markdownFormattingTail = `- Do not wrap the whole reply in a code fence; prose is markdown already.`
+
+const chartFormatting = `- When a trend, comparison, or breakdown is the point (a metric over time, top items, a distribution), draw a real chart: emit a ` + "```chart" + ` code fence whose body is a JSON spec. The chart renders with the same engine as the dashboard, so prefer it over describing the shape in prose.
   - Schema: ` + "`{ \"type\": \"line\"|\"area\"|\"bar\"|\"pie\", \"x\": [labels], \"series\": [{ \"name\": \"…\", \"data\": [numbers] }], \"unit\": \"…\" }`" + `. For a pie, omit ` + "`series`" + ` and use ` + "`\"slices\": [{ \"name\": \"…\", \"value\": n }]`" + `. ` + "`x`" + ` and each ` + "`data`" + ` array must be the same length; put real numbers in, not placeholders.
   - Use a chart only when you actually have the data points; never invent values to fill one. A table is fine when the rows matter more than the shape.
-- Do not wrap the whole reply in a code fence; prose is markdown already.`
+`
 
 // Injection budget for the recalled-memory block.
 //
@@ -165,8 +178,10 @@ func buildSystemPrompt(def AgentDefinition, recalled []MemoryEntry, skills []Ski
 		b.WriteString(memory)
 		b.WriteString("\n")
 	}
-	b.WriteString(responseFormattingGuidance)
-	b.WriteString("\n\n")
+	if formatting := responseFormatting(def); formatting != "" {
+		b.WriteString(formatting)
+		b.WriteString("\n\n")
+	}
 	if len(skills) > 0 {
 		b.WriteString("# Available skills\n")
 		b.WriteString("You have on-demand skills. When the current task matches a skill's description, call the read_skill tool with the skill's id to load its full instructions, then follow them. Only load a skill when it is relevant.\n")
@@ -181,6 +196,23 @@ func buildSystemPrompt(def AgentDefinition, recalled []MemoryEntry, skills []Ski
 	}
 	return strings.TrimRight(b.String(), "\n")
 }
+
+// responseFormatting is the definition's formatting section: its own text,
+// none for NoResponseFormatting, else DefaultResponseFormatting.
+func responseFormatting(def AgentDefinition) string {
+	switch f := strings.TrimSpace(def.ResponseFormatting); f {
+	case "":
+		return DefaultResponseFormatting
+	case NoResponseFormatting:
+		return ""
+	default:
+		return clampBytes(f)
+	}
+}
+
+// NoResponseFormatting as a definition's ResponseFormatting leaves the
+// formatting section out, for an agent whose output is not read as markdown.
+const NoResponseFormatting = "none"
 
 // RecalledMemoryHeader opens the recalled-memory block, in the system prompt of
 // a legacy StartRun caller and in the context message of a native run. That

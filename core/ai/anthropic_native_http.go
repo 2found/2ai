@@ -54,19 +54,12 @@ func streamAnthropic(ctx context.Context, rawModel json.RawMessage, transcript T
 	options.Options = append(json.RawMessage(nil), options.Options...)
 	var model completionsModel
 	prepareErr := json.Unmarshal(rawModel, &model)
-	encoded, err := json.Marshal(transcript)
-	if prepareErr == nil {
-		prepareErr = err
-	}
-	var frozen Context
-	if err = json.Unmarshal(encoded, &frozen); prepareErr == nil {
-		prepareErr = err
-	}
+	frozen := freezeTranscript(transcript)
 	compat, err := ResolveAnthropicCompat(rawModel)
 	if prepareErr == nil {
 		prepareErr = err
 	}
-	transcript = ResolveTranscript(NormalizeContext(frozen), compat.SupportsMidConvoSystemMessages)
+	transcript = ResolveTranscript(frozen, compat.SupportsMidConvoSystemMessages)
 	controls := map[string]json.RawMessage{}
 	if len(options.Options) > 0 {
 		if err = json.Unmarshal(options.Options, &controls); prepareErr == nil {

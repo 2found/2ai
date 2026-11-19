@@ -51,15 +51,7 @@ func StreamOpenAICompletions(ctx context.Context, rawModel json.RawMessage, tran
 	options.Options = append(json.RawMessage(nil), options.Options...)
 	var model completionsModel
 	prepareErr := json.Unmarshal(rawModel, &model)
-	encoded, err := json.Marshal(transcript)
-	if prepareErr == nil {
-		prepareErr = err
-	}
-	var frozen Context
-	if err = json.Unmarshal(encoded, &frozen); prepareErr == nil {
-		prepareErr = err
-	}
-	transcript = NormalizeContext(frozen)
+	transcript = freezeTranscript(transcript)
 	compat, err := ResolveOpenAICompletionsCompat(rawModel)
 	if prepareErr == nil {
 		prepareErr = err

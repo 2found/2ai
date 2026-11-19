@@ -28,19 +28,12 @@ func StreamAzureResponses(ctx context.Context, rawModel json.RawMessage, transcr
 	options.Options = append(json.RawMessage(nil), options.Options...)
 	var model completionsModel
 	prepareErr := json.Unmarshal(rawModel, &model)
-	encoded, err := json.Marshal(transcript)
-	if prepareErr == nil {
-		prepareErr = err
-	}
-	var frozen Context
-	if err = json.Unmarshal(encoded, &frozen); prepareErr == nil {
-		prepareErr = err
-	}
+	frozen := freezeTranscript(transcript)
 	compat, err := azureResponsesCompat(model)
 	if prepareErr == nil {
 		prepareErr = err
 	}
-	transcript = ResolveTranscript(NormalizeContext(frozen), compat.SupportsMidConvoSystemMessages)
+	transcript = ResolveTranscript(frozen, compat.SupportsMidConvoSystemMessages)
 	now := time.Now().UnixMilli()
 	if options.Now != nil {
 		now = options.Now()

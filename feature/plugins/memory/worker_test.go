@@ -106,3 +106,43 @@ func TestWorkerFailureIsSecondaryAndLeavesPendingEvidence(t *testing.T) {
 		t.Fatal("failed model call consumed evidence")
 	}
 }
+
+func TestWorkerActiveCountsOnlyRunningPasses(t *testing.T) {
+	w := NewConsolidationWorker(2)
+	w.coalesceDelay = 0
+	s := &consolidationStore{}
+	started, release := make(chan struct{}), make(chan struct{})
+	committed := make(chan struct{})
+	c := &curation{store: s, consolidation: &commitSignalStore{consolidationStore: s, committed: committed}, scopeID: "scope", worker: w, consolidator: func(context.Context, Consolidation) ([]Change, error) {
+		close(started)
+		<-release
+		return []Change{{Entry: &agentcore.MemoryEntry{Content: "Keep verified lessons."}}}, nil
+	}}
+	if err := c.FinalizeRun(context.Background(), agentcore.RunResult{Turns: 1, StopReason: "stop", Final: "done", Messages: []agentcore.Message{{Role: agentcore.RoleAssistant, Content: "evidence"}}}, nil); err != nil {
+		t.Fatal(err)
+	}
+	if n := w.Active(); n != 0 {
+		t.Fatalf("queued scope counted as active: %d", n)
+	}
+	ctx, cancel := context.WithCancel(context.Background())
+	done := make(chan struct{})
+	go func() { w.Run(ctx); close(done) }()
+	defer func() { cancel(); <-done }()
+	select {
+	case <-started:
+	case <-time.After(time.Second):
+		t.Fatal("pass did not start")
+	}
+	if n := w.Active(); n != 1 {
+		t.Fatalf("running pass not counted: %d", n)
+	}
+	close(release)
+	<-committed
+	deadline := time.Now().Add(time.Second)
+	for w.Active() != 0 {
+		if time.Now().After(deadline) {
+			t.Fatalf("finished pass still active: %d", w.Active())
+		}
+		time.Sleep(time.Millisecond)
+	}
+}

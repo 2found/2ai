@@ -34,15 +34,7 @@ func streamCodexResponsesInto(ctx context.Context, rawModel json.RawMessage, tra
 	options.Options = append(json.RawMessage(nil), options.Options...)
 	var model completionsModel
 	prepareErr := json.Unmarshal(rawModel, &model)
-	encoded, err := json.Marshal(transcript)
-	if prepareErr == nil {
-		prepareErr = err
-	}
-	var frozen Context
-	if err = json.Unmarshal(encoded, &frozen); prepareErr == nil {
-		prepareErr = err
-	}
-	transcript = ResolveTranscript(NormalizeContext(frozen), samplingTruthy(model.Compat["supportsMidConvoSystemMessages"]))
+	transcript = ResolveTranscript(freezeTranscript(transcript), samplingTruthy(model.Compat["supportsMidConvoSystemMessages"]))
 	now := time.Now().UnixMilli()
 	if options.Now != nil {
 		now = options.Now()

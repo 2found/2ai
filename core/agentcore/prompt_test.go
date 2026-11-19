@@ -84,7 +84,7 @@ func TestRecalledBlockClampsPerEntry(t *testing.T) {
 	}
 	// One over-long memory must not cost more than its own budget plus the
 	// bullet's own few bytes of framing.
-	if n := len(got); n > maxRecallEntryBytes+len(responseFormattingGuidance)+512 {
+	if n := len(got); n > maxRecallEntryBytes+len(DefaultResponseFormatting)+512 {
 		t.Errorf("prompt is %d bytes for one clamped memory — the clamp is not bounding the entry", n)
 	}
 }
@@ -107,7 +107,7 @@ func TestRecalledBlockClampsTotalSize(t *testing.T) {
 	if bullets == len(recalled) {
 		t.Fatal("every memory was injected; the block budget did not apply")
 	}
-	if n := len(got); n > maxRecallBlockBytes+len(responseFormattingGuidance)+2048 {
+	if n := len(got); n > maxRecallBlockBytes+len(DefaultResponseFormatting)+2048 {
 		t.Errorf("prompt is %d bytes, want the recalled block held near its %d-byte budget", n, maxRecallBlockBytes)
 	}
 }
@@ -331,4 +331,35 @@ func TestDedupRecalledIsSafeConcurrently(t *testing.T) {
 		}()
 	}
 	wg.Wait()
+}
+
+// A host chooses the formatting section: the default offers ```chart fences,
+// the markdown one does not, "none" leaves the section out, and any other text
+// replaces it.
+func TestResponseFormattingIsTheHostsChoice(t *testing.T) {
+	cases := []struct {
+		formatting string
+		want, not  []string
+	}{
+		{"", []string{"# Response formatting", "```chart", "markdown table"}, nil},
+		{MarkdownResponseFormatting, []string{"# Response formatting", "markdown table", "Do not wrap the whole reply"}, []string{"```chart", "pie"}},
+		{NoResponseFormatting, nil, []string{"# Response formatting"}},
+		{"# Output\nPlain text only.", []string{"# Output\nPlain text only."}, []string{"# Response formatting"}},
+	}
+	for _, c := range cases {
+		got := buildSystemPrompt(AgentDefinition{Soul: "You are a tester.", ResponseFormatting: c.formatting}, nil, []Skill{{ID: "s", Name: "s", Description: "d", Enabled: true}})
+		for _, w := range c.want {
+			if !strings.Contains(got, w) {
+				t.Errorf("formatting %q: prompt lacks %q:\n%s", c.formatting, w, got)
+			}
+		}
+		for _, n := range c.not {
+			if strings.Contains(got, n) {
+				t.Errorf("formatting %q: prompt has %q:\n%s", c.formatting, n, got)
+			}
+		}
+		if !strings.Contains(got, "# Available skills") || strings.Contains(got, "\n\n\n") {
+			t.Errorf("formatting %q: sections around it broke:\n%q", c.formatting, got)
+		}
+	}
 }

@@ -135,7 +135,9 @@ five-second delay; that delay occupies no model slot. A second timeout, invalid
 proposal or other error leaves durable evidence pending until a later successful
 run. Provider retries/fallback retain the host's existing bounded policy; the
 worker does not add another retry loop for provider/auth/validation failures.
-Shutdown cancels and joins all active passes before returning.
+Shutdown cancels and joins all active passes before returning. `Active()` counts
+the passes calling a model now, so a host about to restart can wait for them
+instead of paying for a cancelled pass again; queued scopes are not counted.
 
 Queue overflow and shutdown retain durable evidence. The host can page its durable
 pending index at startup and call `Recover(ctx, plugin, scope)` after rechecking

@@ -48,6 +48,25 @@ func NewConsolidationWorker(capacity int) *ConsolidationWorker {
 	capacity = max(1, capacity)
 	return &ConsolidationWorker{capacity: capacity, parallelism: min(4, capacity), queued: map[string]*consolidationTask{}, changed: make(chan struct{}), wake: make(chan struct{}, 1), coalesceDelay: 200 * time.Millisecond, retryDelay: 5 * time.Second, passTimeout: consolidationPassTimeout}
 }
+
+// Active counts the passes calling a model now. Shutdown cancels them, and
+// although their evidence stays pending, the next pass pays for the model call
+// again, so a host about to restart or reload can wait while this is non-zero.
+// Queued scopes are not counted: they have spent nothing, and waiting for a
+// whole backlog would hold a restart for minutes. A pass is at most
+// consolidationPassTimeout, so the wait is bounded.
+func (w *ConsolidationWorker) Active() int {
+	w.mu.Lock()
+	defer w.mu.Unlock()
+	active := 0
+	for _, task := range w.queued {
+		if task.running {
+			active++
+		}
+	}
+	return active
+}
+
 func (w *ConsolidationWorker) submit(c *curation) bool {
 	return w.submitOrigin(c, telemetry.SafeOrigin{})
 }
