@@ -53,28 +53,26 @@ type RichTool interface {
 	RunRich(ctx context.Context, args string) (ToolOutput, error)
 }
 
-const (
-	maxRichToolParts      = 16
-	maxRichToolImages     = 8
-	maxRichToolImageBytes = 768 * 1024
-)
+// maxRichToolImageBytes bounds the pictures of one tool result together, after
+// normalization (each is scaled to at most 1568 px and about 500 KiB). There is
+// no count bound: a browser call that takes a screenshot of each of a dozen
+// states shows all of them, and how many pictures a request may carry is the
+// provider's limit (Limits / the provider's request image limit), applied to
+// older pictures first.
+const maxRichToolImageBytes = 64 << 20
 
 // boundToolContentParts prevents a trusted-but-buggy tool from bypassing the
 // ordinary result bound through structured parts. Eval applies tighter MIME
-// validation before this point; the kernel enforces the generic count, decoded
-// image-byte, text-byte, and supported-shape limits for every RichTool.
+// validation before this point; the kernel enforces the decoded image-byte,
+// text-byte and supported-shape limits for every RichTool.
 func boundToolContentParts(parts []ContentPart, maxTextBytes int) ([]ContentPart, int, []string) {
 	if maxTextBytes <= 0 {
 		maxTextBytes = defaultMaxToolResultBytes
 	}
-	out := make([]ContentPart, 0, min(len(parts), maxRichToolParts))
-	textBytes, imageBytes, images, omitted := 0, 0, 0, 0
+	out := make([]ContentPart, 0, len(parts))
+	textBytes, imageBytes, omitted := 0, 0, 0
 	var notes []string
 	for _, part := range parts {
-		if len(out) >= maxRichToolParts {
-			omitted++
-			continue
-		}
 		switch part.Type {
 		case ContentPartText:
 			remaining := maxTextBytes - textBytes
@@ -89,7 +87,7 @@ func boundToolContentParts(parts []ContentPart, maxTextBytes int) ([]ContentPart
 			textBytes += len(part.Text)
 			out = append(out, part)
 		case ContentPartImage:
-			if images >= maxRichToolImages || part.Data == "" {
+			if part.Data == "" {
 				omitted++
 				continue
 			}
@@ -100,7 +98,6 @@ func boundToolContentParts(parts []ContentPart, maxTextBytes int) ([]ContentPart
 			}
 			part = normalized.part
 			imageBytes += normalized.bytes
-			images++
 			out = append(out, part)
 			if note := normalized.dimensionNote(); note != "" {
 				notes = append(notes, note)

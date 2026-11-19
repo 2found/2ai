@@ -576,9 +576,25 @@ func TestRenderEvalDisplayReportsImageLimitInsteadOfSilentlyDropping(t *testing.
 	bundle := map[string]json.RawMessage{
 		"image/png": json.RawMessage(`"iVBORw0KGgo="`),
 	}
-	text, parts, used := renderEvalDisplay(bundle, 0, maxEvalImageBytes)
-	if len(parts) != 0 || used != 0 || !strings.Contains(text, "per-cell image limit reached") {
-		t.Fatalf("bounded display = text %q parts %+v used %d", text, parts, used)
+	pictures := &evalPictures{budget: 0}
+	text := renderEvalDisplay(bundle, pictures)
+	if len(pictures.taken()) != 0 || !strings.Contains(text, "display omitted: the pictures of one cell passed") {
+		t.Fatalf("bounded display = text %q parts %+v", text, pictures.taken())
+	}
+}
+
+// A cell's pictures have no count bound: a dozen displays all reach the
+// model, bounded only by their bytes together.
+func TestRenderEvalDisplayHasNoPictureCount(t *testing.T) {
+	bundle := map[string]json.RawMessage{"image/png": json.RawMessage(`"iVBORw0KGgo="`)}
+	pictures := &evalPictures{budget: maxEvalImageBytes}
+	for range 12 {
+		if text := renderEvalDisplay(bundle, pictures); !strings.Contains(text, "1 rich image display(s) attached") {
+			t.Fatalf("display = %q", text)
+		}
+	}
+	if n := len(pictures.taken()); n != 12 {
+		t.Fatalf("pictures = %d, want 12", n)
 	}
 }
 

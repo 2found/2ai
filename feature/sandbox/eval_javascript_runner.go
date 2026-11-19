@@ -83,7 +83,7 @@ consoleBridge.dir = value => log("stdout", [value]);
 
 function imageBase64(data) {
   if (typeof data === "string") {
-    if (data.length > 921600 || data.length === 0 || data.length % 4 !== 0 ||
+    if (data.length > 16777216 || data.length === 0 || data.length % 4 !== 0 ||
         !/^[A-Za-z0-9+/]*={0,2}$/.test(data)) return null;
     return data;
   }
@@ -94,7 +94,7 @@ function imageBase64(data) {
   if (data && data.type === "Buffer" && Array.isArray(data.data)) {
     encoded = Buffer.from(data.data).toString("base64");
   }
-  return encoded !== null && encoded.length <= 921600 ? encoded : null;
+  return encoded !== null && encoded.length <= 16777216 ? encoded : null;
 }
 
 function boundedDisplayText(value) {

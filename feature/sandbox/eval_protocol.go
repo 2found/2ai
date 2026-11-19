@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"slices"
 	"strings"
 	"sync"
 	"time"
@@ -16,13 +17,22 @@ import (
 	"github.com/2found/2ai/core/agentcore"
 )
 
-const maxEvalFrameBytes = 1024 * 1024
+// maxEvalFrameBytes bounds one protocol line: a display carries one picture
+// of up to maxEvalImageBase64 characters plus its text.
+const maxEvalFrameBytes = 24 << 20
 
 const (
-	maxEvalImagesPerCell = 8
-	maxEvalImageBytes    = 768 * 1024
-	// A governed rich tool may return up to 768 KiB of decoded images, whose
-	// base64 representation is roughly 1 MiB. Leave bounded JSON-envelope room.
+	// maxEvalImageBytes bounds the pictures of one cell together (decoded
+	// bytes): its own displays and the pictures the host tools it calls show.
+	// There is no count bound; the provider decides how many pictures a turn
+	// may carry. Pictures past it are named in the output, never dropped
+	// silently.
+	maxEvalImageBytes = 64 << 20
+	// maxEvalImageBase64 bounds one displayed picture (base64 characters); the
+	// runners enforce the same number.
+	maxEvalImageBase64 = 16 << 20
+	// maxEvalBridgeValue bounds the value a host tool call returns to the cell:
+	// its text and a note about its pictures, which go to the model instead.
 	maxEvalBridgeValue = 1536 * 1024
 )
 
@@ -47,11 +57,14 @@ type evalCellResult struct {
 	Output         string
 	Parts          []agentcore.ContentPart
 	ExecutionCount int
-	RuntimeError   bool
-	Truncated      bool
-	Invocations    []agentcore.ToolInvocation
-	Extra          []agentcore.Message
-	Terminate      bool
+	// Fresh reports that the cell ran in a kernel that had run no cell
+	// before: nothing an earlier cell defined exists.
+	Fresh        bool
+	RuntimeError bool
+	Truncated    bool
+	Invocations  []agentcore.ToolInvocation
+	Extra        []agentcore.Message
+	Terminate    bool
 }
 
 type evalToolResultFrame struct {
@@ -154,7 +167,9 @@ func (p *evalProcess) execute(ctx context.Context, code string, limit, maxBridge
 
 	output := newBoundedEvalOutput(limit)
 	result := evalCellResult{}
-	imageBytes := 0
+	// pictures holds the cell's pictures (displays and those its host tools
+	// show) in the order they arrived, bounded by maxEvalImageBytes together.
+	pictures := &evalPictures{budget: maxEvalImageBytes}
 	var bridgeMu sync.Mutex
 	var bridgeWG sync.WaitGroup
 	bridgeResults := make([]evalBridgeResult, 0, maxBridgeCalls)
@@ -183,6 +198,7 @@ func (p *evalProcess) execute(ctx context.Context, code string, limit, maxBridge
 		}
 		result.Output, result.Truncated = output.String()
 		mergeBridgeResults()
+		result.Parts = pictures.taken()
 		return result, err
 	}
 	for {
@@ -205,7 +221,7 @@ func (p *evalProcess) execute(ctx context.Context, code string, limit, maxBridge
 				bridgeResults = append(bridgeResults, evalBridgeResult{})
 				bridgeMu.Unlock()
 				bridgeWG.Add(1)
-				go p.handleToolCall(ctx, id, frame, slot, maxBridgeCalls, invoker, &bridgeMu, &bridgeResults, &bridgeWG)
+				go p.handleToolCall(ctx, id, frame, slot, maxBridgeCalls, invoker, pictures, &bridgeMu, &bridgeResults, &bridgeWG)
 			case "stdout":
 				output.WriteSection("stdout", frame.Data)
 			case "stderr":
@@ -216,18 +232,17 @@ func (p *evalProcess) execute(ctx context.Context, code string, limit, maxBridge
 				result.RuntimeError = true
 				output.WriteSection("error", frame.Data)
 			case "display":
-				text, parts, bytes := renderEvalDisplay(frame.Bundle, maxEvalImagesPerCell-len(result.Parts), maxEvalImageBytes-imageBytes)
+				text := renderEvalDisplay(frame.Bundle, pictures)
 				kind := "display"
 				if frame.Status == "result" {
 					kind = "result"
 				}
 				output.WriteSection(kind, text)
-				result.Parts = append(result.Parts, parts...)
-				imageBytes += bytes
 			case "done":
 				result.ExecutionCount = frame.ExecutionCount
 				result.Output, result.Truncated = output.String()
 				mergeBridgeResults()
+				result.Parts = pictures.taken()
 				return result, nil
 			}
 		}
@@ -240,6 +255,7 @@ func (p *evalProcess) handleToolCall(
 	frame evalFrame,
 	slot, maxBridgeCalls int,
 	invoker agentcore.ToolInvoker,
+	pictures *evalPictures,
 	mu *sync.Mutex,
 	results *[]evalBridgeResult,
 	wg *sync.WaitGroup,
@@ -288,7 +304,7 @@ func (p *evalProcess) handleToolCall(
 			setResult(out)
 			if err != nil {
 				response.Error = err.Error()
-			} else if value, valueErr := evalBridgeValue(out); valueErr != nil {
+			} else if value, valueErr := evalBridgeValue(out, pictures); valueErr != nil {
 				response.Error = valueErr.Error()
 			} else {
 				response.OK = true
@@ -299,19 +315,15 @@ func (p *evalProcess) handleToolCall(
 	p.writeToolResult(cellID, response)
 }
 
-func evalBridgeValue(out agentcore.ToolOutput) (any, error) {
-	var value any
-	if len(out.Parts) == 0 {
-		value = out.Content
-	} else {
-		images := make([]map[string]string, 0, len(out.Parts))
-		for _, part := range out.Parts {
-			if part.Type != agentcore.ContentPartImage {
-				continue
-			}
-			images = append(images, map[string]string{"mimeType": part.MIMEType, "data": part.Data})
-		}
-		value = map[string]any{"text": out.Content, "images": images}
+// evalBridgeValue is what a host tool call returns to the cell: the tool's
+// text, or, when the tool showed pictures, {"text", "images"} where images is a
+// note. The pictures themselves come to the model with the cell's result (as
+// a direct call's would), not into the cell's variables, so a script that
+// takes a screenshot of each state of a page shows every one of them.
+func evalBridgeValue(out agentcore.ToolOutput, pictures *evalPictures) (any, error) {
+	var value any = out.Content
+	if note := pictures.add(out.Parts); note != "" {
+		value = map[string]any{"text": out.Content, "images": note}
 	}
 	encoded, err := json.Marshal(value)
 	if err != nil {
@@ -321,6 +333,64 @@ func evalBridgeValue(out agentcore.ToolOutput) (any, error) {
 		return nil, fmt.Errorf("host tool result exceeds %d bytes", maxEvalBridgeValue)
 	}
 	return value, nil
+}
+
+// evalPictures collects one cell's pictures, safe for the bridge goroutines
+// and the frame loop together.
+type evalPictures struct {
+	mu     sync.Mutex
+	budget int
+	used   int
+	parts  []agentcore.ContentPart
+}
+
+// take keeps one picture when it fits the cell's remaining bytes.
+func (p *evalPictures) take(part agentcore.ContentPart, size int) bool {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	if size > p.budget-p.used {
+		return false
+	}
+	p.used += size
+	p.parts = append(p.parts, part)
+	return true
+}
+
+func (p *evalPictures) remaining() int {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	return p.budget - p.used
+}
+
+func (p *evalPictures) taken() []agentcore.ContentPart {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	return slices.Clone(p.parts)
+}
+
+// add keeps the image parts of a host tool's result and says what became of
+// them, "" when it had none.
+func (p *evalPictures) add(parts []agentcore.ContentPart) string {
+	shown, unshown := 0, 0
+	for _, part := range parts {
+		if part.Type != agentcore.ContentPartImage {
+			continue
+		}
+		size := base64.StdEncoding.DecodedLen(len(part.Data))
+		if p.take(part, size) {
+			shown++
+		} else {
+			unshown++
+		}
+	}
+	switch {
+	case shown == 0 && unshown == 0:
+		return ""
+	case unshown == 0:
+		return fmt.Sprintf("(%d picture(s) shown to you with this eval result)", shown)
+	default:
+		return fmt.Sprintf("(%d picture(s) shown to you with this eval result; %d more not shown: the pictures of one cell passed %d MB)", shown, unshown, maxEvalImageBytes>>20)
+	}
 }
 
 func (p *evalProcess) writeToolResult(cellID string, response evalToolResultFrame) {
@@ -340,7 +410,7 @@ func (p *evalProcess) writeToolResult(cellID string, response evalToolResultFram
 	p.writeMu.Unlock()
 }
 
-func renderEvalDisplay(bundle map[string]json.RawMessage, imageSlots, imageBudget int) (string, []agentcore.ContentPart, int) {
+func renderEvalDisplay(bundle map[string]json.RawMessage, pictures *evalPictures) string {
 	var text string
 	for _, mime := range []string{"text/markdown", "text/plain", "text/html", "image/svg+xml", "text/latex"} {
 		raw, ok := bundle[mime]
@@ -367,8 +437,7 @@ func renderEvalDisplay(bundle map[string]json.RawMessage, imageSlots, imageBudge
 		}
 	}
 
-	parts := make([]agentcore.ContentPart, 0, 2)
-	used := 0
+	attached := 0
 	appendNotice := func(notice string) {
 		if text != "" {
 			text += "\n"
@@ -380,12 +449,8 @@ func renderEvalDisplay(bundle map[string]json.RawMessage, imageSlots, imageBudge
 		if !ok {
 			continue
 		}
-		if imageSlots <= len(parts) {
-			appendNotice(fmt.Sprintf("[%s display omitted: per-cell image limit reached]", mime))
-			continue
-		}
-		if imageBudget-used <= 0 {
-			appendNotice(fmt.Sprintf("[%s display omitted: cell image budget exhausted]", mime))
+		if pictures.remaining() <= 0 {
+			appendNotice(fmt.Sprintf("[%s display omitted: the pictures of one cell passed %d MB]", mime, maxEvalImageBytes>>20))
 			continue
 		}
 		var encoded string
@@ -397,24 +462,21 @@ func renderEvalDisplay(bundle map[string]json.RawMessage, imageSlots, imageBudge
 			appendNotice(fmt.Sprintf("[%s display omitted: invalid image data]", mime))
 			continue
 		}
-		if len(decoded) > imageBudget-used {
-			appendNotice(fmt.Sprintf("[%s display omitted: image exceeds remaining %d-byte cell budget]", mime, imageBudget-used))
+		if !pictures.take(agentcore.ContentPart{Type: agentcore.ContentPartImage, MIMEType: mime, Data: encoded}, len(decoded)) {
+			appendNotice(fmt.Sprintf("[%s display omitted: image exceeds the %d bytes left of the cell's %d MB of pictures]", mime, pictures.remaining(), maxEvalImageBytes>>20))
 			continue
 		}
-		parts = append(parts, agentcore.ContentPart{
-			Type: agentcore.ContentPartImage, MIMEType: mime, Data: encoded,
-		})
-		used += len(decoded)
+		attached++
 	}
-	if len(parts) > 0 {
-		note := fmt.Sprintf("[%d rich image display(s) attached]", len(parts))
+	if attached > 0 {
+		note := fmt.Sprintf("[%d rich image display(s) attached]", attached)
 		if text == "" {
 			text = note
 		} else {
 			text += "\n" + note
 		}
 	}
-	return text, parts, used
+	return text
 }
 
 func validEvalImage(mime string, data []byte) bool {

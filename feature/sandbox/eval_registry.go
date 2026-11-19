@@ -53,6 +53,7 @@ type evalRegistryEntry struct {
 // serializes cells without holding the registry lock while user code runs.
 type evalKernel struct {
 	executionMu sync.Mutex
+	cells       int // cells run, under executionMu
 	entry       evalRegistryEntry
 	process     *evalProcess
 	closed      bool
@@ -249,7 +250,11 @@ func (k *evalKernel) execute(ctx context.Context, code string, limit, maxBridgeC
 	if k.closed || k.process == nil {
 		return evalCellResult{}, errEvalKernelClosed
 	}
-	return k.process.execute(ctx, code, limit, maxBridgeCalls, invoker)
+	fresh := k.cells == 0
+	k.cells++
+	result, err := k.process.execute(ctx, code, limit, maxBridgeCalls, invoker)
+	result.Fresh = fresh
+	return result, err
 }
 
 func (k *evalKernel) close() {

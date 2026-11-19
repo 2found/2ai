@@ -59,24 +59,28 @@ func (t richResultTool) RunRich(context.Context, string) (ToolOutput, error) {
 	return out, nil
 }
 
+// A rich result keeps every valid picture (no count bound: a dozen
+// screenshots of one browser call all reach the model) and names what it
+// could not keep.
 func TestRichToolResultIsBoundedAtDispatchBoundary(t *testing.T) {
-	parts := make([]ContentPart, 0, maxRichToolImages+2)
-	for i := 0; i < maxRichToolImages+1; i++ {
+	const images = 20
+	parts := make([]ContentPart, 0, images+1)
+	for i := 0; i < images; i++ {
 		parts = append(parts, ContentPart{Type: ContentPartImage, MIMEType: "image/png", Data: testRichPNG})
 	}
-	parts = append(parts, ContentPart{Type: ContentPartImage, MIMEType: "text/plain", Data: testRichPNG})
+	parts = append(parts, ContentPart{Type: ContentPartImage, MIMEType: "text/plain", Data: "bm90IGEgcG5n"})
 	out := (&Agent{}).runToolCall(
 		context.Background(), &extensionSet{}, map[string]bool{"rich": true},
 		NewToolSet(richResultTool{parts: parts}), ToolCall{ID: "c1", Name: "rich", Arguments: `{}`},
 		DefaultLimits(), nil,
 	)
-	if len(out.message.ContentParts) != maxRichToolImages {
-		t.Fatalf("rich part count = %d, want %d", len(out.message.ContentParts), maxRichToolImages)
+	if len(out.message.ContentParts) != images {
+		t.Fatalf("rich part count = %d, want %d", len(out.message.ContentParts), images)
 	}
-	if !strings.Contains(out.message.Content, "2 rich content part(s) omitted") {
+	if !strings.Contains(out.message.Content, "1 rich content part(s) omitted") {
 		t.Fatalf("omission was not visible to the model: %q", out.message.Content)
 	}
-	if !strings.Contains(out.trace.ResultMeta, "8 rich parts") {
+	if !strings.Contains(out.trace.ResultMeta, "20 rich parts") {
 		t.Fatalf("rich result was not reflected in trace metadata: %q", out.trace.ResultMeta)
 	}
 }

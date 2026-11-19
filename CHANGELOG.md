@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.4.3 — 2026-11-19
+
+Baseline: v0.4.2. No breaking change.
+
+- **A tool result carries every picture it has; the provider decides how many it reads.** `boundToolContentParts` kept at most 8 images (and 768 KiB) of a rich tool result and dropped the rest, so a browser call or script that took ten screenshots showed the model eight. There is no count bound now: each image is still normalized and checked, the images of one result together are bounded at 64 MiB, and the provider request's own image limit (which drops the oldest first) decides what is read.
+- **`eval` cells see the pictures their tools take.** A cell that calls a host tool through `tool()` receives its text and, when the tool showed pictures, `{"text", "images"}` with a note; the pictures themselves come to the model with the cell's result (bounded at 64 MiB per cell, no count). A cell's `display()` images have no count bound either. The JavaScript runner's frame bound rose to 16 MiB to carry them.
+- **An `eval` cell run in a fresh kernel says so.** Its output opens with `[new <language> session: nothing earlier cells defined exists]` when an earlier kernel was lost (idle reap, timeout, restart) and the call did not ask for `reset`, and the tool description tells the model to set up again. The description also says a cell can loop over many tool calls.
+
 ## 0.4.2 — 2026-11-19
 
 Baseline: v0.4.1. No breaking change. `AgentDefinition` gains `ResponseFormatting`; `ConsolidationWorker` gains `Active()`.

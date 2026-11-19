@@ -49,6 +49,19 @@ func (p *evalBridgeProbeTool) Run(_ context.Context, args string) (string, error
 	return "probe:" + in.Value, nil
 }
 
+const testEvalPNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+
+// RunRich shows a picture for a value starting "shot", as a browser
+// screenshot does.
+func (p *evalBridgeProbeTool) RunRich(ctx context.Context, args string) (agentcore.ToolOutput, error) {
+	text, err := p.Run(ctx, args)
+	out := agentcore.ToolOutput{Content: text}
+	if strings.HasPrefix(text, "probe:shot") {
+		out.Parts = []agentcore.ContentPart{{Type: agentcore.ContentPartImage, MIMEType: "image/png", Data: testEvalPNG}}
+	}
+	return out, err
+}
+
 func evalBridgeAgent(t *testing.T, language, code string, allowed []string, limits *agentcore.Limits) (*evalBridgeProbeTool, agentcore.RunResult) {
 	t.Helper()
 	var eval *EvalTool
@@ -428,6 +441,30 @@ func TestEvalHostToolBridgeUnavailableForDirectToolConstruction(t *testing.T) {
 			_, err := tool.Run(evalContext("direct-bridge-"+test.language), args)
 			if err == nil || !strings.Contains(err.Error(), "unavailable outside a live agent run") {
 				t.Fatalf("direct bridge error = %v", err)
+			}
+		})
+	}
+}
+
+// A cell that takes a picture of each state shows the model every one of them
+// (more than the old eight per cell), and the cell gets text and a note, not
+// the picture data.
+func TestEvalHostToolBridgeShowsThePicturesItsToolsTake(t *testing.T) {
+	for _, test := range []struct{ language, code string }{
+		{"python", "notes = [tool(\"bridge_probe\", {\"value\": \"shot\" + str(i)}) for i in range(10)]\nprint(notes[0][\"text\"], notes[0][\"images\"])"},
+		{"javascript", "const notes = []\nfor (let i = 0; i < 10; i++) notes.push(await tool.bridge_probe({value: \"shot\" + i}))\nconsole.log(notes[0].text, notes[0].images)"},
+	} {
+		t.Run(test.language, func(t *testing.T) {
+			probe, result := evalBridgeAgent(t, test.language, test.code, []string{ToolEval, probeToolName}, nil)
+			if probe.calls.Load() != 10 {
+				t.Fatalf("probe calls = %d", probe.calls.Load())
+			}
+			message := toolMessageFor(t, result, ToolEval)
+			if len(message.ContentParts) < 10 {
+				t.Fatalf("pictures = %d, want 10: %q", len(message.ContentParts), message.Content)
+			}
+			if !strings.Contains(message.Content, "probe:shot0") || !strings.Contains(message.Content, "(1 picture(s) shown to you with this eval result)") || !strings.Contains(message.Content, "[new ") {
+				t.Fatalf("cell output = %q", message.Content)
 			}
 		})
 	}
