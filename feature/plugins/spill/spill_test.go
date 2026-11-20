@@ -9,6 +9,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/2found/2ai/core/agentcore"
+	"github.com/2found/2ai/core/ai"
 )
 
 // failingSpillStore rejects every save, so the policy must degrade to plain
@@ -294,5 +295,64 @@ func TestSpill_FailedCallIsNotSpilled(t *testing.T) {
 	d := p.InterceptToolResult(context.Background(), agentcore.ToolCall{ID: "c1", Name: "run_sql"}, strings.Repeat("H", 9000), errors.New("boom"))
 	if d.Replace || d.ResultRef != "" {
 		t.Fatalf("a failed call must pass through untouched, got %+v", d)
+	}
+}
+
+type nestedProbeTool struct {
+	name string
+	run  func(context.Context, string) (string, error)
+}
+
+func (t nestedProbeTool) Name() string { return t.name }
+func (t nestedProbeTool) Schema() agentcore.ToolSchema {
+	return agentcore.ToolSchema{Name: t.name, Parameters: map[string]any{"type": "object"}}
+}
+func (t nestedProbeTool) Run(ctx context.Context, a string) (string, error) { return t.run(ctx, a) }
+
+// A result that code asked for (run_js, an eval cell) is the data, whole: a
+// preview and a locator in its place are not JSON the code can parse. The
+// same result asked for by the model is spilled.
+func TestSpill_NestedCallGetsTheWholeResult(t *testing.T) {
+	big := `{"rows":[` + strings.Repeat(`{"a":1},`, 20000) + `{"a":1}]}`
+	var got string
+	data := nestedProbeTool{"big", func(context.Context, string) (string, error) { return big, nil }}
+	script := nestedProbeTool{"script", func(ctx context.Context, _ string) (string, error) {
+		invoke, ok := agentcore.ToolInvokerFrom(ctx)
+		if !ok {
+			return "", errors.New("no invoker")
+		}
+		out, err := invoke.InvokeTool(ctx, "big", `{}`)
+		got = out.Content
+		return "ok", err
+	}}
+	model, _ := json.Marshal(map[string]any{"id": "test", "contextWindow": 128000})
+	a, err := agentcore.Build(
+		agentcore.ModelPlugin{NativeProvider: &ai.FallbackProvider{Candidates: []ai.FallbackCandidate{{Model: model, Stream: ai.ScriptedStream()}}}, Model: "test"},
+		agentcore.ToolsPlugin{Label: "probe", Tools: []agentcore.Tool{script, data}},
+		agentcore.PolicyPlugin{Policy: agentcore.NewAllowList("script", "big")},
+		Plugin{Store: NewMemorySpillStore(), MaxInlineBytes: 32 << 10},
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	h, err := a.OpenTools(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer h.Close()
+	call := func(name string) string {
+		v, _ := json.Marshal(map[string]any{"toolCallId": "call-" + name, "toolName": name, "args": json.RawMessage(`{}`)})
+		out, _, err := h.Execute(context.Background(), v, nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return string(out)
+	}
+	call("script")
+	if got != big {
+		t.Fatalf("the script received %d of %d bytes", len(got), len(big))
+	}
+	if direct := call("big"); !strings.Contains(direct, "read_spill") {
+		t.Fatalf("the model's own oversized call was not spilled: %d bytes", len(direct))
 	}
 }

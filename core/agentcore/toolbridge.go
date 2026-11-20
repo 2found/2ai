@@ -54,6 +54,33 @@ func withToolStack(ctx context.Context, name string) context.Context {
 	return context.WithValue(ctx, toolStackContextKey{}, next)
 }
 
+// NestedToolCall reports a call made from inside another tool through the
+// run's ToolInvoker (code in run_js or an eval cell), rather than by the
+// model. Such a result returns to code: it is neither spilled nor cut to
+// the model's result bound, nor framed as external content (the caller
+// learns that from ToolOutput.External).
+func NestedToolCall(ctx context.Context) bool {
+	nested, _ := ctx.Value(nestedToolCallKey{}).(bool)
+	return nested
+}
+
+// nestedToolCallKey marks the context of one call the ToolInvoker makes. It
+// is cleared again on the context the tool itself runs with, so a run the
+// tool starts (a sub-agent) makes direct calls of its own. The tool stack
+// cannot tell: a sub-agent's calls inherit it.
+type nestedToolCallKey struct{}
+
+func withNestedToolCall(ctx context.Context, nested bool) context.Context {
+	if NestedToolCall(ctx) == nested {
+		return ctx
+	}
+	return context.WithValue(ctx, nestedToolCallKey{}, nested)
+}
+
+// maxNestedToolResultBytes bounds a nested result for code that set no
+// bound of its own; run_js and eval refuse far less.
+const maxNestedToolResultBytes = 64 << 20
+
 func toolStack(ctx context.Context) []string {
 	if ctx == nil {
 		return nil

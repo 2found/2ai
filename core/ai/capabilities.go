@@ -7,6 +7,14 @@ import (
 	"github.com/2found/2ai/core/ai/protocol"
 )
 
+// Request-wide image budgets (base64 as sent), below each API's payload limit
+// so the text of the request still fits: Anthropic refuses a body over 32 MB,
+// OpenAI more than 50 MB of images. Others use the loop's portable budget.
+const (
+	anthropicImageBytes = 24 << 20
+	openAIImageBytes    = 40 << 20
+)
+
 // CapabilitiesFor returns adapter-level knowledge and conservative wire-policy
 // limits for a provider/model pair. It intentionally stays sparse: this is not
 // a model catalog, and unknown support preserves the optimistic request path.
@@ -18,7 +26,7 @@ func CapabilitiesFor(vendor, model string) protocol.ModelCapabilities {
 	case "openai":
 		return protocol.ModelCapabilities{
 			Tools: supported, ToolChoice: supported, ReasoningEffort: supported,
-			ImageInput: supported, MaxInputImages: 200,
+			ImageInput: supported, MaxInputImages: 200, MaxInputImageBytes: openAIImageBytes,
 			StructuredOutput: supported, PromptCaching: supported,
 			// AgentRay currently speaks Chat Completions here, not the stateful
 			// Responses API.
@@ -27,14 +35,16 @@ func CapabilitiesFor(vendor, model string) protocol.ModelCapabilities {
 	case VendorOpenAIResponses:
 		return protocol.ModelCapabilities{
 			Tools: supported, ToolChoice: supported, ReasoningEffort: supported,
-			ImageInput: supported, MaxInputImages: 200,
+			ImageInput: supported, MaxInputImages: 200, MaxInputImageBytes: openAIImageBytes,
 			StructuredOutput: supported, PromptCaching: supported,
 			StatefulResponses: supported,
 		}
 	case "anthropic":
 		return protocol.ModelCapabilities{
 			Tools: supported, ToolChoice: supported, ImageInput: supported, MaxInputImages: 90,
-			StructuredOutput: supported, PromptCaching: supported,
+			// The Messages API refuses a request body over 32 MB.
+			MaxInputImageBytes: anthropicImageBytes,
+			StructuredOutput:   supported, PromptCaching: supported,
 			// The neutral request has no Anthropic thinking/tool-choice mapper yet.
 			ReasoningEffort:   unsupported,
 			StatefulResponses: unsupported,
@@ -60,7 +70,9 @@ func CapabilitiesFor(vendor, model string) protocol.ModelCapabilities {
 	case VendorClaudeCode:
 		return protocol.ModelCapabilities{
 			Tools: supported, ToolChoice: supported, ImageInput: supported, MaxInputImages: 90,
-			StructuredOutput: supported, PromptCaching: supported,
+			// The Messages API refuses a request body over 32 MB.
+			MaxInputImageBytes: anthropicImageBytes,
+			StructuredOutput:   supported, PromptCaching: supported,
 			ReasoningEffort:   unsupported,
 			StatefulResponses: unsupported,
 		}

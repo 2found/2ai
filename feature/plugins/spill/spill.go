@@ -127,7 +127,9 @@ func (*readSpillTool) SelfGated() bool { return true }
 // A failed call is left alone: its "result" is an error string the loop is
 // about to overwrite, and persisting it would spend storage on nothing.
 func (r *spillRun) InterceptToolResult(ctx context.Context, call agentcore.ToolCall, out string, runErr error) agentcore.ToolResultDecision {
-	if runErr != nil || len(out) <= r.maxInline || r.exclude[call.Name] {
+	// A nested call's result goes to the code that made it (run_js, an eval
+	// cell), which needs the data: a preview and a locator are not JSON.
+	if runErr != nil || len(out) <= r.maxInline || r.exclude[call.Name] || agentcore.NestedToolCall(ctx) {
 		return agentcore.ToolResultDecision{}
 	}
 	text, locator := r.apply(ctx, call, out)

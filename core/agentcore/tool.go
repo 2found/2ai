@@ -42,6 +42,12 @@ type ToolOutput struct {
 	// outer tool result so provider tool-call/result adjacency remains valid.
 	AdditionalContexts []Message
 	Terminate          bool
+	// External marks Content as untrusted data from outside the run, as
+	// ExternalContentTool does for a whole tool. A nested call's result
+	// carries it unframed, so the calling code reads the data itself; code
+	// that shows the model anything such a call returned (run_js, eval)
+	// sets it on its own output, and the loop frames that result.
+	External bool
 }
 
 // RichTool is an additive tool capability for outputs such as eval-generated

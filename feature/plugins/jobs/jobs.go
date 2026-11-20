@@ -720,7 +720,7 @@ func (t jobStatusTool) Schema() agentcore.ToolSchema {
 		map[string]any{
 			"output_bytes": map[string]any{
 				"type":        "integer",
-				"description": fmt.Sprintf("How much of a running job's output to return, newest first. Defaults to %d; at most %d.", defaultStatusTail, t.board.maxBytes),
+				"description": statusBytesDescription(t.board.maxBytes),
 			},
 		})
 }
@@ -745,6 +745,17 @@ func (t jobStatusTool) Run(_ context.Context, args string) (string, error) {
 		tail = min(in.OutputBytes, t.board.maxBytes)
 	}
 	return t.board.render(id, tail)
+}
+
+// statusBytesDescription names the bound only when there is a real one: a
+// host that lifts the result ceiling (it spills large results instead) leaves
+// a maximum int, which told the model "at most 9223372036854775807".
+func statusBytesDescription(maxBytes int) string {
+	text := fmt.Sprintf("How much of a running job's output to return, newest first. Defaults to %d", defaultStatusTail)
+	if maxBytes < 1<<30 {
+		return fmt.Sprintf("%s; at most %d.", text, maxBytes)
+	}
+	return text + "."
 }
 
 type jobWaitTool struct{ jobTool }

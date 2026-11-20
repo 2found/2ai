@@ -31,6 +31,11 @@ type ModelCapabilities struct {
 	// It is separate from ImageInput: a model may accept images but only a
 	// bounded number of them in one accumulated conversation.
 	MaxInputImages int `json:"max_input_images,omitempty"`
+	// MaxInputImageBytes is the provider/model request-wide budget for image
+	// data as sent (base64). Zero means unknown, in which case the loop uses a
+	// portable budget. A request over the provider's payload limit is refused
+	// whole, so the oldest pictures are dropped to fit, as for the count.
+	MaxInputImageBytes int `json:"max_input_image_bytes,omitempty"`
 	// MaxOutputTokens is the provider/model's hard output ceiling. Zero means
 	// unknown. The request path clamps only an explicit caller limit above this
 	// value; it leaves MaxTokens=0 to the provider's normal default.
@@ -57,6 +62,9 @@ func (c ModelCapabilities) Overlay(newer ModelCapabilities) ModelCapabilities {
 	}
 	if newer.MaxInputImages > 0 {
 		c.MaxInputImages = newer.MaxInputImages
+	}
+	if newer.MaxInputImageBytes > 0 {
+		c.MaxInputImageBytes = newer.MaxInputImageBytes
 	}
 	if newer.MaxOutputTokens > 0 {
 		c.MaxOutputTokens = newer.MaxOutputTokens
@@ -89,6 +97,9 @@ func (c ModelCapabilities) Validate() error {
 	}
 	if c.MaxInputImages < 0 {
 		return fmt.Errorf("max_input_images must be zero (unknown) or positive")
+	}
+	if c.MaxInputImageBytes < 0 {
+		return fmt.Errorf("max_input_image_bytes must be zero (unknown) or positive")
 	}
 	if c.MaxOutputTokens < 0 {
 		return fmt.Errorf("max_output_tokens must be zero (unknown) or positive")

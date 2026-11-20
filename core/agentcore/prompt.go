@@ -155,7 +155,8 @@ const (
 )
 
 // buildSystemPrompt assembles the system prompt in the canonical order:
-// SOUL.md -> AGENTS.md -> recalled memory -> available-skill headers. Skill
+// SOUL.md -> AGENTS.md (then the host's own instructions) -> recalled memory ->
+// available-skill headers. Skill
 // bodies are NOT inlined: only their name + id + description are advertised, and
 // the model pulls a body on demand via the read_skill tool (progressive
 // disclosure). Tool schemas are advertised separately on the ChatRequest
@@ -169,9 +170,13 @@ func buildSystemPrompt(def AgentDefinition, recalled []MemoryEntry, skills []Ski
 		b.WriteString(clampBytes(soul))
 		b.WriteString("\n\n")
 	}
-	if mission := strings.TrimSpace(def.Agents); mission != "" {
+	mission := clampBytes(strings.TrimSpace(def.Agents))
+	if host := strings.TrimSpace(def.Host); host != "" {
+		mission = strings.TrimSpace(mission + "\n" + host)
+	}
+	if mission != "" {
 		b.WriteString("# Mission & Context\n")
-		b.WriteString(clampBytes(mission))
+		b.WriteString(mission)
 		b.WriteString("\n\n")
 	}
 	if memory := renderRecalledMemory(recalled, nil); memory != "" {

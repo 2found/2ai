@@ -1,8 +1,10 @@
 package sandbox
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -228,15 +230,23 @@ func (p *duckDuckGoSearch) Search(ctx context.Context, query string, maxResults 
 		return nil, err
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("provider returned %s", resp.Status)
-	}
 	body, err := io.ReadAll(io.LimitReader(resp.Body, webSearchMaxBodyBytes))
 	if err != nil {
 		return nil, err
 	}
+	// Throttled, DuckDuckGo answers a challenge page (202, or 200 with the
+	// anomaly modal) that holds no results: said as such, not as "no
+	// results" a model would take for the web's answer.
+	if resp.StatusCode == http.StatusAccepted || bytes.Contains(body, []byte("anomaly-modal")) {
+		return nil, errSearchThrottled
+	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("provider returned %s", resp.Status)
+	}
 	return parseDuckDuckGoResults(body, maxResults), nil
 }
+
+var errSearchThrottled = errors.New("the search provider is refusing automated searches for now (it answered a challenge page, not results); search again in a minute or two, or read a page you already know with web_fetch")
 
 // parseDuckDuckGoResults extracts one SearchResult per result container. DDG's
 // HTML marks each hit with a "result" class token; inside it the title anchor

@@ -11,12 +11,17 @@ const (
 	ToolEval                    = "eval"
 	defaultEvalTimeoutSeconds   = 30
 	defaultEvalMaxOutputBytes   = 50 * 1024
-	defaultEvalMaxBridgeCalls   = 16
-	maxEvalBridgeCalls          = 64
+	defaultEvalMaxBridgeCalls   = 200
+	maxEvalBridgeCalls          = 1000
 	maxEvalOutputBytes          = 1024 * 1024
-	maxEvalCellTimeoutSeconds   = 300
 	defaultEvalRegistryCapacity = 16
 )
+
+// MaxEvalCellTimeoutSeconds is the longest cell timeout a configuration can
+// allow. EvalConfig.MaxTimeoutSeconds (default this) is the largest
+// timeout_seconds a call may ask for; EvalConfig.TimeoutSeconds is what a call
+// that names none gets.
+const MaxEvalCellTimeoutSeconds = 300
 
 // EvalConfig selects the operator-provisioned Python and JavaScript runtimes
 // used by the persistent eval tool. The zero-value JSON object is useful on a
@@ -26,8 +31,10 @@ type EvalConfig struct {
 	Python         EvalPythonConfig     `json:"python,omitempty"`
 	JavaScript     EvalJavaScriptConfig `json:"javascript,omitempty"`
 	TimeoutSeconds int                  `json:"timeout_seconds,omitempty"`
-	MaxOutputBytes int                  `json:"max_output_bytes,omitempty"`
-	MaxBridgeCalls int                  `json:"max_bridge_calls,omitempty"`
+	// MaxTimeoutSeconds bounds the timeout_seconds a call may ask for.
+	MaxTimeoutSeconds int `json:"max_timeout_seconds,omitempty"`
+	MaxOutputBytes    int `json:"max_output_bytes,omitempty"`
+	MaxBridgeCalls    int `json:"max_bridge_calls,omitempty"`
 }
 
 type EvalPythonConfig struct {
@@ -86,8 +93,14 @@ func (c *EvalConfig) validate() error {
 	if c.TimeoutSeconds == 0 {
 		c.TimeoutSeconds = defaultEvalTimeoutSeconds
 	}
-	if c.TimeoutSeconds < 1 || c.TimeoutSeconds > maxEvalCellTimeoutSeconds {
-		return fmt.Errorf("invalid eval config: timeout_seconds must be between 1 and %d", maxEvalCellTimeoutSeconds)
+	if c.TimeoutSeconds < 1 || c.TimeoutSeconds > MaxEvalCellTimeoutSeconds {
+		return fmt.Errorf("invalid eval config: timeout_seconds must be between 1 and %d", MaxEvalCellTimeoutSeconds)
+	}
+	if c.MaxTimeoutSeconds == 0 {
+		c.MaxTimeoutSeconds = MaxEvalCellTimeoutSeconds
+	}
+	if c.MaxTimeoutSeconds < c.TimeoutSeconds || c.MaxTimeoutSeconds > MaxEvalCellTimeoutSeconds {
+		return fmt.Errorf("invalid eval config: max_timeout_seconds must be between timeout_seconds (%d) and %d", c.TimeoutSeconds, MaxEvalCellTimeoutSeconds)
 	}
 	if c.MaxOutputBytes == 0 {
 		c.MaxOutputBytes = defaultEvalMaxOutputBytes

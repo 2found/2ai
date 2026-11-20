@@ -9,7 +9,9 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"regexp"
 	"slices"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -31,9 +33,25 @@ const (
 	// maxEvalImageBase64 bounds one displayed picture (base64 characters); the
 	// runners enforce the same number.
 	maxEvalImageBase64 = 16 << 20
-	// maxEvalBridgeValue bounds the value a host tool call returns to the cell:
-	// its text and a note about its pictures, which go to the model instead.
+	// maxEvalBridgeValue bounds the text a host tool call returns to the cell
+	// (with a note about its pictures, which go to the model instead). A larger
+	// result is refused, never cut: a cut JSON document or table would parse as
+	// something else.
 	maxEvalBridgeValue = 1536 * 1024
+	// evalOmittedHint tells the model how to get what a bounded output left out.
+	evalOmittedHint = "print a narrower slice, or write the rest to a file"
+)
+
+// Error kinds a failed host tool call carries to the cell (ToolError.kind).
+const (
+	evalKindBlocked     = "blocked"     // policy, a gate or schema validation refused the call
+	evalKindFailed      = "failed"      // the tool ran and returned an error
+	evalKindBudget      = "budget"      // the run's tool-call budget is spent
+	evalKindApproval    = "approval"    // the call needs a human, which a nested call cannot collect
+	evalKindLimit       = "limit"       // the cell's call count or result size bound
+	evalKindInvalid     = "invalid"     // malformed call: name or arguments
+	evalKindUnavailable = "unavailable" // no live agent run, or the kernel is closing
+	evalKindAborted     = "aborted"     // the cell was cancelled or timed out
 )
 
 type evalFrame struct {
@@ -46,6 +64,50 @@ type evalFrame struct {
 	RequestID      string                     `json:"request_id,omitempty"`
 	Name           string                     `json:"name,omitempty"`
 	Arguments      json.RawMessage            `json:"arguments,omitempty"`
+}
+
+var (
+	evalFrameTypeRE      = regexp.MustCompile(`"type"\s*:\s*"([a-z_]+)"`)
+	evalFrameIDRE        = regexp.MustCompile(`"id"\s*:\s*"([^"\\]*)"`)
+	evalFrameRequestIDRE = regexp.MustCompile(`"request_id"\s*:\s*"([^"\\]*)"`)
+)
+
+// oversizeFrame stands for a frame that passed maxEvalFrameBytes: only the
+// first bytes were kept, enough to say whose it was and what it was.
+func oversizeFrame(head []byte, size int) evalFrame {
+	frame := evalFrame{Type: "oversize", Data: strconv.Itoa(size)}
+	if m := evalFrameTypeRE.FindSubmatch(head); m != nil {
+		frame.Name = string(m[1])
+	}
+	if m := evalFrameIDRE.FindSubmatch(head); m != nil {
+		frame.ID = string(m[1])
+	}
+	if m := evalFrameRequestIDRE.FindSubmatch(head); m != nil {
+		frame.RequestID = string(m[1])
+	}
+	return frame
+}
+
+// readEvalLine reads one newline-terminated line without ever holding more
+// than limit bytes of it: a longer line is read through and dropped, keeping
+// its first bytes in head and its length in size.
+func readEvalLine(r *bufio.Reader, limit int) (line, head []byte, size int, over bool, err error) {
+	for {
+		chunk, readErr := r.ReadSlice('\n')
+		if len(head) < 512 && len(chunk) > 0 {
+			head = append(head, chunk[:min(len(chunk), 512-len(head))]...)
+		}
+		size += len(chunk)
+		if size > limit {
+			over, line = true, nil
+		} else {
+			line = append(line, chunk...)
+		}
+		if errors.Is(readErr, bufio.ErrBufferFull) {
+			continue
+		}
+		return line, head, size, over, readErr
+	}
 }
 
 type evalCellRequest struct {
@@ -65,30 +127,43 @@ type evalCellResult struct {
 	Invocations  []agentcore.ToolInvocation
 	Extra        []agentcore.Message
 	Terminate    bool
+	// External reports that a host tool the cell called returned untrusted
+	// content: whatever shows the cell's output to the model must frame it.
+	External bool
 }
 
 type evalToolResultFrame struct {
 	Type      string `json:"type"`
 	RequestID string `json:"request_id"`
 	OK        bool   `json:"ok"`
-	Value     any    `json:"value,omitempty"`
+	Value     string `json:"value"`
 	Error     string `json:"error,omitempty"`
+	Kind      string `json:"kind,omitempty"`
 }
 
 type evalBridgeResult struct {
 	invocations []agentcore.ToolInvocation
 	extra       []agentcore.Message
 	terminate   bool
+	external    bool
 }
+
+// errEvalNotSent marks a cell the kernel certainly did not receive, so it can
+// run on a fresh kernel without running twice.
+var errEvalNotSent = errors.New("eval request was not delivered")
 
 type evalProcess struct {
 	proc agentcore.SandboxProcess
 	in   io.WriteCloser
 
+	// writeMu keeps one line per write. It can be held by a write the kernel is
+	// not draining (a busy kernel, a full pipe), so nothing that must finish
+	// (closing, killing) takes it.
 	writeMu sync.Mutex
 	frames  chan evalFrame
 	errs    chan error
 	done    chan struct{}
+	closing chan struct{}
 
 	stderr    cappedStringWriter
 	closeOnce sync.Once
@@ -102,7 +177,7 @@ func newEvalProcess(proc agentcore.SandboxProcess, cleanup func()) *evalProcess 
 	}
 	p := &evalProcess{
 		proc: proc, in: proc.Stdin(), frames: make(chan evalFrame, 64),
-		errs: make(chan error, 1), done: make(chan struct{}), cleanup: cleanup,
+		errs: make(chan error, 1), done: make(chan struct{}), closing: make(chan struct{}), cleanup: cleanup,
 	}
 	p.stderr.limit = 8 * 1024
 	go p.readFrames(proc.Stdout())
@@ -115,32 +190,38 @@ func newEvalProcess(proc agentcore.SandboxProcess, cleanup func()) *evalProcess 
 	return p
 }
 
+// exited reports that the kernel process has ended.
+func (p *evalProcess) exited() bool {
+	select {
+	case <-p.done:
+		return true
+	default:
+		return false
+	}
+}
+
 func (p *evalProcess) readFrames(r io.Reader) {
-	reader := bufio.NewReader(r)
-	for {
-		line, err := reader.ReadBytes('\n')
-		if err != nil {
-			if !errors.Is(err, io.EOF) {
-				select {
-				case p.errs <- fmt.Errorf("read eval protocol: %w", err):
-				default:
-				}
-			}
-			return
+	reader := bufio.NewReaderSize(r, 64<<10)
+	fail := func(err error) {
+		select {
+		case p.errs <- err:
+		default:
 		}
-		if len(line) > maxEvalFrameBytes {
-			select {
-			case p.errs <- fmt.Errorf("eval protocol frame exceeds %d bytes", maxEvalFrameBytes):
-			default:
+	}
+	for {
+		line, head, size, over, err := readEvalLine(reader, maxEvalFrameBytes)
+		if err != nil {
+			// A last line without its newline is not a frame.
+			if !errors.Is(err, io.EOF) {
+				fail(fmt.Errorf("read eval protocol: %w", err))
 			}
 			return
 		}
 		var frame evalFrame
-		if err := json.Unmarshal(line, &frame); err != nil {
-			select {
-			case p.errs <- fmt.Errorf("decode eval protocol: %w", err):
-			default:
-			}
+		if over {
+			frame = oversizeFrame(head, size)
+		} else if err := json.Unmarshal(line, &frame); err != nil {
+			fail(fmt.Errorf("decode eval protocol: %w", err))
 			return
 		}
 		select {
@@ -152,6 +233,9 @@ func (p *evalProcess) readFrames(r io.Reader) {
 }
 
 func (p *evalProcess) execute(ctx context.Context, code string, limit, maxBridgeCalls int, invoker agentcore.ToolInvoker) (evalCellResult, error) {
+	if p.exited() {
+		return evalCellResult{}, withEvalStderr(fmt.Errorf("%w: %w", errEvalNotSent, errEvalKernelClosed), p.stderr.String())
+	}
 	p.nextID++
 	id := fmt.Sprintf("cell-%d", p.nextID)
 	payload, err := json.Marshal(evalCellRequest{ID: id, Code: code})
@@ -162,7 +246,7 @@ func (p *evalProcess) execute(ctx context.Context, code string, limit, maxBridge
 	_, err = p.in.Write(append(payload, '\n'))
 	p.writeMu.Unlock()
 	if err != nil {
-		return evalCellResult{}, withEvalStderr(fmt.Errorf("write eval request: %w", err), p.stderr.String())
+		return evalCellResult{}, withEvalStderr(fmt.Errorf("write eval request: %w: %w", errEvalNotSent, err), p.stderr.String())
 	}
 
 	output := newBoundedEvalOutput(limit)
@@ -181,6 +265,7 @@ func (p *evalProcess) execute(ctx context.Context, code string, limit, maxBridge
 			result.Invocations = append(result.Invocations, bridged.invocations...)
 			result.Extra = append(result.Extra, bridged.extra...)
 			result.Terminate = result.Terminate || bridged.terminate
+			result.External = result.External || bridged.external
 		}
 	}
 	returnError := func(err error) (evalCellResult, error) {
@@ -222,6 +307,18 @@ func (p *evalProcess) execute(ctx context.Context, code string, limit, maxBridge
 				bridgeMu.Unlock()
 				bridgeWG.Add(1)
 				go p.handleToolCall(ctx, id, frame, slot, maxBridgeCalls, invoker, pictures, &bridgeMu, &bridgeResults, &bridgeWG)
+			case "oversize":
+				if frame.Name == "tool_call" && frame.RequestID != "" {
+					// The kernel waits for an answer to a call too large to read.
+					bridgeWG.Add(1)
+					go func(requestID string) {
+						defer bridgeWG.Done()
+						p.writeToolResult(id, evalToolResultFrame{Type: "tool_result", RequestID: requestID, Kind: evalKindInvalid,
+							Error: fmt.Sprintf("host tool call is %s bytes, over the %d-byte frame bound; pass less data (write it to a file and pass the path)", frame.Data, maxEvalFrameBytes)})
+					}(frame.RequestID)
+				} else {
+					output.WriteSection("stderr", fmt.Sprintf("[a %s of %s bytes was dropped: it passed the %d MiB frame bound]\n", frame.Name, frame.Data, maxEvalFrameBytes>>20))
+				}
 			case "stdout":
 				output.WriteSection("stdout", frame.Data)
 			case "stderr":
@@ -268,8 +365,12 @@ func (p *evalProcess) handleToolCall(
 			invocations: append([]agentcore.ToolInvocation(nil), out.Invocations...),
 			extra:       append([]agentcore.Message(nil), out.AdditionalContexts...),
 			terminate:   out.Terminate,
+			external:    out.External,
 		}
 		mu.Unlock()
+	}
+	refuse := func(kind, reason string) {
+		response.Kind, response.Error = kind, reason
 	}
 	recordBridgeBlock := func(reason string) {
 		if invoker == nil || strings.TrimSpace(frame.Name) == "" {
@@ -280,17 +381,17 @@ func (p *evalProcess) handleToolCall(
 		}}}})
 	}
 	if frame.RequestID == "" || len(frame.RequestID) > 160 {
-		response.Error = "invalid host tool request id"
+		refuse(evalKindInvalid, "invalid host tool request id")
 	} else if slot >= maxBridgeCalls {
-		response.Error = fmt.Sprintf("eval host-tool call limit reached (%d per cell)", maxBridgeCalls)
+		refuse(evalKindLimit, fmt.Sprintf("eval host-tool call limit reached (%d per cell)", maxBridgeCalls))
 		recordBridgeBlock(response.Error)
 	} else if strings.TrimSpace(frame.Name) == "" || len(frame.Name) > 128 {
-		response.Error = "invalid host tool name"
+		refuse(evalKindInvalid, "invalid host tool name")
 		recordBridgeBlock(response.Error)
 	} else if invoker == nil {
-		response.Error = "host tool bridge is unavailable outside a live agent run"
+		refuse(evalKindUnavailable, "host tool bridge is unavailable outside a live agent run")
 	} else if err := ctx.Err(); err != nil {
-		response.Error = err.Error()
+		refuse(evalKindAborted, err.Error())
 		recordBridgeBlock(response.Error)
 	} else {
 		arguments := frame.Arguments
@@ -298,14 +399,14 @@ func (p *evalProcess) handleToolCall(
 			arguments = json.RawMessage(`{}`)
 		}
 		if !json.Valid(arguments) {
-			response.Error = "host tool arguments must be valid JSON"
+			refuse(evalKindInvalid, "host tool arguments must be valid JSON")
 		} else {
 			out, err := invoker.InvokeTool(ctx, frame.Name, string(arguments))
 			setResult(out)
 			if err != nil {
-				response.Error = err.Error()
+				refuse(classifyEvalToolError(err, out), err.Error())
 			} else if value, valueErr := evalBridgeValue(out, pictures); valueErr != nil {
-				response.Error = valueErr.Error()
+				refuse(evalKindLimit, valueErr.Error())
 			} else {
 				response.OK = true
 				response.Value = value
@@ -315,24 +416,41 @@ func (p *evalProcess) handleToolCall(
 	p.writeToolResult(cellID, response)
 }
 
-// evalBridgeValue is what a host tool call returns to the cell: the tool's
-// text, or, when the tool showed pictures, {"text", "images"} where images is a
-// note. The pictures themselves come to the model with the cell's result (as
-// a direct call's would), not into the cell's variables, so a script that
-// takes a screenshot of each state of a page shows every one of them.
-func evalBridgeValue(out agentcore.ToolOutput, pictures *evalPictures) (any, error) {
-	var value any = out.Content
+// classifyEvalToolError names why a nested call failed, for ToolError.kind.
+func classifyEvalToolError(err error, out agentcore.ToolOutput) string {
+	message := err.Error()
+	switch {
+	case errors.Is(err, context.Canceled), errors.Is(err, context.DeadlineExceeded):
+		return evalKindAborted
+	case strings.Contains(message, "budget exhausted"):
+		return evalKindBudget
+	case strings.Contains(message, "needs human approval"), strings.Contains(message, "cannot park"):
+		return evalKindApproval
+	}
+	if len(out.Invocations) > 0 && !out.Invocations[0].Trace.Allowed {
+		return evalKindBlocked
+	}
+	return evalKindFailed
+}
+
+// evalBridgeValue is what a host tool call returns to the cell: always the
+// tool's text (a string, so a cell can rely on the type), with a note appended
+// when the tool showed pictures. The pictures themselves come to the model with
+// the cell's result (as a direct call's would), not into the cell's variables,
+// so a script that takes a screenshot of each state of a page shows every one
+// of them. A text over maxEvalBridgeValue is refused rather than cut.
+func evalBridgeValue(out agentcore.ToolOutput, pictures *evalPictures) (string, error) {
+	text := out.Content
 	if note := pictures.add(out.Parts); note != "" {
-		value = map[string]any{"text": out.Content, "images": note}
+		if text != "" {
+			text += "\n"
+		}
+		text += note
 	}
-	encoded, err := json.Marshal(value)
-	if err != nil {
-		return nil, fmt.Errorf("encode host tool result: %w", err)
+	if len(text) > maxEvalBridgeValue {
+		return "", fmt.Errorf("host tool result is %d bytes, over the %d-byte limit for one call inside a cell; ask the tool for less (a narrower range, a smaller limit, a filter)", len(text), maxEvalBridgeValue)
 	}
-	if len(encoded) > maxEvalBridgeValue {
-		return nil, fmt.Errorf("host tool result exceeds %d bytes", maxEvalBridgeValue)
-	}
-	return value, nil
+	return text, nil
 }
 
 // evalPictures collects one cell's pictures, safe for the bridge goroutines
@@ -396,7 +514,7 @@ func (p *evalPictures) add(parts []agentcore.ContentPart) string {
 func (p *evalProcess) writeToolResult(cellID string, response evalToolResultFrame) {
 	payload, err := json.Marshal(response)
 	if err != nil {
-		payload, _ = json.Marshal(evalToolResultFrame{Type: "tool_result", RequestID: response.RequestID, Error: err.Error()})
+		payload, _ = json.Marshal(evalToolResultFrame{Type: "tool_result", RequestID: response.RequestID, Error: err.Error(), Kind: evalKindFailed})
 	}
 	// Cell ID is not needed by the runner to correlate a unique request ID, but
 	// keeping it in the envelope lets future kernels reject cross-cell replies.
@@ -405,6 +523,13 @@ func (p *evalProcess) writeToolResult(cellID string, response evalToolResultFram
 		envelope["id"] = cellID
 		payload, _ = json.Marshal(envelope)
 	}
+	select {
+	case <-p.closing:
+		return
+	default:
+	}
+	// The write blocks while the kernel does not read (it is busy, or the pipe
+	// is full). Closing the process kills it, which ends the write.
 	p.writeMu.Lock()
 	_, _ = p.in.Write(append(payload, '\n'))
 	p.writeMu.Unlock()
@@ -490,19 +615,35 @@ func validEvalImage(mime string, data []byte) bool {
 	}
 }
 
-func (p *evalProcess) closeProcess() {
+// closeProcess asks the kernel to exit and kills it if it has not within half
+// a second. It never waits for writeMu: a write the kernel is not reading would
+// hold it forever, and the kill is what ends that write.
+func (p *evalProcess) closeProcess() { p.stop(false) }
+
+// terminate kills the kernel at once, for one whose state is unknown (a cell
+// timed out or the protocol broke): it is not going to read an exit request.
+func (p *evalProcess) terminate() { p.stop(true) }
+
+func (p *evalProcess) stop(kill bool) {
 	p.closeOnce.Do(func() {
-		p.writeMu.Lock()
-		_, _ = io.WriteString(p.in, "{\"type\":\"exit\"}\n")
-		_ = p.in.Close()
-		p.writeMu.Unlock()
-		select {
-		case <-p.done:
-			return
-		case <-time.After(500 * time.Millisecond):
-			_ = p.proc.Kill()
-			<-p.done
+		close(p.closing)
+		if !kill {
+			go func() {
+				if p.writeMu.TryLock() {
+					_, _ = io.WriteString(p.in, "{\"type\":\"exit\"}\n")
+					p.writeMu.Unlock()
+				}
+				_ = p.in.Close()
+			}()
+			select {
+			case <-p.done:
+				return
+			case <-time.After(500 * time.Millisecond):
+			}
 		}
+		_ = p.proc.Kill()
+		_ = p.in.Close()
+		<-p.done
 	})
 }
 
@@ -518,6 +659,11 @@ type boundedEvalOutput struct {
 	head      strings.Builder
 	tail      []byte
 	lastKind  string
+	// sections counts the runs of one kind; a lone section needs no header.
+	sections int
+	// firstHeader is the first section's header, dropped again when it stays the
+	// only one: stderr keeps its header, the others carry no information.
+	firstHeader string
 }
 
 func newBoundedEvalOutput(limit int) *boundedEvalOutput {
@@ -535,7 +681,12 @@ func (b *boundedEvalOutput) WriteSection(kind, value string) {
 		if b.total > 0 {
 			b.WriteString("\n")
 		}
-		b.WriteString("[" + kind + "]\n")
+		header := "[" + kind + "]\n"
+		if b.sections == 0 && kind != "stderr" {
+			b.firstHeader = header
+		}
+		b.sections++
+		b.WriteString(header)
 		b.lastKind = kind
 	}
 	b.WriteString(value)
@@ -571,11 +722,15 @@ func (b *boundedEvalOutput) WriteString(value string) {
 }
 
 func (b *boundedEvalOutput) String() (string, bool) {
-	if b.total <= b.limit {
-		return b.head.String() + string(b.tail), false
+	head, total := b.head.String(), b.total
+	if b.sections == 1 && b.firstHeader != "" && strings.HasPrefix(head, b.firstHeader) {
+		head, total = head[len(b.firstHeader):], total-len(b.firstHeader)
 	}
-	omitted := b.total - b.head.Len() - len(b.tail)
-	return fmt.Sprintf("%s\n[... %d bytes omitted ...]\n%s", b.head.String(), omitted, b.tail), true
+	if total <= b.limit {
+		return head + string(b.tail), false
+	}
+	omitted := total - len(head) - len(b.tail)
+	return fmt.Sprintf("%s\n[... %d bytes omitted: %s ...]\n%s", head, omitted, evalOmittedHint, b.tail), true
 }
 
 func withEvalStderr(err error, stderr string) error {

@@ -448,11 +448,11 @@ func TestEvalHostToolBridgeUnavailableForDirectToolConstruction(t *testing.T) {
 
 // A cell that takes a picture of each state shows the model every one of them
 // (more than the old eight per cell), and the cell gets text and a note, not
-// the picture data.
+// the picture data. The result is a string either way: a note after the text.
 func TestEvalHostToolBridgeShowsThePicturesItsToolsTake(t *testing.T) {
 	for _, test := range []struct{ language, code string }{
-		{"python", "notes = [tool(\"bridge_probe\", {\"value\": \"shot\" + str(i)}) for i in range(10)]\nprint(notes[0][\"text\"], notes[0][\"images\"])"},
-		{"javascript", "const notes = []\nfor (let i = 0; i < 10; i++) notes.push(await tool.bridge_probe({value: \"shot\" + i}))\nconsole.log(notes[0].text, notes[0].images)"},
+		{"python", "notes = [tool(\"bridge_probe\", {\"value\": \"shot\" + str(i)}) for i in range(10)]\nprint(type(notes[0]).__name__, notes[0])"},
+		{"javascript", "const notes = []\nfor (let i = 0; i < 10; i++) notes.push(await tool.bridge_probe({value: \"shot\" + i}))\nconsole.log(typeof notes[0], notes[0])"},
 	} {
 		t.Run(test.language, func(t *testing.T) {
 			probe, result := evalBridgeAgent(t, test.language, test.code, []string{ToolEval, probeToolName}, nil)
@@ -463,7 +463,7 @@ func TestEvalHostToolBridgeShowsThePicturesItsToolsTake(t *testing.T) {
 			if len(message.ContentParts) < 10 {
 				t.Fatalf("pictures = %d, want 10: %q", len(message.ContentParts), message.Content)
 			}
-			if !strings.Contains(message.Content, "probe:shot0") || !strings.Contains(message.Content, "(1 picture(s) shown to you with this eval result)") || !strings.Contains(message.Content, "[new ") {
+			if !strings.Contains(message.Content, "probe:shot0") || !strings.Contains(message.Content, "(1 picture(s) shown to you with this eval result)") || !(strings.Contains(message.Content, "str ") || strings.Contains(message.Content, "string ")) || strings.Contains(message.Content, "[new ") {
 				t.Fatalf("cell output = %q", message.Content)
 			}
 		})

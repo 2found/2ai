@@ -212,6 +212,17 @@ func (t *HTTPTool) Schema() agentcore.ToolSchema {
 	if t.sink.available() {
 		props["save_as"] = saveAsParam()
 	}
+	// The model is told which hosts answer, so it does not spend a call
+	// guessing one; sorted, so the declared bytes stay the same per run.
+	hosts := make([]string, 0, len(t.allowHosts))
+	for h := range t.allowHosts {
+		hosts = append(hosts, h)
+	}
+	slices.Sort(hosts)
+	reach := "No host is allowed yet, so every request is refused until a person allows one."
+	if len(hosts) > 0 {
+		reach = "Reachable hosts (exactly these names): " + strings.Join(hosts, ", ") + "."
+	}
 	return agentcore.ToolSchema{
 		Name:   ToolHTTPRequest,
 		Strict: agentcore.ToolStrictEnabled,
@@ -219,7 +230,7 @@ func (t *HTTPTool) Schema() agentcore.ToolSchema {
 			"{{cred:NAME}} placeholder for any secret (e.g. an Authorization " +
 			"header value); it is resolved securely and never exposed. Only " +
 			"allowlisted hosts over HTTPS are reachable. Returns the status, " +
-			"response headers, and body.",
+			"response headers, and body. " + reach,
 		Parameters: map[string]any{
 			"type":       "object",
 			"properties": props,

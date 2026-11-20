@@ -18,6 +18,7 @@ const readline = require("node:readline");
 const util = require("node:util");
 const { AsyncLocalStorage } = require("node:async_hooks");
 const { PassThrough } = require("node:stream");
+const vm = require("node:vm");
 
 const protocolFd = Number(process.env.AGENTRAY_EVAL_PROTOCOL_FD || "1");
 const runs = new AsyncLocalStorage();
@@ -54,10 +55,32 @@ function writeText(type, value) {
   const text = Buffer.isBuffer(value) || value instanceof Uint8Array
     ? Buffer.from(value).toString("utf8")
     : String(value);
-  for (let start = 0; start < text.length; start += 8192) {
-    writeProtocol({ type, id: run.id, data: text.slice(start, start + 8192) });
+  // Chunks end between code points: a surrogate pair split across two frames
+  // would reach the host as two replacement characters.
+  for (let start = 0; start < text.length;) {
+    let end = Math.min(start + 8192, text.length);
+    if (end < text.length) {
+      const last = text.charCodeAt(end - 1);
+      if (last >= 0xD800 && last <= 0xDBFF) end -= 1;
+    }
+    writeProtocol({ type, id: run.id, data: text.slice(start, end) });
+    start = end;
   }
 }
+
+// The runner's own frames (REPL, vm, domain, this file) say nothing the cell's
+// author can use: drop them from a stack, keep the cell's and any library's.
+function cleanStack(stack) {
+  const text = String(stack);
+  const internal = /^\s+at .*(?:\bContextifyScript\.|\bREPLServer\.|node:repl|node:vm|node:domain|\[eval\]|\bDomain\.|\bbound \(node:)/;
+  return text.split("\n").filter(line => !internal.test(line)).join("\n");
+}
+
+function errorText(error) {
+  return cleanStack(error && error.stack ? error.stack : String(error));
+}
+
+const toolKinds = new Set(["blocked", "failed", "budget", "approval", "limit", "invalid", "unavailable", "aborted"]);
 
 function redirectedWrite(type, chunk, encoding, callback) {
   writeText(type, chunk);
@@ -101,7 +124,8 @@ function boundedDisplayText(value) {
   const text = String(value);
   const bytes = Buffer.from(text, "utf8");
   if (bytes.length <= 262144) return text;
-  return bytes.subarray(0, 262080).toString("utf8") + "\n[display truncated: " + (bytes.length - 262080) + " bytes omitted]";
+  const kept = bytes.subarray(0, 262080).toString("utf8");
+  return kept + "\n[display truncated: " + (bytes.length - Buffer.byteLength(kept, "utf8")) + " bytes omitted; print a narrower slice, or write the rest to a file]";
 }
 
 function emitDisplay(value, status) {
@@ -137,15 +161,26 @@ const output = new PassThrough();
 output.resume();
 const server = repl.start({ input, output, terminal: false, prompt: "", ignoreUndefined: true, useColors: false });
 server.context.console = consoleBridge;
+// A host tool call that did not succeed. kind: blocked (policy or schema
+// refused it), failed (the tool errored), budget, approval, limit, invalid,
+// unavailable or aborted. It is built inside the cells' own context, so an
+// error a cell catches is an instance of that context's Error.
+const ToolError = vm.runInContext(
+  "(class ToolError extends Error {" +
+  "  constructor(message, kind = 'failed', tool = undefined) {" +
+  "    super(message); this.name = 'ToolError'; this.kind = kind; this.tool = tool;" +
+  "  }" +
+  "})", server.context);
+server.context.ToolError = ToolError;
 server.context.print = (...args) => log("stdout", args);
 server.context.display = (...values) => values.forEach(value => emitDisplay(value, "display"));
 
 function callHostTool(name, args = {}) {
   const run = activeRun();
-  if (!run) return Promise.reject(new Error("host tools are only available while an eval cell is running"));
+  if (!run) return Promise.reject(new ToolError("host tools are only available while an eval cell is running", "unavailable"));
   name = String(name || "").trim();
   if (!/^[A-Za-z_][A-Za-z0-9_.:-]{0,127}$/.test(name)) {
-    return Promise.reject(new Error("invalid host tool name"));
+    return Promise.reject(new ToolError("invalid host tool name", "invalid", name));
   }
   let cleanArgs;
   try {
@@ -153,7 +188,7 @@ function callHostTool(name, args = {}) {
     if (encoded === undefined) throw new Error("arguments are not JSON serializable");
     cleanArgs = JSON.parse(encoded);
   } catch (error) {
-    return Promise.reject(new Error("host tool arguments must be JSON serializable: " + error.message));
+    return Promise.reject(new ToolError("host tool arguments must be JSON serializable: " + error.message, "invalid", name));
   }
   const requestId = run.id + "/tool-" + (++bridgeSequence);
   let resolveBridge;
@@ -171,12 +206,12 @@ function callHostTool(name, args = {}) {
     () => run.bridges.delete(promise),
     () => run.bridges.delete(promise),
   );
-  pendingBridges.set(requestId, { run, resolve: resolveBridge, reject: rejectBridge });
+  pendingBridges.set(requestId, { run, name, resolve: resolveBridge, reject: rejectBridge });
   try {
     writeProtocol({ type: "tool_call", id: run.id, request_id: requestId, name, arguments: cleanArgs });
   } catch (error) {
     pendingBridges.delete(requestId);
-    rejectBridge(error);
+    rejectBridge(new ToolError(String(error && error.message || error), "unavailable", name));
   }
   return promise;
 }
@@ -519,8 +554,75 @@ function rewriteStaticImports(code) {
   return code;
 }
 
+// A REPL refuses to declare a name twice ("Identifier 'x' has already been
+// declared"), but an agent re-runs and re-imports across cells all the time. A
+// top-level const, let or class therefore becomes a var (a class becomes a var
+// holding the class), which a later cell can declare again. Only statements at
+// nesting depth zero change: blocks, functions and loops keep their own scope.
+function startsStatement(source, tokens, index) {
+  const previous = tokens[index - 1];
+  if (!previous) return true;
+  if (previous.value === ";" || previous.value === "}") return true;
+  // Automatic semicolon insertion: a line break after something that can end a
+  // statement starts a new one.
+  const endsStatement = previous.type === "identifier" ? !expressionPrefixKeywords.has(previous.value) :
+    previous.type === "number" || previous.type === "string" || previous.type === "template" ||
+    previous.type === "regex" || previous.value === ")" || previous.value === "]";
+  return endsStatement && /[\r\n]/.test(source.slice(previous.end, tokens[index].start));
+}
+
+function rewriteTopLevelDeclarations(code) {
+  if (!/\b(?:const|let|class)\b/.test(code)) return code;
+  const tokens = tokenizeForImports(code);
+  const edits = [];
+  const atTop = token => !token.parens && !token.brackets && !token.braces;
+  for (let index = 0; index < tokens.length; index += 1) {
+    const token = tokens[index];
+    if (token.type !== "identifier" || !atTop(token)) continue;
+    const previous = tokens[index - 1];
+    if (previous && (previous.value === "." || previous.value === "?.")) continue;
+    const next = tokens[index + 1];
+    if ((token.value === "const" || token.value === "let") && next &&
+        ((next.type === "identifier" && next.value !== "in" && next.value !== "of" && next.value !== "instanceof") ||
+         next.value === "{" || next.value === "[")) {
+      edits.push({ start: token.start, end: token.end, text: "var" });
+    } else if (token.value === "class" && next && next.type === "identifier" && next.value !== "extends" &&
+               startsStatement(code, tokens, index)) {
+      let open = -1;
+      for (let probe = index + 2; probe < tokens.length; probe += 1) {
+        const candidate = tokens[probe];
+        if (candidate.value === "{" && candidate.parens === token.parens && candidate.brackets === token.brackets && candidate.braces === token.braces) {
+          open = probe;
+          break;
+        }
+      }
+      if (open < 0) continue;
+      let close = -1;
+      for (let probe = open + 1; probe < tokens.length; probe += 1) {
+        if (tokens[probe].value === "}" && tokens[probe].braces === token.braces + 1 && tokens[probe].type === "punct") {
+          close = probe;
+          break;
+        }
+      }
+      if (close < 0) continue;
+      edits.push({ start: token.start, end: token.start, text: "var " + next.value + " = " });
+      edits.push({ start: tokens[close].end, end: tokens[close].end, text: ";" });
+    }
+  }
+  for (let index = edits.length - 1; index >= 0; index -= 1) {
+    const edit = edits[index];
+    code = code.slice(0, edit.start) + edit.text + code.slice(edit.end);
+  }
+  return code;
+}
+
 function prepareJavaScript(code) {
-  return rewriteStaticImports(transformTypeScript(code));
+  const source = rewriteStaticImports(transformTypeScript(code));
+  try {
+    return rewriteTopLevelDeclarations(source);
+  } catch (_) {
+    return source;
+  }
 }
 
 function evaluate(code) {
@@ -561,13 +663,13 @@ async function runCell(request) {
       cleanupEvaluation = result.cleanup;
       if (result.error) {
         status = "error";
-        writeText("error", result.error.stack || String(result.error));
+        writeText("error", errorText(result.error));
       } else if (result.value !== undefined) {
         emitDisplay(result.value, "result");
       }
     } catch (error) {
       status = "error";
-      writeText("error", error && error.stack ? error.stack : String(error));
+      writeText("error", errorText(error));
     } finally {
       // Keep the cell alive until every bridge request it started has received
       // a host response. This prevents an unawaited call from leaking into the
@@ -583,7 +685,7 @@ async function runCell(request) {
       if (run.rejections.length > 0) {
         status = "error";
         for (const reason of run.rejections) {
-          writeText("error", reason && reason.stack ? reason.stack : String(reason));
+          writeText("error", errorText(reason));
         }
       }
       writeProtocol({ type: "done", id: run.id, status, execution_count: executionCount });
@@ -603,17 +705,18 @@ lines.on("line", line => {
     if (!pendingBridge) return;
     pendingBridges.delete(String(request.request_id || ""));
     if (String(request.id || "") !== pendingBridge.run.id) {
-      pendingBridge.reject(new Error("host tool response belongs to a different eval cell"));
+      pendingBridge.reject(new ToolError("host tool response belongs to a different eval cell", "failed", pendingBridge.name));
     } else if (request.ok) {
-      pendingBridge.resolve(request.value);
+      pendingBridge.resolve(request.value == null ? "" : String(request.value));
     } else {
-      pendingBridge.reject(new Error(String(request.error || "host tool call failed")));
+      const kind = String(request.kind || "failed");
+      pendingBridge.reject(new ToolError(String(request.error || "host tool call failed"), toolKinds.has(kind) ? kind : "failed", pendingBridge.name));
     }
     return;
   }
   pending = pending.then(async () => {
     if (request.type === "exit") {
-      for (const bridge of pendingBridges.values()) bridge.reject(new Error("eval kernel is closing"));
+      for (const bridge of pendingBridges.values()) bridge.reject(new ToolError("eval kernel is closing", "unavailable", bridge.name));
       pendingBridges.clear();
       server.close();
       lines.close();

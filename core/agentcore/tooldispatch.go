@@ -127,6 +127,10 @@ type toolOutcome struct {
 	// A delegated question retains its own session/physical identity. It must
 	// not masquerade as a local ask with the spawn arguments as its question.
 	childQuestion *ChildQuestionError
+	// external marks a result of untrusted content (ExternalContentTool, or
+	// a tool that reported ToolOutput.External). A nested result keeps it
+	// unframed and passes the mark to the calling code.
+	external bool
 }
 
 // runToolCall takes a single model tool call through lookup -> prepareArguments
@@ -136,6 +140,7 @@ type toolOutcome struct {
 // counting and trace recording happen in the caller, in order.
 func (a *Agent) runToolCall(ctx context.Context, exts *extensionSet, exempt map[string]bool, tools *ToolSet, call ToolCall, limits Limits, emitUpdate func(ToolCall, string)) toolOutcome {
 	trace := ToolTrace{CallID: call.ID, Tool: call.Name, Args: call.Arguments}
+	nested := NestedToolCall(ctx)
 
 	tool, ok := tools.Get(call.Name)
 	if !ok {
@@ -224,7 +229,7 @@ func (a *Agent) runToolCall(ctx context.Context, exts *extensionSet, exempt map[
 			})
 		}
 	}
-	toolCtx = withDelegatingPolicy(withToolStack(toolCtx, call.Name), a.policy)
+	toolCtx = withDelegatingPolicy(withToolStack(withNestedToolCall(toolCtx, false), call.Name), a.policy)
 	richOut, runErr := callTool(toolCtx, tool, runArgs, emit)
 	var childQuestion *ChildQuestionError
 	if errors.As(runErr, &childQuestion) {
@@ -275,7 +280,13 @@ func (a *Agent) runToolCall(ctx context.Context, exts *extensionSet, exempt map[
 		extra = append(append([]Message(nil), richOut.AdditionalContexts...), extra...)
 	}
 	if !replaced {
-		out = truncateMiddle(out, limits.MaxToolResultLen)
+		bound := limits.MaxToolResultLen
+		if nested {
+			// The caller is code that bounds what it takes (run_js, an eval
+			// cell): a head and tail of a JSON answer is not data it can use.
+			bound = maxNestedToolResultBytes
+		}
+		out = truncateMiddle(out, bound)
 	}
 	trace.SpillLocator = resultRef
 	out, term := a.hooks.runAfter(ctx, gated, out, runErr)
@@ -287,7 +298,15 @@ func (a *Agent) runToolCall(ctx context.Context, exts *extensionSet, exempt map[
 		out = "error: " + runErr.Error()
 		richOut.Parts = nil
 	}
-	if external, ok := tool.(ExternalContentTool); ok && external.ExternalContent() {
+	external := richOut.External
+	if e, ok := tool.(ExternalContentTool); ok && e.ExternalContent() {
+		external = true
+	}
+	switch {
+	case external && nested:
+		// The calling code gets the data as the tool answered it; the
+		// caller frames what it then shows the model (ToolOutput.External).
+	case external:
 		out = frameExternalContent(call.Name, out)
 		for i := range richOut.Parts {
 			if richOut.Parts[i].Type == ContentPartText {
@@ -309,7 +328,7 @@ func (a *Agent) runToolCall(ctx context.Context, exts *extensionSet, exempt map[
 	message.ContentParts = append([]ContentPart(nil), richOut.Parts...)
 	message.ResultRef = resultRef
 	return toolOutcome{
-		trace: trace, message: message, terminate: term, executed: true, extra: extra,
+		trace: trace, message: message, terminate: term, executed: true, extra: extra, external: external,
 		invocations:   append([]ToolInvocation(nil), richOut.Invocations...),
 		childQuestion: childQuestion,
 	}
@@ -379,7 +398,7 @@ func (i *nestedToolInvoker) InvokeTool(ctx context.Context, name, args string) (
 		trace := ToolTrace{CallID: callID, Tool: name, Args: args, Allowed: false, Reason: string(ToolDenialAborted)}
 		return ToolOutput{Invocations: []ToolInvocation{{Trace: trace}}}, err
 	}
-	outcome := i.agent.runToolCall(ctx, i.exts, i.exempt, i.tools, call, i.limits, i.emitUpdate)
+	outcome := i.agent.runToolCall(withNestedToolCall(ctx, true), i.exts, i.exempt, i.tools, call, i.limits, i.emitUpdate)
 	if !outcome.executed {
 		release()
 	}
@@ -392,6 +411,7 @@ func (i *nestedToolInvoker) InvokeTool(ctx context.Context, name, args string) (
 		Invocations:        invocations,
 		AdditionalContexts: append([]Message(nil), outcome.extra...),
 		Terminate:          outcome.terminate,
+		External:           outcome.external,
 	}
 	if outcome.approval {
 		return result, fmt.Errorf("tool %q needs human approval, which a nested invocation cannot collect; call it directly", name)

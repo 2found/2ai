@@ -1,6 +1,9 @@
 package sandbox
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestValidateURL(t *testing.T) {
 	tool := NewHTTPRequestTool(nil, WithHTTPAllowHosts([]string{"api.example.com"}))
@@ -39,5 +42,17 @@ func TestHTTPToolNetworkHosts(t *testing.T) {
 		if hosts, err := tool.NetworkHosts(args); err == nil {
 			t.Errorf("NetworkHosts(%s) = %v, want an error", args, hosts)
 		}
+	}
+}
+
+// The schema names the hosts a request may reach, so the model does not
+// spend a call guessing one, and says so when none is allowed.
+func TestHTTPSchemaNamesTheReachableHosts(t *testing.T) {
+	got := NewHTTPRequestTool(nil, WithHTTPAllowHosts([]string{"b.example.com", "api.example.com"})).Schema().Description
+	if !strings.Contains(got, "Reachable hosts (exactly these names): api.example.com, b.example.com.") {
+		t.Fatalf("description: %s", got)
+	}
+	if got := NewHTTPRequestTool(nil).Schema().Description; !strings.Contains(got, "No host is allowed yet") {
+		t.Fatalf("no hosts: %s", got)
 	}
 }

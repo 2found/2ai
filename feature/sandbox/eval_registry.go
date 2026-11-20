@@ -2,9 +2,11 @@ package sandbox
 
 import (
 	"context"
+	"crypto/sha256"
 	"errors"
 	"sort"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/2found/2ai/core/agentcore"
@@ -13,6 +15,8 @@ import (
 const (
 	defaultEvalIdleTimeout = 15 * time.Minute
 	evalProcessLifetime    = time.Hour
+	// maxEvalLostKeys bounds the memory of sessions whose kernel was lost.
+	maxEvalLostKeys = 1 << 16
 )
 
 var errEvalKernelClosed = errors.New("eval kernel is closed")
@@ -28,6 +32,34 @@ type EvalSessionRegistry struct {
 	idle     time.Duration
 	now      func() time.Time
 	closed   bool
+	// lost remembers (by hash) the sessions whose kernel ran cells and was then
+	// lost: idle reap, eviction, timeout, crash. The next kernel for such a key
+	// says it is new; the first kernel a session ever gets does not.
+	lost map[[16]byte]struct{}
+}
+
+func evalLostKey(key string) [16]byte {
+	sum := sha256.Sum256([]byte(key))
+	var out [16]byte
+	copy(out[:], sum[:])
+	return out
+}
+
+// noteLostLocked records that key's kernel, which had run cells, is gone.
+func (r *EvalSessionRegistry) noteLostLocked(key string, kernel *evalKernel) {
+	if kernel == nil || kernel.cells.Load() == 0 {
+		return
+	}
+	if r.lost == nil {
+		r.lost = make(map[[16]byte]struct{})
+	}
+	if len(r.lost) >= maxEvalLostKeys {
+		for k := range r.lost {
+			delete(r.lost, k)
+			break
+		}
+	}
+	r.lost[evalLostKey(key)] = struct{}{}
 }
 
 func NewEvalSessionRegistry(capacity int, idle time.Duration) *EvalSessionRegistry {
@@ -53,10 +85,12 @@ type evalRegistryEntry struct {
 // serializes cells without holding the registry lock while user code runs.
 type evalKernel struct {
 	executionMu sync.Mutex
-	cells       int // cells run, under executionMu
-	entry       evalRegistryEntry
-	process     *evalProcess
-	closed      bool
+	cells       atomic.Int64 // cells started
+	// replaces reports that the session had a kernel before, which was lost.
+	replaces bool
+	entry    evalRegistryEntry
+	process  *evalProcess
+	closed   bool
 }
 
 func (r *EvalSessionRegistry) acquire(key string, reset bool, start func() (*evalProcess, error)) (*evalKernel, error) {
@@ -84,6 +118,18 @@ func (r *EvalSessionRegistry) acquire(key string, reset bool, start func() (*eva
 			}
 			closeBefore = append(closeBefore, old)
 		}
+		delete(r.lost, evalLostKey(key))
+	}
+	if current := r.sessions[key]; current != nil && current.process != nil && current.process.exited() {
+		// The kernel died while idle (killed, out of memory, past its lifetime).
+		// Start a new one rather than hand a cell to a dead process.
+		delete(r.sessions, key)
+		if current.entry.timer != nil {
+			current.entry.timer.Stop()
+			current.entry.timer = nil
+		}
+		r.noteLostLocked(key, current)
+		closeBefore = append(closeBefore, current)
 	}
 	if current := r.sessions[key]; current != nil {
 		if current.entry.timer != nil {
@@ -129,6 +175,10 @@ func (r *EvalSessionRegistry) acquire(key string, reset bool, start func() (*eva
 		kernel.close()
 		return winner, nil
 	}
+	if _, lost := r.lost[evalLostKey(key)]; lost {
+		kernel.replaces = true
+		delete(r.lost, evalLostKey(key))
+	}
 	r.sessions[key] = kernel
 	r.mu.Unlock()
 	return kernel, nil
@@ -166,6 +216,7 @@ func (r *EvalSessionRegistry) capacityVictimsLocked() []*evalKernel {
 	for _, candidate := range candidates[:need] {
 		kernel := r.sessions[candidate.key]
 		delete(r.sessions, candidate.key)
+		r.noteLostLocked(candidate.key, kernel)
 		if kernel.entry.timer != nil {
 			kernel.entry.timer.Stop()
 			kernel.entry.timer = nil
@@ -199,6 +250,7 @@ func (r *EvalSessionRegistry) expire(key string, kernel *evalKernel) {
 		return
 	}
 	delete(r.sessions, key)
+	r.noteLostLocked(key, kernel)
 	kernel.entry.timer = nil
 	r.mu.Unlock()
 	kernel.close()
@@ -208,13 +260,14 @@ func (r *EvalSessionRegistry) invalidate(key string, kernel *evalKernel) {
 	r.mu.Lock()
 	if r.sessions[key] == kernel {
 		delete(r.sessions, key)
+		r.noteLostLocked(key, kernel)
 		if kernel.entry.timer != nil {
 			kernel.entry.timer.Stop()
 			kernel.entry.timer = nil
 		}
 	}
 	r.mu.Unlock()
-	kernel.close()
+	kernel.terminate()
 }
 
 // Close releases every retained process. It is primarily useful to embedding
@@ -250,14 +303,27 @@ func (k *evalKernel) execute(ctx context.Context, code string, limit, maxBridgeC
 	if k.closed || k.process == nil {
 		return evalCellResult{}, errEvalKernelClosed
 	}
-	fresh := k.cells == 0
-	k.cells++
+	// Only a kernel that replaces a lost one has something to announce: the
+	// first kernel of a session has lost nothing.
+	fresh := k.cells.Load() == 0 && k.replaces
 	result, err := k.process.execute(ctx, code, limit, maxBridgeCalls, invoker)
+	if !errors.Is(err, errEvalNotSent) {
+		k.cells.Add(1)
+	}
 	result.Fresh = fresh
 	return result, err
 }
 
-func (k *evalKernel) close() {
+func (k *evalKernel) close() { k.shutdown(false) }
+
+// terminate kills the kernel at once, without asking it to exit: its state is
+// unknown (a cell timed out or the protocol broke).
+func (k *evalKernel) terminate() { k.shutdown(true) }
+
+func (k *evalKernel) shutdown(kill bool) {
+	if kill && k.process != nil {
+		k.process.terminate()
+	}
 	k.executionMu.Lock()
 	defer k.executionMu.Unlock()
 	if k.closed {

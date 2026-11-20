@@ -400,3 +400,61 @@ func TestSchemaTransformRewritesOnlyTheDeclaration(t *testing.T) {
 		t.Fatal("the tool's own schema must not change")
 	}
 }
+
+type nativeExternalHostTool struct{ nativeHostTool }
+
+func (nativeExternalHostTool) ExternalContent() bool { return true }
+
+type nativeRichHostTool struct {
+	nativeHostTool
+	rich func(context.Context, string) (ToolOutput, error)
+}
+
+func (t nativeRichHostTool) RunRich(ctx context.Context, args string) (ToolOutput, error) {
+	return t.rich(ctx, args)
+}
+
+// A tool called from code gets the data: not cut to the model's result
+// bound and not framed, with External telling the code it is untrusted.
+// The code's own result, marked External, is framed for the model; the
+// context the tool runs with is not nested, so a run it starts makes
+// direct calls.
+func TestToolHostNestedResultIsRawDataMarkedExternal(t *testing.T) {
+	big := `{"rows":[` + strings.Repeat(`{"a":1},`, 2000) + `{"a":1}]}`
+	api := nativeExternalHostTool{nativeHostTool{"api", func(ctx context.Context, _ string) (string, error) {
+		if NestedToolCall(ctx) {
+			return "", errors.New("the tool's own context reads as nested: a run it starts would not make direct calls")
+		}
+		return big, nil
+	}}}
+	var got ToolOutput
+	var outerNested bool
+	script := nativeRichHostTool{nativeHostTool: nativeHostTool{"script", nil}, rich: func(ctx context.Context, _ string) (ToolOutput, error) {
+		outerNested = NestedToolCall(ctx)
+		invoke, _ := ToolInvokerFrom(ctx)
+		out, err := invoke.InvokeTool(ctx, "api", `{}`)
+		got = out
+		return ToolOutput{Content: "rows read", External: out.External}, err
+	}}
+	limits := DefaultLimits()
+	limits.MaxToolResultLen = 1 << 10
+	a := nativeHostAgent(t, Config{Tools: NewToolSet(script, api), Policy: NewAllowList("script", "api"), Limits: &limits})
+	h, err := a.OpenTools(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer h.Close()
+	value, audit, err := h.Execute(context.Background(), nativeHostCall("script", `{}`), nil)
+	if err != nil || audit.Trace.Error != "" {
+		t.Fatalf("script: %s %+v %v", value, audit, err)
+	}
+	if got.Content != big || !got.External {
+		t.Fatalf("nested result: %d bytes, external %v, framed %v", len(got.Content), got.External, strings.Contains(got.Content, "<external_content"))
+	}
+	if outerNested {
+		t.Fatal("a direct call's context reads as nested")
+	}
+	if !strings.Contains(string(value), "external_content") || !strings.Contains(string(value), "rows read") {
+		t.Fatalf("the script's result showing external data is not framed: %s", value)
+	}
+}

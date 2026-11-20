@@ -10,7 +10,7 @@ func TestParseEvalConfigDefaultsAndValidation(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ParseEvalConfig: %v", err)
 	}
-	if cfg.Python.Command != "python3" || cfg.JavaScript.Command != "node" || cfg.TimeoutSeconds != 30 || cfg.MaxOutputBytes != 50*1024 || cfg.MaxBridgeCalls != 16 {
+	if cfg.Python.Command != "python3" || cfg.JavaScript.Command != "node" || cfg.TimeoutSeconds != 30 || cfg.MaxOutputBytes != 50*1024 || cfg.MaxBridgeCalls != 200 || cfg.MaxTimeoutSeconds != MaxEvalCellTimeoutSeconds {
 		t.Fatalf("defaults = %+v", cfg)
 	}
 
@@ -19,7 +19,9 @@ func TestParseEvalConfigDefaultsAndValidation(t *testing.T) {
 		`{} {}`,
 		`{"timeout_seconds":301}`,
 		`{"max_output_bytes":100}`,
-		`{"max_bridge_calls":65}`,
+		`{"max_bridge_calls":1001}`,
+		`{"timeout_seconds":20,"max_timeout_seconds":10}`,
+		`{"max_timeout_seconds":301}`,
 		`{"javascript":{"command":"node\u0000bad"}}`,
 		`{"javascript":{"args":["--eval\u0000bad"]}}`,
 	} {

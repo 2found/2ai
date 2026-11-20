@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 	"strings"
 	"testing"
 	"time"
@@ -408,5 +409,15 @@ func TestLaunchBackgroundReceipt(t *testing.T) {
 	settled(t, b, receipt.ID)
 	if _, err := agentcore.LaunchBackground(context.Background(), "shell", "make", block); err == nil {
 		t.Fatal("a run without the plugin launched background work")
+	}
+}
+
+// A lifted result ceiling is not stated as a bound.
+func TestStatusBytesNamesOnlyARealBound(t *testing.T) {
+	if got := statusBytesDescription(math.MaxInt); strings.Contains(got, "at most") {
+		t.Fatalf("lifted ceiling: %q", got)
+	}
+	if got := statusBytesDescription(32768); !strings.Contains(got, "at most 32768.") {
+		t.Fatalf("real bound: %q", got)
 	}
 }

@@ -30,9 +30,14 @@ type SkillLoader func(ctx context.Context, ids []string) (map[string]string, err
 // on-demand skills. Tools, hooks, permission, and memory are bound at the Agent
 // level by the consumer, not authored here.
 type AgentDefinition struct {
-	ScopeID     string
-	Soul        string      // SOUL.md — who the agent is (always loaded)
-	Agents      string      // AGENTS.md — what it works on (always loaded)
+	ScopeID string
+	Soul    string // SOUL.md — who the agent is (always loaded)
+	Agents  string // AGENTS.md — what it works on (always loaded)
+	// Host is the host's own always-loaded instructions (how its tools work,
+	// its rules for this kind of run), placed after Agents in the same
+	// section. It is not held to the authored budget: the host composes it
+	// from bounded parts of its own, and a long mission must not cut it off.
+	Host        string
 	Skills      []Skill     // headers selected by description match; body loads on demand
 	SkillLoader SkillLoader // optional deferred content loader for selected skills
 	// ResponseFormatting replaces the system prompt's "# Response formatting"
@@ -106,6 +111,6 @@ func (d AgentDefinition) enabledSkills() []Skill {
 // holds slices, so it is not comparable with ==; composition uses this to decide
 // whether a definition seam is actually being claimed.
 func (d AgentDefinition) IsZero() bool {
-	return d.ScopeID == "" && d.Soul == "" && d.Agents == "" &&
+	return d.ScopeID == "" && d.Soul == "" && d.Agents == "" && d.Host == "" &&
 		len(d.Skills) == 0 && d.SkillLoader == nil
 }

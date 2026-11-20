@@ -363,3 +363,17 @@ func TestResponseFormattingIsTheHostsChoice(t *testing.T) {
 		}
 	}
 }
+
+// The authored mission is held to its budget; the host's own instructions
+// follow it in the same section and are never cut by a long mission.
+func TestHostInstructionsFollowTheMissionOutsideItsBudget(t *testing.T) {
+	mission := strings.Repeat("m", maxAlwaysLoadedBytes*2)
+	got := buildSystemPrompt(AgentDefinition{Agents: mission, Host: "HOST-RULES-END"}, nil, nil)
+	if strings.Contains(got, mission) || !strings.Contains(got, "…[truncated]\nHOST-RULES-END") {
+		t.Fatalf("mission clamp or host placement wrong:\n%.200s…%s", got, got[len(got)-80:])
+	}
+	only := buildSystemPrompt(AgentDefinition{Host: "HOST"}, nil, nil)
+	if !strings.Contains(only, "# Mission & Context\nHOST") || (AgentDefinition{Host: "x"}).IsZero() {
+		t.Fatalf("host-only definition: %q", only)
+	}
+}

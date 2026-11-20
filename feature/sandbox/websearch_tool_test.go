@@ -132,3 +132,23 @@ type stubSearchProvider struct {
 func (s stubSearchProvider) Search(context.Context, string, int) ([]SearchResult, error) {
 	return s.results, s.err
 }
+
+// A throttled provider answers a challenge page: the model is told the search
+// was refused, not that the web has no results for its query.
+func TestWebSearchNamesAThrottledProvider(t *testing.T) {
+	for _, status := range []int{http.StatusAccepted, http.StatusOK} {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			w.WriteHeader(status)
+			_, _ = w.Write([]byte(`<html><body><div class="anomaly-modal__box"></div></body></html>`))
+		}))
+		p := NewDuckDuckGoSearch(nil).(*duckDuckGoSearch)
+		p.endpoint = srv.URL
+		tool := NewWebSearchTool(p, 0)
+		tool.AllowAllIPsForTest()
+		out, err := tool.Run(context.Background(), `{"query":"x"}`)
+		srv.Close()
+		if err == nil || !strings.Contains(err.Error(), "refusing automated searches") || strings.Contains(out, "No results") {
+			t.Errorf("status %d: out %q, err %v", status, out, err)
+		}
+	}
+}

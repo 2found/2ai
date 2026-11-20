@@ -254,3 +254,48 @@ func TestCapabilitiesOfBridgesLegacyProviderToolsFlag(t *testing.T) {
 		t.Fatalf("legacy tools capability = %q, want supported", got)
 	}
 }
+
+// A request over the provider's payload limit is refused whole, so pictures
+// are dropped oldest first to fit the image bytes as well as the count; with
+// no published budget the portable one applies.
+func TestRequestForCapabilitiesClampsOldestImagesToRungBytes(t *testing.T) {
+	image := func(n int) ContentPart {
+		return ContentPart{Type: ContentPartImage, MIMEType: "image/png", Data: strings.Repeat("A", n)}
+	}
+	original := []Message{
+		{Role: RoleTool, ToolCallID: "c1", Content: "first", ContentParts: []ContentPart{image(400), image(400)}},
+		{Role: RoleTool, ToolCallID: "c2", Content: "second", ContentParts: []ContentPart{image(400), image(300)}},
+	}
+	provider := &capabilityProbeProvider{name: "byte-limited", caps: ModelCapabilities{
+		ImageInput: CapabilitySupported, MaxInputImages: 100, MaxInputImageBytes: 1 << 10,
+	}}
+	got, err := requestForCapabilities(provider, "m", ModelCapabilities{}, ChatRequest{Messages: original})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(got.Messages[0].ContentParts) != 0 || len(got.Messages[1].ContentParts) != 2 || len(original[0].ContentParts) != 2 {
+		t.Fatalf("kept %d+%d pictures (original %d), want the newest 700 bytes", len(got.Messages[0].ContentParts), len(got.Messages[1].ContentParts), len(original[0].ContentParts))
+	}
+	if !strings.Contains(got.Messages[0].Content, "2 older image attachment(s) omitted: provider request limit is 1 KiB of images") {
+		t.Fatalf("omission = %q", got.Messages[0].Content)
+	}
+
+	// Sixty normalized screenshots (~680 KiB each as base64) exceed what an
+	// unknown provider takes in one request; the newest that fit remain.
+	shots := make([]ContentPart, 60)
+	for i := range shots {
+		shots[i] = image(680 << 10)
+	}
+	unknown := &capabilityProbeProvider{name: "unknown-vision", caps: ModelCapabilities{ImageInput: CapabilitySupported, MaxInputImages: 200}}
+	got, err = requestForCapabilities(unknown, "m", ModelCapabilities{}, ChatRequest{Messages: []Message{{Role: RoleTool, ToolCallID: "c", ContentParts: shots}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	bytes := 0
+	for _, p := range got.Messages[0].ContentParts {
+		bytes += len(p.Data)
+	}
+	if n := len(got.Messages[0].ContentParts); n == 0 || n == 60 || bytes > unknownProviderImageBytes {
+		t.Fatalf("kept %d pictures, %d bytes", n, bytes)
+	}
+}

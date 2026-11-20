@@ -11,6 +11,13 @@ import (
 // known adapters advertise their larger limits through ModelCapabilities.
 const unknownProviderImageLimit = 5
 
+// unknownProviderImageBytes is the portable request-wide budget for image data
+// (base64 as sent) when a provider publishes none: under the smallest common
+// inline-request limit (20 MB), so the text of the request still fits. A
+// request over a provider's payload limit is refused whole, which would fail
+// the turn instead of dropping the oldest pictures.
+const unknownProviderImageBytes = 16 << 20
+
 // ModelCapabilityError reports a request that a provider/model pair is known
 // not to accept. It is intentionally non-retryable: repeating the same rung
 // cannot add a missing capability, while reason may still advance to a capable
@@ -101,31 +108,55 @@ func requestForCapabilities(provider LLMProvider, model string, discovered Model
 		if limit <= 0 {
 			limit = unknownProviderImageLimit
 		}
-		req.Messages = clampImageContent(req.Messages, limit)
+		budget := caps.MaxInputImageBytes
+		if budget <= 0 {
+			budget = unknownProviderImageBytes
+		}
+		req.Messages = clampImageContent(req.Messages, limit, budget)
 	}
 	return req, nil
 }
 
 // clampImageContent drops the oldest image parts until the complete outgoing
-// request fits the active provider/model limit. It is copy-on-write: escalation
+// request fits the active provider/model limits: at most limit images, and at
+// most budget bytes of image data as sent. It is copy-on-write: escalation
 // to a later rung starts from the unmodified canonical transcript and may apply
 // a different limit. Text parts and tool-call linkage stay intact, and every
 // affected message gets a visible breadcrumb instead of losing images silently.
-func clampImageContent(messages []Message, limit int) []Message {
+func clampImageContent(messages []Message, limit, budget int) []Message {
 	if limit < 0 {
 		limit = 0
 	}
-	total := 0
-	for _, message := range messages {
-		for _, part := range message.ContentParts {
-			if part.Type == ContentPartImage {
-				total++
+	// The newest pictures are kept: walking back from the end, a picture stays
+	// while both the count and the bytes still fit; it and every older one go
+	// once either does not.
+	total, kept, bytes, full := 0, 0, 0, false
+	for i := len(messages) - 1; i >= 0; i-- {
+		parts := messages[i].ContentParts
+		for j := len(parts) - 1; j >= 0; j-- {
+			if parts[j].Type != ContentPartImage {
+				continue
+			}
+			total++
+			if !full && kept < limit && bytes+len(parts[j].Data) <= budget {
+				kept++
+				bytes += len(parts[j].Data)
+			} else {
+				full = true
 			}
 		}
 	}
-	drop := total - limit
+	drop := total - kept
 	if drop <= 0 {
 		return messages
+	}
+	reason := fmt.Sprintf("provider request limit is %d", limit)
+	if kept < limit {
+		size := fmt.Sprintf("%d MiB", budget>>20)
+		if budget < 1<<20 {
+			size = fmt.Sprintf("%d KiB", budget>>10)
+		}
+		reason = "provider request limit is " + size + " of images"
 	}
 
 	var out []Message
@@ -151,7 +182,7 @@ func clampImageContent(messages []Message, limit int) []Message {
 		}
 		replacement := message
 		replacement.ContentParts = kept
-		note := fmt.Sprintf("[%d older image attachment(s) omitted: provider request limit is %d]", omitted, limit)
+		note := fmt.Sprintf("[%d older image attachment(s) omitted: %s]", omitted, reason)
 		if replacement.Content == "" {
 			replacement.Content = note
 		} else {
