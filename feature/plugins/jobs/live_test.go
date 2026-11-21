@@ -40,7 +40,7 @@ func publisher(t *testing.T, b *board, chunks ...string) (id string, release fun
 
 func status(t *testing.T, b *board, args string) string {
 	t.Helper()
-	out, err := (jobStatusTool{jobTool{b, "job_status"}}).Run(context.Background(), args)
+	out, err := (jobStatusTool{jobTool{b, ToolName}}).Run(context.Background(), args)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -133,7 +133,7 @@ func TestJobStatusOfRunningJobIsATailByDefault(t *testing.T) {
 	if got := status(t, small, `{"id":"`+sid+`","output_bytes":100000}`); len(got) > 500+300 {
 		t.Fatalf("status exceeded the result limit: %d bytes", len(got))
 	}
-	if _, err := (jobStatusTool{jobTool{b, "job_status"}}).Run(context.Background(), `{"id":"`+id+`","output_bytes":-1}`); err == nil {
+	if _, err := (jobStatusTool{jobTool{b, ToolName}}).Run(context.Background(), `{"id":"`+id+`","output_bytes":-1}`); err == nil {
 		t.Fatal("negative output_bytes accepted")
 	}
 }
@@ -148,7 +148,7 @@ func TestRunningJobWithoutOutputRendersAsBefore(t *testing.T) {
 	if strings.Count(got, "\n") != 0 || !strings.HasPrefix(got, "job "+r.ID+" (t) — running after") {
 		t.Fatalf("status = %q", got)
 	}
-	list, _ := (jobListTool{jobTool{b, "job_list"}}).Run(context.Background(), "")
+	list, _ := (jobListTool{jobTool{b, ToolName}}).Run(context.Background(), "")
 	if strings.Contains(list, ">") || strings.Count(list, "\n") != 0 {
 		t.Fatalf("list = %q", list)
 	}
@@ -158,7 +158,7 @@ func TestJobListShowsElapsedAndTheLastLine(t *testing.T) {
 	b := begin(t, Plugin{})
 	id, release := publisher(t, b, "compiling a\n", "compiling b\n\n", "  linking "+strings.Repeat("x", 300)+"\n")
 	defer release()
-	out, err := (jobListTool{jobTool{b, "job_list"}}).Run(context.Background(), "")
+	out, err := (jobListTool{jobTool{b, ToolName}}).Run(context.Background(), "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -171,7 +171,7 @@ func TestJobListShowsElapsedAndTheLastLine(t *testing.T) {
 	}
 	release()
 	settled(t, b, id)
-	if out, _ := (jobListTool{jobTool{b, "job_list"}}).Run(context.Background(), ""); strings.Contains(out, ">") {
+	if out, _ := (jobListTool{jobTool{b, ToolName}}).Run(context.Background(), ""); strings.Contains(out, ">") {
 		t.Fatalf("a finished job still lists its output: %q", out)
 	}
 }
@@ -180,7 +180,7 @@ func TestWaitTimeoutCarriesTheNewestOutput(t *testing.T) {
 	b := begin(t, Plugin{})
 	id, release := publisher(t, b, "server listening on :8080\n")
 	defer release()
-	out, err := (jobWaitTool{jobTool{b, "job_wait"}}).Run(context.Background(), `{"id":"`+id+`","timeout_seconds":1}`)
+	out, err := (jobWaitTool{jobTool{b, ToolName}}).Run(context.Background(), `{"id":"`+id+`","timeout_seconds":1}`)
 	if err != nil || !strings.Contains(out, "still running") || !strings.Contains(out, "listening on :8080") {
 		t.Fatalf("wait = %q %v", out, err)
 	}

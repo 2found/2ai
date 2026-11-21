@@ -3,6 +3,7 @@ package jobs
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 	"sync"
 	"testing"
@@ -11,9 +12,9 @@ import (
 	"github.com/2found/2ai/core/agentcore"
 )
 
-func sendTool(b *board) jobSendTool { return jobSendTool{jobTool{b, "job_send"}} }
+func sendTool(b *board) jobSendTool { return jobSendTool{jobTool{b, ToolName}} }
 
-// job_send reaches the handler the work registered, only while the job runs,
+// op send reaches the handler the work registered, only while the job runs,
 // and says why when it cannot.
 func TestJobSendDeliversAndRefuses(t *testing.T) {
 	b := begin(t, Plugin{AllowSend: true})
@@ -105,15 +106,15 @@ func TestJobSendWaitsForAJustStartedHandler(t *testing.T) {
 }
 
 func TestJobSendToolIsOffUnlessEnabled(t *testing.T) {
-	if got := strings.Join(toolNames(begin(t, Plugin{})), ","); strings.Contains(got, "job_send") {
-		t.Fatalf("tools = %s", got)
+	if got := strings.Join(begin(t, Plugin{}).ops(), ","); strings.Contains(got, "send") {
+		t.Fatalf("ops = %s", got)
 	}
 	on := begin(t, Plugin{AllowSend: true})
-	if got := strings.Join(toolNames(on), ","); !strings.HasSuffix(got, ",job_send") {
-		t.Fatalf("tools = %s", got)
+	if got := strings.Join(on.ops(), ","); !strings.HasSuffix(got, ",send") || !strings.Contains(fmt.Sprint(on.Tools()[0].Schema().Parameters), "message") {
+		t.Fatalf("ops = %s", got)
 	}
 	tool := sendTool(on)
 	if !tool.SelfGated() || !tool.Bookkeeping() {
-		t.Fatal("job_send is not governed like the other job tools")
+		t.Fatal("op send is not governed like the other ops")
 	}
 }

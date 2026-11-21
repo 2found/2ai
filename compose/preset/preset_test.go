@@ -342,7 +342,7 @@ func TestEjectRemovesEveryTrace(t *testing.T) {
 		tool   string
 	}{
 		{spill.To(spill.NewMemorySpillStore()), "read_spill"},
-		{jobs.Plugin{}, "job_status"},
+		{jobs.Plugin{}, jobs.ToolName},
 		{sessionquery.OwnSession(), "session_query"},
 		{subagent.SelfOnly(), subagent.ToolSpawnSubagent},
 	}

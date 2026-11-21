@@ -3,9 +3,9 @@
 // Without it every tool is synchronous: a long crawl, build, render, or export
 // blocks the whole run until it finishes, and a run that has to wait cannot
 // also think. With it a tool calls agentcore.LaunchBackground, returns a job
-// receipt immediately, and the model keeps working; the built-in job_list /
-// job_status / job_wait / job_cancel tools observe and stop the work, and jobs
-// that finished since the last turn are announced at the top of the next one.
+// receipt immediately, and the model keeps working; the built-in job tool
+// (op list, status, wait, cancel) observes and stops the work, and jobs that
+// finished since the last turn are announced at the top of the next one.
 //
 // Every run gets its own board, so a job can be neither observed nor cancelled
 // by another run, and every job is cancelled when its run ends. The board's
@@ -13,10 +13,10 @@
 // that finished, and learns which ones the end of the previous run interrupted.
 //
 // A running job is not a black box: its work publishes output as it goes
-// (agentcore.PublishJobOutput), and job_status / job_list show the newest part
-// of it. Two opt-ins extend the board: Plugin.AllowSend adds job_send, which
+// (agentcore.PublishJobOutput), and op status / list show the newest part of
+// it. Two opt-ins extend the board: Plugin.AllowSend adds op send, which
 // steers a running background sub-agent, and Plugin.Survive lets a job the
-// model marks with job_keep outlive the run that started it (see Survival).
+// model marks with op keep outlive the run that started it (see Survival).
 package jobs
 
 import (
@@ -59,7 +59,7 @@ type record struct {
 	// Output is the newest part of the job's output, kept once it ended
 	// without a result (failed, cancelled, interrupted), bounded.
 	Output string `json:"output,omitempty"`
-	// Keep marks a job the model asked to outlive its run (job_keep).
+	// Keep marks a job the model asked to outlive its run (op keep).
 	Keep bool `json:"keep,omitempty"`
 }
 
@@ -80,11 +80,11 @@ var errNotFound = errors.New("job not found")
 type Plugin struct {
 	// MaxConcurrent bounds running jobs per run. Zero uses 15; -1 disables the ceiling.
 	MaxConcurrent int
-	// AllowSend adds job_send, which delivers a message to a running
-	// background sub-agent at its next step. Off by default: it changes the
-	// tool list the model sees.
+	// AllowSend adds the job tool's op send, which delivers a message to a
+	// running background sub-agent at its next step. Off by default: it
+	// changes the tool the model sees.
 	AllowSend bool
-	// Survive, when set, adds job_keep and lets kept jobs outlive their run.
+	// Survive, when set, adds op keep and lets kept jobs outlive their run.
 	// Nil keeps every job bound to its run, exactly as without the option.
 	Survive *Survival
 	// Disposable, when set, names the tools whose background jobs are the
@@ -108,7 +108,7 @@ func (p Plugin) Register(r *agentcore.Registry) error {
 
 const (
 	defaultMaxConcurrent = 15
-	// maxWait bounds one job_wait call so the model cannot park the run forever
+	// maxWait bounds one op wait call so the model cannot park the run forever
 	// on a job that never finishes.
 	maxWait = 120 * time.Second
 	// defaultResultBytes bounds a stored result when the run sets no tool
@@ -178,7 +178,7 @@ type job struct {
 	finished chan struct{} // closed once the work has returned
 	out      *outputBuffer
 	maxBytes int
-	// onMsg receives job_send messages; set by the work through
+	// onMsg receives op send messages; set by the work through
 	// agentcore.HandleJobMessages.
 	onMsg func(string) error
 	// owner is the board the job belongs to; nil while the job is detached in
@@ -197,22 +197,10 @@ type job struct {
 // Name identifies the extension in composition diagnostics.
 func (*board) Name() string { return "jobs" }
 
-// Tools contributes the four observation tools, plus job_send and job_keep
-// when the plugin enables them.
+// Tools contributes the one job tool (tool.go): its ops observe and stop
+// the work, plus send and keep when the plugin enables them.
 func (b *board) Tools() []agentcore.Tool {
-	tools := []agentcore.Tool{
-		jobListTool{jobTool{b, "job_list"}},
-		jobStatusTool{jobTool{b, "job_status"}},
-		jobWaitTool{jobTool{b, "job_wait"}},
-		jobCancelTool{jobTool{b, "job_cancel"}},
-	}
-	if b.allowSend {
-		tools = append(tools, jobSendTool{jobTool{b, "job_send"}})
-	}
-	if b.survive != nil {
-		tools = append(tools, jobKeepTool{jobTool{b, "job_keep"}})
-	}
-	return tools
+	return []agentcore.Tool{jobsTool{jobTool{b, ToolName}}}
 }
 
 // RunContext binds the launcher to the run's context, which is how a tool finds
@@ -415,7 +403,7 @@ func (b *board) dispose(ctx context.Context, id string) {
 }
 
 // seen marks a finished job announced: the model has just read how it ended
-// (job_status, job_wait, job_cancel), so a notice would only repeat it.
+// (op status, wait or cancel), so a notice would only repeat it.
 func (b *board) seen(id string) {
 	j, err := b.find(id)
 	if err != nil {
@@ -492,7 +480,7 @@ func (b *board) TurnStopping(ctx context.Context, _ agentcore.StopInfo) agentcor
 			if ctx.Err() != nil {
 				return agentcore.StopDecision{StopReason: "aborted"}
 			}
-			return agentcore.StopDecision{Continue: true, Inject: []agentcore.Message{{Role: agentcore.RoleUser, Content: "Background work is still pending. Use job_wait/status to collect it, or job_cancel if it is no longer needed; do not claim it completed."}}}
+			return agentcore.StopDecision{Continue: true, Inject: []agentcore.Message{{Role: agentcore.RoleUser, Content: "Background work is still pending. Collect it with the job tool (op wait or status), or cancel it (op cancel) if it is no longer needed; do not claim it completed."}}}
 		}
 	}
 	completed := b.drain()
@@ -606,7 +594,7 @@ func (b *board) RestoreNativeState(raw json.RawMessage) error {
 
 // completionNotice renders the synthetic user message announcing finished jobs.
 // It carries the result inline for a small success so the common case costs the
-// model no extra tool call, and points at job_status when the payload is large.
+// model no extra tool call, and points at op status when the payload is large.
 func completionNotice(jobs []record, inlineLimit int) string {
 	if len(jobs) == 0 {
 		return ""
@@ -621,7 +609,7 @@ func completionNotice(jobs []record, inlineLimit int) string {
 		case j.State == succeeded && len(j.Result) <= inlineLimit:
 			fmt.Fprintf(&b, ":\n%s", j.Result)
 		case j.State == succeeded:
-			fmt.Fprintf(&b, ": %d bytes of output — call job_status with id %q to read it.", len(j.Result), j.ID)
+			fmt.Fprintf(&b, ": %d bytes of output — call job with op status and id %q to read it.", len(j.Result), j.ID)
 		}
 		b.WriteString("\n")
 	}
@@ -630,7 +618,7 @@ func completionNotice(jobs []record, inlineLimit int) string {
 
 // ---- model-facing tools -------------------------------------------------
 
-// jobTool is the shared base for the built-in job_* tools.
+// jobTool is the shared base of the job tool and the handlers of its ops.
 type jobTool struct {
 	board *board
 	name  string
@@ -638,7 +626,7 @@ type jobTool struct {
 
 func (t jobTool) Name() string { return t.name }
 
-// SelfGated exempts the job_* tools from the permission gate. They observe and
+// SelfGated exempts the job tool from the permission gate. They observe and
 // cancel work THIS run launched — the board is per run — so they grant no
 // capability the agent did not already exercise by starting the job.
 func (jobTool) SelfGated() bool { return true }
@@ -650,7 +638,7 @@ func (t jobTool) Parallel() bool { return true }
 // Bookkeeping: observing background work is administration, not progress toward
 // the task. Two things follow, and both matter for a run that goes async:
 //
-//   - A turn spent only on job_* calls is refunded against MaxTurns, so polling
+//   - A turn spent only on job calls is refunded against MaxTurns, so polling
 //     a slow job cannot starve the turn budget it is waiting to spend.
 //   - A repeat guard asks the run whether a tool is bookkeeping, so the
 //     legitimate "poll the same job id until it finishes" chain is transparent
@@ -659,35 +647,7 @@ func (t jobTool) Parallel() bool { return true }
 // The MaxToolCalls budget still backstops a runaway polling loop.
 func (t jobTool) Bookkeeping() bool { return true }
 
-func jobIDSchema(name, description string, extra map[string]any) agentcore.ToolSchema {
-	props := map[string]any{
-		"id": map[string]any{"type": "string", "description": "The job id."},
-	}
-	for k, v := range extra {
-		props[k] = v
-	}
-	return agentcore.ToolSchema{
-		Name:        name,
-		Description: description,
-		Strict:      agentcore.ToolStrictEnabled,
-		Parameters: map[string]any{
-			"type":       "object",
-			"properties": props,
-			"required":   []string{"id"},
-		},
-	}
-}
-
 type jobListTool struct{ jobTool }
-
-func (t jobListTool) Schema() agentcore.ToolSchema {
-	return agentcore.ToolSchema{
-		Name:        "job_list",
-		Strict:      agentcore.ToolStrictEnabled,
-		Description: t.board.listDescription(),
-		Parameters:  map[string]any{"type": "object", "properties": map[string]any{}, "additionalProperties": false},
-	}
-}
 
 func (t jobListTool) Run(_ context.Context, _ string) (string, error) {
 	jobs := t.board.list()
@@ -712,18 +672,6 @@ func (t jobListTool) Run(_ context.Context, _ string) (string, error) {
 }
 
 type jobStatusTool struct{ jobTool }
-
-func (t jobStatusTool) Schema() agentcore.ToolSchema {
-	return jobIDSchema("job_status",
-		"Read one background job: its state, and its full output once it has finished. "+
-			"While it runs you get the newest part of its output so far; pass output_bytes for more of it.",
-		map[string]any{
-			"output_bytes": map[string]any{
-				"type":        "integer",
-				"description": statusBytesDescription(t.board.maxBytes),
-			},
-		})
-}
 
 func (t jobStatusTool) Run(_ context.Context, args string) (string, error) {
 	var in struct {
@@ -760,18 +708,6 @@ func statusBytesDescription(maxBytes int) string {
 
 type jobWaitTool struct{ jobTool }
 
-func (t jobWaitTool) Schema() agentcore.ToolSchema {
-	return jobIDSchema("job_wait",
-		"Block until a background job finishes, then return its result. Bounded by a timeout — "+
-			"if it returns while the job is still running, the job keeps going and you can wait again or continue with other work.",
-		map[string]any{
-			"timeout_seconds": map[string]any{
-				"type":        "integer",
-				"description": "How long to wait before returning with the job still running.",
-			},
-		})
-}
-
 func (t jobWaitTool) Run(ctx context.Context, args string) (string, error) {
 	var in struct {
 		ID      string `json:"id"`
@@ -794,7 +730,7 @@ func (t jobWaitTool) Run(ctx context.Context, args string) (string, error) {
 		return "", err
 	}
 	if !j.done() {
-		msg := fmt.Sprintf("Job %s is still running after %s. It was not cancelled — continue with other work and check job_status later.", j.ID, wait)
+		msg := fmt.Sprintf("Job %s is still running after %s. It was not cancelled — continue with other work and check it later (op status).", j.ID, wait)
 		if out := t.board.outputTail(j.ID, waitTail); out != "" {
 			msg += "\nOutput so far (newest part):\n" + out
 		}
@@ -805,10 +741,6 @@ func (t jobWaitTool) Run(ctx context.Context, args string) (string, error) {
 }
 
 type jobCancelTool struct{ jobTool }
-
-func (t jobCancelTool) Schema() agentcore.ToolSchema {
-	return jobIDSchema("job_cancel", "Cancel a running background job.", nil)
-}
 
 func (t jobCancelTool) Run(ctx context.Context, args string) (string, error) {
 	id, err := jobIDArg(args)
@@ -831,7 +763,7 @@ func (t jobCancelTool) Run(ctx context.Context, args string) (string, error) {
 	return fmt.Sprintf("Cancelled %s; it has stopped.", id), nil
 }
 
-// cancelSettle bounds how long job_cancel waits to report the job stopped.
+// cancelSettle bounds how long op cancel waits to report the job stopped.
 const cancelSettle = 2 * time.Second
 
 func unmarshalArgs(args string, v any) error {
@@ -875,7 +807,7 @@ func renderJob(j record) string {
 	}
 }
 
-// render formats one job for job_status. A running job also shows the newest
+// render formats one job for op status. A running job also shows the newest
 // tail bytes of its output, which is what lets the model decide to wait, keep
 // working or cancel.
 func (b *board) render(id string, tail int) (string, error) {
@@ -917,13 +849,4 @@ func (b *board) lastLine(id string) string {
 		return ""
 	}
 	return j.out.lastLine()
-}
-
-func (b *board) listDescription() string {
-	d := "List the background jobs this session started, newest first, with their state and duration; a running job also shows its newest output line. " +
-		"Jobs still running when you finish your answer are cancelled — wait for the ones whose results you need."
-	if b.survive != nil {
-		d += " Use job_keep for work that should keep running after your answer; kept jobs are listed here on your next turn."
-	}
-	return d
 }

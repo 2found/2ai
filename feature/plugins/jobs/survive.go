@@ -15,10 +15,10 @@ import (
 // Survival is the opt-in that lets a background job outlive the run that
 // started it. Set it as Plugin.Survive.
 //
-// The model chooses: only a job it marks with job_keep survives; every other
+// The model chooses: only a job it marks with op keep survives; every other
 // job is cancelled when the run ends, exactly as without this option. A kept
 // job keeps running after the run's final answer. It is listed, readable and
-// cancellable (job_list, job_status, job_wait, job_cancel) from the next run of
+// cancellable (op list, status, wait, cancel) from the next run of
 // the SAME conversation and from no other. Its result is announced exactly
 // once: in that next run's first step, or, when it ends while no run of the
 // conversation is attached, through Hold's callback.
@@ -42,7 +42,7 @@ import (
 // Model-backed work cannot be kept. spawn_subagent folds its child's token
 // usage into the Agent that spawned it, and that Agent's run has ended by the
 // time a surviving child would finish: the usage would be lost or charged to
-// the wrong run. job_keep refuses it with that reason. Shell commands and host
+// the wrong run. Op keep refuses it with that reason. Shell commands and host
 // tools can be kept; Exclude refuses more tools that call a model.
 type Survival struct {
 	// Hold is the host-owned home of kept jobs between runs. Required.
@@ -53,7 +53,7 @@ type Survival struct {
 	// MaxJobs bounds how many kept jobs one conversation may have running. Zero
 	// uses four.
 	MaxJobs int
-	// Exclude names more tools whose jobs job_keep refuses, besides
+	// Exclude names more tools whose jobs op keep refuses, besides
 	// spawn_subagent.
 	Exclude []string
 }
@@ -64,7 +64,7 @@ const (
 	// subagentToolName is spawn_subagent's tool name, spelled out because
 	// plugins do not import each other.
 	subagentToolName = "spawn_subagent"
-	// sendWait is how long job_send waits for a just-started job to register
+	// sendWait is how long op send waits for a just-started job to register
 	// its message handler.
 	sendWait    = 250 * time.Millisecond
 	maxSendSize = 4 * 1024
@@ -340,7 +340,7 @@ func (b *board) keep(id string) (string, error) {
 		return fmt.Sprintf("Job %s is already kept.", id), nil
 	case s.exclude[j.Tool]:
 		if j.Tool == subagentToolName {
-			return "", fmt.Errorf("job %s is a sub-agent: its token usage is accounted to this run, so it cannot outlive it; use job_wait to collect it", id)
+			return "", fmt.Errorf("job %s is a sub-agent: its token usage is accounted to this run, so it cannot outlive it; collect it with op wait", id)
 		}
 		return "", fmt.Errorf("job %s (%s) cannot outlive the run: it is model-backed work whose usage this run accounts for", id, j.Tool)
 	}
@@ -351,7 +351,7 @@ func (b *board) keep(id string) (string, error) {
 		}
 	}
 	if kept >= s.maxJobs {
-		return "", fmt.Errorf("this conversation already keeps %d running jobs (the maximum); cancel one with job_cancel first", kept)
+		return "", fmt.Errorf("this conversation already keeps %d running jobs (the maximum); cancel one (op cancel) first", kept)
 	}
 	j.Keep, j.keepFor = true, s.maxAge
 	wait := max(s.maxAge-time.Since(j.StartedAt), 0)
@@ -363,7 +363,7 @@ func (b *board) keep(id string) (string, error) {
 		b.mu.Unlock()
 		j.cancel()
 	})
-	return fmt.Sprintf("Job %s will keep running after you answer, for at most %s from its start. Its result is announced when it ends; list or cancel it with job_list / job_cancel on a later turn.", id, s.maxAge), nil
+	return fmt.Sprintf("Job %s will keep running after you answer, for at most %s from its start. Its result is announced when it ends; list or cancel it with the job tool (op list, cancel) on a later turn.", id, s.maxAge), nil
 }
 
 // send delivers a message to a running job that accepts them.
@@ -392,15 +392,6 @@ func (b *board) send(id, message string) error {
 
 type jobKeepTool struct{ jobTool }
 
-func (t jobKeepTool) Schema() agentcore.ToolSchema {
-	s := t.board.survive
-	return jobIDSchema("job_keep",
-		fmt.Sprintf("Let a running background job outlive this run: a dev server, a long build. Call it right after starting the job, "+
-			"then answer the person; the job keeps running and its result is announced when it ends. A job you do not keep is cancelled when you answer. "+
-			"A kept job lives at most %s and each conversation keeps at most %d. Sub-agents cannot be kept. "+
-			"Never keep work whose output you need for this answer: wait for it instead.", s.maxAge, s.maxJobs), nil)
-}
-
 func (t jobKeepTool) Run(_ context.Context, args string) (string, error) {
 	id, err := jobIDArg(args)
 	if err != nil {
@@ -410,16 +401,6 @@ func (t jobKeepTool) Run(_ context.Context, args string) (string, error) {
 }
 
 type jobSendTool struct{ jobTool }
-
-func (t jobSendTool) Schema() agentcore.ToolSchema {
-	return jobIDSchema("job_send",
-		"Send a follow-up message to a running background sub-agent. It reads the message as a user message at its next step, "+
-			"so use it to correct course or add a constraint without cancelling the work. Refused when the job already finished, "+
-			"does not exist, or is not a sub-agent.",
-		map[string]any{
-			"message": map[string]any{"type": "string", "description": "What to tell the sub-agent."},
-		})
-}
 
 func (t jobSendTool) Run(_ context.Context, args string) (string, error) {
 	var in struct {

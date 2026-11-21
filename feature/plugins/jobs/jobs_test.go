@@ -117,7 +117,7 @@ func TestBoardsAreIsolatedPerRun(t *testing.T) {
 	if _, err := theirs.get(r.ID); !errors.Is(err, errNotFound) {
 		t.Fatalf("other run read the job: %v", err)
 	}
-	if _, err := (jobCancelTool{jobTool{theirs, "job_cancel"}}).Run(context.Background(), `{"id":"`+r.ID+`"}`); !errors.Is(err, errNotFound) {
+	if _, err := (jobCancelTool{jobTool{theirs, ToolName}}).Run(context.Background(), `{"id":"`+r.ID+`"}`); !errors.Is(err, errNotFound) {
 		t.Fatalf("other run cancelled the job: %v", err)
 	}
 	if got := theirs.drain(); len(got) != 0 {
@@ -128,7 +128,7 @@ func TestBoardsAreIsolatedPerRun(t *testing.T) {
 func TestCancelStopsTheWorkAndIsIdempotent(t *testing.T) {
 	b := begin(t, Plugin{})
 	r, _ := b.start(context.Background(), "t", "long", block)
-	cancel := jobCancelTool{jobTool{b, "job_cancel"}}
+	cancel := jobCancelTool{jobTool{b, ToolName}}
 	if _, err := cancel.Run(context.Background(), `{"id":"`+r.ID+`"}`); err != nil {
 		t.Fatal(err)
 	}
@@ -224,9 +224,9 @@ func TestWaitReturnsWhileStillRunningWithoutCancelling(t *testing.T) {
 			return "", ctx.Err()
 		}
 	})
-	out, err := (jobWaitTool{jobTool{b, "job_wait"}}).Run(context.Background(), `{"id":"`+r.ID+`","timeout_seconds":1}`)
+	out, err := (jobWaitTool{jobTool{b, ToolName}}).Run(context.Background(), `{"id":"`+r.ID+`","timeout_seconds":1}`)
 	if err != nil || !strings.Contains(out, "still running") {
-		t.Fatalf("job_wait = %q, %v", out, err)
+		t.Fatalf("op wait = %q, %v", out, err)
 	}
 	// Timing out the wait must NOT cancel the job.
 	if got, _ := b.get(r.ID); got.State != running {
@@ -240,18 +240,18 @@ func TestWaitReturnsWhileStillRunningWithoutCancelling(t *testing.T) {
 
 func TestToolsRenderStateAndRejectUnknownIDs(t *testing.T) {
 	b := begin(t, Plugin{})
-	list := jobListTool{jobTool{b, "job_list"}}
+	list := jobListTool{jobTool{b, ToolName}}
 	if out, err := list.Run(context.Background(), `{}`); err != nil || !strings.Contains(out, "No background jobs") {
-		t.Fatalf("job_list on empty = %q, %v", out, err)
+		t.Fatalf("op list on empty = %q, %v", out, err)
 	}
 	r, _ := b.start(context.Background(), "run_sql", "count rows", func(context.Context) (string, error) { return "1234", nil })
 	settled(t, b, r.ID)
 	if out, err := list.Run(context.Background(), `{}`); err != nil || !strings.Contains(out, r.ID) || !strings.Contains(out, "succeeded") {
-		t.Fatalf("job_list = %q, %v", out, err)
+		t.Fatalf("op list = %q, %v", out, err)
 	}
-	status := jobStatusTool{jobTool{b, "job_status"}}
+	status := jobStatusTool{jobTool{b, ToolName}}
 	if out, err := status.Run(context.Background(), `{"id":"`+r.ID+`"}`); err != nil || !strings.Contains(out, "1234") {
-		t.Fatalf("job_status = %q, %v", out, err)
+		t.Fatalf("op status = %q, %v", out, err)
 	}
 	if _, err := status.Run(context.Background(), `{"id":"job_nope"}`); !errors.Is(err, errNotFound) {
 		t.Fatalf("unknown id = %v", err)
@@ -259,7 +259,7 @@ func TestToolsRenderStateAndRejectUnknownIDs(t *testing.T) {
 	if _, err := status.Run(context.Background(), `{}`); err == nil {
 		t.Fatal("missing id must be an error")
 	}
-	if _, err := (jobWaitTool{jobTool{b, "job_wait"}}).Run(context.Background(), `{"id":"job_nope"}`); !errors.Is(err, errNotFound) {
+	if _, err := (jobWaitTool{jobTool{b, ToolName}}).Run(context.Background(), `{"id":"job_nope"}`); !errors.Is(err, errNotFound) {
 		t.Fatalf("wait unknown = %v", err)
 	}
 }
@@ -272,7 +272,7 @@ func TestCompletionNoticeInlinesSmallResultsAndDefersLargeOnes(t *testing.T) {
 		{ID: "job_3", Tool: "crawl", State: failed, Err: "host unreachable", StartedAt: now.Add(-time.Second), EndedAt: now},
 		{ID: "job_4", Tool: "crawl", State: cancelled, Err: interrupted, StartedAt: now.Add(-time.Second), EndedAt: now},
 	}, 2048)
-	for _, want := range []string{"7 rows", "job_status", "host unreachable", interrupted} {
+	for _, want := range []string{"7 rows", "op status", "host unreachable", interrupted} {
 		if !strings.Contains(notice, want) {
 			t.Fatalf("notice missing %q:\n%s", want, notice)
 		}
@@ -340,7 +340,7 @@ func TestBoardSurvivesResume(t *testing.T) {
 	if err := second.RestoreNativeState(raw); err != nil {
 		t.Fatal(err)
 	}
-	if out, err := (jobStatusTool{jobTool{second, "job_status"}}).Run(context.Background(), `{"id":"`+announced.ID+`"}`); err != nil || !strings.Contains(out, "1234") {
+	if out, err := (jobStatusTool{jobTool{second, ToolName}}).Run(context.Background(), `{"id":"`+announced.ID+`"}`); err != nil || !strings.Contains(out, "1234") {
 		t.Fatalf("finished result lost across resume: %q %v", out, err)
 	}
 	notice := second.BeforeStep(context.Background(), agentcore.StepInfo{}).AdditionalContexts

@@ -12,7 +12,7 @@ import (
 // maxPendingSteers bounds the messages a child may have queued and unread.
 const maxPendingSteers = 8
 
-// mailbox carries the parent's follow-up messages (job_send) to a running
+// mailbox carries the parent's follow-up messages (the job tool's op send) to a running
 // background child. The child's run drains it at each step boundary, before the
 // model is asked again, and once more before it may finish; the loop persists
 // whatever is drained as user messages of the child's own transcript.

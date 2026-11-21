@@ -114,7 +114,7 @@ func TestDelegationGuidanceFollowsAdvertisedCapabilities(t *testing.T) {
 			}
 			_, async := props["async"]
 			wantAsync := tc.async && !tc.durable
-			if async != wantAsync || strings.Contains(schema.Description, "job_wait/status") != wantAsync {
+			if async != wantAsync || strings.Contains(schema.Description, "op wait or status") != wantAsync {
 				t.Fatal("async guidance differs from advertised capability")
 			}
 			contextDescription := props["context"].(map[string]any)["description"].(string)

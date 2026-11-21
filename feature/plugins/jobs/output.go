@@ -13,13 +13,13 @@ const (
 	// that prints gigabytes costs about ten kilobytes of memory.
 	liveHead = 2 * 1024
 	liveTail = 8 * 1024
-	// defaultStatusTail is how much live output job_status returns unless asked
+	// defaultStatusTail is how much live output op status returns unless asked
 	// for more; keepOutput bounds what a finished record carries (and so the
 	// checkpoint).
 	defaultStatusTail = 2 * 1024
 	waitTail          = 1024
 	keepOutput        = 4 * 1024
-	// lastLineBytes bounds the output excerpt job_list shows per running job.
+	// lastLineBytes bounds the output excerpt op list shows per running job.
 	lastLineBytes = 100
 )
 

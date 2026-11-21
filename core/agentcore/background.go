@@ -86,7 +86,7 @@ func InBackgroundJob(ctx context.Context) bool {
 }
 
 // HandleJobMessages makes the running background job accept messages from the
-// model (the job_send tool). handle is called on the sender's goroutine and
+// model (the job tool's op send). handle is called on the sender's goroutine and
 // must only queue: it returns an error to refuse. A job that registers no
 // handler refuses every message. Inert outside a job.
 func HandleJobMessages(ctx context.Context, handle func(message string) error) {

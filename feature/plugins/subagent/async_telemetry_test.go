@@ -32,7 +32,7 @@ func TestAsyncChildRecordsUnderTheRun(t *testing.T) {
 		}
 		return ai.ScriptedStream(nativeAnswer("parent finished"))(ctx, model, view, opts)
 	})
-	a, err := agentcore.New(agentcore.Config{Model: "test", NativeProvider: provider, Policy: agentcore.NewAllowList(subagent.ToolSpawnSubagent, "job_wait", "job_status", "job_list", "job_cancel"),
+	a, err := agentcore.New(agentcore.Config{Model: "test", NativeProvider: provider, Policy: agentcore.NewAllowList(subagent.ToolSpawnSubagent, jobs.ToolName),
 		Extensions: []agentcore.ExtensionFactory{&subagent.Plugin{AllowAsync: true}, jobs.Plugin{}}})
 	if err != nil {
 		t.Fatal(err)

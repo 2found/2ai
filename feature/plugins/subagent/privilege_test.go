@@ -65,7 +65,7 @@ func TestSelfForkCannotWidenPrivilege(t *testing.T) {
 			parentScript := []ai.Message{nativeCall("p1", subagent.ToolSpawnSubagent, spawn), nativeAnswer("parent done")}
 			if async {
 				spawn = `{"task":"child-task: read the secret","async":true}`
-				parentScript = []ai.Message{nativeCall("p1", subagent.ToolSpawnSubagent, spawn), nativeCall("p2", "job_wait", `{"id":"job_1"}`), nativeAnswer("parent done")}
+				parentScript = []ai.Message{nativeCall("p1", subagent.ToolSpawnSubagent, spawn), nativeCall("p2", "job", `{"op":"wait","id":"job_1"}`), nativeAnswer("parent done")}
 			}
 			provider, childTools := routedProvider("child-task", parentScript, []ai.Message{
 				nativeCall("c1", "secret", `{"text":"leak"}`),

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.4.5 — 2026-11-21
+
+Baseline: v0.4.4. Breaking: the `job_*` tools are one `job` tool (migration below).
+
+- **Breaking: the six `job_*` tools are one `job` tool.** `job_list`, `job_status`, `job_wait`, `job_cancel`, `job_send` and `job_keep` were six declarations on every request for a capability most runs never touch (0 calls in the Soot bench runs). The board now gives the model one tool, `jobs.ToolName` (`job`), whose `op` is `list`, `status`, `wait` or `cancel`, plus `send` with `Plugin.AllowSend` and `keep` with `Plugin.Survive`; the `op` enum lists only the ops enabled, and the other arguments (`id`, `output_bytes`, `timeout_seconds`, `message`) are the old tools'. Results, refusals and the board's behavior are unchanged; the texts that named a tool (a completion notice, the pending-work nudge, `spawn_subagent`'s async guidance, `wait`'s still-running reply, `keep`'s refusals) now name the op. Migration: a host whose policy, prompt or script names a `job_*` tool names `job` (and the op) instead.
+
 ## 0.4.4 — 2026-11-21
 
 Baseline: v0.4.3. No breaking API change. `Definition.Host` is new; a host that does not set it behaves as before.

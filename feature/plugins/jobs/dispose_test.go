@@ -31,24 +31,24 @@ func TestDisposableJobEndsWithTheAnswer(t *testing.T) {
 	_ = other
 }
 
-// The model that read how a job ended (job_cancel, job_status, job_wait) is
+// The model that read how a job ended (op cancel, op status, op wait) is
 // not told again.
 func TestAJobTheModelSawEndIsNotAnnounced(t *testing.T) {
 	b := begin(t, Plugin{})
 	r, _ := b.start(context.Background(), "bash", "server", block)
-	out, err := (jobCancelTool{jobTool{b, "job_cancel"}}).Run(context.Background(), `{"id":"`+r.ID+`"}`)
+	out, err := (jobCancelTool{jobTool{b, ToolName}}).Run(context.Background(), `{"id":"`+r.ID+`"}`)
 	if err != nil || !strings.Contains(out, "it has stopped") {
-		t.Fatalf("job_cancel = %q, %v", out, err)
+		t.Fatalf("op cancel = %q, %v", out, err)
 	}
 	if d := b.TurnStopping(context.Background(), agentcore.StopInfo{}); d.Continue {
 		t.Fatalf("a job the model cancelled re-opened the run: %+v", d)
 	}
 	done, _ := b.start(context.Background(), "bash", "quick", func(context.Context) (string, error) { return "ok", nil })
 	settled(t, b, done.ID)
-	if _, err := (jobStatusTool{jobTool{b, "job_status"}}).Run(context.Background(), `{"id":"`+done.ID+`"}`); err != nil {
+	if _, err := (jobStatusTool{jobTool{b, ToolName}}).Run(context.Background(), `{"id":"`+done.ID+`"}`); err != nil {
 		t.Fatal(err)
 	}
 	if len(b.drain()) != 0 {
-		t.Fatal("a job read with job_status was announced")
+		t.Fatal("a job read with op status was announced")
 	}
 }

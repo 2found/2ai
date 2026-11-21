@@ -140,7 +140,7 @@ func (p Plugin) Register(r *agentcore.Registry) error {
 func (p Plugin) BeginRun(ctx context.Context, info agentcore.RunInfo) (agentcore.Extension, error) {
 	settings := p.normalized(info.Limits)
 	settings.MaxDepth = depthCeiling(ctx, settings.MaxDepth)
-	// A background child's mailbox rides its context (see job_send); only the
+	// A background child's mailbox rides its context (see the job tool's op send); only the
 	// run at the depth it was made for claims it.
 	mail := mailboxFor(ctx, info.Depth)
 	if info.Depth >= settings.MaxDepth {
@@ -215,7 +215,7 @@ type subagentTool struct {
 	settings Plugin
 	durable  bool
 	spawned  int32 // atomic; children spawned this run
-	// mail carries job_send messages to this run when it is a background child.
+	// mail carries op send messages to this run when it is a background child.
 	mail *mailbox
 }
 
@@ -266,7 +266,7 @@ func (t *subagentTool) Schema() agentcore.ToolSchema {
 		},
 	}
 	if t.settings.AllowAsync && !t.durable {
-		props["async"] = map[string]any{"type": "boolean", "description": "Return a job id immediately. Use job_wait/status/cancel to manage it; the job is cancelled when this run ends."}
+		props["async"] = map[string]any{"type": "boolean", "description": "Return a job id immediately. Manage it with the job tool (op wait, status, cancel); the job is cancelled when this run ends."}
 	}
 	// Tool advertisement already applies policy and run-depth gates. Keeping the
 	// orchestration contract here avoids unconditional system instructions for a
@@ -298,7 +298,7 @@ func (t *subagentTool) Schema() agentcore.ToolSchema {
 			"Each named target uses its own host-defined identity and permissions; its description is a selection hint, not an authorization grant."
 	}
 	if t.settings.AllowAsync && !t.durable {
-		desc += " For independent work, async:true returns a job receipt. A receipt is not completion: collect the result with job_wait/status, or cancel unneeded work with job_cancel, before claiming success."
+		desc += " For independent work, async:true returns a job receipt. A receipt is not completion: collect the result with the job tool (op wait or status), or cancel unneeded work (op cancel), before claiming success."
 	}
 	return agentcore.ToolSchema{
 		Name:        ToolSpawnSubagent,
@@ -365,7 +365,7 @@ func (t *subagentTool) RunStreaming(ctx context.Context, args string, emit func(
 			return "", errors.New("async delegation is not available for this run")
 		}
 		values := context.WithoutCancel(ctx)
-		// A self-fork can be steered with job_send; a named delegate is an
+		// A self-fork can be steered with op send; a named delegate is an
 		// opaque closure with no step boundary to deliver to.
 		var mail *mailbox
 		if who := strings.TrimSpace(in.Agent); who == "" || strings.EqualFold(who, "self") {

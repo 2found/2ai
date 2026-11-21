@@ -84,7 +84,7 @@ func TestKeptJobSurvivesToTheNextTurn(t *testing.T) {
 	plugin := jobs.Plugin{Survive: &jobs.Survival{Hold: hold}}
 	server := &devServer{started: make(chan struct{}), stop: make(chan struct{}), ctxErr: make(chan error, 1)}
 
-	first, _ := provider(call("c1", "dev_server", `{}`), call("c2", "job_keep", `{"id":"job_1"}`), answer("the server is up on :5173"))
+	first, _ := provider(call("c1", "dev_server", `{}`), call("c2", "job", `{"op":"keep","id":"job_1"}`), answer("the server is up on :5173"))
 	ctx := jobs.WithConversation(context.Background(), "conv-42")
 	res, err := newAgent(t, first, server, plugin).RunNative(ctx, agentcore.NativeRun{Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: "start the dev server"}}})
 	if err != nil || res.StopReason != "stop" || res.Final != "the server is up on :5173" {
@@ -97,7 +97,7 @@ func TestKeptJobSurvivesToTheNextTurn(t *testing.T) {
 	}
 
 	// The same conversation, a later turn, resuming from the checkpoint.
-	second, seen := provider(call("c3", "job_list", `{}`), call("c4", "job_status", `{"id":"job_1"}`), call("c5", "job_cancel", `{"id":"job_1"}`), call("c6", "job_wait", `{"id":"job_1","timeout_seconds":5}`), answer("stopped it"))
+	second, seen := provider(call("c3", "job", `{"op":"list"}`), call("c4", "job", `{"op":"status","id":"job_1"}`), call("c5", "job", `{"op":"cancel","id":"job_1"}`), call("c6", "job", `{"op":"wait","id":"job_1","timeout_seconds":5}`), answer("stopped it"))
 	res2, err := newAgent(t, second, server, plugin).RunNative(ctx, agentcore.NativeRun{State: res.NativeState, Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: "what is running?"}}})
 	if err != nil || res2.Final != "stopped it" {
 		t.Fatalf("second run = %+v %v", res2, err)
@@ -114,7 +114,7 @@ func TestKeptJobSurvivesToTheNextTurn(t *testing.T) {
 			t.Fatal("no cancellation error")
 		}
 	case <-time.After(5 * time.Second):
-		t.Fatal("job_cancel from the next turn did not stop the server")
+		t.Fatal("op cancel from the next turn did not stop the server")
 	}
 	select {
 	case e := <-ended:
@@ -129,12 +129,12 @@ func TestKeptJobIsNotVisibleToAnotherConversationThroughTheLoop(t *testing.T) {
 	hold := jobs.NewHold(nil)
 	plugin := jobs.Plugin{Survive: &jobs.Survival{Hold: hold}}
 	server := &devServer{started: make(chan struct{}), stop: make(chan struct{}), ctxErr: make(chan error, 1)}
-	first, _ := provider(call("c1", "dev_server", `{}`), call("c2", "job_keep", `{"id":"job_1"}`), answer("up"))
+	first, _ := provider(call("c1", "dev_server", `{}`), call("c2", "job", `{"op":"keep","id":"job_1"}`), answer("up"))
 	res, err := newAgent(t, first, server, plugin).RunNative(jobs.WithConversation(context.Background(), "conv-A"), agentcore.NativeRun{Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: "go"}}})
 	if err != nil || res.Final != "up" {
 		t.Fatal(res, err)
 	}
-	other, seen := provider(call("c3", "job_status", `{"id":"job_1"}`), call("c4", "job_cancel", `{"id":"job_1"}`), answer("nothing there"))
+	other, seen := provider(call("c3", "job", `{"op":"status","id":"job_1"}`), call("c4", "job", `{"op":"cancel","id":"job_1"}`), answer("nothing there"))
 	if _, err := newAgent(t, other, server, plugin).RunNative(jobs.WithConversation(context.Background(), "conv-B"), agentcore.NativeRun{Input: []agentcore.Message{{Role: agentcore.RoleUser, Content: "status?"}}}); err != nil {
 		t.Fatal(err)
 	}
@@ -150,10 +150,10 @@ func TestKeptJobIsNotVisibleToAnotherConversationThroughTheLoop(t *testing.T) {
 }
 
 // With the option off the loop behaves as it always did: the job dies with the
-// run and job_keep does not exist.
+// run and op keep does not exist.
 func TestWithoutTheOptionAJobDiesWithItsRun(t *testing.T) {
 	server := &devServer{started: make(chan struct{}), stop: make(chan struct{}), ctxErr: make(chan error, 1)}
-	p, seen := provider(call("c1", "dev_server", `{}`), call("c2", "job_keep", `{"id":"job_1"}`), answer("done"))
+	p, seen := provider(call("c1", "dev_server", `{}`), call("c2", "job", `{"op":"keep","id":"job_1"}`), answer("done"))
 	// An unkept job also holds the final answer back, so end the run the way a
 	// host does when the person walks away.
 	runCtx, stop := context.WithCancel(jobs.WithConversation(context.Background(), "conv-off"))
@@ -166,6 +166,6 @@ func TestWithoutTheOptionAJobDiesWithItsRun(t *testing.T) {
 		t.Fatal("the job outlived its run without the option")
 	}
 	if got := strings.Join(seen(), "\n"); strings.Contains(got, "will keep running") {
-		t.Fatalf("job_keep acted without the option:\n%s", got)
+		t.Fatalf("op keep acted without the option:\n%s", got)
 	}
 }

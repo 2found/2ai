@@ -119,7 +119,7 @@ func trailingPartialRune(p []byte) int {
 }
 
 // shellLogMaxBytes bounds one command's full-output log. A chatty command kept
-// running in the background (job_keep lets one outlive its run by up to an
+// running in the background (the job tool's op keep lets one outlive its run by up to an
 // hour) would otherwise fill the disk with a log nobody reads past its tail.
 // A variable only so a test can lower it.
 var shellLogMaxBytes int64 = 64 << 20

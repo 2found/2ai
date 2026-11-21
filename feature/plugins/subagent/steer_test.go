@@ -3,6 +3,7 @@ package subagent_test
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -140,12 +141,12 @@ func TestJobSendReachesTheRunningChildOnce(t *testing.T) {
 			return nativeCall("p1", subagent.ToolSpawnSubagent, spawn)
 		case 2:
 			gate.waitEntered() // the child is mid-flight
-			return nativeCall("p2", "job_status", `{"id":"job_1"}`)
+			return nativeCall("p2", "job", `{"op":"status","id":"job_1"}`)
 		case 3:
-			return nativeCall("p3", "job_send", `{"id":"job_1","message":"also skip the vendor directory"}`)
+			return nativeCall("p3", "job", `{"op":"send","id":"job_1","message":"also skip the vendor directory"}`)
 		case 4:
 			close(gate.release)
-			return nativeCall("p4", "job_wait", `{"id":"job_1","timeout_seconds":20}`)
+			return nativeCall("p4", "job", `{"op":"wait","id":"job_1","timeout_seconds":20}`)
 		}
 		return nativeAnswer("parent done")
 	}, "child done")
@@ -169,7 +170,7 @@ func TestJobSendReachesTheRunningChildOnce(t *testing.T) {
 	script.mu.Unlock()
 	// While it ran, the parent could see which step the child was on.
 	if !strings.Contains(results, "running gate") || !strings.Contains(results, "sub-agent] started") {
-		t.Fatalf("job_status of the running child showed no progress: %s", results)
+		t.Fatalf("op status of the running child showed no progress: %s", results)
 	}
 	if len(seen) != 2 {
 		t.Fatalf("child made %d requests, want 2", len(seen))
@@ -233,9 +234,9 @@ func TestMessageSentWhileTheChildIsInAToolShapesItsAnswer(t *testing.T) {
 				return ai.ScriptedStream(nativeCall("p1", subagent.ToolSpawnSubagent, spawn))(ctx, model, view, options)
 			case 2:
 				gate.waitEntered()
-				return ai.ScriptedStream(nativeCall("p2", "job_send", `{"id":"job_1","message":"last-minute correction"}`))(ctx, model, view, options)
+				return ai.ScriptedStream(nativeCall("p2", "job", `{"op":"send","id":"job_1","message":"last-minute correction"}`))(ctx, model, view, options)
 			case 3:
-				return ai.ScriptedStream(nativeCall("p3", "job_wait", `{"id":"job_1","timeout_seconds":20}`))(ctx, model, view, options)
+				return ai.ScriptedStream(nativeCall("p3", "job", `{"op":"wait","id":"job_1","timeout_seconds":20}`))(ctx, model, view, options)
 			}
 			return ai.ScriptedStream(nativeAnswer("parent done"))(ctx, model, view, options)
 		}
@@ -271,7 +272,7 @@ func TestMessageSentWhileTheChildIsInAToolShapesItsAnswer(t *testing.T) {
 	}
 }
 
-// job_send is refused, with a reason the model can act on, for a job that is
+// op send is refused, with a reason the model can act on, for a job that is
 // finished, unknown or not a sub-agent. Nothing is queued anywhere.
 func TestJobSendRefusals(t *testing.T) {
 	gate := newGate()
@@ -306,13 +307,13 @@ func TestJobSendRefusals(t *testing.T) {
 		case 1:
 			return ai.ScriptedStream(nativeCall("p1", subagent.ToolSpawnSubagent, spawn))(ctx, model, view, options)
 		case 2:
-			return ai.ScriptedStream(nativeCall("p2", "job_wait", `{"id":"job_1","timeout_seconds":20}`))(ctx, model, view, options)
+			return ai.ScriptedStream(nativeCall("p2", "job", `{"op":"wait","id":"job_1","timeout_seconds":20}`))(ctx, model, view, options)
 		case 3:
-			return ai.ScriptedStream(nativeCall("p3", "job_send", `{"id":"job_1","message":"too late"}`))(ctx, model, view, options)
+			return ai.ScriptedStream(nativeCall("p3", "job", `{"op":"send","id":"job_1","message":"too late"}`))(ctx, model, view, options)
 		case 4:
-			return ai.ScriptedStream(nativeCall("p4", "job_send", `{"id":"job_404","message":"hello"}`))(ctx, model, view, options)
+			return ai.ScriptedStream(nativeCall("p4", "job", `{"op":"send","id":"job_404","message":"hello"}`))(ctx, model, view, options)
 		case 5:
-			return ai.ScriptedStream(nativeCall("p5", "job_send", `{"id":"job_1","message":""}`))(ctx, model, view, options)
+			return ai.ScriptedStream(nativeCall("p5", "job", `{"op":"send","id":"job_1","message":""}`))(ctx, model, view, options)
 		}
 		return ai.ScriptedStream(nativeAnswer("parent done"))(ctx, model, view, options)
 	})
@@ -330,7 +331,7 @@ func TestJobSendRefusals(t *testing.T) {
 	}
 }
 
-// Without AllowSend the model is not offered job_send at all.
+// Without AllowSend the model is not offered op send at all.
 func TestJobSendIsOffOnlyByDefault(t *testing.T) {
 	script := newNativeScript(nativeAnswer("hi"))
 	a, err := agentcore.New(agentcore.Config{NativeProvider: script.Provider, Model: "faux-1", Policy: agentcore.NewAllowList("x"), Extensions: []agentcore.ExtensionFactory{jobs.Plugin{}}})
@@ -343,8 +344,11 @@ func TestJobSendIsOffOnlyByDefault(t *testing.T) {
 	var names []string
 	for _, tool := range script.Recorded[0].Tools {
 		names = append(names, tool.Name)
+		if tool.Name == jobs.ToolName && strings.Contains(fmt.Sprint(tool.Parameters), "send") {
+			t.Fatalf("the job tool offers op send: %s", tool.Parameters)
+		}
 	}
-	if got := strings.Join(names, ","); got != "job_list,job_status,job_wait,job_cancel" {
+	if got := strings.Join(names, ","); got != jobs.ToolName {
 		t.Fatalf("tools = %s", got)
 	}
 }

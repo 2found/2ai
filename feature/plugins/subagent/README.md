@@ -169,7 +169,7 @@ original native checkpoint.
   expensive child can consume the whole run's budget.
 - **A synchronous child cannot be steered.** No steering queue, no step gate —
   once started it runs to completion or cancellation. An async self-fork can
-  receive `job_send` messages when `jobs.Plugin{AllowSend: true}` is set (see
+  receive op `send` messages (the `job` tool) when `jobs.Plugin{AllowSend: true}` is set (see
   below); a named delegate cannot.
 - **An async child cannot outlive its run.** Its token usage is folded into the
   spawning Agent, which has finished by then; `jobs.Plugin{Survive: ...}` refuses
@@ -193,8 +193,8 @@ policy intersection and budgets are untouched: a message adds no capability.
 Messages left unread when the child ends are appended to its job result.
 
 The child also publishes a start line and each current tool or progress note as
-the job's live output (`agentcore.PublishJobOutput`), which `job_status` and
-`job_list` show while it runs.
+the job's live output (`agentcore.PublishJobOutput`), which op `status` and
+`list` show while it runs.
 
 ## Native execution
 

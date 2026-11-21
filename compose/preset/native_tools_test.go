@@ -36,7 +36,7 @@ func TestNativeRunObservationToolsRemainAvailableUnderWorkloadPolicy(t *testing.
 	for _, tool := range definitions {
 		names[tool.Name] = true
 	}
-	for _, name := range []string{"job_list", "job_status", "job_wait", "job_cancel", "read_spill", "session_query"} {
+	for _, name := range []string{"job", "read_spill", "session_query"} {
 		if !names[name] {
 			t.Errorf("run-owned tool %s absent from native registry", name)
 		}

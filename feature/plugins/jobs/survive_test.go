@@ -62,8 +62,8 @@ func run(t *testing.T, s *Survival, conv string, opts ...func(*Plugin)) (*board,
 
 func keepJob(t *testing.T, b *board, id string) {
 	t.Helper()
-	if _, err := (jobKeepTool{jobTool{b, "job_keep"}}).Run(context.Background(), `{"id":"`+id+`"}`); err != nil {
-		t.Fatalf("job_keep %s: %v", id, err)
+	if _, err := (jobKeepTool{jobTool{b, ToolName}}).Run(context.Background(), `{"id":"`+id+`"}`); err != nil {
+		t.Fatalf("op keep %s: %v", id, err)
 	}
 }
 
@@ -75,12 +75,12 @@ func toolNames(b *board) []string {
 	return names
 }
 
-// Without the option nothing changes: the same four tools, and a job a run
+// Without the option nothing changes: the same four ops, and a job a run
 // started is cancelled when the run ends.
 func TestSurvivalOffIsTheOldBehaviour(t *testing.T) {
 	b := begin(t, Plugin{})
-	if got := strings.Join(toolNames(b), ","); got != "job_list,job_status,job_wait,job_cancel" {
-		t.Fatalf("tools = %s", got)
+	if got := strings.Join(toolNames(b), ",") + " " + strings.Join(b.ops(), ","); got != "job list,status,wait,cancel" {
+		t.Fatalf("tools and ops = %s", got)
 	}
 	if b.survive != nil || b.conv != "" {
 		t.Fatal("survival state set without the option")
@@ -106,8 +106,8 @@ func TestSurviveRequiresAHold(t *testing.T) {
 func TestOnlyAKeptJobSurvivesItsRun(t *testing.T) {
 	s := &Survival{Hold: NewHold(nil)}
 	b, _ := run(t, s, "conv-1")
-	if got := strings.Join(toolNames(b), ","); !strings.HasSuffix(got, ",job_keep") {
-		t.Fatalf("tools = %s", got)
+	if got := strings.Join(b.ops(), ","); !strings.HasSuffix(got, ",keep") {
+		t.Fatalf("ops = %s", got)
 	}
 	forgotten, _ := b.start(context.Background(), "bash", "forgotten", block)
 	kept, _ := b.start(context.Background(), "bash", "dev server", block)
@@ -127,11 +127,11 @@ func TestOnlyAKeptJobSurvivesItsRun(t *testing.T) {
 		t.Fatalf("a forgotten job reached the next run: %v", err)
 	}
 	// The next run observes it, then cancels it.
-	out, _ := (jobListTool{jobTool{next, "job_list"}}).Run(context.Background(), "")
+	out, _ := (jobListTool{jobTool{next, ToolName}}).Run(context.Background(), "")
 	if !strings.Contains(out, kept.ID+"\trunning (kept)") {
 		t.Fatalf("list = %q", out)
 	}
-	if _, err := (jobCancelTool{jobTool{next, "job_cancel"}}).Run(context.Background(), `{"id":"`+kept.ID+`"}`); err != nil {
+	if _, err := (jobCancelTool{jobTool{next, ToolName}}).Run(context.Background(), `{"id":"`+kept.ID+`"}`); err != nil {
 		t.Fatal(err)
 	}
 	if got := settled(t, next, kept.ID); got.State != cancelled {
@@ -207,7 +207,7 @@ func TestKeptJobIsInvisibleToAnotherConversation(t *testing.T) {
 	if _, err := other.get(r.ID); !errors.Is(err, errNotFound) {
 		t.Fatalf("another conversation read the job: %v", err)
 	}
-	if _, err := (jobCancelTool{jobTool{other, "job_cancel"}}).Run(context.Background(), `{"id":"`+r.ID+`"}`); !errors.Is(err, errNotFound) {
+	if _, err := (jobCancelTool{jobTool{other, ToolName}}).Run(context.Background(), `{"id":"`+r.ID+`"}`); !errors.Is(err, errNotFound) {
 		t.Fatalf("another conversation cancelled the job: %v", err)
 	}
 	if len(other.list()) != 0 || len(other.drain()) != 0 {
@@ -232,7 +232,7 @@ func TestAnnouncedByTheAttachedRunOnly(t *testing.T) {
 
 	next, _ := run(t, s, "conv-att")
 	defer next.CloseRun()
-	// The job ends on its own (not through job_cancel, whose result already
+	// The job ends on its own (not through op cancel, whose result already
 	// tells the model).
 	j, _ := next.find(r.ID)
 	j.cancel()
@@ -250,7 +250,7 @@ func TestAnnouncedByTheAttachedRunOnly(t *testing.T) {
 
 func cancelJob(t *testing.T, b *board, id string) {
 	t.Helper()
-	if _, err := (jobCancelTool{jobTool{b, "job_cancel"}}).Run(context.Background(), `{"id":"`+id+`"}`); err != nil {
+	if _, err := (jobCancelTool{jobTool{b, ToolName}}).Run(context.Background(), `{"id":"`+id+`"}`); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -354,7 +354,7 @@ func TestMaxJobsIsEnforcedPerConversation(t *testing.T) {
 	}
 	keepJob(t, b, ids[0])
 	keepJob(t, b, ids[1])
-	_, err := (jobKeepTool{jobTool{b, "job_keep"}}).Run(context.Background(), `{"id":"`+ids[2]+`"}`)
+	_, err := (jobKeepTool{jobTool{b, ToolName}}).Run(context.Background(), `{"id":"`+ids[2]+`"}`)
 	if err == nil || !strings.Contains(err.Error(), "maximum") {
 		t.Fatalf("third keep = %v", err)
 	}
@@ -414,7 +414,7 @@ func TestKeepRefusals(t *testing.T) {
 	s := &Survival{Hold: NewHold(nil), Exclude: []string{"agent_call"}}
 	b, _ := run(t, s, "conv-ref")
 	defer b.CloseRun()
-	keep := jobKeepTool{jobTool{b, "job_keep"}}
+	keep := jobKeepTool{jobTool{b, ToolName}}
 	sub, _ := b.start(context.Background(), "spawn_subagent", "child", block)
 	host, _ := b.start(context.Background(), "agent_call", "model", block)
 	done, _ := b.start(context.Background(), "bash", "quick", func(context.Context) (string, error) { return "", nil })
@@ -447,7 +447,7 @@ func TestKeepNeedsAConversation(t *testing.T) {
 	}
 	b := ext.(*board)
 	r, _ := b.start(context.Background(), "bash", "x", block)
-	if _, err := (jobKeepTool{jobTool{b, "job_keep"}}).Run(context.Background(), `{"id":"`+r.ID+`"}`); err == nil || !strings.Contains(err.Error(), "conversation") {
+	if _, err := (jobKeepTool{jobTool{b, ToolName}}).Run(context.Background(), `{"id":"`+r.ID+`"}`); err == nil || !strings.Contains(err.Error(), "conversation") {
 		t.Fatalf("keep without identity = %v", err)
 	}
 	b.CloseRun()
